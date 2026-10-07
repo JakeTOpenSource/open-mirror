@@ -1,0 +1,2444 @@
+{
+ "extractions": [
+  {
+   "arm": "W0",
+   "key": "electrical",
+   "results": [
+    {
+     "id": "R01",
+     "recoverable": true,
+     "quote": "Six stages in a chain: 1 at the source, 6 at the load."
+    },
+    {
+     "id": "R02",
+     "recoverable": false,
+     "quote": "absent (closest: \"rounded down\" and \"Starting charge: 3, 6, 6, 2, 2, 1\"; nothing says quantities are whole numbers that never go negative)"
+    },
+    {
+     "id": "R03",
+     "recoverable": true,
+     "quote": "Ratings, stages 1 to 6: 10, 8, 12, 6, 9, 7."
+    },
+    {
+     "id": "R04",
+     "recoverable": true,
+     "quote": "Upper thresholds: 7, 6, 9, 5, 7, 5."
+    },
+    {
+     "id": "R05",
+     "recoverable": true,
+     "quote": "Lower thresholds: 3, 2, 4, 2, 3, 2."
+    },
+    {
+     "id": "R06",
+     "recoverable": true,
+     "quote": "Everything starts CLEAR; ground tally starts at zero. ... Starting charge: 3, 6, 6, 2, 2, 1."
+    },
+    {
+     "id": "R07",
+     "recoverable": true,
+     "quote": "Breaker setting: 38 total. ... ground tally starts at zero."
+    },
+    {
+     "id": "R08",
+     "recoverable": true,
+     "quote": "Cycle 1: 0, 6, 3, 5, 3, 3 / Cycle 2: 4, 2, 0, 1, 1, 7 / Cycle 3: 4, 4, 3, 0, 0, 6 / Cycle 4: 7, 6, 7, 1, 3, 0 / Cycle 5: 0, 6, 6, 3, 3, 0"
+    },
+    {
+     "id": "R09",
+     "recoverable": true,
+     "quote": "Every cycle runs five moves in order, each finished chain-wide before the next."
+    },
+    {
+     "id": "R10",
+     "recoverable": true,
+     "quote": "Charge in. Add the cycle's feed to each stage; ratings aren't enforced here."
+    },
+    {
+     "id": "R11",
+     "recoverable": true,
+     "quote": "Walk 1 to 6. A stage over rating dumps the excess into the next stage down and sits at exactly rating"
+    },
+    {
+     "id": "R12",
+     "recoverable": true,
+     "quote": "Walking in order, 1's excess can tip 2 before you reach 2."
+    },
+    {
+     "id": "R13",
+     "recoverable": true,
+     "quote": "stage 6's excess goes to ground."
+    },
+    {
+     "id": "R14",
+     "recoverable": true,
+     "quote": "Read each stage now. CLEAR goes ASSERTED at or above its upper threshold"
+    },
+    {
+     "id": "R15",
+     "recoverable": true,
+     "quote": "ASSERTED goes CLEAR at or below its lower."
+    },
+    {
+     "id": "R16",
+     "recoverable": true,
+     "quote": "In between it holds. Log every flip. (single read of each stage in one pass)"
+    },
+    {
+     "id": "R17",
+     "recoverable": true,
+     "quote": "Take all six readings first, then move everything at once."
+    },
+    {
+     "id": "R18",
+     "recoverable": true,
+     "quote": "A CLEAR stage leaks a quarter, rounded down, to ground."
+    },
+    {
+     "id": "R19",
+     "recoverable": true,
+     "quote": "An ASSERTED stage sends half, rounded down, back through its return diode to the stage before; stage 1's goes to ground."
+    },
+    {
+     "id": "R20",
+     "recoverable": true,
+     "quote": "Ratings aren't checked here, so a stage can sit over until next cycle's shunts, or for good after cycle 5."
+    },
+    {
+     "id": "R21",
+     "recoverable": true,
+     "quote": "Sum the chain. Strictly over 38, every stage halves ... At 38 or under, nothing."
+    },
+    {
+     "id": "R22",
+     "recoverable": true,
+     "quote": "every stage halves, rounded down, the difference to ground; note the cycle."
+    },
+    {
+     "id": "R23",
+     "recoverable": true,
+     "quote": "the charge on stages 1 to 6, in order; the state of each stage ... every flip as (cycle, stage, state before, state after); the cycles in which the breaker tripped; the ground tally; and a balance line: starting charge plus everything fed in, against what is on the chain plus the ground tally."
+    }
+   ],
+   "recoverable": 22
+  },
+  {
+   "arm": "W0",
+   "key": "concrete",
+   "results": [
+    {
+     "id": "R01",
+     "recoverable": true,
+     "quote": "Six forms down the chute: form 1 under the hopper, form 6 at the end."
+    },
+    {
+     "id": "R02",
+     "recoverable": false,
+     "quote": "Start: 3, 6, 6, 2, 2, 1 (nothing says quantities are whole numbers or never negative)"
+    },
+    {
+     "id": "R03",
+     "recoverable": true,
+     "quote": "Capacity: 10, 8, 12, 6, 9, 7"
+    },
+    {
+     "id": "R04",
+     "recoverable": true,
+     "quote": "Upper mark: 7, 6, 9, 5, 7, 5"
+    },
+    {
+     "id": "R05",
+     "recoverable": true,
+     "quote": "Lower mark: 3, 2, 4, 2, 3, 2"
+    },
+    {
+     "id": "R06",
+     "recoverable": true,
+     "quote": "Start: 3, 6, 6, 2, 2, 1 ... Everything starts GREEN."
+    },
+    {
+     "id": "R07",
+     "recoverable": false,
+     "quote": "Over 38, halve every form, rounded down, and what comes off is waste. (the 38 limit is stated, but the waste tally starting at 0 is absent)"
+    },
+    {
+     "id": "R08",
+     "recoverable": true,
+     "quote": "Cycle 1: 0, 6, 3, 5, 3, 3 / Cycle 2: 4, 2, 0, 1, 1, 7 / Cycle 3: 4, 4, 3, 0, 0, 6 / Cycle 4: 7, 6, 7, 1, 3, 0 / Cycle 5: 0, 6, 6, 3, 3, 0"
+    },
+    {
+     "id": "R09",
+     "recoverable": true,
+     "quote": "A cycle is five steps, always in this order, and each step goes all the way down the line before the next one starts."
+    },
+    {
+     "id": "R10",
+     "recoverable": true,
+     "quote": "Each form takes its load off the sheet below. Nobody trims here; a form can sit over capacity for a moment."
+    },
+    {
+     "id": "R11",
+     "recoverable": true,
+     "quote": "Walk forms 1 to 6. Whatever's over capacity runs down the chute into the next form before you get to that one"
+    },
+    {
+     "id": "R12",
+     "recoverable": true,
+     "quote": "runs down the chute into the next form before you get to that one, so one heavy form can push the whole line."
+    },
+    {
+     "id": "R13",
+     "recoverable": true,
+     "quote": "Form 6 overtops into the waste pit."
+    },
+    {
+     "id": "R14",
+     "recoverable": true,
+     "quote": "A GREEN form at or above its upper mark goes HOT."
+    },
+    {
+     "id": "R15",
+     "recoverable": true,
+     "quote": "A HOT form at or below its lower mark goes back to GREEN."
+    },
+    {
+     "id": "R16",
+     "recoverable": true,
+     "quote": "Anywhere between, it stays what it was. Log every change."
+    },
+    {
+     "id": "R17",
+     "recoverable": true,
+     "quote": "Read all six first, then move mix."
+    },
+    {
+     "id": "R18",
+     "recoverable": true,
+     "quote": "GREEN loses a quarter, rounded down, to evaporation: waste."
+    },
+    {
+     "id": "R19",
+     "recoverable": true,
+     "quote": "HOT bleeds half, rounded down, back up the chute into the form before it; form 1's bleed goes to waste."
+    },
+    {
+     "id": "R20",
+     "recoverable": true,
+     "quote": "Nothing trims after this, so a form can carry over capacity into the next charge, or finish the run that way."
+    },
+    {
+     "id": "R21",
+     "recoverable": true,
+     "quote": "Total the line. Over 38, halve every form... 38 or under, leave it."
+    },
+    {
+     "id": "R22",
+     "recoverable": true,
+     "quote": "Over 38, halve every form, rounded down, and what comes off is waste. ... the cycles in which a washout fired"
+    },
+    {
+     "id": "R23",
+     "recoverable": true,
+     "quote": "the quantity in forms 1 to 6, in order; the end state of each form (GREEN or HOT); every state change as (cycle, form, before, after); the cycles in which a washout fired; the waste tally; and a balance line: starting mix plus all charges, against what is in the forms plus waste."
+    }
+   ],
+   "recoverable": 21
+  },
+  {
+   "arm": "W0",
+   "key": "metallurgy",
+   "results": [
+    {
+     "id": "R01",
+     "recoverable": true,
+     "quote": "Six crucibles, 1 at the charging end, 6 at the tapping end."
+    },
+    {
+     "id": "R02",
+     "recoverable": false,
+     "quote": "Whole units of melt; any split rounds down. (non-negativity not stated)"
+    },
+    {
+     "id": "R03",
+     "recoverable": true,
+     "quote": "Working volume: 10, 8, 12, 6, 9, 7"
+    },
+    {
+     "id": "R04",
+     "recoverable": true,
+     "quote": "Upper mark: 7, 6, 9, 5, 7, 5"
+    },
+    {
+     "id": "R05",
+     "recoverable": true,
+     "quote": "Lower mark: 3, 2, 4, 2, 3, 2"
+    },
+    {
+     "id": "R06",
+     "recoverable": true,
+     "quote": "Starting melt: 3, 6, 6, 2, 2, 1 Everything starts BASE."
+    },
+    {
+     "id": "R07",
+     "recoverable": true,
+     "quote": "Line limit for the emergency tap: 38. ... Slag tally: everything that reached the pit."
+    },
+    {
+     "id": "R08",
+     "recoverable": true,
+     "quote": "Cycle 1: 0, 6, 3, 5, 3, 3 / Cycle 2: 4, 2, 0, 1, 1, 7 / Cycle 3: 4, 4, 3, 0, 0, 6 / Cycle 4: 7, 6, 7, 1, 3, 0 / Cycle 5: 0, 6, 6, 3, 3, 0"
+    },
+    {
+     "id": "R09",
+     "recoverable": true,
+     "quote": "Five moves per cycle, each finished down the whole line before the next."
+    },
+    {
+     "id": "R10",
+     "recoverable": true,
+     "quote": "Charge. Pour the row in; nobody watches volume while charging."
+    },
+    {
+     "id": "R11",
+     "recoverable": true,
+     "quote": "Walk 1 to 6. Anything over working volume runs down the launder into the next crucible before you judge that one"
+    },
+    {
+     "id": "R12",
+     "recoverable": true,
+     "quote": "runs down the launder into the next crucible before you judge that one, so it can chain."
+    },
+    {
+     "id": "R13",
+     "recoverable": true,
+     "quote": "Overflow off 6 goes to the slag pit."
+    },
+    {
+     "id": "R14",
+     "recoverable": true,
+     "quote": "A BASE crucible at or above its upper mark goes SUPERHEATED."
+    },
+    {
+     "id": "R15",
+     "recoverable": true,
+     "quote": "A SUPERHEATED one at or below its lower mark drops back to BASE."
+    },
+    {
+     "id": "R16",
+     "recoverable": true,
+     "quote": "In between, it holds. Log every change."
+    },
+    {
+     "id": "R17",
+     "recoverable": true,
+     "quote": "Bleed. Read all six before touching any."
+    },
+    {
+     "id": "R18",
+     "recoverable": true,
+     "quote": "BASE crucibles skim a quarter to slag."
+    },
+    {
+     "id": "R19",
+     "recoverable": true,
+     "quote": "SUPERHEATED crucibles send half back up the return launder to the crucible before them; crucible 1 has nowhere to send it, so its half goes to slag."
+    },
+    {
+     "id": "R20",
+     "recoverable": true,
+     "quote": "A crucible can finish over volume; that waits for next cycle's overflow, and after cycle 5 it stays."
+    },
+    {
+     "id": "R21",
+     "recoverable": true,
+     "quote": "Emergency tap. Total the line. Strictly over 38"
+    },
+    {
+     "id": "R22",
+     "recoverable": true,
+     "quote": "halve every crucible, removed melt to slag, log the cycle."
+    },
+    {
+     "id": "R23",
+     "recoverable": true,
+     "quote": "the melt in crucibles 1 to 6, in order; each crucible's state (BASE or SUPERHEATED); every change as (cycle, crucible, before, after); the cycles in which an emergency tap fired; the slag tally; and a balance line: starting melt plus all charges, against what is in the crucibles plus slag."
+    }
+   ],
+   "recoverable": 22
+  },
+  {
+   "arm": "W0",
+   "key": "xylem",
+   "results": [
+    {
+     "id": "R01",
+     "recoverable": true,
+     "quote": "The stem run is six segments, 1 at the root collar, 6 at the crown."
+    },
+    {
+     "id": "R02",
+     "recoverable": false,
+     "quote": "Sap is counted in whole units, and every segment opens QUIET. (non-negativity not stated)"
+    },
+    {
+     "id": "R03",
+     "recoverable": true,
+     "quote": "Holding volume: 10 8 12 6 9 7"
+    },
+    {
+     "id": "R04",
+     "recoverable": true,
+     "quote": "Upper mark: 7 6 9 5 7 5"
+    },
+    {
+     "id": "R05",
+     "recoverable": true,
+     "quote": "Lower mark: 3 2 4 2 3 2"
+    },
+    {
+     "id": "R06",
+     "recoverable": true,
+     "quote": "every segment opens QUIET. ... Sap at start: 3 6 6 2 2 1"
+    },
+    {
+     "id": "R07",
+     "recoverable": true,
+     "quote": "Leaf-drop threshold, whole stem: 38 ... Loss tally: everything transpired, respired or sent past the collar, starting from zero."
+    },
+    {
+     "id": "R08",
+     "recoverable": true,
+     "quote": "Feed by cycle, segments 1 to 6: 1: 0 6 3 5 3 3 / 2: 4 2 0 1 1 7 / 3: 4 4 3 0 0 6 / 4: 7 6 7 1 3 0 / 5: 0 6 6 3 3 0"
+    },
+    {
+     "id": "R09",
+     "recoverable": true,
+     "quote": "Each cycle has five moves, always in this order. Finish the whole stem before you start the next move."
+    },
+    {
+     "id": "R10",
+     "recoverable": true,
+     "quote": "Feed. Add the row. Don't check volume yet."
+    },
+    {
+     "id": "R11",
+     "recoverable": true,
+     "quote": "Push, from 1 up to 6. Anything over a segment's volume goes up the xylem into the next segment before you reach it"
+    },
+    {
+     "id": "R12",
+     "recoverable": true,
+     "quote": "goes up the xylem into the next segment before you reach it, so one surge can ride the whole stem."
+    },
+    {
+     "id": "R13",
+     "recoverable": true,
+     "quote": "Whatever goes over the top of 6 is transpired."
+    },
+    {
+     "id": "R14",
+     "recoverable": true,
+     "quote": "A QUIET segment at or above its upper mark goes SINK-ACTIVE."
+    },
+    {
+     "id": "R15",
+     "recoverable": true,
+     "quote": "A SINK-ACTIVE segment at or below its lower mark goes QUIET."
+    },
+    {
+     "id": "R16",
+     "recoverable": true,
+     "quote": "Between the marks it stays as it was. Log every flip."
+    },
+    {
+     "id": "R17",
+     "recoverable": true,
+     "quote": "Work out every amount from the sap in place before anything moves."
+    },
+    {
+     "id": "R18",
+     "recoverable": true,
+     "quote": "QUIET respires a quarter. ... Round down both."
+    },
+    {
+     "id": "R19",
+     "recoverable": true,
+     "quote": "SINK-ACTIVE sends half down the phloem to the segment below. ... What segment 1 sends goes to the roots and off our books."
+    },
+    {
+     "id": "R20",
+     "recoverable": true,
+     "quote": "Volume isn't checked here, so a segment can sit overfull until next cycle's push. After cycle 5 it stays that way."
+    },
+    {
+     "id": "R21",
+     "recoverable": true,
+     "quote": "If the stem totals over 38 (exactly 38 doesn't count)"
+    },
+    {
+     "id": "R22",
+     "recoverable": true,
+     "quote": "halve every segment, rounding down. What comes off is transpired. ... the cycles in which leaf-drop fired"
+    },
+    {
+     "id": "R23",
+     "recoverable": true,
+     "quote": "sap in segments 1 to 6, in order; the state of each segment; every flip as (cycle, segment, before, after); the cycles in which leaf-drop fired; the loss tally; and a balance line: sap at start plus everything fed in, against sap standing plus the tally."
+    }
+   ],
+   "recoverable": 22
+  },
+  {
+   "arm": "W0",
+   "key": "ballast",
+   "results": [
+    {
+     "id": "R01",
+     "recoverable": true,
+     "quote": "Six compartments, 1 at the bow through 6 at the stern."
+    },
+    {
+     "id": "R02",
+     "recoverable": true,
+     "quote": "Water counts in whole units, never below zero."
+    },
+    {
+     "id": "R03",
+     "recoverable": true,
+     "quote": "Volume: 10, 8, 12, 6, 9, 7"
+    },
+    {
+     "id": "R04",
+     "recoverable": true,
+     "quote": "Inception marks: 7, 6, 9, 5, 7, 5"
+    },
+    {
+     "id": "R05",
+     "recoverable": true,
+     "quote": "Desinence marks: 3, 2, 4, 2, 3, 2"
+    },
+    {
+     "id": "R06",
+     "recoverable": true,
+     "quote": "Every pump starts LAMINAR. ... Water at start: 3, 6, 6, 2, 2, 1"
+    },
+    {
+     "id": "R07",
+     "recoverable": true,
+     "quote": "Emergency blow threshold, whole hull: 38. ... Keep one running overboard total from zero"
+    },
+    {
+     "id": "R08",
+     "recoverable": true,
+     "quote": "Cycle 1: 0, 6, 3, 5, 3, 3 / Cycle 2: 4, 2, 0, 1, 1, 7 / Cycle 3: 4, 4, 3, 0, 0, 6 / Cycle 4: 7, 6, 7, 1, 3, 0 / Cycle 5: 0, 6, 6, 3, 3, 0"
+    },
+    {
+     "id": "R09",
+     "recoverable": true,
+     "quote": "Each cycle is five steps, in order, each finished in all six before the next."
+    },
+    {
+     "id": "R10",
+     "recoverable": true,
+     "quote": "Flood. Add the cycle's water. Don't stop at the volume; let it overfill."
+    },
+    {
+     "id": "R11",
+     "recoverable": true,
+     "quote": "Work bow to stern, 1 through 6. Anything above volume runs aft into the next compartment, leaving this one exactly full."
+    },
+    {
+     "id": "R12",
+     "recoverable": true,
+     "quote": "Since 1 goes before 2, one surge can carry down the whole line."
+    },
+    {
+     "id": "R13",
+     "recoverable": true,
+     "quote": "Whatever overtops 6 goes overboard."
+    },
+    {
+     "id": "R14",
+     "recoverable": true,
+     "quote": "LAMINAR at or above its inception mark goes CAVITATING."
+    },
+    {
+     "id": "R15",
+     "recoverable": true,
+     "quote": "CAVITATING only settles to LAMINAR at or below its desinence mark"
+    },
+    {
+     "id": "R16",
+     "recoverable": true,
+     "quote": "in between, it holds. Log every change. (single pass per step; at-most-once is implied by one reading per cycle)"
+    },
+    {
+     "id": "R17",
+     "recoverable": true,
+     "quote": "Size every discharge off current readings before touching a valve ... Then open them all together."
+    },
+    {
+     "id": "R18",
+     "recoverable": true,
+     "quote": "LAMINAR moves a quarter, CAVITATING half, rounded down. ... LAMINAR water goes overboard."
+    },
+    {
+     "id": "R19",
+     "recoverable": true,
+     "quote": "CAVITATING water backflows forward into the next compartment toward the bow; out of 1 it goes overboard."
+    },
+    {
+     "id": "R20",
+     "recoverable": true,
+     "quote": "Nobody watches volume here, so a compartment can sit overfull until next cycle's scuppers, and after cycle 5 it stays that way."
+    },
+    {
+     "id": "R21",
+     "recoverable": true,
+     "quote": "Sum all six. Strictly over 38: ... At 38 or under, leave it."
+    },
+    {
+     "id": "R22",
+     "recoverable": true,
+     "quote": "every compartment halves, rounded down, the difference overboard; note the cycle."
+    },
+    {
+     "id": "R23",
+     "recoverable": true,
+     "quote": "water in compartments 1 to 6, in order; the state of each pump (LAMINAR or CAVITATING); every state change as (cycle, compartment, before, after); the cycles in which a blow fired; the overboard tally; and a balance line: water at start plus everything flooded in, against water aboard plus overboard."
+    }
+   ],
+   "recoverable": 23
+  },
+  {
+   "arm": "W0",
+   "key": "metamorphosis",
+   "results": [
+    {
+     "id": "R01",
+     "recoverable": true,
+     "quote": "Six chambers: 1 at the head, 6 at the tail."
+    },
+    {
+     "id": "R02",
+     "recoverable": false,
+     "quote": "Nutrient mass is whole units; any split rounds down. (non-negativity not stated)"
+    },
+    {
+     "id": "R03",
+     "recoverable": true,
+     "quote": "Chamber limits, 1 to 6: 10, 8, 12, 6, 9, 7."
+    },
+    {
+     "id": "R04",
+     "recoverable": true,
+     "quote": "Pupation marks: 7, 6, 9, 5, 7, 5."
+    },
+    {
+     "id": "R05",
+     "recoverable": true,
+     "quote": "Fallback marks: 3, 2, 4, 2, 3, 2."
+    },
+    {
+     "id": "R06",
+     "recoverable": true,
+     "quote": "Starting mass: 3, 6, 6, 2, 2, 1. Every chamber starts LARVAL."
+    },
+    {
+     "id": "R07",
+     "recoverable": false,
+     "quote": "Above 38, every chamber halves ... Keep one loss tally: tail overflow, burn-off, chamber 1's reabsorbed half, moult sheddings. (the tally's starting value of 0 is not stated)"
+    },
+    {
+     "id": "R08",
+     "recoverable": true,
+     "quote": "Five cycles per run. ... Cycle 1: 0, 6, 3, 5, 3, 3 / Cycle 2: 4, 2, 0, 1, 1, 7 / Cycle 3: 4, 4, 3, 0, 0, 6 / Cycle 4: 7, 6, 7, 1, 3, 0 / Cycle 5: 0, 6, 6, 3, 3, 0"
+    },
+    {
+     "id": "R09",
+     "recoverable": true,
+     "quote": "Finish each job along the whole line before the next:"
+    },
+    {
+     "id": "R10",
+     "recoverable": true,
+     "quote": "1. Feed. Add the cycle's ration: ... No trimming yet."
+    },
+    {
+     "id": "R11",
+     "recoverable": true,
+     "quote": "Walk from 1 to 6. Anything above a chamber's limit moves into the next chamber"
+    },
+    {
+     "id": "R12",
+     "recoverable": true,
+     "quote": "so overflow can cascade down the line."
+    },
+    {
+     "id": "R13",
+     "recoverable": true,
+     "quote": "Chamber 6's overflow is discarded. ... Keep one loss tally: tail overflow,"
+    },
+    {
+     "id": "R14",
+     "recoverable": true,
+     "quote": "A LARVAL chamber at or above its pupation mark goes PUPAL."
+    },
+    {
+     "id": "R15",
+     "recoverable": true,
+     "quote": "A PUPAL chamber at or below its fallback mark goes back to LARVAL"
+    },
+    {
+     "id": "R16",
+     "recoverable": true,
+     "quote": "Anything in between holds its stage. Log every change as (cycle, chamber, before, after)."
+    },
+    {
+     "id": "R17",
+     "recoverable": true,
+     "quote": "Weigh all six first, then act."
+    },
+    {
+     "id": "R18",
+     "recoverable": true,
+     "quote": "LARVAL chambers burn off a quarter of their mass. ... Keep one loss tally: ... burn-off"
+    },
+    {
+     "id": "R19",
+     "recoverable": true,
+     "quote": "PUPAL chambers reabsorb half back into the chamber ahead (one number lower); chamber 1's half is discarded."
+    },
+    {
+     "id": "R20",
+     "recoverable": true,
+     "quote": "No trimming: a chamber can stay over limit until next cycle's overflow, or for good after cycle 5."
+    },
+    {
+     "id": "R21",
+     "recoverable": true,
+     "quote": "Total the line. Above 38, every chamber halves and the shed mass is discarded. At 38 or under, leave it."
+    },
+    {
+     "id": "R22",
+     "recoverable": true,
+     "quote": "Above 38, every chamber halves and the shed mass is discarded. ... moult sheddings. ... the cycles in which a moult fired"
+    },
+    {
+     "id": "R23",
+     "recoverable": true,
+     "quote": "mass in chambers 1 to 6, in order; the stage of each chamber (LARVAL or PUPAL); every stage change as (cycle, chamber, before, after); the cycles in which a moult fired; the loss tally; and a balance line: mass at start plus all feed, against mass in the chambers plus the tally."
+    }
+   ],
+   "recoverable": 21
+  },
+  {
+   "arm": "W0",
+   "key": "treatment",
+   "results": [
+    {
+     "id": "R01",
+     "recoverable": true,
+     "quote": "Six tanks in series, 1 at the inlet, 6 at the outfall."
+    },
+    {
+     "id": "R02",
+     "recoverable": false,
+     "quote": "We count whole units of liquor, rounding down on every split."
+    },
+    {
+     "id": "R03",
+     "recoverable": true,
+     "quote": "Volumes: 10, 8, 12, 6, 9, 7."
+    },
+    {
+     "id": "R04",
+     "recoverable": true,
+     "quote": "Upper marks: 7, 6, 9, 5, 7, 5."
+    },
+    {
+     "id": "R05",
+     "recoverable": true,
+     "quote": "Lower marks: 3, 2, 4, 2, 3, 2."
+    },
+    {
+     "id": "R06",
+     "recoverable": true,
+     "quote": "Starting contents: 3, 6, 6, 2, 2, 1. All start STEADY."
+    },
+    {
+     "id": "R07",
+     "recoverable": true,
+     "quote": "Storm bypass limit, whole line: 38. ... The outfall tally takes everything sent to outfall."
+    },
+    {
+     "id": "R08",
+     "recoverable": true,
+     "quote": "A run is five cycles. ... Cycle 1: 0, 6, 3, 5, 3, 3 / Cycle 2: 4, 2, 0, 1, 1, 7 / Cycle 3: 4, 4, 3, 0, 0, 6 / Cycle 4: 7, 6, 7, 1, 3, 0 / Cycle 5: 0, 6, 6, 3, 3, 0"
+    },
+    {
+     "id": "R09",
+     "recoverable": true,
+     "quote": "Each cycle, five jobs in order, each finished down the whole line before the next"
+    },
+    {
+     "id": "R10",
+     "recoverable": true,
+     "quote": "Inflow. Add the row. A tank can sit over volume for now."
+    },
+    {
+     "id": "R11",
+     "recoverable": true,
+     "quote": "Weirs. Walk 1 to 6. Anything over volume goes over the weir into the next tank before you look at that one"
+    },
+    {
+     "id": "R12",
+     "recoverable": true,
+     "quote": "goes over the weir into the next tank before you look at that one, so a surge can ride down the line."
+    },
+    {
+     "id": "R13",
+     "recoverable": true,
+     "quote": "Tank 6 overflows to outfall."
+    },
+    {
+     "id": "R14",
+     "recoverable": true,
+     "quote": "States. STEADY at or above the upper mark goes OVERLOADED."
+    },
+    {
+     "id": "R15",
+     "recoverable": true,
+     "quote": "OVERLOADED at or below the lower mark comes back STEADY."
+    },
+    {
+     "id": "R16",
+     "recoverable": true,
+     "quote": "Between the marks, no change. Log every change."
+    },
+    {
+     "id": "R17",
+     "recoverable": true,
+     "quote": "Work out every tank's draw from what it holds now, then move it all at once."
+    },
+    {
+     "id": "R18",
+     "recoverable": true,
+     "quote": "STEADY: a quarter to outfall."
+    },
+    {
+     "id": "R19",
+     "recoverable": true,
+     "quote": "OVERLOADED: half back up the return line to the tank before; tank 1's return goes to outfall."
+    },
+    {
+     "id": "R20",
+     "recoverable": true,
+     "quote": "Return flow can leave a tank over volume; the weirs take it next cycle, and after cycle 5 it stays."
+    },
+    {
+     "id": "R21",
+     "recoverable": true,
+     "quote": "Storm bypass. Total the line. Strictly over 38"
+    },
+    {
+     "id": "R22",
+     "recoverable": true,
+     "quote": "every tank keeps half, rounded down; the rest goes to outfall. ... the cycles in which the bypass fired"
+    },
+    {
+     "id": "R23",
+     "recoverable": true,
+     "quote": "the contents of tanks 1 to 6, in order; each tank's state (STEADY or OVERLOADED); every change as (cycle, tank, before, after); the cycles in which the bypass fired; the outfall tally; and a balance line: starting contents plus all inflow, against what is in the tanks plus outfall."
+    }
+   ],
+   "recoverable": 22
+  },
+  {
+   "arm": "W0",
+   "key": "rag",
+   "results": [
+    {
+     "id": "R01",
+     "recoverable": true,
+     "quote": "The stack is six retrieval buffers: tier 1 sits next to the LLM, tier 6 furthest out."
+    },
+    {
+     "id": "R02",
+     "recoverable": false,
+     "quote": "Everything you track is chunks held."
+    },
+    {
+     "id": "R03",
+     "recoverable": true,
+     "quote": "Budget: 10, 8, 12, 6, 9, 7"
+    },
+    {
+     "id": "R04",
+     "recoverable": true,
+     "quote": "HOT mark: 7, 6, 9, 5, 7, 5"
+    },
+    {
+     "id": "R05",
+     "recoverable": true,
+     "quote": "COLD mark: 3, 2, 4, 2, 3, 2"
+    },
+    {
+     "id": "R06",
+     "recoverable": true,
+     "quote": "Holding at start: 3, 6, 6, 2, 2, 1 ... Every tier starts COLD."
+    },
+    {
+     "id": "R07",
+     "recoverable": true,
+     "quote": "Context ceiling for the whole stack: 38. ... Keep one running drop count covering tier-6 evictions, compactions, tier-1 promotions and resets."
+    },
+    {
+     "id": "R08",
+     "recoverable": true,
+     "quote": "Cycle 1: 0, 6, 3, 5, 3, 3 / Cycle 2: 4, 2, 0, 1, 1, 7 / Cycle 3: 4, 4, 3, 0, 0, 6 / Cycle 4: 7, 6, 7, 1, 3, 0 / Cycle 5: 0, 6, 6, 3, 3, 0"
+    },
+    {
+     "id": "R09",
+     "recoverable": true,
+     "quote": "A cycle is five passes, each finished across the whole stack before the next starts."
+    },
+    {
+     "id": "R10",
+     "recoverable": true,
+     "quote": "Load. Add the cycle's new chunks. No trimming yet; a tier can sit over budget here."
+    },
+    {
+     "id": "R11",
+     "recoverable": true,
+     "quote": "Evict. Walk tier 1 through 6. Anything over budget moves out to the next tier"
+    },
+    {
+     "id": "R12",
+     "recoverable": true,
+     "quote": "so it can push that tier over before you reach it."
+    },
+    {
+     "id": "R13",
+     "recoverable": true,
+     "quote": "Overflow from tier 6 is dropped."
+    },
+    {
+     "id": "R14",
+     "recoverable": true,
+     "quote": "A COLD tier at or above its HOT mark goes HOT"
+    },
+    {
+     "id": "R15",
+     "recoverable": true,
+     "quote": "a HOT tier at or below its COLD mark goes COLD."
+    },
+    {
+     "id": "R16",
+     "recoverable": true,
+     "quote": "Anywhere between the marks, it keeps its flag. Log every flip."
+    },
+    {
+     "id": "R17",
+     "recoverable": true,
+     "quote": "Off the post-flag counts ... Work out all six amounts before moving anything."
+    },
+    {
+     "id": "R18",
+     "recoverable": true,
+     "quote": "a COLD tier compacts a quarter of its chunks (round down), dropped"
+    },
+    {
+     "id": "R19",
+     "recoverable": true,
+     "quote": "a HOT tier promotes half (round down) into the tier one closer to the LLM, and tier 1's promotion is dropped."
+    },
+    {
+     "id": "R20",
+     "recoverable": true,
+     "quote": "A promotion can leave a tier over budget; that waits for next cycle's evict, and after cycle 5 it just stands."
+    },
+    {
+     "id": "R21",
+     "recoverable": true,
+     "quote": "If the stack totals more than 38, context reset ... Exactly 38 is fine."
+    },
+    {
+     "id": "R22",
+     "recoverable": true,
+     "quote": "every tier halves (round down), removed chunks dropped. ... the cycles in which a reset fired"
+    },
+    {
+     "id": "R23",
+     "recoverable": true,
+     "quote": "holdings in tiers 1 to 6, in order; the state of each tier (COLD or HOT); every flip as (cycle, tier, before, after); the cycles in which a reset fired; the dropped tally; and a balance line: chunks at start plus everything loaded, against chunks held plus dropped."
+    }
+   ],
+   "recoverable": 22
+  },
+  {
+   "arm": "W0",
+   "key": "lagrangian",
+   "results": [
+    {
+     "id": "R01",
+     "recoverable": true,
+     "quote": "six nonnegative integer components, positions 1 to 6 ... Projection sweep, Gauss-Seidel, 1 through 6 ... push the violation into x_{i+1}"
+    },
+    {
+     "id": "R02",
+     "recoverable": true,
+     "quote": "six nonnegative integer components, positions 1 to 6"
+    },
+    {
+     "id": "R03",
+     "recoverable": true,
+     "quote": "Box bounds c = (10, 8, 12, 6, 9, 7)"
+    },
+    {
+     "id": "R04",
+     "recoverable": true,
+     "quote": "Activation thresholds u = (7, 6, 9, 5, 7, 5)"
+    },
+    {
+     "id": "R05",
+     "recoverable": true,
+     "quote": "deactivation thresholds d = (3, 2, 4, 2, 3, 2)"
+    },
+    {
+     "id": "R06",
+     "recoverable": true,
+     "quote": "starting at x0 = (3, 6, 6, 2, 2, 1) ... every component starts INACTIVE"
+    },
+    {
+     "id": "R07",
+     "recoverable": true,
+     "quote": "Budget on the 1-norm: 38. Slack s starts at 0"
+    },
+    {
+     "id": "R08",
+     "recoverable": true,
+     "quote": "A run is five cycles ... Rows, cycles 1 to 5: (0,6,3,5,3,3), (4,2,0,1,1,7), (4,4,3,0,0,6), (7,6,7,1,3,0), (0,6,6,3,3,0)."
+    },
+    {
+     "id": "R09",
+     "recoverable": true,
+     "quote": "Each cycle is five steps, and each step finishes across the whole vector before the next one starts."
+    },
+    {
+     "id": "R10",
+     "recoverable": true,
+     "quote": "Load. Add the cycle's row of b to x. Bounds are not enforced here."
+    },
+    {
+     "id": "R11",
+     "recoverable": true,
+     "quote": "Clip x_i to c_i and push the violation into x_{i+1} before you visit it, so overflow cascades down the vector."
+    },
+    {
+     "id": "R12",
+     "recoverable": true,
+     "quote": "push the violation into x_{i+1} before you visit it, so overflow cascades down the vector"
+    },
+    {
+     "id": "R13",
+     "recoverable": true,
+     "quote": "Component 6's violation goes to s."
+    },
+    {
+     "id": "R14",
+     "recoverable": true,
+     "quote": "Active-set update on the projected x. INACTIVE goes ACTIVE at x_i >= u_i"
+    },
+    {
+     "id": "R15",
+     "recoverable": true,
+     "quote": "ACTIVE drops back to INACTIVE at x_i <= d_i"
+    },
+    {
+     "id": "R16",
+     "recoverable": true,
+     "quote": "Anywhere in between, the flag holds. Log every flip as (cycle, position, before, after)."
+    },
+    {
+     "id": "R17",
+     "recoverable": true,
+     "quote": "Jacobi shed. Compute all six amounts from the same x before anything moves."
+    },
+    {
+     "id": "R18",
+     "recoverable": true,
+     "quote": "An INACTIVE component sheds floor(x_i/4) to s."
+    },
+    {
+     "id": "R19",
+     "recoverable": true,
+     "quote": "An ACTIVE component moves floor(x_i/2) up to x_{i-1}; component 1 sends its share to s."
+    },
+    {
+     "id": "R20",
+     "recoverable": true,
+     "quote": "No projection after this step: a component can sit over its bound until the next sweep, and after cycle 5 it simply stays there."
+    },
+    {
+     "id": "R21",
+     "recoverable": true,
+     "quote": "If the 1-norm is strictly above 38"
+    },
+    {
+     "id": "R22",
+     "recoverable": true,
+     "quote": "halve every component with floor and book what came off to s. Note the cycle."
+    },
+    {
+     "id": "R23",
+     "recoverable": true,
+     "quote": "the vector x, components 1 to 6, in order; each component's flag (INACTIVE or ACTIVE); every flip as (cycle, component, before, after); the cycles in which the penalty fired; the slack s; and a balance line: the starting 1-norm plus everything loaded, against the final 1-norm plus s."
+    }
+   ],
+   "recoverable": 23
+  },
+  {
+   "arm": "W0",
+   "key": "goodhart",
+   "results": [
+    {
+     "id": "R01",
+     "recoverable": true,
+     "quote": "Six teams: team 1 takes new work in, team 6 faces the customer."
+    },
+    {
+     "id": "R02",
+     "recoverable": false,
+     "quote": "We watch open tickets per team. (nothing states counts are whole numbers or never negative)"
+    },
+    {
+     "id": "R03",
+     "recoverable": true,
+     "quote": "WIP limit: 10, 8, 12, 6, 9, 7"
+    },
+    {
+     "id": "R04",
+     "recoverable": true,
+     "quote": "Escalate at: 7, 6, 9, 5, 7, 5"
+    },
+    {
+     "id": "R05",
+     "recoverable": true,
+     "quote": "Stand down at: 3, 2, 4, 2, 3, 2"
+    },
+    {
+     "id": "R06",
+     "recoverable": true,
+     "quote": "Open at start: 3, 6, 6, 2, 2, 1 ... Everyone starts ROUTINE."
+    },
+    {
+     "id": "R07",
+     "recoverable": true,
+     "quote": "The board target is 38 open tickets. ... Every closure, by any route, goes on one closed tally, from zero."
+    },
+    {
+     "id": "R08",
+     "recoverable": true,
+     "quote": "C1: 0, 6, 3, 5, 3, 3 / C2: 4, 2, 0, 1, 1, 7 / C3: 4, 4, 3, 0, 0, 6 / C4: 7, 6, 7, 1, 3, 0 / C5: 0, 6, 6, 3, 3, 0"
+    },
+    {
+     "id": "R09",
+     "recoverable": true,
+     "quote": "Each cycle runs five steps, each finished board-wide before the next."
+    },
+    {
+     "id": "R10",
+     "recoverable": true,
+     "quote": "New tickets land (per cycle, teams 1 to 6) ... Limits don't bite yet."
+    },
+    {
+     "id": "R11",
+     "recoverable": true,
+     "quote": "Walk the line, team 1 to team 6. A team's excess goes to the next team down"
+    },
+    {
+     "id": "R12",
+     "recoverable": true,
+     "quote": "A team's excess goes to the next team down, counting when you reach them."
+    },
+    {
+     "id": "R13",
+     "recoverable": true,
+     "quote": "Team 6's overflow is closed-without-action."
+    },
+    {
+     "id": "R14",
+     "recoverable": true,
+     "quote": "A ROUTINE team at or above its escalation mark goes ESCALATED"
+    },
+    {
+     "id": "R15",
+     "recoverable": true,
+     "quote": "an ESCALATED team at or below its stand-down mark goes back to ROUTINE."
+    },
+    {
+     "id": "R16",
+     "recoverable": false,
+     "quote": "In between, status holds. Log every flip. (nothing says a team changes at most once per cycle)"
+    },
+    {
+     "id": "R17",
+     "recoverable": true,
+     "quote": "Work the queues off one snapshot."
+    },
+    {
+     "id": "R18",
+     "recoverable": true,
+     "quote": "A ROUTINE team closes a quarter of its tickets, rounded down. ... Every closure, by any route, goes on one closed tally"
+    },
+    {
+     "id": "R19",
+     "recoverable": true,
+     "quote": "An ESCALATED team bounces half, rounded down, to the team upstream; team 1 has nobody upstream, so its bounce is closed."
+    },
+    {
+     "id": "R20",
+     "recoverable": true,
+     "quote": "Bounced tickets can leave a team over its limit until the next walk; after cycle 5 they stay."
+    },
+    {
+     "id": "R21",
+     "recoverable": true,
+     "quote": "Total the board. Strictly over 38, every team keeps half its tickets, rounded down ... At 38 or under, leave it."
+    },
+    {
+     "id": "R22",
+     "recoverable": true,
+     "quote": "every team keeps half its tickets, rounded down, and the rest are closed-without-action. ... the cycles in which the backlog cut fired"
+    },
+    {
+     "id": "R23",
+     "recoverable": true,
+     "quote": "open tickets for teams 1 to 6, in order; each team's status (ROUTINE or ESCALATED); every status change as (cycle, team, before, after); the cycles in which the backlog cut fired; the closed tally; and a balance line: tickets at start plus everything that arrived, against tickets open plus tickets closed."
+    }
+   ],
+   "recoverable": 21
+  },
+  {
+   "arm": "W1",
+   "key": "electrical",
+   "results": [
+    {
+     "id": "R01",
+     "recoverable": true,
+     "quote": "Six storage stages in a chain: position 1 at the source end, 6 at the load end."
+    },
+    {
+     "id": "R02",
+     "recoverable": true,
+     "quote": "Charge comes in whole units, never negative."
+    },
+    {
+     "id": "R03",
+     "recoverable": true,
+     "quote": "Rating: 10, 8, 12, 6, 9, 7"
+    },
+    {
+     "id": "R04",
+     "recoverable": true,
+     "quote": "Upper threshold: 7, 6, 9, 5, 7, 5"
+    },
+    {
+     "id": "R05",
+     "recoverable": true,
+     "quote": "Lower threshold: 3, 2, 4, 2, 3, 2"
+    },
+    {
+     "id": "R06",
+     "recoverable": true,
+     "quote": "Starting charge: 3, 6, 6, 2, 2, 1 ... All stages start CLEAR"
+    },
+    {
+     "id": "R07",
+     "recoverable": true,
+     "quote": "Breaker trip point: 38. All stages start CLEAR; loss tally starts at zero."
+    },
+    {
+     "id": "R08",
+     "recoverable": true,
+     "quote": "Five cycles, five steps each ... Cycle 1: 0, 6, 3, 5, 3, 3 / Cycle 2: 4, 2, 0, 1, 1, 7 / Cycle 3: 4, 4, 3, 0, 0, 6 / Cycle 4: 7, 6, 7, 1, 3, 0 / Cycle 5: 0, 6, 6, 3, 3, 0"
+    },
+    {
+     "id": "R09",
+     "recoverable": true,
+     "quote": "Five cycles, five steps each, in this order. Each step finishes everywhere before the next starts."
+    },
+    {
+     "id": "R10",
+     "recoverable": true,
+     "quote": "Charge. Add each stage's input; ratings aren't enforced, so stages can exceed rating."
+    },
+    {
+     "id": "R11",
+     "recoverable": true,
+     "quote": "Go 1 to 6 in turn. A stage over rating drops to exactly its rating and passes the excess to the next stage toward the load"
+    },
+    {
+     "id": "R12",
+     "recoverable": true,
+     "quote": "passes the excess to the next stage toward the load before that one is checked, so excess can cascade in one pass"
+    },
+    {
+     "id": "R13",
+     "recoverable": true,
+     "quote": "Stage 6's excess goes to ground. ... Everything sent to ground goes on the loss tally."
+    },
+    {
+     "id": "R14",
+     "recoverable": true,
+     "quote": "On post-shunt charge: CLEAR at or above upper goes ASSERTED"
+    },
+    {
+     "id": "R15",
+     "recoverable": true,
+     "quote": "ASSERTED at or below lower goes CLEAR"
+    },
+    {
+     "id": "R16",
+     "recoverable": true,
+     "quote": "in between, it holds. States change only here, at most once per cycle."
+    },
+    {
+     "id": "R17",
+     "recoverable": true,
+     "quote": "Work out all six amounts from present charges, then move them together."
+    },
+    {
+     "id": "R18",
+     "recoverable": true,
+     "quote": "CLEAR leaks a quarter of its charge, rounded down, to ground."
+    },
+    {
+     "id": "R19",
+     "recoverable": true,
+     "quote": "ASSERTED instead sends half, rounded down, back through the return diode to the stage just before it, toward the source; stage 1's feedback goes to ground."
+    },
+    {
+     "id": "R20",
+     "recoverable": true,
+     "quote": "Ratings aren't enforced: overcharge waits for next cycle's shunts; after cycle 5, none."
+    },
+    {
+     "id": "R21",
+     "recoverable": true,
+     "quote": "Every cycle, if the six total strictly above 38, it trips ... At 38 or below, nothing."
+    },
+    {
+     "id": "R22",
+     "recoverable": true,
+     "quote": "each stage keeps half, rounded down; the rest goes to ground."
+    },
+    {
+     "id": "R23",
+     "recoverable": true,
+     "quote": "each stage's end charge, source end first; each end state, same order; every state change as (cycle, position, before, after); the cycles the breaker tripped; the loss tally; and the balance check: starting charge plus all input equals end charge plus loss tally."
+    }
+   ],
+   "recoverable": 23
+  },
+  {
+   "arm": "W1",
+   "key": "concrete",
+   "results": [
+    {
+     "id": "R01",
+     "recoverable": true,
+     "quote": "Six forms on the chute: form 1 under the hopper, form 6 at the end."
+    },
+    {
+     "id": "R02",
+     "recoverable": false,
+     "quote": "Mix counts in whole units. (never-negative is not stated)"
+    },
+    {
+     "id": "R03",
+     "recoverable": true,
+     "quote": "Capacity: 10, 8, 12, 6, 9, 7"
+    },
+    {
+     "id": "R04",
+     "recoverable": true,
+     "quote": "Upper mark: 7, 6, 9, 5, 7, 5"
+    },
+    {
+     "id": "R05",
+     "recoverable": true,
+     "quote": "Lower mark: 3, 2, 4, 2, 3, 2"
+    },
+    {
+     "id": "R06",
+     "recoverable": true,
+     "quote": "Every form starts GREEN. ... Starting mix: 3, 6, 6, 2, 2, 1"
+    },
+    {
+     "id": "R07",
+     "recoverable": true,
+     "quote": "Washout limit: 38 ... go on the loss tally, starting at zero."
+    },
+    {
+     "id": "R08",
+     "recoverable": true,
+     "quote": "Five cycles ... Cycle 1: 0, 6, 3, 5, 3, 3 / Cycle 2: 4, 2, 0, 1, 1, 7 / Cycle 3: 4, 4, 3, 0, 0, 6 / Cycle 4: 7, 6, 7, 1, 3, 0 / Cycle 5: 0, 6, 6, 3, 3, 0"
+    },
+    {
+     "id": "R09",
+     "recoverable": true,
+     "quote": "Five cycles, five steps each, in this order. Each step finishes on all six forms before the next."
+    },
+    {
+     "id": "R10",
+     "recoverable": true,
+     "quote": "Pour. Each form takes its units, even past capacity."
+    },
+    {
+     "id": "R11",
+     "recoverable": true,
+     "quote": "Go form 1 to form 6, one at a time. Anything over capacity runs into the next form down; the form is left exactly full."
+    },
+    {
+     "id": "R12",
+     "recoverable": true,
+     "quote": "Form 1's overtop is already in form 2 when you reach it, so it can cascade."
+    },
+    {
+     "id": "R13",
+     "recoverable": true,
+     "quote": "Form 6 overtops into the waste pit."
+    },
+    {
+     "id": "R14",
+     "recoverable": true,
+     "quote": "State check, on what's in the forms now. GREEN at or above the upper mark goes HOT."
+    },
+    {
+     "id": "R15",
+     "recoverable": true,
+     "quote": "HOT at or below the lower mark goes back to GREEN"
+    },
+    {
+     "id": "R16",
+     "recoverable": true,
+     "quote": "Anything else keeps its state. One change per form per cycle at most."
+    },
+    {
+     "id": "R17",
+     "recoverable": true,
+     "quote": "Figure all six amounts from current contents first, then move them together."
+    },
+    {
+     "id": "R18",
+     "recoverable": true,
+     "quote": "GREEN loses a quarter, rounded down, to evaporation: waste."
+    },
+    {
+     "id": "R19",
+     "recoverable": true,
+     "quote": "HOT bleeds half, rounded down, back up the chute into the form before it (5 into 4). Form 1's bleed is waste."
+    },
+    {
+     "id": "R20",
+     "recoverable": true,
+     "quote": "A form can bleed and receive in the same step. No capacity limit: overfill waits for next cycle's overtop, and after cycle 5 it stays."
+    },
+    {
+     "id": "R21",
+     "recoverable": true,
+     "quote": "Total all six. Strictly over 38: ... Otherwise nothing."
+    },
+    {
+     "id": "R22",
+     "recoverable": true,
+     "quote": "each form keeps half, rounded down; the rest is waste; note the cycle."
+    },
+    {
+     "id": "R23",
+     "recoverable": true,
+     "quote": "the six end quantities, positions 1 to 6; the six end states; every state change as (cycle, position, before, after); the cycles the washout fired; the loss tally; and the balance check: starting mix plus all pours must equal end quantities plus loss tally."
+    }
+   ],
+   "recoverable": 22
+  },
+  {
+   "arm": "W1",
+   "key": "metallurgy",
+   "results": [
+    {
+     "id": "R01",
+     "recoverable": true,
+     "quote": "Six crucibles in a cascade: 1 at the charging end, 6 at the tapping end. ... Every row reads positions 1 to 6."
+    },
+    {
+     "id": "R02",
+     "recoverable": false,
+     "quote": "Melt counts in whole units."
+    },
+    {
+     "id": "R03",
+     "recoverable": true,
+     "quote": "Capacity: 10 8 12 6 9 7"
+    },
+    {
+     "id": "R04",
+     "recoverable": true,
+     "quote": "Upper mark: 7 6 9 5 7 5"
+    },
+    {
+     "id": "R05",
+     "recoverable": true,
+     "quote": "Lower mark: 3 2 4 2 3 2"
+    },
+    {
+     "id": "R06",
+     "recoverable": true,
+     "quote": "Starting melt: 3 6 6 2 2 1 ... All start BASE."
+    },
+    {
+     "id": "R07",
+     "recoverable": true,
+     "quote": "Loss tally, everything sent to slag, starts at 0. Global reset limit: 38."
+    },
+    {
+     "id": "R08",
+     "recoverable": true,
+     "quote": "Cycle 1: 0 6 3 5 3 3 / Cycle 2: 4 2 0 1 1 7 / Cycle 3: 4 4 3 0 0 6 / Cycle 4: 7 6 7 1 3 0 / Cycle 5: 0 6 6 3 3 0 ... Five cycles"
+    },
+    {
+     "id": "R09",
+     "recoverable": true,
+     "quote": "Five cycles, five steps each, in order; each step finishes on all six before the next."
+    },
+    {
+     "id": "R10",
+     "recoverable": true,
+     "quote": "Charge. Add each crucible's charge. It may sit above capacity until step 2."
+    },
+    {
+     "id": "R11",
+     "recoverable": true,
+     "quote": "Walk 1 to 6. Excess over capacity runs down the launder to the next crucible; this one stays exactly full."
+    },
+    {
+     "id": "R12",
+     "recoverable": true,
+     "quote": "It lands before you reach that crucible, so overflow can carry down the line."
+    },
+    {
+     "id": "R13",
+     "recoverable": true,
+     "quote": "From 6 it goes to the slag pit, not a ladle."
+    },
+    {
+     "id": "R14",
+     "recoverable": true,
+     "quote": "State check, on contents after overflow. ... BASE at or above its upper mark goes SUPERHEATED."
+    },
+    {
+     "id": "R15",
+     "recoverable": true,
+     "quote": "SUPERHEATED at or below its lower mark goes back to BASE."
+    },
+    {
+     "id": "R16",
+     "recoverable": true,
+     "quote": "Between the marks, state carries over unchanged. State changes only here, at most once per crucible per cycle."
+    },
+    {
+     "id": "R17",
+     "recoverable": true,
+     "quote": "Figure all six amounts from current contents before moving anything, rounding down. ... Then move all at once."
+    },
+    {
+     "id": "R18",
+     "recoverable": true,
+     "quote": "BASE: a quarter to slag."
+    },
+    {
+     "id": "R19",
+     "recoverable": true,
+     "quote": "SUPERHEATED: half back up the return launder into the previous crucible, toward the charging end, none to slag; crucible 1's half goes to slag."
+    },
+    {
+     "id": "R20",
+     "recoverable": true,
+     "quote": "Then move all at once. Returned melt can put a crucible over capacity; it stays until next cycle's overflow, or for good after cycle 5."
+    },
+    {
+     "id": "R21",
+     "recoverable": true,
+     "quote": "Total all six. Strictly above 38: emergency tap ... At 38 or below, nothing."
+    },
+    {
+     "id": "R22",
+     "recoverable": true,
+     "quote": "emergency tap, halve every crucible, rounding down, removed melt to slag; note the cycle."
+    },
+    {
+     "id": "R23",
+     "recoverable": true,
+     "quote": "the six end quantities, positions 1 to 6; the six end states, same order; every state change as (cycle, position, before, after); the cycles the global reset fired; the loss tally; and the balance check: starting melt plus all charges must equal end melt plus loss tally."
+    }
+   ],
+   "recoverable": 22
+  },
+  {
+   "arm": "W1",
+   "key": "xylem",
+   "results": [
+    {
+     "id": "R01",
+     "recoverable": true,
+     "quote": "Six stem segments: 1 at the root collar, 6 at the crown."
+    },
+    {
+     "id": "R02",
+     "recoverable": false,
+     "quote": "Each holds whole units of sap (non-negativity is not stated)"
+    },
+    {
+     "id": "R03",
+     "recoverable": true,
+     "quote": "Holding volume: 10, 8, 12, 6, 9, 7"
+    },
+    {
+     "id": "R04",
+     "recoverable": true,
+     "quote": "Upper mark: 7, 6, 9, 5, 7, 5"
+    },
+    {
+     "id": "R05",
+     "recoverable": true,
+     "quote": "Lower mark: 3, 2, 4, 2, 3, 2"
+    },
+    {
+     "id": "R06",
+     "recoverable": true,
+     "quote": "all start QUIET. ... Starting sap: 3, 6, 6, 2, 2, 1"
+    },
+    {
+     "id": "R07",
+     "recoverable": true,
+     "quote": "Stem limit: 38 ... Everything transpired or respired goes on the loss tally, starting at 0."
+    },
+    {
+     "id": "R08",
+     "recoverable": true,
+     "quote": "Cycle 1: 0, 6, 3, 5, 3, 3 / Cycle 2: 4, 2, 0, 1, 1, 7 / Cycle 3: 4, 4, 3, 0, 0, 6 / Cycle 4: 7, 6, 7, 1, 3, 0 / Cycle 5: 0, 6, 6, 3, 3, 0 ... Five cycles"
+    },
+    {
+     "id": "R09",
+     "recoverable": true,
+     "quote": "each runs these five steps in order, every step finished on all segments before the next."
+    },
+    {
+     "id": "R10",
+     "recoverable": true,
+     "quote": "Uptake: add each segment's uptake for the cycle; it may go over its holding volume."
+    },
+    {
+     "id": "R11",
+     "recoverable": true,
+     "quote": "work segments 1 to 6 in turn. Sap over a segment's holding volume goes up the xylem into the next segment toward the crown, leaving that segment full"
+    },
+    {
+     "id": "R12",
+     "recoverable": true,
+     "quote": "What arrives counts before that segment is worked, so excess can carry several segments up."
+    },
+    {
+     "id": "R13",
+     "recoverable": true,
+     "quote": "segment 6's excess is transpired."
+    },
+    {
+     "id": "R14",
+     "recoverable": true,
+     "quote": "State check, on sap after push-up: QUIET at or above its upper mark turns SINK-ACTIVE"
+    },
+    {
+     "id": "R15",
+     "recoverable": true,
+     "quote": "SINK-ACTIVE at or below its lower mark turns QUIET"
+    },
+    {
+     "id": "R16",
+     "recoverable": true,
+     "quote": "otherwise, including between the marks, the state stays. Log each change as (cycle, position, before, after)."
+    },
+    {
+     "id": "R17",
+     "recoverable": true,
+     "quote": "first, from sap and states as they stand, work out all six amounts, rounded down ... Then each gives its amount, all at once."
+    },
+    {
+     "id": "R18",
+     "recoverable": true,
+     "quote": "QUIET a quarter ... QUIET sap is respired."
+    },
+    {
+     "id": "R19",
+     "recoverable": true,
+     "quote": "SINK-ACTIVE half ... SINK-ACTIVE sap goes down the phloem into the next segment toward the root ... from segment 1 it goes on the tally."
+    },
+    {
+     "id": "R20",
+     "recoverable": true,
+     "quote": "Then each gives its amount, all at once. ... which may then sit over holding volume until next cycle's push-up, or for good after cycle 5"
+    },
+    {
+     "id": "R21",
+     "recoverable": true,
+     "quote": "Leaf-drop: if the six total strictly above 38"
+    },
+    {
+     "id": "R22",
+     "recoverable": true,
+     "quote": "halve every segment, rounded down, the removed sap transpired; log the cycle."
+    },
+    {
+     "id": "R23",
+     "recoverable": true,
+     "quote": "end sap per segment, positions 1 to 6; end states, 1 to 6; every state change as (cycle, position, before, after); the cycles leaf-drop fired; the loss tally; and the balance check: starting sap plus all uptake equals end sap plus loss tally."
+    }
+   ],
+   "recoverable": 22
+  },
+  {
+   "arm": "W1",
+   "key": "ballast",
+   "results": [
+    {
+     "id": "R01",
+     "recoverable": true,
+     "quote": "Six ballast compartments, 1 at the bow to 6 at the stern."
+    },
+    {
+     "id": "R02",
+     "recoverable": true,
+     "quote": "Water counts in whole units, never below zero."
+    },
+    {
+     "id": "R03",
+     "recoverable": true,
+     "quote": "Volume: 10, 8, 12, 6, 9, 7"
+    },
+    {
+     "id": "R04",
+     "recoverable": true,
+     "quote": "Inception mark: 7, 6, 9, 5, 7, 5 (LAMINAR with water at or above its inception mark goes CAVITATING)"
+    },
+    {
+     "id": "R05",
+     "recoverable": true,
+     "quote": "Desinence mark: 3, 2, 4, 2, 3, 2 (CAVITATING returns to LAMINAR only when water is at or below its desinence mark)"
+    },
+    {
+     "id": "R06",
+     "recoverable": true,
+     "quote": "Starting water: 3, 6, 6, 2, 2, 1 ... All pumps start LAMINAR"
+    },
+    {
+     "id": "R07",
+     "recoverable": true,
+     "quote": "Blow limit, whole line: 38 ... the overboard tally starts at 0"
+    },
+    {
+     "id": "R08",
+     "recoverable": true,
+     "quote": "a run is five cycles, 1 to 5 ... Cycle 1: 0, 6, 3, 5, 3, 3 / Cycle 2: 4, 2, 0, 1, 1, 7 / Cycle 3: 4, 4, 3, 0, 0, 6 / Cycle 4: 7, 6, 7, 1, 3, 0 / Cycle 5: 0, 6, 6, 3, 3, 0"
+    },
+    {
+     "id": "R09",
+     "recoverable": true,
+     "quote": "Each cycle is five steps, in order, each finished on all six before the next."
+    },
+    {
+     "id": "R10",
+     "recoverable": true,
+     "quote": "Take on water. Every compartment gets its full table amount, even past its volume."
+    },
+    {
+     "id": "R11",
+     "recoverable": true,
+     "quote": "One at a time, 1 through 6. Anything above volume runs aft into the next compartment, leaving this one at exactly its volume."
+    },
+    {
+     "id": "R12",
+     "recoverable": true,
+     "quote": "Going bow to stern, that water arrives before the next is checked, so overflow can cascade down the line."
+    },
+    {
+     "id": "R13",
+     "recoverable": true,
+     "quote": "Overflow from 6 goes overboard."
+    },
+    {
+     "id": "R14",
+     "recoverable": true,
+     "quote": "Pump check, on post-scupper water. LAMINAR with water at or above its inception mark goes CAVITATING."
+    },
+    {
+     "id": "R15",
+     "recoverable": true,
+     "quote": "CAVITATING returns to LAMINAR only when water is at or below its desinence mark."
+    },
+    {
+     "id": "R16",
+     "recoverable": true,
+     "quote": "In between, no change. States change nowhere else."
+    },
+    {
+     "id": "R17",
+     "recoverable": true,
+     "quote": "Figure all six amounts from current contents first, then move them together."
+    },
+    {
+     "id": "R18",
+     "recoverable": true,
+     "quote": "LAMINAR pumps a quarter, rounded down, overboard."
+    },
+    {
+     "id": "R19",
+     "recoverable": true,
+     "quote": "CAVITATING backflows half, rounded down, forward into the next compartment toward the bow; compartment 1's backflow goes overboard."
+    },
+    {
+     "id": "R20",
+     "recoverable": true,
+     "quote": "Nobody enforces volume here: backflow can leave a compartment over volume until next cycle's scuppers, and after cycle 5 it stays over."
+    },
+    {
+     "id": "R21",
+     "recoverable": true,
+     "quote": "Emergency blow. Total all six. Only above 38, not at 38"
+    },
+    {
+     "id": "R22",
+     "recoverable": true,
+     "quote": "every compartment keeps half, rounded down, the rest overboard. Note the cycle."
+    },
+    {
+     "id": "R23",
+     "recoverable": true,
+     "quote": "the six end quantities, position order 1 to 6; the six end states, same order; every state change as (cycle, position, before, after); the cycles the emergency blow fired; the overboard tally; and the balance check, starting water plus all water taken on must equal end water plus the tally."
+    }
+   ],
+   "recoverable": 23
+  },
+  {
+   "arm": "W1",
+   "key": "metamorphosis",
+   "results": [
+    {
+     "id": "R01",
+     "recoverable": true,
+     "quote": "Six chambers, 1 to 6; overflow runs toward 6, reabsorption back toward 1."
+    },
+    {
+     "id": "R02",
+     "recoverable": true,
+     "quote": "Mass is whole units, never below zero."
+    },
+    {
+     "id": "R03",
+     "recoverable": true,
+     "quote": "Holding limit: 10, 8, 12, 6, 9, 7"
+    },
+    {
+     "id": "R04",
+     "recoverable": true,
+     "quote": "Upper mark: 7, 6, 9, 5, 7, 5"
+    },
+    {
+     "id": "R05",
+     "recoverable": true,
+     "quote": "Lower mark: 3, 2, 4, 2, 3, 2"
+    },
+    {
+     "id": "R06",
+     "recoverable": true,
+     "quote": "Every chamber starts LARVAL; ... Starting mass: 3, 6, 6, 2, 2, 1"
+    },
+    {
+     "id": "R07",
+     "recoverable": true,
+     "quote": "Line limit: 38 ... the loss tally starts at zero."
+    },
+    {
+     "id": "R08",
+     "recoverable": true,
+     "quote": "A run is five cycles of five steps ... Cycle 1: 0, 6, 3, 5, 3, 3 / Cycle 2: 4, 2, 0, 1, 1, 7 / Cycle 3: 4, 4, 3, 0, 0, 6 / Cycle 4: 7, 6, 7, 1, 3, 0 / Cycle 5: 0, 6, 6, 3, 3, 0"
+    },
+    {
+     "id": "R09",
+     "recoverable": true,
+     "quote": "A run is five cycles of five steps, in order; each step finishes on all six chambers before the next."
+    },
+    {
+     "id": "R10",
+     "recoverable": true,
+     "quote": "Add that cycle's table amount to every chamber, PUPAL included. The holding limit doesn't apply here."
+    },
+    {
+     "id": "R11",
+     "recoverable": true,
+     "quote": "Chamber by chamber, 1 through 6: anything over the holding limit moves into the next chamber, leaving the chamber exactly at its limit."
+    },
+    {
+     "id": "R12",
+     "recoverable": true,
+     "quote": "Chamber 1's excess lands in 2 before 2 is checked, so overflow cascades."
+    },
+    {
+     "id": "R13",
+     "recoverable": true,
+     "quote": "Excess from 6 is discarded onto the loss tally."
+    },
+    {
+     "id": "R14",
+     "recoverable": true,
+     "quote": "Weigh after overflow. LARVAL at or above the upper mark goes PUPAL."
+    },
+    {
+     "id": "R15",
+     "recoverable": true,
+     "quote": "PUPAL at or below the lower mark goes back to LARVAL"
+    },
+    {
+     "id": "R16",
+     "recoverable": true,
+     "quote": "Otherwise no change. At most one change per chamber per cycle."
+    },
+    {
+     "id": "R17",
+     "recoverable": true,
+     "quote": "Work out all six amounts from current contents before touching anything."
+    },
+    {
+     "id": "R18",
+     "recoverable": true,
+     "quote": "LARVAL metabolises a quarter of its mass, rounded down, onto the loss tally."
+    },
+    {
+     "id": "R19",
+     "recoverable": true,
+     "quote": "PUPAL reabsorbs half, rounded down, back into the previous chamber; chamber 1's goes on the loss tally."
+    },
+    {
+     "id": "R20",
+     "recoverable": true,
+     "quote": "Apply all six together. No holding limit here either: excess waits for next cycle's overflow, so after cycle 5 it stays."
+    },
+    {
+     "id": "R21",
+     "recoverable": true,
+     "quote": "Total the line. Strictly over 38, every chamber is halved ... At 38 or under, nothing."
+    },
+    {
+     "id": "R22",
+     "recoverable": true,
+     "quote": "every chamber is halved, rounded down, the removed mass onto the loss tally."
+    },
+    {
+     "id": "R23",
+     "recoverable": true,
+     "quote": "the six end masses, chamber 1 to 6; the six end states, LARVAL or PUPAL; every state change as (cycle, chamber, before, after); the cycles a moult fired; the loss tally; and the balance check: starting mass plus all feed equals end mass plus loss tally."
+    }
+   ],
+   "recoverable": 23
+  },
+  {
+   "arm": "W1",
+   "key": "treatment",
+   "results": [
+    {
+     "id": "R01",
+     "recoverable": true,
+     "quote": "Six tanks in series, tank 1 at the inlet, tank 6 at the outfall."
+    },
+    {
+     "id": "R02",
+     "recoverable": true,
+     "quote": "Liquor is counted in whole units, never below zero."
+    },
+    {
+     "id": "R03",
+     "recoverable": true,
+     "quote": "Volume:         10  8 12  6  9  7"
+    },
+    {
+     "id": "R04",
+     "recoverable": true,
+     "quote": "Upper mark:      7  6  9  5  7  5"
+    },
+    {
+     "id": "R05",
+     "recoverable": true,
+     "quote": "Lower mark:      3  2  4  2  3  2"
+    },
+    {
+     "id": "R06",
+     "recoverable": true,
+     "quote": "Opening liquor:  3  6  6  2  2  1 ... All tanks open STEADY."
+    },
+    {
+     "id": "R07",
+     "recoverable": true,
+     "quote": "Loss tally opens at 0. Storm bypass limit: 38."
+    },
+    {
+     "id": "R08",
+     "recoverable": true,
+     "quote": "Five cycles, five jobs each ... Cycle 1: 0 6 3 5 3 3 / Cycle 2: 4 2 0 1 1 7 / Cycle 3: 4 4 3 0 0 6 / Cycle 4: 7 6 7 1 3 0 / Cycle 5: 0 6 6 3 3 0"
+    },
+    {
+     "id": "R09",
+     "recoverable": true,
+     "quote": "Five cycles, five jobs each, in order; finish each job on all six tanks first."
+    },
+    {
+     "id": "R10",
+     "recoverable": true,
+     "quote": "Each tank takes its own delivery directly, even past volume."
+    },
+    {
+     "id": "R11",
+     "recoverable": true,
+     "quote": "Go tank 1 to 6. Anything over volume passes the weir into the next tank, leaving it exactly full."
+    },
+    {
+     "id": "R12",
+     "recoverable": true,
+     "quote": "Overflow lands before the next tank's turn and can push that one over too."
+    },
+    {
+     "id": "R13",
+     "recoverable": true,
+     "quote": "Tank 6 overflows to outfall. ... Everything reaching outfall goes on the loss tally."
+    },
+    {
+     "id": "R14",
+     "recoverable": true,
+     "quote": "After the weirs, a STEADY tank at or above its upper mark goes OVERLOADED"
+    },
+    {
+     "id": "R15",
+     "recoverable": true,
+     "quote": "an OVERLOADED tank at or below its lower mark goes STEADY."
+    },
+    {
+     "id": "R16",
+     "recoverable": true,
+     "quote": "Between the marks it keeps its state. ... at most one per tank per cycle."
+    },
+    {
+     "id": "R17",
+     "recoverable": true,
+     "quote": "Using those states, work out all six amounts from current contents before moving anything, rounding down."
+    },
+    {
+     "id": "R18",
+     "recoverable": true,
+     "quote": "STEADY: a quarter to outfall."
+    },
+    {
+     "id": "R19",
+     "recoverable": true,
+     "quote": "OVERLOADED: half back through the return line to the tank just upstream; tank 1 sends its half to outfall."
+    },
+    {
+     "id": "R20",
+     "recoverable": true,
+     "quote": "Then move all at once. No volume cap here; an overfull tank waits for next cycle's weirs, and after cycle 5 it stays overfull."
+    },
+    {
+     "id": "R21",
+     "recoverable": true,
+     "quote": "If the six tanks total more than 38 ... At 38 or under, nothing happens."
+    },
+    {
+     "id": "R22",
+     "recoverable": true,
+     "quote": "each keeps half, rounded down, and the rest goes to outfall; log the cycle."
+    },
+    {
+     "id": "R23",
+     "recoverable": true,
+     "quote": "the six end quantities and six end states, positions 1 to 6; every state change as (cycle, position, before, after); the cycles the storm bypass fired; the loss tally; and the balance check: opening liquor plus all feed must equal end quantities plus the loss tally."
+    }
+   ],
+   "recoverable": 23
+  },
+  {
+   "arm": "W1",
+   "key": "rag",
+   "results": [
+    {
+     "id": "R01",
+     "recoverable": true,
+     "quote": "Six retrieval buffers in a stack, positions 1 to 6: tier 1 nearest the LLM, tier 6 furthest."
+    },
+    {
+     "id": "R02",
+     "recoverable": true,
+     "quote": "Counts are whole chunks."
+    },
+    {
+     "id": "R03",
+     "recoverable": true,
+     "quote": "Chunk budget: 10, 8, 12, 6, 9, 7"
+    },
+    {
+     "id": "R04",
+     "recoverable": true,
+     "quote": "Upper mark: 7, 6, 9, 5, 7, 5"
+    },
+    {
+     "id": "R05",
+     "recoverable": true,
+     "quote": "Lower mark: 3, 2, 4, 2, 3, 2"
+    },
+    {
+     "id": "R06",
+     "recoverable": true,
+     "quote": "Every tier starts COLD. ... Starting chunks: 3, 6, 6, 2, 2, 1"
+    },
+    {
+     "id": "R07",
+     "recoverable": true,
+     "quote": "Stack ceiling: 38. ... the loss tally, every chunk dropped; and the balance check: starting chunks plus all ingested chunks must equal end chunks plus the loss tally."
+    },
+    {
+     "id": "R08",
+     "recoverable": true,
+     "quote": "A run is five cycles ... Cycle 1: 0, 6, 3, 5, 3, 3 / Cycle 2: 4, 2, 0, 1, 1, 7 / Cycle 3: 4, 4, 3, 0, 0, 6 / Cycle 4: 7, 6, 7, 1, 3, 0 / Cycle 5: 0, 6, 6, 3, 3, 0"
+    },
+    {
+     "id": "R09",
+     "recoverable": true,
+     "quote": "A run is five cycles, five steps each, in this order. Each step finishes on every tier before the next starts."
+    },
+    {
+     "id": "R10",
+     "recoverable": true,
+     "quote": "Ingest. Add that cycle's new chunks, tiers 1 to 6. Budgets aren't enforced here."
+    },
+    {
+     "id": "R11",
+     "recoverable": true,
+     "quote": "Walk tiers 1 to 6. Over-budget chunks move to the next tier out; the tier sits exactly at budget."
+    },
+    {
+     "id": "R12",
+     "recoverable": true,
+     "quote": "Evicted chunks arrive before the receiving tier is checked, so overflow cascades."
+    },
+    {
+     "id": "R13",
+     "recoverable": true,
+     "quote": "Tier 6's overflow is dropped."
+    },
+    {
+     "id": "R14",
+     "recoverable": true,
+     "quote": "State check, on post-eviction counts. A COLD tier at or above its upper mark goes HOT."
+    },
+    {
+     "id": "R15",
+     "recoverable": true,
+     "quote": "A HOT tier at or below its lower mark goes COLD."
+    },
+    {
+     "id": "R16",
+     "recoverable": true,
+     "quote": "Between the marks, no change. At most one flip per tier per cycle."
+    },
+    {
+     "id": "R17",
+     "recoverable": true,
+     "quote": "Compute all six amounts from current counts first, then apply together."
+    },
+    {
+     "id": "R18",
+     "recoverable": true,
+     "quote": "A COLD tier compacts away a quarter, rounded down; those are dropped."
+    },
+    {
+     "id": "R19",
+     "recoverable": true,
+     "quote": "A HOT tier moves half, rounded down, out of itself into the tier one closer to the LLM; tier 1's promoted chunks are dropped."
+    },
+    {
+     "id": "R20",
+     "recoverable": true,
+     "quote": "No budget check: a tier pushed over budget stays over until next cycle's eviction or, after cycle 5, for good."
+    },
+    {
+     "id": "R21",
+     "recoverable": true,
+     "quote": "If the six-tier total is strictly above 38 ... At 38 or below, nothing."
+    },
+    {
+     "id": "R22",
+     "recoverable": true,
+     "quote": "halve every tier, rounded down, dropping what's removed, and note the cycle."
+    },
+    {
+     "id": "R23",
+     "recoverable": true,
+     "quote": "chunks held, tiers 1 to 6 in order; each tier's state, same order; every flip as (cycle, position, before, after); the cycles where the context reset fired; the loss tally, every chunk dropped; and the balance check: starting chunks plus all ingested chunks must equal end chunks plus the loss tally."
+    }
+   ],
+   "recoverable": 23
+  },
+  {
+   "arm": "W1",
+   "key": "lagrangian",
+   "results": [
+    {
+     "id": "R01",
+     "recoverable": true,
+     "quote": "components 1 to 6 ... components 1 to 6 in order ... ACTIVE amounts go to component i\u22121"
+    },
+    {
+     "id": "R02",
+     "recoverable": true,
+     "quote": "integer state vector x, components 1 to 6, never negative"
+    },
+    {
+     "id": "R03",
+     "recoverable": true,
+     "quote": "c: 10, 8, 12, 6, 9, 7"
+    },
+    {
+     "id": "R04",
+     "recoverable": true,
+     "quote": "u: 7, 6, 9, 5, 7, 5"
+    },
+    {
+     "id": "R05",
+     "recoverable": true,
+     "quote": "d: 3, 2, 4, 2, 3, 2"
+    },
+    {
+     "id": "R06",
+     "recoverable": true,
+     "quote": "All start INACTIVE ... Starting x: 3, 6, 6, 2, 2, 1"
+    },
+    {
+     "id": "R07",
+     "recoverable": true,
+     "quote": "1-norm budget: 38 ... slack starts at 0"
+    },
+    {
+     "id": "R08",
+     "recoverable": true,
+     "quote": "A run is 5 cycles ... Cycle 1: 0, 6, 3, 5, 3, 3 / Cycle 2: 4, 2, 0, 1, 1, 7 / Cycle 3: 4, 4, 3, 0, 0, 6 / Cycle 4: 7, 6, 7, 1, 3, 0 / Cycle 5: 0, 6, 6, 3, 3, 0"
+    },
+    {
+     "id": "R09",
+     "recoverable": true,
+     "quote": "A run is 5 cycles of five steps, always in this order. Each step finishes on all six components before the next starts."
+    },
+    {
+     "id": "R10",
+     "recoverable": true,
+     "quote": "Load. Add the cycle's input row to x, position by position. No box enforcement."
+    },
+    {
+     "id": "R11",
+     "recoverable": true,
+     "quote": "components 1 to 6 in order. If x_i exceeds c_i, set it to c_i and add the violation to x_(i+1) before handling i+1"
+    },
+    {
+     "id": "R12",
+     "recoverable": true,
+     "quote": "add the violation to x_(i+1) before handling i+1, so violations cascade; nothing is discarded"
+    },
+    {
+     "id": "R13",
+     "recoverable": true,
+     "quote": "Component 6's violation goes to slack."
+    },
+    {
+     "id": "R14",
+     "recoverable": true,
+     "quote": "Active-set update, on the swept x. INACTIVE with x_i \u2265 u_i goes ACTIVE"
+    },
+    {
+     "id": "R15",
+     "recoverable": true,
+     "quote": "ACTIVE with x_i \u2264 d_i goes INACTIVE"
+    },
+    {
+     "id": "R16",
+     "recoverable": true,
+     "quote": "otherwise the flag holds. ... Flags change only here, at most once per cycle."
+    },
+    {
+     "id": "R17",
+     "recoverable": true,
+     "quote": "Jacobi transfer. Compute all six amounts from the current x before moving anything: INACTIVE floor(x_i/4), ACTIVE floor(x_i/2). Apply together"
+    },
+    {
+     "id": "R18",
+     "recoverable": true,
+     "quote": "INACTIVE floor(x_i/4) ... INACTIVE amounts go to slack."
+    },
+    {
+     "id": "R19",
+     "recoverable": true,
+     "quote": "ACTIVE floor(x_i/2) ... ACTIVE amounts go to component i\u22121; component 1's goes to slack."
+    },
+    {
+     "id": "R20",
+     "recoverable": true,
+     "quote": "each component drops by its own amount. ... No box enforcement: a component can sit above its ceiling until next cycle's sweep, or permanently after cycle 5."
+    },
+    {
+     "id": "R21",
+     "recoverable": true,
+     "quote": "If the 1-norm is strictly above 38 ... At 38 or below, nothing."
+    },
+    {
+     "id": "R22",
+     "recoverable": true,
+     "quote": "floor-halve every component, everything removed to slack, and log the cycle."
+    },
+    {
+     "id": "R23",
+     "recoverable": true,
+     "quote": "the six end quantities, positions 1 to 6; the six end flags, positions 1 to 6; every flag change as (cycle, position, before, after); the cycles where the penalty reset fired; the slack accumulator; and the balance check: starting sum plus total input equals end sum plus slack."
+    }
+   ],
+   "recoverable": 23
+  },
+  {
+   "arm": "W1",
+   "key": "goodhart",
+   "results": [
+    {
+     "id": "R01",
+     "recoverable": true,
+     "quote": "Six teams, 1 at the front, 6 at the customer."
+    },
+    {
+     "id": "R02",
+     "recoverable": false,
+     "quote": "Each holds open tickets against its WIP limit. (whole-number and never-negative are not stated)"
+    },
+    {
+     "id": "R03",
+     "recoverable": true,
+     "quote": "WIP limit: 10, 8, 12, 6, 9, 7"
+    },
+    {
+     "id": "R04",
+     "recoverable": true,
+     "quote": "Upper mark: 7, 6, 9, 5, 7, 5"
+    },
+    {
+     "id": "R05",
+     "recoverable": true,
+     "quote": "Lower mark: 3, 2, 4, 2, 3, 2"
+    },
+    {
+     "id": "R06",
+     "recoverable": true,
+     "quote": "All start ROUTINE; closed tally starts at 0. ... Opening tickets: 3, 6, 6, 2, 2, 1"
+    },
+    {
+     "id": "R07",
+     "recoverable": true,
+     "quote": "Line target: 38 ... closed tally starts at 0. ... 38 is only a trigger."
+    },
+    {
+     "id": "R08",
+     "recoverable": true,
+     "quote": "Five cycles, five steps each ... Cycle 1: 0, 6, 3, 5, 3, 3 / Cycle 2: 4, 2, 0, 1, 1, 7 / Cycle 3: 4, 4, 3, 0, 0, 6 / Cycle 4: 7, 6, 7, 1, 3, 0 / Cycle 5: 0, 6, 6, 3, 3, 0"
+    },
+    {
+     "id": "R09",
+     "recoverable": true,
+     "quote": "Five cycles, five steps each, in this order; each step finishes for all teams before the next."
+    },
+    {
+     "id": "R10",
+     "recoverable": true,
+     "quote": "Arrivals. Teams add their new tickets. Nobody refuses work; teams can sit over limit."
+    },
+    {
+     "id": "R11",
+     "recoverable": true,
+     "quote": "Team by team, 1 through 6: anything over the limit goes to the next team downstream, leaving exactly the limit."
+    },
+    {
+     "id": "R12",
+     "recoverable": true,
+     "quote": "Excess arrives before the receiving team is handled, so it can cascade."
+    },
+    {
+     "id": "R13",
+     "recoverable": true,
+     "quote": "Team 6's excess is closed-without-action and tallied."
+    },
+    {
+     "id": "R14",
+     "recoverable": true,
+     "quote": "Status check, on post-overflow counts. ROUTINE at or above the upper mark goes ESCALATED."
+    },
+    {
+     "id": "R15",
+     "recoverable": true,
+     "quote": "ESCALATED at or below the lower mark goes ROUTINE."
+    },
+    {
+     "id": "R16",
+     "recoverable": true,
+     "quote": "Between the marks, status holds. Status changes only here, at most once per team per cycle."
+    },
+    {
+     "id": "R17",
+     "recoverable": true,
+     "quote": "Figure every amount from current counts before changing any ... Apply all six at once."
+    },
+    {
+     "id": "R18",
+     "recoverable": true,
+     "quote": "ROUTINE closes a quarter of its tickets, tallied; ... both round down."
+    },
+    {
+     "id": "R19",
+     "recoverable": true,
+     "quote": "ESCALATED closes nothing and bounces half back to the team upstream; ... Bounced tickets join the upstream count; team 1's bounce is closed-without-action and tallied."
+    },
+    {
+     "id": "R20",
+     "recoverable": true,
+     "quote": "Apply all six at once. ... No limits here: a team can end over its limit until next cycle's overflow; after cycle 5 it stays over."
+    },
+    {
+     "id": "R21",
+     "recoverable": true,
+     "quote": "Total all six counts. Above 38, not at 38, every team is halved"
+    },
+    {
+     "id": "R22",
+     "recoverable": true,
+     "quote": "every team is halved, rounding down; removed tickets are closed-without-action and tallied; note the cycle."
+    },
+    {
+     "id": "R23",
+     "recoverable": true,
+     "quote": "the six ticket counts, teams 1 to 6; the six statuses, same order; every status change as (cycle, team, before, after); the cycles the backlog cut fired; the closed tally, all routes; and the balance check: opening tickets plus all new tickets equals final counts plus tally."
+    }
+   ],
+   "recoverable": 22
+  }
+ ]
+}

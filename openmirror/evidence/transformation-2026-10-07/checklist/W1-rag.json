@@ -1,0 +1,122 @@
+{
+ "arm": "W1",
+ "key": "rag",
+ "results": [
+  {
+   "id": "R01",
+   "recoverable": true,
+   "quote": "Six retrieval buffers in a stack, positions 1 to 6: tier 1 nearest the LLM, tier 6 furthest."
+  },
+  {
+   "id": "R02",
+   "recoverable": true,
+   "quote": "Counts are whole chunks."
+  },
+  {
+   "id": "R03",
+   "recoverable": true,
+   "quote": "Chunk budget: 10, 8, 12, 6, 9, 7"
+  },
+  {
+   "id": "R04",
+   "recoverable": true,
+   "quote": "Upper mark: 7, 6, 9, 5, 7, 5"
+  },
+  {
+   "id": "R05",
+   "recoverable": true,
+   "quote": "Lower mark: 3, 2, 4, 2, 3, 2"
+  },
+  {
+   "id": "R06",
+   "recoverable": true,
+   "quote": "Every tier starts COLD. ... Starting chunks: 3, 6, 6, 2, 2, 1"
+  },
+  {
+   "id": "R07",
+   "recoverable": true,
+   "quote": "Stack ceiling: 38. ... the loss tally, every chunk dropped; and the balance check: starting chunks plus all ingested chunks must equal end chunks plus the loss tally."
+  },
+  {
+   "id": "R08",
+   "recoverable": true,
+   "quote": "A run is five cycles ... Cycle 1: 0, 6, 3, 5, 3, 3 / Cycle 2: 4, 2, 0, 1, 1, 7 / Cycle 3: 4, 4, 3, 0, 0, 6 / Cycle 4: 7, 6, 7, 1, 3, 0 / Cycle 5: 0, 6, 6, 3, 3, 0"
+  },
+  {
+   "id": "R09",
+   "recoverable": true,
+   "quote": "A run is five cycles, five steps each, in this order. Each step finishes on every tier before the next starts."
+  },
+  {
+   "id": "R10",
+   "recoverable": true,
+   "quote": "Ingest. Add that cycle's new chunks, tiers 1 to 6. Budgets aren't enforced here."
+  },
+  {
+   "id": "R11",
+   "recoverable": true,
+   "quote": "Walk tiers 1 to 6. Over-budget chunks move to the next tier out; the tier sits exactly at budget."
+  },
+  {
+   "id": "R12",
+   "recoverable": true,
+   "quote": "Evicted chunks arrive before the receiving tier is checked, so overflow cascades."
+  },
+  {
+   "id": "R13",
+   "recoverable": true,
+   "quote": "Tier 6's overflow is dropped."
+  },
+  {
+   "id": "R14",
+   "recoverable": true,
+   "quote": "State check, on post-eviction counts. A COLD tier at or above its upper mark goes HOT."
+  },
+  {
+   "id": "R15",
+   "recoverable": true,
+   "quote": "A HOT tier at or below its lower mark goes COLD."
+  },
+  {
+   "id": "R16",
+   "recoverable": true,
+   "quote": "Between the marks, no change. At most one flip per tier per cycle."
+  },
+  {
+   "id": "R17",
+   "recoverable": true,
+   "quote": "Compute all six amounts from current counts first, then apply together."
+  },
+  {
+   "id": "R18",
+   "recoverable": true,
+   "quote": "A COLD tier compacts away a quarter, rounded down; those are dropped."
+  },
+  {
+   "id": "R19",
+   "recoverable": true,
+   "quote": "A HOT tier moves half, rounded down, out of itself into the tier one closer to the LLM; tier 1's promoted chunks are dropped."
+  },
+  {
+   "id": "R20",
+   "recoverable": true,
+   "quote": "No budget check: a tier pushed over budget stays over until next cycle's eviction or, after cycle 5, for good."
+  },
+  {
+   "id": "R21",
+   "recoverable": true,
+   "quote": "If the six-tier total is strictly above 38 ... At 38 or below, nothing."
+  },
+  {
+   "id": "R22",
+   "recoverable": true,
+   "quote": "halve every tier, rounded down, dropping what's removed, and note the cycle."
+  },
+  {
+   "id": "R23",
+   "recoverable": true,
+   "quote": "chunks held, tiers 1 to 6 in order; each tier's state, same order; every flip as (cycle, position, before, after); the cycles where the context reset fired; the loss tally, every chunk dropped; and the balance check: starting chunks plus all ingested chunks must equal end chunks plus the loss tally."
+  }
+ ],
+ "recoverable": 23
+}

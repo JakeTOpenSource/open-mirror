@@ -1,0 +1,175 @@
+{
+ "key": "treatment",
+ "n": 1,
+ "run": {
+  "procedureSummary": "Start: liquor [3,6,6,2,2,1], all STEADY, loss 0. Each cycle runs five steps in order, and each step finishes on all six tanks before the next one starts. (1) Feed: add each tank's delivery for the cycle. No cap, so a tank can go past its volume. (2) Weirs: go through tanks 1 to 6 in order. Any amount over a tank's volume goes into the next tank (before that tank is checked), and the tank is left at exactly its volume. Tank 6's excess goes to outfall and is added to the loss. (3) States: use the contents after the weirs. A STEADY tank with contents >= upper mark becomes OVERLOADED. An OVERLOADED tank with contents <= lower mark becomes STEADY. Otherwise the state stays the same. Each change is logged as (cycle, position, before, after). (4) Discharge: work out every amount from the post-weir contents before moving anything. STEADY sends floor(q/4) to outfall (loss). OVERLOADED sends floor(q/2) to the tank just upstream; tank 1 sends its half to outfall (loss). All amounts then move at once, with no volume cap. (5) Storm bypass: if the six-tank total is strictly greater than 38, each tank keeps floor(q/2), the remainder q - floor(q/2) goes to outfall (loss), and the cycle is logged. A total of 38 or less does nothing. Arithmetic was done with a short Python script.",
+  "openPoints": [
+   {
+    "point": "Whether tank 6 weir overflow counts as loss",
+    "assumption": "Yes. The write-up says it overflows to outfall, and everything that reaches outfall goes on the loss tally."
+   },
+   {
+    "point": "Storm bypass boundary at exactly 38",
+    "assumption": "Strictly more than 38 triggers it. Cycle 5 ended at exactly 38, so the bypass did not fire."
+   },
+   {
+    "point": "Rounding of the bypass remainder for odd quantities",
+    "assumption": "Each tank keeps floor(q/2) and the remainder q - floor(q/2) goes to outfall, so the odd unit goes to loss."
+   },
+   {
+    "point": "Which contents the discharge amounts are based on",
+    "assumption": "The post-weir contents for every tank, worked out before any movement. Return-line inflow does not change any other tank's discharge in the same cycle."
+   },
+   {
+    "point": "A return-line inflow pushing an upstream tank over its volume",
+    "assumption": "Allowed. The tank stays overfull until the next cycle's weirs or the bypass. No tank was overfull at the end of cycle 5."
+   },
+   {
+    "point": "What the state test compares against",
+    "assumption": "Contents after the weirs, using the at-or-above upper mark and at-or-below lower mark rules, with at most one change per tank per cycle."
+   }
+  ],
+  "cycleFigures": "C1: feed [3,12,9,7,5,4]; weirs [3,8,12,6,7,4] (loss 0); states S,O,O,O,O,S; discharge amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3] (loss 1); bypass fired (total 39 > 38) -> [3,5,4,3,2,1] (loss 22). C2: feed [7,7,4,4,3,8]; weirs [7,7,4,4,3,7] (loss 23); states O,O,S,O,S,O; discharge [3,3,1,2,0,3] -> [7,4,5,2,6,4] (loss 27); bypass no (28) -> [7,4,5,2,6,4] (loss 27). C3: feed [11,8,8,2,6,10]; weirs [10,8,9,2,6,7] (loss 30); states O,O,O,S,S,O; discharge [5,4,4,0,1,3] -> [9,8,5,2,8,4] (loss 36); bypass no (36) -> [9,8,5,2,8,4] (loss 36). C4: feed [16,14,12,3,11,4]; weirs [10,8,12,6,9,7] (loss 44); states O,O,O,O,O,O; discharge [5,4,6,3,4,3] -> [9,10,9,7,8,4] (loss 49); bypass fired (total 47) -> [4,5,4,3,4,2] (loss 74). C5: feed [4,11,10,6,7,2]; weirs [4,8,12,6,8,2] (loss 74); states O,O,O,O,O,S; discharge [2,4,6,3,4,0] -> [6,10,9,7,4,2] (loss 76); bypass no (total exactly 38) -> [6,10,9,7,4,2] (loss 76).",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "OVERLOADED",
+   "OVERLOADED",
+   "OVERLOADED",
+   "OVERLOADED",
+   "OVERLOADED",
+   "STEADY"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "OVERLOADED",
+    "to": "STEADY"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "OVERLOADED",
+    "to": "STEADY"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "OVERLOADED",
+    "to": "STEADY"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "OVERLOADED",
+    "to": "STEADY"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Opening liquor 20 + all feed 94 = 114; end quantities 38 + loss tally 76 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "Source write-up: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-w1\\treatment.md. The \"resetPeriods\" field lists the cycles in which the storm bypass (the halving event) fired. Cycle 5 ended with a total of exactly 38, which is at the limit, so the bypass did not fire. The arithmetic script is in the session scratchpad as t.py. Its hard-coded opening total was wrong (it used 18 instead of 20), so the balance figure it printed was off. The balance check above uses the correct opening total of 20."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "openPoints": 6,
+  "usedScript": true
+ },
+ "source": "opus-5.5"
+}

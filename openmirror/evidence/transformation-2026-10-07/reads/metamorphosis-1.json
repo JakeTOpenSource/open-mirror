@@ -1,0 +1,175 @@
+{
+ "key": "metamorphosis",
+ "n": 1,
+ "run": {
+  "procedureSummary": "Start: mass 3,6,6,2,2,1, every chamber LARVAL, loss tally 0. Each cycle runs these five steps in order, and each step finishes on all six chambers before the next starts.\n1 Feed: add the cycle's table amount to each chamber, PUPAL ones included. No holding limit at this step.\n2 Overflow: go through chambers 1 to 6 in order. Any amount over the holding limit (10,8,12,6,9,7) is added to the next chamber before that chamber is checked, so overflow cascades. Chamber 6's excess goes to the loss tally.\n3 Marks: weigh after overflow. LARVAL with mass at or above its upper mark (7,6,9,5,7,5) becomes PUPAL. PUPAL with mass at or below its lower mark (3,2,4,2,3,2) becomes LARVAL. Otherwise no change. At most one change per chamber per cycle. Log each change as (cycle, chamber, before, after).\n4 Burn-off: work out all six amounts from the post-marks contents and new states, then apply them together. LARVAL loses floor(mass/4) to the loss tally. PUPAL moves floor(mass/2) into chamber i-1; chamber 1's amount goes to the loss tally. No holding limit is applied, so any excess waits for the next cycle's overflow. After cycle 5 it stays.\n5 Moult: total the line. If the total is strictly over 38, each chamber becomes floor(mass/2) and the removed mass (mass - floor(mass/2)) goes to the loss tally. At 38 or under, nothing happens.",
+  "openPoints": [
+   {
+    "point": "Moult rounding: does 'halved, rounded down' set the remaining mass or the removed mass?",
+    "assumption": "Remaining mass = floor(m/2), and removed = m - floor(m/2) goes to the loss tally (so for an odd mass the larger half is removed). This decides the result: in cycle 1 chambers 1, 3 and 6 had odd masses (7, 9, 3), and in cycle 4 chambers 1, 3, 4 and 6 did (9, 9, 7, 3)."
+   },
+   {
+    "point": "Which state the burn-off uses",
+    "assumption": "The state after step 3 of the same cycle, i.e. a chamber that just turned PUPAL reabsorbs in that same cycle."
+   },
+   {
+    "point": "Where PUPAL reabsorption goes",
+    "assumption": "Into chamber i-1 whatever that chamber's state is. It is added after all six amounts are computed (simultaneous), and no holding limit is checked."
+   },
+   {
+    "point": "Moult boundary in cycle 5",
+    "assumption": "After burn-off the line total was exactly 38. 'Strictly over 38' therefore fails and no moult fires."
+   },
+   {
+    "point": "Chambers above their holding limit at the end of the run",
+    "assumption": "After cycle 5 chamber 2 is at 10 (limit 8) and chamber 4 is at 7 (limit 6). Following the write-up ('after cycle 5 it stays'), they are left as they are."
+   },
+   {
+    "point": "Repeated mark checks",
+    "assumption": "Marks are checked once per cycle, after overflow only. The burn-off and moult results are not re-checked until the next cycle's step 3."
+   }
+  ],
+  "cycleFigures": "Masses for chambers 1..6 after each step; L = loss tally after the step.\nC1: Feed 3,12,9,7,5,4 (L0) | Overflow 3,8,12,6,7,4 (L0) | Marks 3,8,12,6,7,4 (L0; states L,P,P,P,P,L) | Burn-off 7,10,9,6,4,3 (L1; amounts 0,4,6,3,3,1) | Moult total 39>38, fired: 3,5,4,3,2,1 (L22)\nC2: Feed 7,7,4,4,3,8 (L22) | Overflow 7,7,4,4,3,7 (L23) | Marks 7,7,4,4,3,7 (L23; P,P,L,P,L,P) | Burn-off 7,4,5,2,6,4 (L27; amounts 3,3,1,2,0,3) | Moult total 28, none: 7,4,5,2,6,4 (L27)\nC3: Feed 11,8,8,2,6,10 (L27) | Overflow 10,8,9,2,6,7 (L30) | Marks 10,8,9,2,6,7 (L30; P,P,P,L,L,P) | Burn-off 9,8,5,2,8,4 (L36; amounts 5,4,4,0,1,3) | Moult total 36, none: 9,8,5,2,8,4 (L36)\nC4: Feed 16,14,12,3,11,4 (L36) | Overflow 10,8,12,6,9,7 (L44) | Marks 10,8,12,6,9,7 (L44; P,P,P,P,P,P) | Burn-off 9,10,9,7,8,4 (L49; amounts 5,4,6,3,4,3) | Moult total 47>38, fired: 4,5,4,3,4,2 (L74)\nC5: Feed 4,11,10,6,7,2 (L74) | Overflow 4,8,12,6,8,2 (L74) | Marks 4,8,12,6,8,2 (L74; P,P,P,P,P,L) | Burn-off 6,10,9,7,4,2 (L76; amounts 2,4,6,3,4,0) | Moult total 38, not strictly over, none: 6,10,9,7,4,2 (L76)",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "LARVAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting mass 20 + all feed 94 = 114; end mass 38 (6+10+9+7+4+2) + loss tally 76 = 114. The check holds.",
+  "usedScript": true,
+  "notes": "I used a short Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\m.py. I also checked cycle 1 by hand. The result that rests most on an unsettled rule is the moult rounding (remaining mass = floor(m/2)). If you read it the other way (removed = floor(m/2)), the results from cycle 1 onward change. Cycle 5 ended at exactly 38, so the moult did not fire on the strict 'over 38' rule. Chambers 2 and 4 end above their holding limits, as the write-up allows."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "openPoints": 6,
+  "usedScript": true
+ },
+ "source": "opus-5.5"
+}

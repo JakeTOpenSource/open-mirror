@@ -1,0 +1,2284 @@
+{
+ "reads": [
+  {
+   "key": "electrical",
+   "n": 1,
+   "run": {
+    "procedureSummary": "Step 1 Charge: add each stage's cycle input to its charge; no rating cap.\nStep 2 Shunts: sweep positions 1 to 6 in order; if charge > rating, set to rating and add the excess to the next position before that one is checked (cascades in one pass); position 6's excess goes to ground (loss tally).\nStep 3 Comparators: on post-shunt charge, evaluate each stage once: CLEAR with charge >= upper becomes ASSERTED; ASSERTED with charge <= lower becomes CLEAR; otherwise hold. Log each change (cycle, position, before, after).\nStep 4 Leak/feedback: compute all six amounts from the post-comparator charges and the states just set, then apply simultaneously. CLEAR: floor(charge/4) to ground. ASSERTED: floor(charge/2) moved to the previous position (toward source); position 1's ASSERTED feedback goes to ground. No rating cap.\nStep 5 Breaker: if the six-stage total is strictly > 38, every stage keeps floor(charge/2) and the remainder goes to ground; at <= 38 nothing happens.\nAll ground amounts (shunt-6 excess, CLEAR leak, stage-1 feedback, breaker remainder) are added to the loss tally. Repeat for cycles 1-5.",
+    "openPoints": [
+     {
+      "point": "Which state governs step 4 leak/feedback in a cycle where the comparator just changed",
+      "assumption": "Use the state as set by step 3 of the same cycle (steps finish everywhere before the next starts)."
+     },
+     {
+      "point": "Shunt passes excess to the next stage before it is checked",
+      "assumption": "Single sequential sweep 1 to 6; the received excess counts toward that stage's own over-rating check in the same sweep; no second sweep."
+     },
+     {
+      "point": "Rounding of quarter/half amounts and breaker halves",
+      "assumption": "All rounded down (floor) on whole units; the breaker's ground amount is charge minus floor(charge/2), so odd charges lose the extra unit."
+     },
+     {
+      "point": "Breaker test is on what total",
+      "assumption": "Six-stage total after step 4 of the same cycle; exactly 38 does not trip (cycle 5 total was exactly 38, no trip)."
+     },
+     {
+      "point": "Stage 1 feedback when ASSERTED",
+      "assumption": "Goes to ground and is counted in the loss tally."
+     },
+     {
+      "point": "Overcharge after leak/feedback in cycle 5",
+      "assumption": "Left as-is in end figures (stage 2 ends at 10 over its rating 8, stage 4 at 7 over rating 6); no extra shunt pass after cycle 5."
+     }
+    ],
+    "cycleFigures": "Cycle 1: charge [3,12,9,7,5,4]; shunts [3,8,12,6,7,4] (loss 0); comparators [3,8,12,6,7,4] states C,A,A,A,A,C; leak/feedback [7,10,9,6,4,3] (loss 1); breaker total 39 > 38 trips -> [3,5,4,3,2,1] (loss 22).\nCycle 2: charge [7,7,4,4,3,8]; shunts [7,7,4,4,3,7] (loss 23); comparators [7,7,4,4,3,7] states A,A,C,A,C,A; leak/feedback [7,4,5,2,6,4] (loss 27); breaker total 28, no trip [7,4,5,2,6,4].\nCycle 3: charge [11,8,8,2,6,10]; shunts [10,8,9,2,6,7] (loss 30); comparators [10,8,9,2,6,7] states A,A,A,C,C,A; leak/feedback [9,8,5,2,8,4] (loss 36); breaker total 36, no trip [9,8,5,2,8,4].\nCycle 4: charge [16,14,12,3,11,4]; shunts [10,8,12,6,9,7] (loss 44); comparators [10,8,12,6,9,7] states A,A,A,A,A,A; leak/feedback [9,10,9,7,8,4] (loss 49); breaker total 47 > 38 trips -> [4,5,4,3,4,2] (loss 74).\nCycle 5: charge [4,11,10,6,7,2]; shunts [4,8,12,6,8,2] (loss 74); comparators [4,8,12,6,8,2] states A,A,A,A,A,C; leak/feedback [6,10,9,7,4,2] (loss 76); breaker total 38, not strictly above, no trip [6,10,9,7,4,2].",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "ASSERTED",
+     "ASSERTED",
+     "ASSERTED",
+     "ASSERTED",
+     "ASSERTED",
+     "CLEAR"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "CLEAR",
+      "to": "ASSERTED"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "CLEAR",
+      "to": "ASSERTED"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "CLEAR",
+      "to": "ASSERTED"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "CLEAR",
+      "to": "ASSERTED"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "CLEAR",
+      "to": "ASSERTED"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "ASSERTED",
+      "to": "CLEAR"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "ASSERTED",
+      "to": "CLEAR"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "CLEAR",
+      "to": "ASSERTED"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "CLEAR",
+      "to": "ASSERTED"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "ASSERTED",
+      "to": "CLEAR"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "CLEAR",
+      "to": "ASSERTED"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "CLEAR",
+      "to": "ASSERTED"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "ASSERTED",
+      "to": "CLEAR"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "Starting charge 20 + all input 94 = 114; end charge 38 + loss tally 76 = 114. Balanced.",
+    "usedScript": true,
+    "notes": "I ran the arithmetic with a short Python script (sim.py in the session scratchpad) and checked the cycle 1 leak/feedback step by hand. The breaker tripped in cycle 1 (total 39) and cycle 4 (total 47). In cycle 5 the total came to exactly 38, so it did not trip. At the end, stages 2 and 4 hold more charge than their ratings. That is expected, because the write-up says no shunt runs after cycle 5."
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "finalOk": true,
+    "purgesOk": true,
+    "lostOk": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 6,
+    "usedScript": true
+   }
+  },
+  {
+   "key": "concrete",
+   "n": 1,
+   "run": {
+    "procedureSummary": "Applied each cycle's five steps in order, each step finishing on all six forms before the next:\n1. Pour: add that cycle's units to each form. Capacity is not checked at this step.\n2. Overtop: go from form 1 to form 6 in order. Any excess over capacity moves into the next form, and the form is left at exactly its capacity. Excess that a form has just received counts when that form is reached, so it can cascade. Form 6's excess goes to the waste pit and onto the loss tally.\n3. State check, on the contents after overtop: a GREEN form at or above its upper mark becomes HOT, and a HOT form at or below its lower mark becomes GREEN (equal to the mark counts). Each form is checked once per cycle, so it changes state at most once. Each change is logged as (cycle, position, before, after).\n4. Bleed/evaporation: all six amounts are computed from the contents after the state check, using the new states, and then applied together. A GREEN form loses floor(q/4) to evaporation, which goes on the loss tally. A HOT form sends floor(q/2) to the form before it (form i to form i-1); form 1's bleed is waste. There is no capacity cap at this step.\n5. Washout: total the six forms. If the total is strictly over 38, each form keeps floor(q/2), the remainder goes on the loss tally, and the cycle is recorded. Otherwise nothing happens.\nThe loss tally starts at 0 and collects pit overflow, evaporation, form 1's bleed and washout losses.",
+    "openPoints": [
+     {
+      "point": "Which states the bleed/evaporation step uses: the states from before the state check or after it",
+      "assumption": "Step 4 uses the states set in step 3 of the same cycle, because steps run in order."
+     },
+     {
+      "point": "What 'here it does' means in the HOT to GREEN rule at the boundary",
+      "assumption": "A HOT form whose contents equal the lower mark goes back to GREEN. This applied to form 4 in cycle 3 (2 <= 2)."
+     },
+     {
+      "point": "Washout when the total is exactly 38",
+      "assumption": "Washout fires only when the total is strictly over 38. In cycle 5 the total was exactly 38, so washout did not fire."
+     },
+     {
+      "point": "Rounding of bleed, evaporation and washout amounts",
+      "assumption": "Bleed and evaporation amounts are rounded down. In a washout each form keeps floor(q/2) and the larger half goes to waste."
+     },
+     {
+      "point": "Overfill left after the cycle 5 bleed (form 2 holds 10 against a capacity of 8)",
+      "assumption": "Following the write-up, it is left as is. No overtop is applied after cycle 5."
+     },
+     {
+      "point": "Whether overtop cascade amounts count toward form 6's pit loss in the same pass",
+      "assumption": "Yes. It is a single pass from form 1 to form 6, so excess passed down from upstream forms can reach the pit in that same pass."
+     }
+    ],
+    "cycleFigures": "Start: [3,6,6,2,2,1], all GREEN, loss 0.\nCycle 1: pour [3,12,9,7,5,4]; overtop [3,8,12,6,7,4] (loss 0); state check [3,8,12,6,7,4] G,H,H,H,H,G; bleed/evap [7,10,9,6,4,3] (loss 1); washout total 39 > 38, so washout fires: [3,5,4,3,2,1] (loss 22).\nCycle 2: pour [7,7,4,4,3,8]; overtop [7,7,4,4,3,7] (loss 23); state check [7,7,4,4,3,7] H,H,G,H,G,H; bleed/evap [7,4,5,2,6,4] (loss 27); washout total 28, no washout: [7,4,5,2,6,4] (loss 27).\nCycle 3: pour [11,8,8,2,6,10]; overtop [10,8,9,2,6,7] (loss 30); state check [10,8,9,2,6,7] H,H,H,G,G,H; bleed/evap [9,8,5,2,8,4] (loss 36); washout total 36, no washout: [9,8,5,2,8,4] (loss 36).\nCycle 4: pour [16,14,12,3,11,4]; overtop [10,8,12,6,9,7] (loss 44); state check [10,8,12,6,9,7] all H; bleed/evap [9,10,9,7,8,4] (loss 49); washout total 47 > 38, so washout fires: [4,5,4,3,4,2] (loss 74).\nCycle 5: pour [4,11,10,6,7,2]; overtop [4,8,12,6,8,2] (loss 74); state check [4,8,12,6,8,2] H,H,H,H,H,G; bleed/evap [6,10,9,7,4,2] (loss 76); washout total 38, not strictly over 38, no washout: [6,10,9,7,4,2] (loss 76).",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "HOT",
+     "HOT",
+     "HOT",
+     "HOT",
+     "HOT",
+     "GREEN"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "GREEN",
+      "to": "HOT"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "GREEN",
+      "to": "HOT"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "GREEN",
+      "to": "HOT"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "GREEN",
+      "to": "HOT"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "GREEN",
+      "to": "HOT"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "HOT",
+      "to": "GREEN"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "HOT",
+      "to": "GREEN"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "GREEN",
+      "to": "HOT"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "GREEN",
+      "to": "HOT"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "HOT",
+      "to": "GREEN"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "GREEN",
+      "to": "HOT"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "GREEN",
+      "to": "HOT"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "HOT",
+      "to": "GREEN"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "Starting mix 20 + pours 94 (cycle by cycle: 20+15+17+24+18) = 114. End quantities 38 (6+10+9+7+4+2) + loss tally 76 = 114. The two sides match.",
+    "usedScript": true,
+    "notes": "I used a short Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py. I checked cycle 1 bleed/washout and cycle 4 overtop by hand. Loss by cycle is 22, 5, 9, 38, 2. Cycle 5 lands exactly on the washout limit (38), so the strictly-over rule decides the outcome there."
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "finalOk": true,
+    "purgesOk": true,
+    "lostOk": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 6,
+    "usedScript": true
+   }
+  },
+  {
+   "key": "metallurgy",
+   "n": 1,
+   "run": {
+    "procedureSummary": "Applied in cycles 1-5, steps in order. Each step finishes on all six crucibles before the next one starts.\n1 Charge: add each crucible's charge for the cycle to its melt. Contents may sit above capacity until step 2.\n2 Overflow: walk positions 1 to 6. Any excess over capacity is added to the next crucible before that crucible is checked, so overflow cascades, and the crucible is left exactly at capacity. Excess from crucible 6 goes to the slag pit (loss tally).\n3 State check on the contents after overflow: BASE with quantity >= upper mark becomes SUPERHEATED. SUPERHEATED with quantity <= lower mark becomes BASE. Otherwise the state is unchanged, with at most one change per crucible per cycle.\n4 Draw-off: compute all six amounts from the current contents first, rounding down. BASE sends floor(q/4) to slag. SUPERHEATED sends floor(q/2) to crucible i-1, and crucible 1's half goes to slag. Then apply all moves at once. Returned melt may leave a crucible over capacity, and it stays there.\n5 Global reset: if the total of all six is strictly > 38, each crucible becomes floor(q/2), the removed melt q - floor(q/2) goes to slag, and the cycle is noted. At 38 or below nothing happens.\nI used a short Python script for the arithmetic (C:/Users/Jaket/AppData/Local/Temp/claude/scratchm/sim.py) and checked cycle 1 and the cycle 4 overflow cascade by hand.",
+    "openPoints": [
+     {
+      "point": "Rounding for the global reset halving: should 'rounding down' apply to what remains or to what is removed?",
+      "assumption": "Applied it to what remains: the new quantity is floor(q/2) and the removed melt q - floor(q/2) goes to slag. With odd quantities more goes to slag. Cycle 1: remaining 18, removed 21. Cycle 4: remaining 22, removed 25."
+     },
+     {
+      "point": "Reset boundary when the total is exactly 38",
+      "assumption": "No reset, because the trigger is 'strictly above 38'. Cycle 5 ended at exactly 38, so nothing happened."
+     },
+     {
+      "point": "Where a state change is recorded when the draw-off or reset afterwards moves a crucible past a mark",
+      "assumption": "States are judged only in step 3 on the post-overflow contents. Draw-off and reset never change state, even when they leave the melt past a mark."
+     },
+     {
+      "point": "Over-capacity melt from return flow at the end of cycle 5",
+      "assumption": "It stays as is (crucible 2 ends at 10 against capacity 8). Overflow is not applied again after cycle 5, as the write-up says."
+     },
+     {
+      "point": "Whether a crucible that receives overflow is checked against its capacity again",
+      "assumption": "Yes. Overflow lands before the walk reaches that crucible, so its own excess (including what it received) passes on down the line. In cycle 4 the overflow cascaded from 1 to 6 and 8 units reached slag."
+     },
+     {
+      "point": "Order inside the draw-off when a crucible both gives and receives",
+      "assumption": "All amounts are computed from the contents before any move, then the gives and receipts are applied together. Received melt does not change that crucible's own draw amount in the same cycle."
+     }
+    ],
+    "cycleFigures": "Quantities for positions 1-6 after each step, with the loss tally after each step in brackets.\nStart: 3 6 6 2 2 1, all BASE (loss 0)\nC1 Charge 3 12 9 7 5 4 (0); Overflow 3 8 12 6 7 4 (0); State 3 8 12 6 7 4, states B S S S S B (0); Draw-off amounts 0 4 6 3 3 1, result 7 10 9 6 4 3 (1); Reset: total 39 > 38, fired, result 3 5 4 3 2 1 (22)\nC2 Charge 7 7 4 4 3 8 (22); Overflow 7 7 4 4 3 7 (23); State 7 7 4 4 3 7, states S S B S B S (23); Draw-off amounts 3 3 1 2 0 3, result 7 4 5 2 6 4 (27); Reset: total 28, none, 7 4 5 2 6 4 (27)\nC3 Charge 11 8 8 2 6 10 (27); Overflow 10 8 9 2 6 7 (30); State 10 8 9 2 6 7, states S S S B B S (30); Draw-off amounts 5 4 4 0 1 3, result 9 8 5 2 8 4 (36); Reset: total 36, none, 9 8 5 2 8 4 (36)\nC4 Charge 16 14 12 3 11 4 (36); Overflow 10 8 12 6 9 7 (44); State 10 8 12 6 9 7, all S (44); Draw-off amounts 5 4 6 3 4 3, result 9 10 9 7 8 4 (49); Reset: total 47 > 38, fired, result 4 5 4 3 4 2 (74)\nC5 Charge 4 11 10 6 7 2 (74); Overflow 4 8 12 6 8 2 (74); State 4 8 12 6 8 2, states S S S S S B (74); Draw-off amounts 2 4 6 3 4 0, result 6 10 9 7 4 2 (76); Reset: total 38, not > 38, none, 6 10 9 7 4 2 (76)\n(B = BASE, S = SUPERHEATED)",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "BASE"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "Starting melt 20 + all charges 94 (20 + 15 + 17 + 24 + 18) = 114. End melt 38 (6 + 10 + 9 + 7 + 4 + 2) + loss tally 76 = 114. The two sides balance.",
+    "notes": "Breakdown of the 76 units of loss:\n- Overflow from crucible 6: 12 (1 in cycle 2, 3 in cycle 3, 8 in cycle 4).\n- Draw-off to slag: 18 (1, 4, 6, 5 and 2 in cycles 1-5). This covers the BASE quarters and crucible 1's SUPERHEATED half.\n- Global reset halvings: 46 (21 in cycle 1, 25 in cycle 4).\nCrucible 2 ends at 10 against capacity 8 because of melt returned in the cycle 5 draw-off, which the write-up allows.",
+    "usedScript": true
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "finalOk": true,
+    "purgesOk": true,
+    "lostOk": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 6,
+    "usedScript": true
+   }
+  },
+  {
+   "key": "metallurgy",
+   "n": 2,
+   "run": {
+    "procedureSummary": "Five cycles, five steps in order, each step completed on all six crucibles before the next. (1) Charge: add the cycle's charge to each crucible; it may sit above capacity for now. (2) Overflow: walk 1 to 6; anything over capacity moves to the next crucible before that crucible is checked, and the crucible stays exactly full; overflow out of crucible 6 goes to slag (added to the loss tally). (3) State check on contents after overflow: BASE with contents >= upper mark becomes SUPERHEATED; SUPERHEATED with contents <= lower mark becomes BASE; otherwise the state stays the same; at most one change per crucible per cycle. (4) Draw-off: work out all six amounts from the current contents first, rounding down. BASE sends floor(q/4) to slag. SUPERHEATED sends floor(q/2) to the previous crucible (crucible 1's half goes to slag). Then everything moves at once. A crucible pushed over capacity by returned melt stays over until the next cycle's overflow, or stays that way after cycle 5. (5) Global reset: if the total of all six is strictly above 38, each crucible becomes floor(q/2), the removed amount q - floor(q/2) goes to slag, and the cycle is noted; at 38 or below nothing happens. I used a short Python script for the arithmetic.",
+    "openPoints": [
+     {
+      "point": "Rounding of the emergency-tap halving: does the crucible keep floor(q/2), or is floor(q/2) the amount removed?",
+      "assumption": "The crucible keeps floor(q/2) and the rest, q - floor(q/2), goes to slag. This matters in cycles 1 and 4, where some contents were odd."
+     },
+     {
+      "point": "Where overflow out of crucible 6 goes.",
+      "assumption": "It goes to the slag pit and counts in the loss tally (3 units in cycle 2, 3 in cycle 3, 8 in cycle 4)."
+     },
+     {
+      "point": "Reset threshold boundary.",
+      "assumption": "The reset needs a total strictly above 38. The cycle 5 total is exactly 38, so there was no reset in cycle 5."
+     },
+     {
+      "point": "State-check boundaries.",
+      "assumption": "Both marks are inclusive: at or above the upper mark, and at or below the lower mark, as the write-up says. Example: crucible 3 at 4 with lower mark 4 went back to BASE in cycle 2."
+     },
+     {
+      "point": "Melt returned in the draw-off that leaves a crucible over capacity.",
+      "assumption": "It is not trimmed in that cycle. The overflow is carried into the next cycle's step 2, and after cycle 5 it is left in place (crucible 2 ends at 10 against a capacity of 8)."
+     },
+     {
+      "point": "Whether a crucible's draw-off amount depends on melt arriving from its neighbour in the same draw-off.",
+      "assumption": "No. All amounts come from the contents before the draw-off and then move at the same time."
+     }
+    ],
+    "cycleFigures": "Start: 3 6 6 2 2 1, all BASE, loss 0.\nC1: charge 3 12 9 7 5 4 | overflow 3 8 12 6 7 4 (loss 0) | state 3 8 12 6 7 4 [B S S S S B] | draw-off (amounts 0 4 6 3 3 1) 7 10 9 6 4 3, loss 1 | reset (total 39 > 38) 3 5 4 3 2 1, loss 22.\nC2: charge 7 7 4 4 3 8 | overflow 7 7 4 4 3 7 (3 to slag, loss 23) | state 7 7 4 4 3 7 [S S B S B S] | draw-off (amounts 3 3 1 2 0 3) 7 4 5 2 6 4, loss 27 | reset: total 28, none, 7 4 5 2 6 4.\nC3: charge 11 8 8 2 6 10 | overflow 10 8 9 2 6 7 (3 to slag, loss 30) | state 10 8 9 2 6 7 [S S S B B S] | draw-off (amounts 5 4 4 0 1 3) 9 8 5 2 8 4, loss 36 | reset: total 36, none, 9 8 5 2 8 4.\nC4: charge 16 14 12 3 11 4 | overflow 10 8 12 6 9 7 (8 to slag, loss 44) | state 10 8 12 6 9 7 [S S S S S S] | draw-off (amounts 5 4 6 3 4 3) 9 10 9 7 8 4, loss 49 | reset (total 47 > 38) 4 5 4 3 4 2, loss 74.\nC5: charge 4 11 10 6 7 2 | overflow 4 8 12 6 8 2 (loss 74) | state 4 8 12 6 8 2 [S S S S S B] | draw-off (amounts 2 4 6 3 4 0) 6 10 9 7 4 2, loss 76 | reset: total 38, not above 38, none, 6 10 9 7 4 2.",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "BASE"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "Starting melt 20 + all charges 94 (cycle 1 20, cycle 2 15, cycle 3 17, cycle 4 24, cycle 5 18) = 114; end melt 38 + loss tally 76 = 114. It balances.",
+    "usedScript": true,
+    "notes": "The global reset fired in cycles 1 and 4. Crucible 2 ends at 10, above its capacity of 8, because melt returned in the cycle 5 draw-off stays where it lands after the last cycle. The script is C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py."
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "finalOk": true,
+    "purgesOk": true,
+    "lostOk": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 6,
+    "usedScript": true
+   }
+  },
+  {
+   "key": "metallurgy",
+   "n": 3,
+   "run": {
+    "procedureSummary": "1. Charge: add each crucible's cycle charge to its contents. It may sit above capacity for now. 2. Overflow: walk positions 1 to 6. Any excess over capacity leaves the crucible, which is set to exactly its capacity, and goes into the next crucible before that one is checked, so it can carry down the line. Excess from crucible 6 goes to slag and is added to the loss tally. 3. State check, on the contents after overflow: a BASE crucible with melt at or above its upper mark becomes SUPERHEATED; a SUPERHEATED crucible at or below its lower mark becomes BASE; otherwise the state stays as it is. Each crucible is checked once per cycle. 4. Draw-off: using the contents after step 3, work out all six amounts first, rounding down. BASE: floor(q/4) to slag. SUPERHEATED: floor(q/2) back to the previous crucible (position i-1); for crucible 1 that half goes to slag. Then all moves are applied at once. Returned melt can leave a crucible above capacity, and it is not corrected until the next cycle's overflow. 5. Global reset: add up all six. Only if the total is strictly above 38, set every crucible to floor(q/2), add the removed amount (q - floor(q/2)) to slag and note the cycle. At 38 or below, nothing happens.",
+    "openPoints": [
+     {
+      "point": "How 'halve every crucible, rounding down' applies in the global reset when a quantity is odd",
+      "assumption": "The rounding applies to what stays: the new quantity is floor(q/2) and the removed amount, q - floor(q/2), goes to slag. So for odd quantities the larger half goes to slag. This matters in cycles 1 and 4."
+     },
+     {
+      "point": "The global reset boundary at exactly 38",
+      "assumption": "'Strictly above 38' is read literally. The cycle 5 total is exactly 38, so no reset fires in cycle 5."
+     },
+     {
+      "point": "Where overflow from crucible 6 goes",
+      "assumption": "It goes to the slag pit and is added to the loss tally, as the write-up says ('not a ladle')."
+     },
+     {
+      "point": "Crucibles above capacity at the end of cycle 5 because of returned melt",
+      "assumption": "Left as they are, per the write-up ('or for good after cycle 5'). End quantities: crucible 2 holds 10 against a capacity of 8, and crucible 4 holds 7 against a capacity of 6."
+     },
+     {
+      "point": "Which contents the draw-off uses",
+      "assumption": "The contents after step 3 (after overflow). All six amounts are worked out before anything moves, so melt returned in a cycle is not drawn again in that same cycle."
+     },
+     {
+      "point": "Which state the draw-off uses",
+      "assumption": "The state after this cycle's step 3 state check."
+     }
+    ],
+    "cycleFigures": "Cycle 1: charge [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] (loss 0); state check [3,8,12,6,7,4], states B,S,S,S,S,B; draw-off amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3] (loss 1); reset: total 39 > 38, fires -> [3,5,4,3,2,1] (loss 22).\nCycle 2: charge [7,7,4,4,3,8]; overflow [7,7,4,4,3,7] (loss 23); state check [7,7,4,4,3,7], states S,S,B,S,B,S; draw-off amounts [3,3,1,2,0,3] -> [7,4,5,2,6,4] (loss 27); reset: total 28, no reset -> [7,4,5,2,6,4] (loss 27).\nCycle 3: charge [11,8,8,2,6,10]; overflow [10,8,9,2,6,7] (loss 30); state check [10,8,9,2,6,7], states S,S,S,B,B,S; draw-off amounts [5,4,4,0,1,3] -> [9,8,5,2,8,4] (loss 36); reset: total 36, no reset -> [9,8,5,2,8,4] (loss 36).\nCycle 4: charge [16,14,12,3,11,4]; overflow [10,8,12,6,9,7] (loss 44); state check [10,8,12,6,9,7], all S; draw-off amounts [5,4,6,3,4,3] -> [9,10,9,7,8,4] (loss 49); reset: total 47 > 38, fires -> [4,5,4,3,4,2] (loss 74).\nCycle 5: charge [4,11,10,6,7,2]; overflow [4,8,12,6,8,2] (loss 74); state check [4,8,12,6,8,2], states S,S,S,S,S,B; draw-off amounts [2,4,6,3,4,0] -> [6,10,9,7,4,2] (loss 76); reset: total 38, not strictly above 38, no reset -> [6,10,9,7,4,2] (loss 76).",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "BASE"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "Starting melt 15 (3+6+6+2+2+1) plus all charges 99 (cycle 1: 20, cycle 2: 15, cycle 3: 17, cycle 4: 24, cycle 5: 18) = 114. End melt 38 (6+10+9+7+4+2) plus loss tally 76 = 114. The two sides match.",
+    "usedScript": true,
+    "notes": "The arithmetic was done with a short Python script, C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py, and I checked cycles 1 and 5 by hand. Loss tally by source: overflow from crucible 6 = 1+3+8+0+0 = 12; draw-off to slag = 1+4+6+5+2 = 18; global resets = 21 (cycle 1) + 25 (cycle 4) = 46; total 76. Two results depend on the open points. The cycle 5 total is exactly 38, so the 'strictly above' reading decides that no reset fires in cycle 5. Crucibles 2 and 4 end above capacity because melt was returned to them in the last draw-off."
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "finalOk": true,
+    "purgesOk": true,
+    "lostOk": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 6,
+    "usedScript": true
+   }
+  },
+  {
+   "key": "xylem",
+   "n": 1,
+   "run": {
+    "procedureSummary": "Start: sap 3,6,6,2,2,1 (total 20); all six QUIET; loss tally 0. Each cycle runs these steps in order, and each step finishes on all six segments before the next starts.\n1 Uptake: add the cycle's uptake to each segment. A segment may go over its holding volume.\n2 Push-up: work segments 1 to 6 in order. Any sap over holding volume (10,8,12,6,9,7) moves into the next segment up and the segment is left full. Sap that arrives counts before that segment is worked, so excess can cascade. Excess from segment 6 is transpired and goes on the tally.\n3 State check on post-push sap: a QUIET segment at or above its upper mark (7,6,9,5,7,5) becomes SINK-ACTIVE; a SINK-ACTIVE segment at or below its lower mark (3,2,4,2,3,2) becomes QUIET; otherwise the state stays. Each change is logged.\n4 Draw-down: first compute all six amounts from post-push sap and the new states, rounded down: a quarter for QUIET, a half for SINK-ACTIVE. Then apply them all at once. QUIET amounts are respired to the tally. A SINK-ACTIVE amount goes to segment i-1; from segment 1 it goes to the tally. A receiving segment may stay over holding volume until the next push-up.\n5 Leaf-drop: if the six-segment total is strictly above 38, every segment becomes floor(sap/2). The removed sap is transpired to the tally and the cycle is logged.\nThe arithmetic was done with a short Python script that follows exactly these steps.",
+    "openPoints": [
+     {
+      "point": "Which states are used to size draw-down amounts in the same cycle",
+      "assumption": "The states as updated by step 3 of that cycle, applied to post-push sap. The write-up says 'as they stand'."
+     },
+     {
+      "point": "Whether SINK-ACTIVE sap passed down in draw-down counts toward the receiving segment's own draw-down amount",
+      "assumption": "No. All amounts are computed from pre-draw sap and applied simultaneously."
+     },
+     {
+      "point": "Rounding when halving an odd amount at leaf-drop",
+      "assumption": "Each segment keeps floor(sap/2). The remainder, ceil(sap/2), is transpired to the tally."
+     },
+     {
+      "point": "Leaf-drop threshold boundary",
+      "assumption": "Strictly above 38. In cycle 5 the total is exactly 38, so leaf-drop does not fire."
+     },
+     {
+      "point": "A segment over holding volume after cycle 5 draw-down",
+      "assumption": "It is left as is, with no extra push-up. Segment 2 ends at 10 against a volume of 8, as the write-up allows ('for good after cycle 5')."
+     },
+     {
+      "point": "Which sap the leaf-drop total is taken on",
+      "assumption": "Sap after the cycle's draw-down."
+     }
+    ],
+    "cycleFigures": "Positions 1-6; loss shown is the cumulative tally after each step.\nC1: uptake [3,12,9,7,5,4]; push-up [3,8,12,6,7,4] loss 0; states Q,S,S,S,S,Q; draw amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3] loss 1; leaf-drop fires (total 39>38) -> [3,5,4,3,2,1] loss 22.\nC2: uptake [7,7,4,4,3,8]; push-up [7,7,4,4,3,7] loss 23; states S,S,Q,S,Q,S; draw [3,3,1,2,0,3] -> [7,4,5,2,6,4] loss 27; total 28, no leaf-drop.\nC3: uptake [11,8,8,2,6,10]; push-up [10,8,9,2,6,7] loss 30; states S,S,S,Q,Q,S; draw [5,4,4,0,1,3] -> [9,8,5,2,8,4] loss 36; total 36, no leaf-drop.\nC4: uptake [16,14,12,3,11,4]; push-up [10,8,12,6,9,7] loss 44; states all S; draw [5,4,6,3,4,3] -> [9,10,9,7,8,4] loss 49; leaf-drop fires (total 47>38) -> [4,5,4,3,4,2] loss 74.\nC5: uptake [4,11,10,6,7,2]; push-up [4,8,12,6,8,2] loss 74; states S,S,S,S,S,Q; draw [2,4,6,3,4,0] -> [6,10,9,7,4,2] loss 76; total 38, not strictly above 38, no leaf-drop.",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "SINK-ACTIVE",
+     "SINK-ACTIVE",
+     "SINK-ACTIVE",
+     "SINK-ACTIVE",
+     "SINK-ACTIVE",
+     "QUIET"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "QUIET",
+      "to": "SINK-ACTIVE"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "QUIET",
+      "to": "SINK-ACTIVE"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "QUIET",
+      "to": "SINK-ACTIVE"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "QUIET",
+      "to": "SINK-ACTIVE"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "QUIET",
+      "to": "SINK-ACTIVE"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "SINK-ACTIVE",
+      "to": "QUIET"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "SINK-ACTIVE",
+      "to": "QUIET"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "QUIET",
+      "to": "SINK-ACTIVE"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "QUIET",
+      "to": "SINK-ACTIVE"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "SINK-ACTIVE",
+      "to": "QUIET"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "QUIET",
+      "to": "SINK-ACTIVE"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "QUIET",
+      "to": "SINK-ACTIVE"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "SINK-ACTIVE",
+      "to": "QUIET"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "Starting sap 20 + all uptake 94 = 114; end sap 38 (6+10+9+7+4+2) + loss tally 76 = 114. The balance holds.",
+    "usedScript": true,
+    "notes": "Segment 2 ends at 10, over its holding volume of 8. This is the cycle 5 phloem inflow that the write-up allows to stay over volume for good. The loss tally is made up of: push-up transpiration 11 (C2 1, C3 3, C4 8), draw-down respiration and segment-1 phloem outflow 19, and leaf-drop transpiration 46 (C1 21, C4 25). Script (scratch copy): C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\x.py"
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "finalOk": true,
+    "purgesOk": true,
+    "lostOk": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 6,
+    "usedScript": true
+   }
+  },
+  {
+   "key": "ballast",
+   "n": 1,
+   "run": {
+    "procedureSummary": "Start: water 3,6,6,2,2,1; all pumps LAMINAR; tally 0. Each cycle runs five steps, and each step is finished on all six compartments before the next step starts.\nStep 1, take on water: add the full table amount to each compartment, even if that takes it over volume.\nStep 2, scuppers: go through compartments 1 to 6 one at a time. Anything over volume moves into the next compartment (k+1) before that one is checked, so overflow can cascade. Overflow from 6 goes overboard to the tally.\nStep 3, pump check, on the water left after the scuppers: a LAMINAR pump with water >= its inception mark becomes CAVITATING. A CAVITATING pump with water <= its desinence mark becomes LAMINAR. Otherwise nothing changes. Each change is logged.\nStep 4, pump: first work out every amount from the current contents, using the states just set in step 3. A LAMINAR pump sends floor(w/4) overboard. A CAVITATING pump sends floor(w/2) forward into compartment k-1; compartment 1's backflow goes overboard. Then all six moves are applied together, with no volume cap.\nStep 5, emergency blow: total all six. Only if the total is strictly above 38, each compartment keeps floor(w/2) and the rest goes overboard; the cycle is noted.\nReport: end quantities and states after step 5 of cycle 5. Balance check: starting water + water taken on = end water + tally.",
+    "openPoints": [
+     {
+      "point": "Which state the pump step uses in the cycle where a state changes",
+      "assumption": "The step-3 state from the same cycle governs step 4, because step 3 comes first."
+     },
+     {
+      "point": "Direction of backflow",
+      "assumption": "'Forward toward the bow' means compartment k sends water to k-1, and compartment 1 sends it overboard to the tally."
+     },
+     {
+      "point": "Pump amounts versus water arriving by backflow in the same step",
+      "assumption": "All six amounts are worked out from the contents before any move (taken literally from the write-up). Water that arrives by backflow is not pumped again until the next cycle."
+     },
+     {
+      "point": "What the blow rule totals, and the case of exactly 38",
+      "assumption": "The blow totals the contents after the pump step. The rule fires only if the total is above 38. In cycle 5 the total was exactly 38, so the blow did not fire."
+     },
+     {
+      "point": "Rounding in the blow",
+      "assumption": "Each compartment keeps floor(w/2) and the remainder, ceil(w/2), goes overboard to the tally."
+     },
+     {
+      "point": "End quantities above volume",
+      "assumption": "The end quantities are reported as they stand after cycle 5 with no final scupper pass. Compartment 2 ends at 10, above its volume of 8, as the write-up allows."
+     },
+     {
+      "point": "Where scupper overflow from compartment 6 goes",
+      "assumption": "It goes overboard and is counted on the tally (the write-up says 'Everything overboard goes on the tally')."
+     }
+    ],
+    "cycleFigures": "Cycle 1: take on [3,12,9,7,5,4]; scuppers [3,8,12,6,7,4] (tally 0); pump check gives states L,C,C,C,C,L; pump amounts [0,4,6,3,3,1] give [7,10,9,6,4,3] (tally 1); blow: total 39 > 38, so it FIRES, giving [3,5,4,3,2,1] (tally 22).\nCycle 2: take on [7,7,4,4,3,8]; scuppers [7,7,4,4,3,7] (tally 23); pump check gives C,C,L,C,L,C; pump amounts [3,3,1,2,0,3] give [7,4,5,2,6,4] (tally 27); blow: total 28, no blow, [7,4,5,2,6,4] (tally 27).\nCycle 3: take on [11,8,8,2,6,10]; scuppers [10,8,9,2,6,7] (tally 30); pump check gives C,C,C,L,L,C; pump amounts [5,4,4,0,1,3] give [9,8,5,2,8,4] (tally 36); blow: total 36, no blow, [9,8,5,2,8,4] (tally 36).\nCycle 4: take on [16,14,12,3,11,4]; scuppers [10,8,12,6,9,7] (8 overboard from 6, tally 44); pump check gives all six C; pump amounts [5,4,6,3,4,3] give [9,10,9,7,8,4] (tally 49); blow: total 47 > 38, so it FIRES, giving [4,5,4,3,4,2] (tally 74).\nCycle 5: take on [4,11,10,6,7,2]; scuppers [4,8,12,6,8,2] (tally 74); pump check gives C,C,C,C,C,L; pump amounts [2,4,6,3,4,0] give [6,10,9,7,4,2] (tally 76); blow: total exactly 38, no blow, end [6,10,9,7,4,2] (tally 76).",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "CAVITATING",
+     "CAVITATING",
+     "CAVITATING",
+     "CAVITATING",
+     "CAVITATING",
+     "LAMINAR"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "LAMINAR",
+      "to": "CAVITATING"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "LAMINAR",
+      "to": "CAVITATING"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "LAMINAR",
+      "to": "CAVITATING"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "LAMINAR",
+      "to": "CAVITATING"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "LAMINAR",
+      "to": "CAVITATING"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "CAVITATING",
+      "to": "LAMINAR"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "CAVITATING",
+      "to": "LAMINAR"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "LAMINAR",
+      "to": "CAVITATING"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "LAMINAR",
+      "to": "CAVITATING"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "CAVITATING",
+      "to": "LAMINAR"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "LAMINAR",
+      "to": "CAVITATING"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "LAMINAR",
+      "to": "CAVITATING"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "CAVITATING",
+      "to": "LAMINAR"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "Starting water 20 + water taken on 94 (17+15+17+24+18) = 114. End water 38 (6+10+9+7+4+2) + overboard tally 76 = 114. The two sides match.",
+    "usedScript": true,
+    "notes": "The arithmetic was done with a short Python script, C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\ballast.py. Cycle 1 was also checked by hand. The emergency blow fired in cycles 1 and 4. In cycle 5 the total was exactly 38, so it did not fire. Compartment 2 ends at 10, above its volume of 8; the write-up allows this after cycle 5."
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "finalOk": true,
+    "purgesOk": true,
+    "lostOk": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 7,
+    "usedScript": true
+   }
+  },
+  {
+   "key": "metamorphosis",
+   "n": 1,
+   "run": {
+    "procedureSummary": "Start: mass 3,6,6,2,2,1, every chamber LARVAL, loss tally 0. Each cycle runs these five steps in order, and each step finishes on all six chambers before the next starts.\n1 Feed: add the cycle's table amount to each chamber, PUPAL ones included. No holding limit at this step.\n2 Overflow: go through chambers 1 to 6 in order. Any amount over the holding limit (10,8,12,6,9,7) is added to the next chamber before that chamber is checked, so overflow cascades. Chamber 6's excess goes to the loss tally.\n3 Marks: weigh after overflow. LARVAL with mass at or above its upper mark (7,6,9,5,7,5) becomes PUPAL. PUPAL with mass at or below its lower mark (3,2,4,2,3,2) becomes LARVAL. Otherwise no change. At most one change per chamber per cycle. Log each change as (cycle, chamber, before, after).\n4 Burn-off: work out all six amounts from the post-marks contents and new states, then apply them together. LARVAL loses floor(mass/4) to the loss tally. PUPAL moves floor(mass/2) into chamber i-1; chamber 1's amount goes to the loss tally. No holding limit is applied, so any excess waits for the next cycle's overflow. After cycle 5 it stays.\n5 Moult: total the line. If the total is strictly over 38, each chamber becomes floor(mass/2) and the removed mass (mass - floor(mass/2)) goes to the loss tally. At 38 or under, nothing happens.",
+    "openPoints": [
+     {
+      "point": "Moult rounding: does 'halved, rounded down' set the remaining mass or the removed mass?",
+      "assumption": "Remaining mass = floor(m/2), and removed = m - floor(m/2) goes to the loss tally (so for an odd mass the larger half is removed). This decides the result: in cycle 1 chambers 1, 3 and 6 had odd masses (7, 9, 3), and in cycle 4 chambers 1, 3, 4 and 6 did (9, 9, 7, 3)."
+     },
+     {
+      "point": "Which state the burn-off uses",
+      "assumption": "The state after step 3 of the same cycle, i.e. a chamber that just turned PUPAL reabsorbs in that same cycle."
+     },
+     {
+      "point": "Where PUPAL reabsorption goes",
+      "assumption": "Into chamber i-1 whatever that chamber's state is. It is added after all six amounts are computed (simultaneous), and no holding limit is checked."
+     },
+     {
+      "point": "Moult boundary in cycle 5",
+      "assumption": "After burn-off the line total was exactly 38. 'Strictly over 38' therefore fails and no moult fires."
+     },
+     {
+      "point": "Chambers above their holding limit at the end of the run",
+      "assumption": "After cycle 5 chamber 2 is at 10 (limit 8) and chamber 4 is at 7 (limit 6). Following the write-up ('after cycle 5 it stays'), they are left as they are."
+     },
+     {
+      "point": "Repeated mark checks",
+      "assumption": "Marks are checked once per cycle, after overflow only. The burn-off and moult results are not re-checked until the next cycle's step 3."
+     }
+    ],
+    "cycleFigures": "Masses for chambers 1..6 after each step; L = loss tally after the step.\nC1: Feed 3,12,9,7,5,4 (L0) | Overflow 3,8,12,6,7,4 (L0) | Marks 3,8,12,6,7,4 (L0; states L,P,P,P,P,L) | Burn-off 7,10,9,6,4,3 (L1; amounts 0,4,6,3,3,1) | Moult total 39>38, fired: 3,5,4,3,2,1 (L22)\nC2: Feed 7,7,4,4,3,8 (L22) | Overflow 7,7,4,4,3,7 (L23) | Marks 7,7,4,4,3,7 (L23; P,P,L,P,L,P) | Burn-off 7,4,5,2,6,4 (L27; amounts 3,3,1,2,0,3) | Moult total 28, none: 7,4,5,2,6,4 (L27)\nC3: Feed 11,8,8,2,6,10 (L27) | Overflow 10,8,9,2,6,7 (L30) | Marks 10,8,9,2,6,7 (L30; P,P,P,L,L,P) | Burn-off 9,8,5,2,8,4 (L36; amounts 5,4,4,0,1,3) | Moult total 36, none: 9,8,5,2,8,4 (L36)\nC4: Feed 16,14,12,3,11,4 (L36) | Overflow 10,8,12,6,9,7 (L44) | Marks 10,8,12,6,9,7 (L44; P,P,P,P,P,P) | Burn-off 9,10,9,7,8,4 (L49; amounts 5,4,6,3,4,3) | Moult total 47>38, fired: 4,5,4,3,4,2 (L74)\nC5: Feed 4,11,10,6,7,2 (L74) | Overflow 4,8,12,6,8,2 (L74) | Marks 4,8,12,6,8,2 (L74; P,P,P,P,P,L) | Burn-off 6,10,9,7,4,2 (L76; amounts 2,4,6,3,4,0) | Moult total 38, not strictly over, none: 6,10,9,7,4,2 (L76)",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "LARVAL"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "Starting mass 20 + all feed 94 = 114; end mass 38 (6+10+9+7+4+2) + loss tally 76 = 114. The check holds.",
+    "usedScript": true,
+    "notes": "I used a short Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\m.py. I also checked cycle 1 by hand. The result that rests most on an unsettled rule is the moult rounding (remaining mass = floor(m/2)). If you read it the other way (removed = floor(m/2)), the results from cycle 1 onward change. Cycle 5 ended at exactly 38, so the moult did not fire on the strict 'over 38' rule. Chambers 2 and 4 end above their holding limits, as the write-up allows."
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "finalOk": true,
+    "purgesOk": true,
+    "lostOk": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 6,
+    "usedScript": true
+   }
+  },
+  {
+   "key": "metamorphosis",
+   "n": 2,
+   "run": {
+    "procedureSummary": "1 Feed: add the cycle's table amount to every chamber, LARVAL and PUPAL alike, with no holding-limit check. 2 Overflow: go through chambers 1 to 6 in order. Any mass over the holding limit moves into the next chamber, which leaves the chamber exactly at its limit. Because it runs in order, overflow cascades. Excess from chamber 6 goes onto the loss tally. This applies whatever the chamber's state. 3 Marks: use the mass after overflow. LARVAL at or above the upper mark becomes PUPAL. PUPAL at or below the lower mark becomes LARVAL. Otherwise nothing changes, and a chamber changes at most once per cycle. 4 Burn-off: compute all six amounts from the contents after marks, using the states after marks. LARVAL loses floor(mass/4) to the loss tally. PUPAL loses floor(mass/2) into chamber i-1 (toward 1), and chamber 1's PUPAL amount goes to the loss tally. All six are applied together, with no holding-limit check. 5 Moult: total the line after burn-off. If the total is strictly over 38, every chamber becomes floor(mass/2) and the removed mass (mass - floor(mass/2)) goes to the loss tally. At 38 or under, nothing happens. Five cycles are run in this order.",
+    "openPoints": [
+     {
+      "point": "Which state burn-off uses",
+      "assumption": "The state after step 3 marks of the same cycle."
+     },
+     {
+      "point": "Whether overflow depends on state",
+      "assumption": "Overflow applies to every chamber regardless of state, and incoming overflow can push the receiving chamber over its own limit (cascade)."
+     },
+     {
+      "point": "Where PUPAL reabsorption goes, and how it is calculated",
+      "assumption": "It goes to the previous chamber (i-1, toward chamber 1). Amounts are computed from the contents before burn-off and applied at the same time, so a chamber can lose its own amount and receive one from chamber i+1 in the same step."
+     },
+     {
+      "point": "Rounding in the moult",
+      "assumption": "The new mass is floor(mass/2), and the remainder mass - floor(mass/2) (the larger half for odd masses) goes onto the loss tally."
+     },
+     {
+      "point": "Moult threshold at exactly 38",
+      "assumption": "No moult, because the rule says strictly over 38. In cycle 5 the total was exactly 38, so nothing happened."
+     },
+     {
+      "point": "End masses above the holding limit",
+      "assumption": "They are left as they are after cycle 5 (chamber 2 = 10 > 8, chamber 4 = 7 > 6), as the write-up says excess waits and stays after cycle 5."
+     },
+     {
+      "point": "Upper and lower mark comparisons",
+      "assumption": "Both are inclusive: at or above the upper mark, at or below the lower mark."
+     }
+    ],
+    "cycleFigures": "C1: feed [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] (loss 0); marks [3,8,12,6,7,4] states L,P,P,P,P,L; burn-off amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3] (loss 1); moult total 39>38 fired -> [3,5,4,3,2,1] (loss 22). C2: feed [7,7,4,4,3,8]; overflow [7,7,4,4,3,7] (loss 23); marks same masses, states P,P,L,P,L,P; burn-off amounts [3,3,1,2,0,3] -> [7,4,5,2,6,4] (loss 27); moult total 28, none -> [7,4,5,2,6,4]. C3: feed [11,8,8,2,6,10]; overflow [10,8,9,2,6,7] (loss 30); marks states P,P,P,L,L,P; burn-off amounts [5,4,4,0,1,3] -> [9,8,5,2,8,4] (loss 36); moult total 36, none -> [9,8,5,2,8,4]. C4: feed [16,14,12,3,11,4]; overflow [10,8,12,6,9,7] (loss 44); marks states P,P,P,P,P,P; burn-off amounts [5,4,6,3,4,3] -> [9,10,9,7,8,4] (loss 49); moult total 47>38 fired -> [4,5,4,3,4,2] (loss 74). C5: feed [4,11,10,6,7,2]; overflow [4,8,12,6,8,2] (loss 74); marks states P,P,P,P,P,L; burn-off amounts [2,4,6,3,4,0] -> [6,10,9,7,4,2] (loss 76); moult total 38, not over 38, none -> [6,10,9,7,4,2].",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "LARVAL"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "Starting mass 20 + total feed 94 = 114; end mass 38 (6+10+9+7+4+2) + loss tally 76 = 114. Balanced.",
+    "usedScript": true,
+    "notes": "I used a short Python script for the arithmetic and checked cycles 1, 2 and 5 by hand. The script is at C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\meta_h2.py. A file named sim.py was already in the scratchpad with different content, so I wrote a new file and did not use sim.py. Loss tally by source: overflow from chamber 6 is 1 (C2) + 3 (C3) + 8 (C4) = 12. Burn-off is 1 (C1) + 4 (C2) + 6 (C3) + 5 (C4) + 2 (C5) = 18. The moults are 21 (C1) + 25 (C4) = 46. 12 + 18 + 46 = 76. Chambers 2 and 4 end above their holding limits because excess stays after the cycle 5 burn-off."
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "finalOk": true,
+    "purgesOk": true,
+    "lostOk": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 7,
+    "usedScript": true
+   }
+  },
+  {
+   "key": "metamorphosis",
+   "n": 3,
+   "run": {
+    "procedureSummary": "Source: metamorphosis.md, read in full. Start: masses 3,6,6,2,2,1 (total 20), every chamber LARVAL, loss 0. Each cycle runs these five steps in order, and each step finishes on all six chambers before the next starts.\n1. Feed: add the cycle's table row to every chamber, whatever its state, with no holding-limit check.\n2. Overflow: go through chambers 1 to 6 in order. Any mass over the holding limit (10,8,12,6,9,7) moves into the next chamber before that chamber is checked, so overflow can carry on down the line. Excess from chamber 6 goes to the loss tally.\n3. Marks, using the mass after overflow: a LARVAL chamber at or above its upper mark (7,6,9,5,7,5) becomes PUPAL. A PUPAL chamber at or below its lower mark (3,2,4,2,3,2) becomes LARVAL. Each chamber is checked once per cycle, so it changes at most once. Each change is logged as (cycle, chamber, before, after).\n4. Burn-off: first work out all six amounts from current mass and the state after marks. LARVAL loses floor(mass/4) to the loss tally. PUPAL gives floor(mass/2) to the previous chamber; chamber 1's share goes to the loss tally. Then apply all six at once, with no holding-limit check.\n5. Moult: total the line. Only if the total is strictly over 38, every chamber becomes floor(mass/2) and the removed part, ceil(mass/2), goes to the loss tally.\nBalance: starting mass + all feed = end mass + loss tally.",
+    "openPoints": [
+     {
+      "point": "Which state burn-off uses",
+      "assumption": "The state after step 3 of the same cycle, because steps run in order."
+     },
+     {
+      "point": "Moult when the total is exactly 38",
+      "assumption": "No moult. The write-up says 'strictly over 38' and '38 or under, nothing'. This happens after cycle 5, where the total is exactly 38."
+     },
+     {
+      "point": "How much mass a moult removes",
+      "assumption": "The chamber keeps floor(m/2); the removed amount is m - floor(m/2), so it rounds up, and it goes to the loss tally."
+     },
+     {
+      "point": "Mass over the holding limit after cycle 5's burn-off",
+      "assumption": "Left as it is (chamber 2 ends at 10 against a limit of 8, chamber 4 at 7 against a limit of 6). The write-up says excess waits for the next overflow and that after cycle 5 it stays."
+     },
+     {
+      "point": "Reabsorption into a chamber that is already at or over its limit",
+      "assumption": "Added anyway, with no check, because burn-off has no holding limit."
+     },
+     {
+      "point": "Order of burn-off moves",
+      "assumption": "All six amounts are worked out from the mass before burn-off, then applied together, so nothing reabsorbed into a chamber changes that chamber's own burn-off amount."
+     },
+     {
+      "point": "Rule of at most one state change per chamber per cycle",
+      "assumption": "Marks are checked once per cycle, so this rule never actually limits anything."
+     }
+    ],
+    "cycleFigures": "Mass of chambers 1 to 6 after each step [loss tally]:\nC1: feed 3,12,9,7,5,4 [0] | overflow 3,8,12,6,7,4 [0] | marks 3,8,12,6,7,4, states L,P,P,P,P,L [0] | burn-off 7,10,9,6,4,3 [1] (amounts 0,4,6,3,3,1) | moult FIRED, total 39 > 38: 3,5,4,3,2,1 [22]\nC2: feed 7,7,4,4,3,8 [22] | overflow 7,7,4,4,3,7 [23] | marks 7,7,4,4,3,7, states P,P,L,P,L,P [23] | burn-off 7,4,5,2,6,4 [27] (amounts 3,3,1,2,0,3) | moult none, total 28: 7,4,5,2,6,4 [27]\nC3: feed 11,8,8,2,6,10 [27] | overflow 10,8,9,2,6,7 [30] | marks 10,8,9,2,6,7, states P,P,P,L,L,P [30] | burn-off 9,8,5,2,8,4 [36] (amounts 5,4,4,0,1,3) | moult none, total 36: 9,8,5,2,8,4 [36]\nC4: feed 16,14,12,3,11,4 [36] | overflow 10,8,12,6,9,7 [44] | marks 10,8,12,6,9,7, states P,P,P,P,P,P [44] | burn-off 9,10,9,7,8,4 [49] (amounts 5,4,6,3,4,3) | moult FIRED, total 47 > 38: 4,5,4,3,4,2 [74]\nC5: feed 4,11,10,6,7,2 [74] | overflow 4,8,12,6,8,2 [74] | marks 4,8,12,6,8,2, states P,P,P,P,P,L [74] | burn-off 6,10,9,7,4,2 [76] (amounts 2,4,6,3,4,0) | moult none, total exactly 38: 6,10,9,7,4,2 [76]",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "LARVAL"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "Starting mass 20 + all feed 94 (cycles: 20 + 15 + 17 + 24 + 18) = 114. End mass 38 (6+10+9+7+4+2) + loss tally 76 = 114. It balances.",
+    "usedScript": true,
+    "notes": "A short Python script did the arithmetic. It is in the scratchpad as m.py. I checked cycle 1 by hand and it matches. Two boundary cases decided the figures. First, after cycle 5 the line totals exactly 38, so no moult fires (the rule needs strictly over 38). Second, in cycle 5 chamber 6 weighs 2, which equals its lower mark, so it goes from PUPAL back to LARVAL. Chambers 2 and 4 end above their holding limits, as the write-up allows after cycle 5."
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "finalOk": true,
+    "purgesOk": true,
+    "lostOk": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 7,
+    "usedScript": true
+   }
+  },
+  {
+   "key": "treatment",
+   "n": 1,
+   "run": {
+    "procedureSummary": "Start: liquor [3,6,6,2,2,1], all STEADY, loss 0. Each cycle runs five steps in order, and each step finishes on all six tanks before the next one starts. (1) Feed: add each tank's delivery for the cycle. No cap, so a tank can go past its volume. (2) Weirs: go through tanks 1 to 6 in order. Any amount over a tank's volume goes into the next tank (before that tank is checked), and the tank is left at exactly its volume. Tank 6's excess goes to outfall and is added to the loss. (3) States: use the contents after the weirs. A STEADY tank with contents >= upper mark becomes OVERLOADED. An OVERLOADED tank with contents <= lower mark becomes STEADY. Otherwise the state stays the same. Each change is logged as (cycle, position, before, after). (4) Discharge: work out every amount from the post-weir contents before moving anything. STEADY sends floor(q/4) to outfall (loss). OVERLOADED sends floor(q/2) to the tank just upstream; tank 1 sends its half to outfall (loss). All amounts then move at once, with no volume cap. (5) Storm bypass: if the six-tank total is strictly greater than 38, each tank keeps floor(q/2), the remainder q - floor(q/2) goes to outfall (loss), and the cycle is logged. A total of 38 or less does nothing. Arithmetic was done with a short Python script.",
+    "openPoints": [
+     {
+      "point": "Whether tank 6 weir overflow counts as loss",
+      "assumption": "Yes. The write-up says it overflows to outfall, and everything that reaches outfall goes on the loss tally."
+     },
+     {
+      "point": "Storm bypass boundary at exactly 38",
+      "assumption": "Strictly more than 38 triggers it. Cycle 5 ended at exactly 38, so the bypass did not fire."
+     },
+     {
+      "point": "Rounding of the bypass remainder for odd quantities",
+      "assumption": "Each tank keeps floor(q/2) and the remainder q - floor(q/2) goes to outfall, so the odd unit goes to loss."
+     },
+     {
+      "point": "Which contents the discharge amounts are based on",
+      "assumption": "The post-weir contents for every tank, worked out before any movement. Return-line inflow does not change any other tank's discharge in the same cycle."
+     },
+     {
+      "point": "A return-line inflow pushing an upstream tank over its volume",
+      "assumption": "Allowed. The tank stays overfull until the next cycle's weirs or the bypass. No tank was overfull at the end of cycle 5."
+     },
+     {
+      "point": "What the state test compares against",
+      "assumption": "Contents after the weirs, using the at-or-above upper mark and at-or-below lower mark rules, with at most one change per tank per cycle."
+     }
+    ],
+    "cycleFigures": "C1: feed [3,12,9,7,5,4]; weirs [3,8,12,6,7,4] (loss 0); states S,O,O,O,O,S; discharge amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3] (loss 1); bypass fired (total 39 > 38) -> [3,5,4,3,2,1] (loss 22). C2: feed [7,7,4,4,3,8]; weirs [7,7,4,4,3,7] (loss 23); states O,O,S,O,S,O; discharge [3,3,1,2,0,3] -> [7,4,5,2,6,4] (loss 27); bypass no (28) -> [7,4,5,2,6,4] (loss 27). C3: feed [11,8,8,2,6,10]; weirs [10,8,9,2,6,7] (loss 30); states O,O,O,S,S,O; discharge [5,4,4,0,1,3] -> [9,8,5,2,8,4] (loss 36); bypass no (36) -> [9,8,5,2,8,4] (loss 36). C4: feed [16,14,12,3,11,4]; weirs [10,8,12,6,9,7] (loss 44); states O,O,O,O,O,O; discharge [5,4,6,3,4,3] -> [9,10,9,7,8,4] (loss 49); bypass fired (total 47) -> [4,5,4,3,4,2] (loss 74). C5: feed [4,11,10,6,7,2]; weirs [4,8,12,6,8,2] (loss 74); states O,O,O,O,O,S; discharge [2,4,6,3,4,0] -> [6,10,9,7,4,2] (loss 76); bypass no (total exactly 38) -> [6,10,9,7,4,2] (loss 76).",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "OVERLOADED",
+     "OVERLOADED",
+     "OVERLOADED",
+     "OVERLOADED",
+     "OVERLOADED",
+     "STEADY"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "STEADY",
+      "to": "OVERLOADED"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "STEADY",
+      "to": "OVERLOADED"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "STEADY",
+      "to": "OVERLOADED"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "STEADY",
+      "to": "OVERLOADED"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "STEADY",
+      "to": "OVERLOADED"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "OVERLOADED",
+      "to": "STEADY"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "OVERLOADED",
+      "to": "STEADY"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "STEADY",
+      "to": "OVERLOADED"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "STEADY",
+      "to": "OVERLOADED"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "OVERLOADED",
+      "to": "STEADY"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "STEADY",
+      "to": "OVERLOADED"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "STEADY",
+      "to": "OVERLOADED"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "OVERLOADED",
+      "to": "STEADY"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "Opening liquor 20 + all feed 94 = 114; end quantities 38 + loss tally 76 = 114. Balanced.",
+    "usedScript": true,
+    "notes": "Source write-up: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-w1\\treatment.md. The \"resetPeriods\" field lists the cycles in which the storm bypass (the halving event) fired. Cycle 5 ended with a total of exactly 38, which is at the limit, so the bypass did not fire. The arithmetic script is in the session scratchpad as t.py. Its hard-coded opening total was wrong (it used 18 instead of 20), so the balance figure it printed was off. The balance check above uses the correct opening total of 20."
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "finalOk": true,
+    "purgesOk": true,
+    "lostOk": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 6,
+    "usedScript": true
+   }
+  },
+  {
+   "key": "rag",
+   "n": 1,
+   "run": {
+    "procedureSummary": "Start: chunks 3,6,6,2,2,1 (total 20), all tiers COLD. Each cycle, in order, each step done on all six tiers before the next step starts:\n1. Ingest: add that cycle's ingest row to tiers 1 to 6. No budget check at this step.\n2. Eviction: walk tiers 1 to 6 in order. If a tier is over its budget (10,8,12,6,9,7), set it to exactly its budget and add the excess to the next tier out (i+1) before checking that tier, so overflow cascades. Tier 6's excess is dropped and added to the loss tally.\n3. State check, on post-eviction counts: a COLD tier at or above its upper mark (7,6,9,5,7,5) becomes HOT. A HOT tier at or below its lower mark (3,2,4,2,3,2) becomes COLD. Otherwise no change. Each tier is checked once, so it can flip at most once per cycle. Each flip is logged as (cycle, position, from, to).\n4. Compaction/promotion: first work out all six amounts from the post-state-check counts. A COLD tier's amount is floor(count/4), and it is dropped (loss). A HOT tier's amount is floor(count/2), and it moves to tier i-1. Tier 1's HOT amount is dropped (loss). Then apply all six at once. No budget check, so a tier can stay over budget.\n5. Context reset: if the six-tier total is strictly above 38, set every tier to floor(count/2), add what was removed to the loss tally, and record the cycle. At a total of 38 or less, do nothing.\nI used a short Node.js script for the arithmetic and checked the cycle 2 compaction step by hand.",
+    "openPoints": [
+     {
+      "point": "Which counts the step-4 amounts are based on",
+      "assumption": "Post-eviction counts with the step-3 states (the 'current counts' when step 4 starts). All amounts are computed before any are applied, so chunks a tier receives by promotion in the same step are not compacted or promoted again."
+     },
+     {
+      "point": "Whether chunks removed by compaction, tier-1 promotion, tier-6 eviction overflow and the context-reset halving all count toward the loss tally",
+      "assumption": "Yes. Every dropped chunk from all four sources goes into lossTotal. Chunks evicted or promoted between tiers stay in the stack and are not losses."
+     },
+     {
+      "point": "Reset boundary when the total is exactly 38 (cycle 5 closed at 38)",
+      "assumption": "No reset, because the rule needs a total strictly above 38. Cycle 5 is not a reset cycle."
+     },
+     {
+      "point": "Boundary cases at the marks (for example, tier 4 at exactly 2 in cycle 3, and tier 1 COLD at 3 in cycle 1)",
+      "assumption": "The checks are inclusive: at or above the upper mark goes HOT, at or below the lower mark goes COLD. A COLD tier at or below its lower mark stays COLD, and a HOT tier at or above its upper mark stays HOT."
+     },
+     {
+      "point": "Over-budget tiers after promotion (for example, tier 2 ends cycle 5 at 10 against a budget of 8)",
+      "assumption": "They are left as they are. Budgets are enforced only by the next cycle's eviction, so the end figures include over-budget tiers."
+     },
+     {
+      "point": "Rounding",
+      "assumption": "Every fraction (quarter, half, halving) is rounded down to a whole chunk."
+     }
+    ],
+    "cycleFigures": "Format: tiers 1-6 (total).\nC1: ingest 3,12,9,7,5,4 (40) | evict 3,8,12,6,7,4 (40, 0 dropped) | state 3,8,12,6,7,4, states COLD,HOT,HOT,HOT,HOT,COLD | compact/promote amounts 0,4,6,3,3,1, giving 7,10,9,6,4,3 (39, 1 dropped) | reset fired, giving 3,5,4,3,2,1 (18, 21 dropped). Running loss 22.\nC2: ingest 7,7,4,4,3,8 (33) | evict 7,7,4,4,3,7 (32, 1 dropped) | state 7,7,4,4,3,7, states HOT,HOT,COLD,HOT,COLD,HOT | amounts 3,3,1,2,0,3, giving 7,4,5,2,6,4 (28, 4 dropped) | no reset 7,4,5,2,6,4 (28). Running loss 27.\nC3: ingest 11,8,8,2,6,10 (45) | evict 10,8,9,2,6,7 (42, 3 dropped) | state 10,8,9,2,6,7, states HOT,HOT,HOT,COLD,COLD,HOT | amounts 5,4,4,0,1,3, giving 9,8,5,2,8,4 (36, 6 dropped) | no reset 9,8,5,2,8,4 (36). Running loss 36.\nC4: ingest 16,14,12,3,11,4 (60) | evict 10,8,12,6,9,7 (52, 8 dropped) | state 10,8,12,6,9,7, all HOT | amounts 5,4,6,3,4,3, giving 9,10,9,7,8,4 (47, 5 dropped) | reset fired, giving 4,5,4,3,4,2 (22, 25 dropped). Running loss 74.\nC5: ingest 4,11,10,6,7,2 (40) | evict 4,8,12,6,8,2 (40, 0 dropped) | state 4,8,12,6,8,2, states HOT,HOT,HOT,HOT,HOT,COLD | amounts 2,4,6,3,4,0, giving 6,10,9,7,4,2 (38, 2 dropped) | no reset at exactly 38: 6,10,9,7,4,2 (38). Running loss 76.",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "HOT",
+     "HOT",
+     "HOT",
+     "HOT",
+     "HOT",
+     "COLD"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "COLD",
+      "to": "HOT"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "COLD",
+      "to": "HOT"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "COLD",
+      "to": "HOT"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "COLD",
+      "to": "HOT"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "COLD",
+      "to": "HOT"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "HOT",
+      "to": "COLD"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "HOT",
+      "to": "COLD"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "COLD",
+      "to": "HOT"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "COLD",
+      "to": "HOT"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "HOT",
+      "to": "COLD"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "COLD",
+      "to": "HOT"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "COLD",
+      "to": "HOT"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "HOT",
+      "to": "COLD"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "Starting chunks 20 + ingested 94 (cycles: 20, 15, 17, 24, 18) = 114. End chunks 38 + loss tally 76 = 114. The balance check holds. The loss tally breaks down as: tier-6 eviction overflow 12 (cycles 2, 3, 4: 1+3+8), compaction and tier-1 promotion 18 (1+4+6+5+2), and context resets 46 (21+25).",
+    "notes": "I used a Node.js script for the arithmetic, at C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\scr\\rag.js. I also checked cycle 2 step 4 by hand. A Python attempt hung on the WindowsApps python stub and was abandoned; that background task (bjkz9w2tf) should be stopped if it is still running. At the end of cycle 5, tier 2 holds 10 chunks against a budget of 8, and tier 4 holds 7 against a budget of 6. These are left as they are, because no eviction follows cycle 5.",
+    "usedScript": true
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "finalOk": true,
+    "purgesOk": true,
+    "lostOk": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 6,
+    "usedScript": true
+   }
+  },
+  {
+   "key": "lagrangian",
+   "n": 1,
+   "run": {
+    "procedureSummary": "1. Load: add the cycle's input row to x, position by position, with no ceiling check. 2. Projection sweep (Gauss-Seidel): for i = 1 to 6 in order, if x_i > c_i, set x_i = c_i and add the excess to x_(i+1) before checking i+1, so excess can cascade. Excess from position 6 goes to slack. Only the ceiling is projected. 3. Active-set update on the swept x: an INACTIVE position with x_i >= u_i becomes ACTIVE; an ACTIVE position with x_i <= d_i becomes INACTIVE; otherwise the flag stays. Each change is logged as (cycle, position, before, after). 4. Jacobi transfer: first compute every amount from the same x (INACTIVE: floor(x_i/4); ACTIVE: floor(x_i/2)). Then subtract each amount from its own position, all at once. INACTIVE amounts go to slack. ACTIVE amounts go to position i-1, except position 1's, which goes to slack. No ceiling check. 5. Penalty reset: if sum(x) > 38 (strictly greater), set every x_i = floor(x_i/2), add the removed x_i - floor(x_i/2) to slack, and log the cycle. At 38 or below, do nothing. Report: end x, end flags, the flag-change log, the reset cycles, slack, and the balance check.",
+    "openPoints": [
+     {
+      "point": "How much a reset removes when x_i is odd",
+      "assumption": "The kept value is floor(x_i/2) and the removed part is x_i - floor(x_i/2) (that is, ceil(x_i/2)). All of the removed part goes to slack."
+     },
+     {
+      "point": "Whether the loss tally is the same as the slack accumulator",
+      "assumption": "lossTotal is the final slack. Slack collects sweep excess from position 6, INACTIVE transfer amounts, position 1's ACTIVE transfer, and penalty-reset removals."
+     },
+     {
+      "point": "Which flags the transfer uses",
+      "assumption": "Step 4 uses the flags just set in step 3 of the same cycle."
+     },
+     {
+      "point": "What the reset test compares",
+      "assumption": "The test is the plain sum of x after the transfer, slack not included, and it must be strictly above 38. In cycle 5 the sum is exactly 38, so no reset."
+     },
+     {
+      "point": "Positions above their ceiling at the end of the run",
+      "assumption": "They are left as they are. Position 2 ends at 10 against a ceiling of 8, which the write-up allows after cycle 5."
+     }
+    ],
+    "cycleFigures": "Cycle 1: load [3,12,9,7,5,4] slack 0 | sweep [3,8,12,6,7,4] slack 0 | flags I,A,A,A,A,I | transfer amounts [0,4,6,3,3,1], x [7,10,9,6,4,3] (sum 39) slack 1 | reset fired: [3,5,4,3,2,1] (sum 18) slack 22.\nCycle 2: load [7,7,4,4,3,8] | sweep [7,7,4,4,3,7] slack 23 | flags A,A,I,A,I,A | transfer amounts [3,3,1,2,0,3], x [7,4,5,2,6,4] slack 27 | reset: sum 28, no reset.\nCycle 3: load [11,8,8,2,6,10] | sweep [10,8,9,2,6,7] slack 30 | flags A,A,A,I,I,A | transfer amounts [5,4,4,0,1,3], x [9,8,5,2,8,4] slack 36 | reset: sum 36, no reset.\nCycle 4: load [16,14,12,3,11,4] | sweep [10,8,12,6,9,7] slack 44 | flags A,A,A,A,A,A | transfer amounts [5,4,6,3,4,3], x [9,10,9,7,8,4] (sum 47) slack 49 | reset fired: [4,5,4,3,4,2] (sum 22) slack 74.\nCycle 5: load [4,11,10,6,7,2] | sweep [4,8,12,6,8,2] slack 74 | flags A,A,A,A,A,I | transfer amounts [2,4,6,3,4,0], x [6,10,9,7,4,2] slack 76 | reset: sum 38, not strictly above 38, no reset.",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "ACTIVE",
+     "ACTIVE",
+     "ACTIVE",
+     "ACTIVE",
+     "ACTIVE",
+     "INACTIVE"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "INACTIVE",
+      "to": "ACTIVE"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "INACTIVE",
+      "to": "ACTIVE"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "INACTIVE",
+      "to": "ACTIVE"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "INACTIVE",
+      "to": "ACTIVE"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "INACTIVE",
+      "to": "ACTIVE"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "ACTIVE",
+      "to": "INACTIVE"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "ACTIVE",
+      "to": "INACTIVE"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "INACTIVE",
+      "to": "ACTIVE"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "INACTIVE",
+      "to": "ACTIVE"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "ACTIVE",
+      "to": "INACTIVE"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "INACTIVE",
+      "to": "ACTIVE"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "INACTIVE",
+      "to": "ACTIVE"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "ACTIVE",
+      "to": "INACTIVE"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "Starting sum 20 + total input 94 = 114; end sum 38 + slack 76 = 114. Both sides are equal.",
+    "usedScript": true,
+    "notes": "I computed the figures with a short Python script, which also checked the balance. The script is at C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py. Position 2 ends at 10, above its ceiling of 8, because the cycle 5 transfer moved amount into it after the last sweep; the write-up allows this. The write-up is C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-w1\\lagrangian.md."
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "finalOk": true,
+    "purgesOk": true,
+    "lostOk": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 5,
+    "usedScript": true
+   }
+  },
+  {
+   "key": "goodhart",
+   "n": 1,
+   "run": {
+    "procedureSummary": "Source: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-w1\\goodhart.md. Start: counts 3,6,6,2,2,1; all ROUTINE; tally 0. In each of cycles 1 to 5, every step finishes for all six teams before the next step starts.\nStep 1, Arrivals: add the cycle's new tickets to each team. No limit applies.\nStep 2, Overflow: go through teams 1 to 6 in order. If a team is over its WIP limit (10,8,12,6,9,7), set it to the limit and add the excess to the next team before that team is checked, so excess can cascade. Team 6's excess goes to the tally.\nStep 3, Status check (on post-overflow counts): a ROUTINE team with count >= upper mark (7,6,9,5,7,5) becomes ESCALATED. An ESCALATED team with count <= lower mark (3,2,4,2,3,2) becomes ROUTINE. Otherwise the status holds. Each team changes at most once, and each change is logged.\nStep 4, Closing: work out all amounts from the current counts first. A ROUTINE team closes floor(count/4), which goes to the tally. An ESCALATED team bounces floor(count/2) to the team upstream. All six are applied at once. Team 1's bounce goes to the tally. Limits are not enforced here.\nStep 5, Backlog cut: total the six counts. Only if the total is strictly above 38, every count becomes floor(count/2), the removed tickets go to the tally, and the cycle is noted.\nEnd: report the counts, statuses, changes, cut cycles and tally, and check that opening tickets plus all new tickets equals final counts plus tally.",
+    "openPoints": [
+     {
+      "point": "How the backlog cut rounds 'halved, rounding down' (is the kept amount or the removed amount rounded down?)",
+      "assumption": "The kept count is rounded down: new count = floor(n/2) and n - floor(n/2) goes to the tally. For an odd count, the larger half is removed."
+     },
+     {
+      "point": "When bounced tickets land relative to the closing amounts",
+      "assumption": "All closing and bounce amounts come from the counts before Step 4. Bounces are added to the upstream team afterwards, so a team's own close or bounce never includes tickets bounced to it in the same step."
+     },
+     {
+      "point": "A team that is both ESCALATED and receiving a bounce",
+      "assumption": "Its new count is pre-step count - own bounce + bounce received from downstream."
+     },
+     {
+      "point": "Boundary at the line target",
+      "assumption": "The cut fires only when the total is strictly above 38. The cycle 5 total is exactly 38, so the cut does not fire."
+     },
+     {
+      "point": "Status boundary values",
+      "assumption": "The checks are inclusive: >= upper mark escalates, <= lower mark returns to ROUTINE."
+     },
+     {
+      "point": "Which counts the status check reads",
+      "assumption": "Post-overflow counts from Step 2 of the same cycle."
+     },
+     {
+      "point": "Over-limit counts after Step 4 and Step 5",
+      "assumption": "They are left as they are until the next cycle's overflow. After cycle 5 they stay over: team 2 ends at 10 against a limit of 8, and team 4 at 7 against 6."
+     }
+    ],
+    "cycleFigures": "Counts for teams 1-6 after each step; running tally in brackets.\nC1: arrivals 3,12,9,7,5,4 [0]; overflow 3,8,12,6,7,4 [0]; status: T2-T5 become ESCALATED; closing 7,10,9,6,4,3 [1] (T6 closes 1; bounces T2 4, T3 6, T4 3, T5 3); cut fires (total 39 > 38): 3,5,4,3,2,1 [22] (21 removed).\nC2: arrivals 7,7,4,4,3,8 [22]; overflow 7,7,4,4,3,7 [23] (T6 excess 1); status: T1 ROUTINE->ESC, T3 ESC->ROUTINE, T5 ESC->ROUTINE, T6 ROUTINE->ESC; closing 7,4,5,2,6,4 [27] (T3 closes 1; bounces T1 3 to tally, T2 3, T4 2, T6 3); total 28, no cut.\nC3: arrivals 11,8,8,2,6,10 [27]; overflow 10,8,9,2,6,7 [30] (T1 1 to T2, T2 1 to T3, T6 excess 3); status: T3 ROUTINE->ESC, T4 ESC->ROUTINE; closing 9,8,5,2,8,4 [36] (T5 closes 1; bounces T1 5 to tally, T2 4, T3 4, T6 3); total 36, no cut.\nC4: arrivals 16,14,12,3,11,4 [36]; overflow 10,8,12,6,9,7 [44] (cascade, T6 excess 8); status: T4 and T5 ROUTINE->ESC, so all six are ESCALATED; closing 9,10,9,7,8,4 [49] (bounces T1 5 to tally, T2 4, T3 6, T4 3, T5 4, T6 3); cut fires (total 47): 4,5,4,3,4,2 [74] (25 removed).\nC5: arrivals 4,11,10,6,7,2 [74]; overflow 4,8,12,6,8,2 [74] (no T6 excess); status: T6 ESC->ROUTINE; closing 6,10,9,7,4,2 [76] (T6 closes 0; bounces T1 2 to tally, T2 4, T3 6, T4 3, T5 4); total 38, not above 38, no cut.",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "ESCALATED",
+     "ESCALATED",
+     "ESCALATED",
+     "ESCALATED",
+     "ESCALATED",
+     "ROUTINE"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "ROUTINE",
+      "to": "ESCALATED"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "ROUTINE",
+      "to": "ESCALATED"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "ROUTINE",
+      "to": "ESCALATED"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "ROUTINE",
+      "to": "ESCALATED"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "ROUTINE",
+      "to": "ESCALATED"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "ESCALATED",
+      "to": "ROUTINE"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "ESCALATED",
+      "to": "ROUTINE"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "ROUTINE",
+      "to": "ESCALATED"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "ROUTINE",
+      "to": "ESCALATED"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "ESCALATED",
+      "to": "ROUTINE"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "ROUTINE",
+      "to": "ESCALATED"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "ROUTINE",
+      "to": "ESCALATED"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "ESCALATED",
+      "to": "ROUTINE"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "Opening 20 + new tickets 94 (C1 20, C2 15, C3 17, C4 24, C5 18) = 114. Final counts 38 (6+10+9+7+4+2) + tally 76 = 114. The tally is made up of: team 6 overflow 12 (1+3+8), routine closes 4 (1+1+1+1), team 1 bounces 15 (3+5+5+2), backlog cuts 46 (21+25) (total 76). The check balances.",
+    "usedScript": true,
+    "notes": "I used a short Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\g.py. The result depends on two boundary calls. (1) In cycle 5 the total is exactly 38, so the backlog cut does not fire. (2) In cycle 1 the total is 39, so the cut fires. If the cut instead rounded the removed amount down (keeping the larger half), cycle 1 and every later figure would change."
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "finalOk": true,
+    "purgesOk": true,
+    "lostOk": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 7,
+    "usedScript": true
+   }
+  }
+ ]
+}

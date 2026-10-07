@@ -1,0 +1,175 @@
+{
+ "key": "concrete",
+ "n": 1,
+ "run": {
+  "procedureSummary": "Applied each cycle's five steps in order, each step finishing on all six forms before the next:\n1. Pour: add that cycle's units to each form. Capacity is not checked at this step.\n2. Overtop: go from form 1 to form 6 in order. Any excess over capacity moves into the next form, and the form is left at exactly its capacity. Excess that a form has just received counts when that form is reached, so it can cascade. Form 6's excess goes to the waste pit and onto the loss tally.\n3. State check, on the contents after overtop: a GREEN form at or above its upper mark becomes HOT, and a HOT form at or below its lower mark becomes GREEN (equal to the mark counts). Each form is checked once per cycle, so it changes state at most once. Each change is logged as (cycle, position, before, after).\n4. Bleed/evaporation: all six amounts are computed from the contents after the state check, using the new states, and then applied together. A GREEN form loses floor(q/4) to evaporation, which goes on the loss tally. A HOT form sends floor(q/2) to the form before it (form i to form i-1); form 1's bleed is waste. There is no capacity cap at this step.\n5. Washout: total the six forms. If the total is strictly over 38, each form keeps floor(q/2), the remainder goes on the loss tally, and the cycle is recorded. Otherwise nothing happens.\nThe loss tally starts at 0 and collects pit overflow, evaporation, form 1's bleed and washout losses.",
+  "openPoints": [
+   {
+    "point": "Which states the bleed/evaporation step uses: the states from before the state check or after it",
+    "assumption": "Step 4 uses the states set in step 3 of the same cycle, because steps run in order."
+   },
+   {
+    "point": "What 'here it does' means in the HOT to GREEN rule at the boundary",
+    "assumption": "A HOT form whose contents equal the lower mark goes back to GREEN. This applied to form 4 in cycle 3 (2 <= 2)."
+   },
+   {
+    "point": "Washout when the total is exactly 38",
+    "assumption": "Washout fires only when the total is strictly over 38. In cycle 5 the total was exactly 38, so washout did not fire."
+   },
+   {
+    "point": "Rounding of bleed, evaporation and washout amounts",
+    "assumption": "Bleed and evaporation amounts are rounded down. In a washout each form keeps floor(q/2) and the larger half goes to waste."
+   },
+   {
+    "point": "Overfill left after the cycle 5 bleed (form 2 holds 10 against a capacity of 8)",
+    "assumption": "Following the write-up, it is left as is. No overtop is applied after cycle 5."
+   },
+   {
+    "point": "Whether overtop cascade amounts count toward form 6's pit loss in the same pass",
+    "assumption": "Yes. It is a single pass from form 1 to form 6, so excess passed down from upstream forms can reach the pit in that same pass."
+   }
+  ],
+  "cycleFigures": "Start: [3,6,6,2,2,1], all GREEN, loss 0.\nCycle 1: pour [3,12,9,7,5,4]; overtop [3,8,12,6,7,4] (loss 0); state check [3,8,12,6,7,4] G,H,H,H,H,G; bleed/evap [7,10,9,6,4,3] (loss 1); washout total 39 > 38, so washout fires: [3,5,4,3,2,1] (loss 22).\nCycle 2: pour [7,7,4,4,3,8]; overtop [7,7,4,4,3,7] (loss 23); state check [7,7,4,4,3,7] H,H,G,H,G,H; bleed/evap [7,4,5,2,6,4] (loss 27); washout total 28, no washout: [7,4,5,2,6,4] (loss 27).\nCycle 3: pour [11,8,8,2,6,10]; overtop [10,8,9,2,6,7] (loss 30); state check [10,8,9,2,6,7] H,H,H,G,G,H; bleed/evap [9,8,5,2,8,4] (loss 36); washout total 36, no washout: [9,8,5,2,8,4] (loss 36).\nCycle 4: pour [16,14,12,3,11,4]; overtop [10,8,12,6,9,7] (loss 44); state check [10,8,12,6,9,7] all H; bleed/evap [9,10,9,7,8,4] (loss 49); washout total 47 > 38, so washout fires: [4,5,4,3,4,2] (loss 74).\nCycle 5: pour [4,11,10,6,7,2]; overtop [4,8,12,6,8,2] (loss 74); state check [4,8,12,6,8,2] H,H,H,H,H,G; bleed/evap [6,10,9,7,4,2] (loss 76); washout total 38, not strictly over 38, no washout: [6,10,9,7,4,2] (loss 76).",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "HOT",
+   "HOT",
+   "HOT",
+   "HOT",
+   "HOT",
+   "GREEN"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "HOT",
+    "to": "GREEN"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "HOT",
+    "to": "GREEN"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "HOT",
+    "to": "GREEN"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "HOT",
+    "to": "GREEN"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting mix 20 + pours 94 (cycle by cycle: 20+15+17+24+18) = 114. End quantities 38 (6+10+9+7+4+2) + loss tally 76 = 114. The two sides match.",
+  "usedScript": true,
+  "notes": "I used a short Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py. I checked cycle 1 bleed/washout and cycle 4 overtop by hand. Loss by cycle is 22, 5, 9, 38, 2. Cycle 5 lands exactly on the washout limit (38), so the strictly-over rule decides the outcome there."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "openPoints": 6,
+  "usedScript": true
+ },
+ "source": "opus-5.5"
+}

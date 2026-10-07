@@ -1,0 +1,179 @@
+{
+ "key": "ballast",
+ "n": 1,
+ "run": {
+  "procedureSummary": "Start: water 3,6,6,2,2,1; all pumps LAMINAR; tally 0. Each cycle runs five steps, and each step is finished on all six compartments before the next step starts.\nStep 1, take on water: add the full table amount to each compartment, even if that takes it over volume.\nStep 2, scuppers: go through compartments 1 to 6 one at a time. Anything over volume moves into the next compartment (k+1) before that one is checked, so overflow can cascade. Overflow from 6 goes overboard to the tally.\nStep 3, pump check, on the water left after the scuppers: a LAMINAR pump with water >= its inception mark becomes CAVITATING. A CAVITATING pump with water <= its desinence mark becomes LAMINAR. Otherwise nothing changes. Each change is logged.\nStep 4, pump: first work out every amount from the current contents, using the states just set in step 3. A LAMINAR pump sends floor(w/4) overboard. A CAVITATING pump sends floor(w/2) forward into compartment k-1; compartment 1's backflow goes overboard. Then all six moves are applied together, with no volume cap.\nStep 5, emergency blow: total all six. Only if the total is strictly above 38, each compartment keeps floor(w/2) and the rest goes overboard; the cycle is noted.\nReport: end quantities and states after step 5 of cycle 5. Balance check: starting water + water taken on = end water + tally.",
+  "openPoints": [
+   {
+    "point": "Which state the pump step uses in the cycle where a state changes",
+    "assumption": "The step-3 state from the same cycle governs step 4, because step 3 comes first."
+   },
+   {
+    "point": "Direction of backflow",
+    "assumption": "'Forward toward the bow' means compartment k sends water to k-1, and compartment 1 sends it overboard to the tally."
+   },
+   {
+    "point": "Pump amounts versus water arriving by backflow in the same step",
+    "assumption": "All six amounts are worked out from the contents before any move (taken literally from the write-up). Water that arrives by backflow is not pumped again until the next cycle."
+   },
+   {
+    "point": "What the blow rule totals, and the case of exactly 38",
+    "assumption": "The blow totals the contents after the pump step. The rule fires only if the total is above 38. In cycle 5 the total was exactly 38, so the blow did not fire."
+   },
+   {
+    "point": "Rounding in the blow",
+    "assumption": "Each compartment keeps floor(w/2) and the remainder, ceil(w/2), goes overboard to the tally."
+   },
+   {
+    "point": "End quantities above volume",
+    "assumption": "The end quantities are reported as they stand after cycle 5 with no final scupper pass. Compartment 2 ends at 10, above its volume of 8, as the write-up allows."
+   },
+   {
+    "point": "Where scupper overflow from compartment 6 goes",
+    "assumption": "It goes overboard and is counted on the tally (the write-up says 'Everything overboard goes on the tally')."
+   }
+  ],
+  "cycleFigures": "Cycle 1: take on [3,12,9,7,5,4]; scuppers [3,8,12,6,7,4] (tally 0); pump check gives states L,C,C,C,C,L; pump amounts [0,4,6,3,3,1] give [7,10,9,6,4,3] (tally 1); blow: total 39 > 38, so it FIRES, giving [3,5,4,3,2,1] (tally 22).\nCycle 2: take on [7,7,4,4,3,8]; scuppers [7,7,4,4,3,7] (tally 23); pump check gives C,C,L,C,L,C; pump amounts [3,3,1,2,0,3] give [7,4,5,2,6,4] (tally 27); blow: total 28, no blow, [7,4,5,2,6,4] (tally 27).\nCycle 3: take on [11,8,8,2,6,10]; scuppers [10,8,9,2,6,7] (tally 30); pump check gives C,C,C,L,L,C; pump amounts [5,4,4,0,1,3] give [9,8,5,2,8,4] (tally 36); blow: total 36, no blow, [9,8,5,2,8,4] (tally 36).\nCycle 4: take on [16,14,12,3,11,4]; scuppers [10,8,12,6,9,7] (8 overboard from 6, tally 44); pump check gives all six C; pump amounts [5,4,6,3,4,3] give [9,10,9,7,8,4] (tally 49); blow: total 47 > 38, so it FIRES, giving [4,5,4,3,4,2] (tally 74).\nCycle 5: take on [4,11,10,6,7,2]; scuppers [4,8,12,6,8,2] (tally 74); pump check gives C,C,C,C,C,L; pump amounts [2,4,6,3,4,0] give [6,10,9,7,4,2] (tally 76); blow: total exactly 38, no blow, end [6,10,9,7,4,2] (tally 76).",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "CAVITATING",
+   "CAVITATING",
+   "CAVITATING",
+   "CAVITATING",
+   "CAVITATING",
+   "LAMINAR"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting water 20 + water taken on 94 (17+15+17+24+18) = 114. End water 38 (6+10+9+7+4+2) + overboard tally 76 = 114. The two sides match.",
+  "usedScript": true,
+  "notes": "The arithmetic was done with a short Python script, C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\ballast.py. Cycle 1 was also checked by hand. The emergency blow fired in cycles 1 and 4. In cycle 5 the total was exactly 38, so it did not fire. Compartment 2 ends at 10, above its volume of 8; the write-up allows this after cycle 5."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "openPoints": 7,
+  "usedScript": true
+ },
+ "source": "opus-5.5"
+}

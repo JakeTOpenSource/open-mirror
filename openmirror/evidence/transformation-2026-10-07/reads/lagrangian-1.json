@@ -1,0 +1,171 @@
+{
+ "key": "lagrangian",
+ "n": 1,
+ "run": {
+  "procedureSummary": "1. Load: add the cycle's input row to x, position by position, with no ceiling check. 2. Projection sweep (Gauss-Seidel): for i = 1 to 6 in order, if x_i > c_i, set x_i = c_i and add the excess to x_(i+1) before checking i+1, so excess can cascade. Excess from position 6 goes to slack. Only the ceiling is projected. 3. Active-set update on the swept x: an INACTIVE position with x_i >= u_i becomes ACTIVE; an ACTIVE position with x_i <= d_i becomes INACTIVE; otherwise the flag stays. Each change is logged as (cycle, position, before, after). 4. Jacobi transfer: first compute every amount from the same x (INACTIVE: floor(x_i/4); ACTIVE: floor(x_i/2)). Then subtract each amount from its own position, all at once. INACTIVE amounts go to slack. ACTIVE amounts go to position i-1, except position 1's, which goes to slack. No ceiling check. 5. Penalty reset: if sum(x) > 38 (strictly greater), set every x_i = floor(x_i/2), add the removed x_i - floor(x_i/2) to slack, and log the cycle. At 38 or below, do nothing. Report: end x, end flags, the flag-change log, the reset cycles, slack, and the balance check.",
+  "openPoints": [
+   {
+    "point": "How much a reset removes when x_i is odd",
+    "assumption": "The kept value is floor(x_i/2) and the removed part is x_i - floor(x_i/2) (that is, ceil(x_i/2)). All of the removed part goes to slack."
+   },
+   {
+    "point": "Whether the loss tally is the same as the slack accumulator",
+    "assumption": "lossTotal is the final slack. Slack collects sweep excess from position 6, INACTIVE transfer amounts, position 1's ACTIVE transfer, and penalty-reset removals."
+   },
+   {
+    "point": "Which flags the transfer uses",
+    "assumption": "Step 4 uses the flags just set in step 3 of the same cycle."
+   },
+   {
+    "point": "What the reset test compares",
+    "assumption": "The test is the plain sum of x after the transfer, slack not included, and it must be strictly above 38. In cycle 5 the sum is exactly 38, so no reset."
+   },
+   {
+    "point": "Positions above their ceiling at the end of the run",
+    "assumption": "They are left as they are. Position 2 ends at 10 against a ceiling of 8, which the write-up allows after cycle 5."
+   }
+  ],
+  "cycleFigures": "Cycle 1: load [3,12,9,7,5,4] slack 0 | sweep [3,8,12,6,7,4] slack 0 | flags I,A,A,A,A,I | transfer amounts [0,4,6,3,3,1], x [7,10,9,6,4,3] (sum 39) slack 1 | reset fired: [3,5,4,3,2,1] (sum 18) slack 22.\nCycle 2: load [7,7,4,4,3,8] | sweep [7,7,4,4,3,7] slack 23 | flags A,A,I,A,I,A | transfer amounts [3,3,1,2,0,3], x [7,4,5,2,6,4] slack 27 | reset: sum 28, no reset.\nCycle 3: load [11,8,8,2,6,10] | sweep [10,8,9,2,6,7] slack 30 | flags A,A,A,I,I,A | transfer amounts [5,4,4,0,1,3], x [9,8,5,2,8,4] slack 36 | reset: sum 36, no reset.\nCycle 4: load [16,14,12,3,11,4] | sweep [10,8,12,6,9,7] slack 44 | flags A,A,A,A,A,A | transfer amounts [5,4,6,3,4,3], x [9,10,9,7,8,4] (sum 47) slack 49 | reset fired: [4,5,4,3,4,2] (sum 22) slack 74.\nCycle 5: load [4,11,10,6,7,2] | sweep [4,8,12,6,8,2] slack 74 | flags A,A,A,A,A,I | transfer amounts [2,4,6,3,4,0], x [6,10,9,7,4,2] slack 76 | reset: sum 38, not strictly above 38, no reset.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "ACTIVE",
+   "ACTIVE",
+   "ACTIVE",
+   "ACTIVE",
+   "ACTIVE",
+   "INACTIVE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting sum 20 + total input 94 = 114; end sum 38 + slack 76 = 114. Both sides are equal.",
+  "usedScript": true,
+  "notes": "I computed the figures with a short Python script, which also checked the balance. The script is at C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py. Position 2 ends at 10, above its ceiling of 8, because the cycle 5 transfer moved amount into it after the last sweep; the write-up allows this. The write-up is C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-w1\\lagrangian.md."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "openPoints": 5,
+  "usedScript": true
+ },
+ "source": "opus-5.5"
+}

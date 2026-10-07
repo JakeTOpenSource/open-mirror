@@ -1,0 +1,175 @@
+{
+ "key": "rag",
+ "n": 1,
+ "run": {
+  "procedureSummary": "Start: chunks 3,6,6,2,2,1 (total 20), all tiers COLD. Each cycle, in order, each step done on all six tiers before the next step starts:\n1. Ingest: add that cycle's ingest row to tiers 1 to 6. No budget check at this step.\n2. Eviction: walk tiers 1 to 6 in order. If a tier is over its budget (10,8,12,6,9,7), set it to exactly its budget and add the excess to the next tier out (i+1) before checking that tier, so overflow cascades. Tier 6's excess is dropped and added to the loss tally.\n3. State check, on post-eviction counts: a COLD tier at or above its upper mark (7,6,9,5,7,5) becomes HOT. A HOT tier at or below its lower mark (3,2,4,2,3,2) becomes COLD. Otherwise no change. Each tier is checked once, so it can flip at most once per cycle. Each flip is logged as (cycle, position, from, to).\n4. Compaction/promotion: first work out all six amounts from the post-state-check counts. A COLD tier's amount is floor(count/4), and it is dropped (loss). A HOT tier's amount is floor(count/2), and it moves to tier i-1. Tier 1's HOT amount is dropped (loss). Then apply all six at once. No budget check, so a tier can stay over budget.\n5. Context reset: if the six-tier total is strictly above 38, set every tier to floor(count/2), add what was removed to the loss tally, and record the cycle. At a total of 38 or less, do nothing.\nI used a short Node.js script for the arithmetic and checked the cycle 2 compaction step by hand.",
+  "openPoints": [
+   {
+    "point": "Which counts the step-4 amounts are based on",
+    "assumption": "Post-eviction counts with the step-3 states (the 'current counts' when step 4 starts). All amounts are computed before any are applied, so chunks a tier receives by promotion in the same step are not compacted or promoted again."
+   },
+   {
+    "point": "Whether chunks removed by compaction, tier-1 promotion, tier-6 eviction overflow and the context-reset halving all count toward the loss tally",
+    "assumption": "Yes. Every dropped chunk from all four sources goes into lossTotal. Chunks evicted or promoted between tiers stay in the stack and are not losses."
+   },
+   {
+    "point": "Reset boundary when the total is exactly 38 (cycle 5 closed at 38)",
+    "assumption": "No reset, because the rule needs a total strictly above 38. Cycle 5 is not a reset cycle."
+   },
+   {
+    "point": "Boundary cases at the marks (for example, tier 4 at exactly 2 in cycle 3, and tier 1 COLD at 3 in cycle 1)",
+    "assumption": "The checks are inclusive: at or above the upper mark goes HOT, at or below the lower mark goes COLD. A COLD tier at or below its lower mark stays COLD, and a HOT tier at or above its upper mark stays HOT."
+   },
+   {
+    "point": "Over-budget tiers after promotion (for example, tier 2 ends cycle 5 at 10 against a budget of 8)",
+    "assumption": "They are left as they are. Budgets are enforced only by the next cycle's eviction, so the end figures include over-budget tiers."
+   },
+   {
+    "point": "Rounding",
+    "assumption": "Every fraction (quarter, half, halving) is rounded down to a whole chunk."
+   }
+  ],
+  "cycleFigures": "Format: tiers 1-6 (total).\nC1: ingest 3,12,9,7,5,4 (40) | evict 3,8,12,6,7,4 (40, 0 dropped) | state 3,8,12,6,7,4, states COLD,HOT,HOT,HOT,HOT,COLD | compact/promote amounts 0,4,6,3,3,1, giving 7,10,9,6,4,3 (39, 1 dropped) | reset fired, giving 3,5,4,3,2,1 (18, 21 dropped). Running loss 22.\nC2: ingest 7,7,4,4,3,8 (33) | evict 7,7,4,4,3,7 (32, 1 dropped) | state 7,7,4,4,3,7, states HOT,HOT,COLD,HOT,COLD,HOT | amounts 3,3,1,2,0,3, giving 7,4,5,2,6,4 (28, 4 dropped) | no reset 7,4,5,2,6,4 (28). Running loss 27.\nC3: ingest 11,8,8,2,6,10 (45) | evict 10,8,9,2,6,7 (42, 3 dropped) | state 10,8,9,2,6,7, states HOT,HOT,HOT,COLD,COLD,HOT | amounts 5,4,4,0,1,3, giving 9,8,5,2,8,4 (36, 6 dropped) | no reset 9,8,5,2,8,4 (36). Running loss 36.\nC4: ingest 16,14,12,3,11,4 (60) | evict 10,8,12,6,9,7 (52, 8 dropped) | state 10,8,12,6,9,7, all HOT | amounts 5,4,6,3,4,3, giving 9,10,9,7,8,4 (47, 5 dropped) | reset fired, giving 4,5,4,3,4,2 (22, 25 dropped). Running loss 74.\nC5: ingest 4,11,10,6,7,2 (40) | evict 4,8,12,6,8,2 (40, 0 dropped) | state 4,8,12,6,8,2, states HOT,HOT,HOT,HOT,HOT,COLD | amounts 2,4,6,3,4,0, giving 6,10,9,7,4,2 (38, 2 dropped) | no reset at exactly 38: 6,10,9,7,4,2 (38). Running loss 76.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "HOT",
+   "HOT",
+   "HOT",
+   "HOT",
+   "HOT",
+   "COLD"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "HOT",
+    "to": "COLD"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "HOT",
+    "to": "COLD"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "HOT",
+    "to": "COLD"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "HOT",
+    "to": "COLD"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting chunks 20 + ingested 94 (cycles: 20, 15, 17, 24, 18) = 114. End chunks 38 + loss tally 76 = 114. The balance check holds. The loss tally breaks down as: tier-6 eviction overflow 12 (cycles 2, 3, 4: 1+3+8), compaction and tier-1 promotion 18 (1+4+6+5+2), and context resets 46 (21+25).",
+  "notes": "I used a Node.js script for the arithmetic, at C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\scr\\rag.js. I also checked cycle 2 step 4 by hand. A Python attempt hung on the WindowsApps python stub and was abandoned; that background task (bjkz9w2tf) should be stopped if it is still running. At the end of cycle 5, tier 2 holds 10 chunks against a budget of 8, and tier 4 holds 7 against a budget of 6. These are left as they are, because no eviction follows cycle 5.",
+  "usedScript": true
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "openPoints": 6,
+  "usedScript": true
+ },
+ "source": "opus-5.5"
+}

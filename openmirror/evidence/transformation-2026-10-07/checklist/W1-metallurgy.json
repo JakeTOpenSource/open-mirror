@@ -1,0 +1,122 @@
+{
+ "arm": "W1",
+ "key": "metallurgy",
+ "results": [
+  {
+   "id": "R01",
+   "recoverable": true,
+   "quote": "Six crucibles in a cascade: 1 at the charging end, 6 at the tapping end. ... Every row reads positions 1 to 6."
+  },
+  {
+   "id": "R02",
+   "recoverable": false,
+   "quote": "Melt counts in whole units."
+  },
+  {
+   "id": "R03",
+   "recoverable": true,
+   "quote": "Capacity: 10 8 12 6 9 7"
+  },
+  {
+   "id": "R04",
+   "recoverable": true,
+   "quote": "Upper mark: 7 6 9 5 7 5"
+  },
+  {
+   "id": "R05",
+   "recoverable": true,
+   "quote": "Lower mark: 3 2 4 2 3 2"
+  },
+  {
+   "id": "R06",
+   "recoverable": true,
+   "quote": "Starting melt: 3 6 6 2 2 1 ... All start BASE."
+  },
+  {
+   "id": "R07",
+   "recoverable": true,
+   "quote": "Loss tally, everything sent to slag, starts at 0. Global reset limit: 38."
+  },
+  {
+   "id": "R08",
+   "recoverable": true,
+   "quote": "Cycle 1: 0 6 3 5 3 3 / Cycle 2: 4 2 0 1 1 7 / Cycle 3: 4 4 3 0 0 6 / Cycle 4: 7 6 7 1 3 0 / Cycle 5: 0 6 6 3 3 0 ... Five cycles"
+  },
+  {
+   "id": "R09",
+   "recoverable": true,
+   "quote": "Five cycles, five steps each, in order; each step finishes on all six before the next."
+  },
+  {
+   "id": "R10",
+   "recoverable": true,
+   "quote": "Charge. Add each crucible's charge. It may sit above capacity until step 2."
+  },
+  {
+   "id": "R11",
+   "recoverable": true,
+   "quote": "Walk 1 to 6. Excess over capacity runs down the launder to the next crucible; this one stays exactly full."
+  },
+  {
+   "id": "R12",
+   "recoverable": true,
+   "quote": "It lands before you reach that crucible, so overflow can carry down the line."
+  },
+  {
+   "id": "R13",
+   "recoverable": true,
+   "quote": "From 6 it goes to the slag pit, not a ladle."
+  },
+  {
+   "id": "R14",
+   "recoverable": true,
+   "quote": "State check, on contents after overflow. ... BASE at or above its upper mark goes SUPERHEATED."
+  },
+  {
+   "id": "R15",
+   "recoverable": true,
+   "quote": "SUPERHEATED at or below its lower mark goes back to BASE."
+  },
+  {
+   "id": "R16",
+   "recoverable": true,
+   "quote": "Between the marks, state carries over unchanged. State changes only here, at most once per crucible per cycle."
+  },
+  {
+   "id": "R17",
+   "recoverable": true,
+   "quote": "Figure all six amounts from current contents before moving anything, rounding down. ... Then move all at once."
+  },
+  {
+   "id": "R18",
+   "recoverable": true,
+   "quote": "BASE: a quarter to slag."
+  },
+  {
+   "id": "R19",
+   "recoverable": true,
+   "quote": "SUPERHEATED: half back up the return launder into the previous crucible, toward the charging end, none to slag; crucible 1's half goes to slag."
+  },
+  {
+   "id": "R20",
+   "recoverable": true,
+   "quote": "Then move all at once. Returned melt can put a crucible over capacity; it stays until next cycle's overflow, or for good after cycle 5."
+  },
+  {
+   "id": "R21",
+   "recoverable": true,
+   "quote": "Total all six. Strictly above 38: emergency tap ... At 38 or below, nothing."
+  },
+  {
+   "id": "R22",
+   "recoverable": true,
+   "quote": "emergency tap, halve every crucible, rounding down, removed melt to slag; note the cycle."
+  },
+  {
+   "id": "R23",
+   "recoverable": true,
+   "quote": "the six end quantities, positions 1 to 6; the six end states, same order; every state change as (cycle, position, before, after); the cycles the global reset fired; the loss tally; and the balance check: starting melt plus all charges must equal end melt plus loss tally."
+  }
+ ],
+ "recoverable": 22
+}

@@ -1,0 +1,175 @@
+{
+ "key": "xylem",
+ "n": 1,
+ "run": {
+  "procedureSummary": "Start: sap 3,6,6,2,2,1 (total 20); all six QUIET; loss tally 0. Each cycle runs these steps in order, and each step finishes on all six segments before the next starts.\n1 Uptake: add the cycle's uptake to each segment. A segment may go over its holding volume.\n2 Push-up: work segments 1 to 6 in order. Any sap over holding volume (10,8,12,6,9,7) moves into the next segment up and the segment is left full. Sap that arrives counts before that segment is worked, so excess can cascade. Excess from segment 6 is transpired and goes on the tally.\n3 State check on post-push sap: a QUIET segment at or above its upper mark (7,6,9,5,7,5) becomes SINK-ACTIVE; a SINK-ACTIVE segment at or below its lower mark (3,2,4,2,3,2) becomes QUIET; otherwise the state stays. Each change is logged.\n4 Draw-down: first compute all six amounts from post-push sap and the new states, rounded down: a quarter for QUIET, a half for SINK-ACTIVE. Then apply them all at once. QUIET amounts are respired to the tally. A SINK-ACTIVE amount goes to segment i-1; from segment 1 it goes to the tally. A receiving segment may stay over holding volume until the next push-up.\n5 Leaf-drop: if the six-segment total is strictly above 38, every segment becomes floor(sap/2). The removed sap is transpired to the tally and the cycle is logged.\nThe arithmetic was done with a short Python script that follows exactly these steps.",
+  "openPoints": [
+   {
+    "point": "Which states are used to size draw-down amounts in the same cycle",
+    "assumption": "The states as updated by step 3 of that cycle, applied to post-push sap. The write-up says 'as they stand'."
+   },
+   {
+    "point": "Whether SINK-ACTIVE sap passed down in draw-down counts toward the receiving segment's own draw-down amount",
+    "assumption": "No. All amounts are computed from pre-draw sap and applied simultaneously."
+   },
+   {
+    "point": "Rounding when halving an odd amount at leaf-drop",
+    "assumption": "Each segment keeps floor(sap/2). The remainder, ceil(sap/2), is transpired to the tally."
+   },
+   {
+    "point": "Leaf-drop threshold boundary",
+    "assumption": "Strictly above 38. In cycle 5 the total is exactly 38, so leaf-drop does not fire."
+   },
+   {
+    "point": "A segment over holding volume after cycle 5 draw-down",
+    "assumption": "It is left as is, with no extra push-up. Segment 2 ends at 10 against a volume of 8, as the write-up allows ('for good after cycle 5')."
+   },
+   {
+    "point": "Which sap the leaf-drop total is taken on",
+    "assumption": "Sap after the cycle's draw-down."
+   }
+  ],
+  "cycleFigures": "Positions 1-6; loss shown is the cumulative tally after each step.\nC1: uptake [3,12,9,7,5,4]; push-up [3,8,12,6,7,4] loss 0; states Q,S,S,S,S,Q; draw amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3] loss 1; leaf-drop fires (total 39>38) -> [3,5,4,3,2,1] loss 22.\nC2: uptake [7,7,4,4,3,8]; push-up [7,7,4,4,3,7] loss 23; states S,S,Q,S,Q,S; draw [3,3,1,2,0,3] -> [7,4,5,2,6,4] loss 27; total 28, no leaf-drop.\nC3: uptake [11,8,8,2,6,10]; push-up [10,8,9,2,6,7] loss 30; states S,S,S,Q,Q,S; draw [5,4,4,0,1,3] -> [9,8,5,2,8,4] loss 36; total 36, no leaf-drop.\nC4: uptake [16,14,12,3,11,4]; push-up [10,8,12,6,9,7] loss 44; states all S; draw [5,4,6,3,4,3] -> [9,10,9,7,8,4] loss 49; leaf-drop fires (total 47>38) -> [4,5,4,3,4,2] loss 74.\nC5: uptake [4,11,10,6,7,2]; push-up [4,8,12,6,8,2] loss 74; states S,S,S,S,S,Q; draw [2,4,6,3,4,0] -> [6,10,9,7,4,2] loss 76; total 38, not strictly above 38, no leaf-drop.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "QUIET"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting sap 20 + all uptake 94 = 114; end sap 38 (6+10+9+7+4+2) + loss tally 76 = 114. The balance holds.",
+  "usedScript": true,
+  "notes": "Segment 2 ends at 10, over its holding volume of 8. This is the cycle 5 phloem inflow that the write-up allows to stay over volume for good. The loss tally is made up of: push-up transpiration 11 (C2 1, C3 3, C4 8), draw-down respiration and segment-1 phloem outflow 19, and leaf-drop transpiration 46 (C1 21, C4 25). Script (scratch copy): C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\x.py"
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "openPoints": 6,
+  "usedScript": true
+ },
+ "source": "opus-5.5"
+}

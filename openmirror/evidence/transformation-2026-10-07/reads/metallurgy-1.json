@@ -1,0 +1,175 @@
+{
+ "key": "metallurgy",
+ "n": 1,
+ "run": {
+  "procedureSummary": "Applied in cycles 1-5, steps in order. Each step finishes on all six crucibles before the next one starts.\n1 Charge: add each crucible's charge for the cycle to its melt. Contents may sit above capacity until step 2.\n2 Overflow: walk positions 1 to 6. Any excess over capacity is added to the next crucible before that crucible is checked, so overflow cascades, and the crucible is left exactly at capacity. Excess from crucible 6 goes to the slag pit (loss tally).\n3 State check on the contents after overflow: BASE with quantity >= upper mark becomes SUPERHEATED. SUPERHEATED with quantity <= lower mark becomes BASE. Otherwise the state is unchanged, with at most one change per crucible per cycle.\n4 Draw-off: compute all six amounts from the current contents first, rounding down. BASE sends floor(q/4) to slag. SUPERHEATED sends floor(q/2) to crucible i-1, and crucible 1's half goes to slag. Then apply all moves at once. Returned melt may leave a crucible over capacity, and it stays there.\n5 Global reset: if the total of all six is strictly > 38, each crucible becomes floor(q/2), the removed melt q - floor(q/2) goes to slag, and the cycle is noted. At 38 or below nothing happens.\nI used a short Python script for the arithmetic (C:/Users/Jaket/AppData/Local/Temp/claude/scratchm/sim.py) and checked cycle 1 and the cycle 4 overflow cascade by hand.",
+  "openPoints": [
+   {
+    "point": "Rounding for the global reset halving: should 'rounding down' apply to what remains or to what is removed?",
+    "assumption": "Applied it to what remains: the new quantity is floor(q/2) and the removed melt q - floor(q/2) goes to slag. With odd quantities more goes to slag. Cycle 1: remaining 18, removed 21. Cycle 4: remaining 22, removed 25."
+   },
+   {
+    "point": "Reset boundary when the total is exactly 38",
+    "assumption": "No reset, because the trigger is 'strictly above 38'. Cycle 5 ended at exactly 38, so nothing happened."
+   },
+   {
+    "point": "Where a state change is recorded when the draw-off or reset afterwards moves a crucible past a mark",
+    "assumption": "States are judged only in step 3 on the post-overflow contents. Draw-off and reset never change state, even when they leave the melt past a mark."
+   },
+   {
+    "point": "Over-capacity melt from return flow at the end of cycle 5",
+    "assumption": "It stays as is (crucible 2 ends at 10 against capacity 8). Overflow is not applied again after cycle 5, as the write-up says."
+   },
+   {
+    "point": "Whether a crucible that receives overflow is checked against its capacity again",
+    "assumption": "Yes. Overflow lands before the walk reaches that crucible, so its own excess (including what it received) passes on down the line. In cycle 4 the overflow cascaded from 1 to 6 and 8 units reached slag."
+   },
+   {
+    "point": "Order inside the draw-off when a crucible both gives and receives",
+    "assumption": "All amounts are computed from the contents before any move, then the gives and receipts are applied together. Received melt does not change that crucible's own draw amount in the same cycle."
+   }
+  ],
+  "cycleFigures": "Quantities for positions 1-6 after each step, with the loss tally after each step in brackets.\nStart: 3 6 6 2 2 1, all BASE (loss 0)\nC1 Charge 3 12 9 7 5 4 (0); Overflow 3 8 12 6 7 4 (0); State 3 8 12 6 7 4, states B S S S S B (0); Draw-off amounts 0 4 6 3 3 1, result 7 10 9 6 4 3 (1); Reset: total 39 > 38, fired, result 3 5 4 3 2 1 (22)\nC2 Charge 7 7 4 4 3 8 (22); Overflow 7 7 4 4 3 7 (23); State 7 7 4 4 3 7, states S S B S B S (23); Draw-off amounts 3 3 1 2 0 3, result 7 4 5 2 6 4 (27); Reset: total 28, none, 7 4 5 2 6 4 (27)\nC3 Charge 11 8 8 2 6 10 (27); Overflow 10 8 9 2 6 7 (30); State 10 8 9 2 6 7, states S S S B B S (30); Draw-off amounts 5 4 4 0 1 3, result 9 8 5 2 8 4 (36); Reset: total 36, none, 9 8 5 2 8 4 (36)\nC4 Charge 16 14 12 3 11 4 (36); Overflow 10 8 12 6 9 7 (44); State 10 8 12 6 9 7, all S (44); Draw-off amounts 5 4 6 3 4 3, result 9 10 9 7 8 4 (49); Reset: total 47 > 38, fired, result 4 5 4 3 4 2 (74)\nC5 Charge 4 11 10 6 7 2 (74); Overflow 4 8 12 6 8 2 (74); State 4 8 12 6 8 2, states S S S S S B (74); Draw-off amounts 2 4 6 3 4 0, result 6 10 9 7 4 2 (76); Reset: total 38, not > 38, none, 6 10 9 7 4 2 (76)\n(B = BASE, S = SUPERHEATED)",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "BASE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting melt 20 + all charges 94 (20 + 15 + 17 + 24 + 18) = 114. End melt 38 (6 + 10 + 9 + 7 + 4 + 2) + loss tally 76 = 114. The two sides balance.",
+  "notes": "Breakdown of the 76 units of loss:\n- Overflow from crucible 6: 12 (1 in cycle 2, 3 in cycle 3, 8 in cycle 4).\n- Draw-off to slag: 18 (1, 4, 6, 5 and 2 in cycles 1-5). This covers the BASE quarters and crucible 1's SUPERHEATED half.\n- Global reset halvings: 46 (21 in cycle 1, 25 in cycle 4).\nCrucible 2 ends at 10 against capacity 8 because of melt returned in the cycle 5 draw-off, which the write-up allows.",
+  "usedScript": true
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "openPoints": 6,
+  "usedScript": true
+ },
+ "source": "opus-5.5"
+}

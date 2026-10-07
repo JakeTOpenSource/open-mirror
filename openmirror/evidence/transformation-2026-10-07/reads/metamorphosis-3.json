@@ -1,0 +1,179 @@
+{
+ "key": "metamorphosis",
+ "n": 3,
+ "run": {
+  "procedureSummary": "Source: metamorphosis.md, read in full. Start: masses 3,6,6,2,2,1 (total 20), every chamber LARVAL, loss 0. Each cycle runs these five steps in order, and each step finishes on all six chambers before the next starts.\n1. Feed: add the cycle's table row to every chamber, whatever its state, with no holding-limit check.\n2. Overflow: go through chambers 1 to 6 in order. Any mass over the holding limit (10,8,12,6,9,7) moves into the next chamber before that chamber is checked, so overflow can carry on down the line. Excess from chamber 6 goes to the loss tally.\n3. Marks, using the mass after overflow: a LARVAL chamber at or above its upper mark (7,6,9,5,7,5) becomes PUPAL. A PUPAL chamber at or below its lower mark (3,2,4,2,3,2) becomes LARVAL. Each chamber is checked once per cycle, so it changes at most once. Each change is logged as (cycle, chamber, before, after).\n4. Burn-off: first work out all six amounts from current mass and the state after marks. LARVAL loses floor(mass/4) to the loss tally. PUPAL gives floor(mass/2) to the previous chamber; chamber 1's share goes to the loss tally. Then apply all six at once, with no holding-limit check.\n5. Moult: total the line. Only if the total is strictly over 38, every chamber becomes floor(mass/2) and the removed part, ceil(mass/2), goes to the loss tally.\nBalance: starting mass + all feed = end mass + loss tally.",
+  "openPoints": [
+   {
+    "point": "Which state burn-off uses",
+    "assumption": "The state after step 3 of the same cycle, because steps run in order."
+   },
+   {
+    "point": "Moult when the total is exactly 38",
+    "assumption": "No moult. The write-up says 'strictly over 38' and '38 or under, nothing'. This happens after cycle 5, where the total is exactly 38."
+   },
+   {
+    "point": "How much mass a moult removes",
+    "assumption": "The chamber keeps floor(m/2); the removed amount is m - floor(m/2), so it rounds up, and it goes to the loss tally."
+   },
+   {
+    "point": "Mass over the holding limit after cycle 5's burn-off",
+    "assumption": "Left as it is (chamber 2 ends at 10 against a limit of 8, chamber 4 at 7 against a limit of 6). The write-up says excess waits for the next overflow and that after cycle 5 it stays."
+   },
+   {
+    "point": "Reabsorption into a chamber that is already at or over its limit",
+    "assumption": "Added anyway, with no check, because burn-off has no holding limit."
+   },
+   {
+    "point": "Order of burn-off moves",
+    "assumption": "All six amounts are worked out from the mass before burn-off, then applied together, so nothing reabsorbed into a chamber changes that chamber's own burn-off amount."
+   },
+   {
+    "point": "Rule of at most one state change per chamber per cycle",
+    "assumption": "Marks are checked once per cycle, so this rule never actually limits anything."
+   }
+  ],
+  "cycleFigures": "Mass of chambers 1 to 6 after each step [loss tally]:\nC1: feed 3,12,9,7,5,4 [0] | overflow 3,8,12,6,7,4 [0] | marks 3,8,12,6,7,4, states L,P,P,P,P,L [0] | burn-off 7,10,9,6,4,3 [1] (amounts 0,4,6,3,3,1) | moult FIRED, total 39 > 38: 3,5,4,3,2,1 [22]\nC2: feed 7,7,4,4,3,8 [22] | overflow 7,7,4,4,3,7 [23] | marks 7,7,4,4,3,7, states P,P,L,P,L,P [23] | burn-off 7,4,5,2,6,4 [27] (amounts 3,3,1,2,0,3) | moult none, total 28: 7,4,5,2,6,4 [27]\nC3: feed 11,8,8,2,6,10 [27] | overflow 10,8,9,2,6,7 [30] | marks 10,8,9,2,6,7, states P,P,P,L,L,P [30] | burn-off 9,8,5,2,8,4 [36] (amounts 5,4,4,0,1,3) | moult none, total 36: 9,8,5,2,8,4 [36]\nC4: feed 16,14,12,3,11,4 [36] | overflow 10,8,12,6,9,7 [44] | marks 10,8,12,6,9,7, states P,P,P,P,P,P [44] | burn-off 9,10,9,7,8,4 [49] (amounts 5,4,6,3,4,3) | moult FIRED, total 47 > 38: 4,5,4,3,4,2 [74]\nC5: feed 4,11,10,6,7,2 [74] | overflow 4,8,12,6,8,2 [74] | marks 4,8,12,6,8,2, states P,P,P,P,P,L [74] | burn-off 6,10,9,7,4,2 [76] (amounts 2,4,6,3,4,0) | moult none, total exactly 38: 6,10,9,7,4,2 [76]",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "LARVAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting mass 20 + all feed 94 (cycles: 20 + 15 + 17 + 24 + 18) = 114. End mass 38 (6+10+9+7+4+2) + loss tally 76 = 114. It balances.",
+  "usedScript": true,
+  "notes": "A short Python script did the arithmetic. It is in the scratchpad as m.py. I checked cycle 1 by hand and it matches. Two boundary cases decided the figures. First, after cycle 5 the line totals exactly 38, so no moult fires (the rule needs strictly over 38). Second, in cycle 5 chamber 6 weighs 2, which equals its lower mark, so it goes from PUPAL back to LARVAL. Chambers 2 and 4 end above their holding limits, as the write-up allows after cycle 5."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "openPoints": 7,
+  "usedScript": true
+ },
+ "source": "opus-5.5"
+}

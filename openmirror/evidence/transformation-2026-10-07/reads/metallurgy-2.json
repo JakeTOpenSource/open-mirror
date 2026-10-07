@@ -1,0 +1,175 @@
+{
+ "key": "metallurgy",
+ "n": 2,
+ "run": {
+  "procedureSummary": "Five cycles, five steps in order, each step completed on all six crucibles before the next. (1) Charge: add the cycle's charge to each crucible; it may sit above capacity for now. (2) Overflow: walk 1 to 6; anything over capacity moves to the next crucible before that crucible is checked, and the crucible stays exactly full; overflow out of crucible 6 goes to slag (added to the loss tally). (3) State check on contents after overflow: BASE with contents >= upper mark becomes SUPERHEATED; SUPERHEATED with contents <= lower mark becomes BASE; otherwise the state stays the same; at most one change per crucible per cycle. (4) Draw-off: work out all six amounts from the current contents first, rounding down. BASE sends floor(q/4) to slag. SUPERHEATED sends floor(q/2) to the previous crucible (crucible 1's half goes to slag). Then everything moves at once. A crucible pushed over capacity by returned melt stays over until the next cycle's overflow, or stays that way after cycle 5. (5) Global reset: if the total of all six is strictly above 38, each crucible becomes floor(q/2), the removed amount q - floor(q/2) goes to slag, and the cycle is noted; at 38 or below nothing happens. I used a short Python script for the arithmetic.",
+  "openPoints": [
+   {
+    "point": "Rounding of the emergency-tap halving: does the crucible keep floor(q/2), or is floor(q/2) the amount removed?",
+    "assumption": "The crucible keeps floor(q/2) and the rest, q - floor(q/2), goes to slag. This matters in cycles 1 and 4, where some contents were odd."
+   },
+   {
+    "point": "Where overflow out of crucible 6 goes.",
+    "assumption": "It goes to the slag pit and counts in the loss tally (3 units in cycle 2, 3 in cycle 3, 8 in cycle 4)."
+   },
+   {
+    "point": "Reset threshold boundary.",
+    "assumption": "The reset needs a total strictly above 38. The cycle 5 total is exactly 38, so there was no reset in cycle 5."
+   },
+   {
+    "point": "State-check boundaries.",
+    "assumption": "Both marks are inclusive: at or above the upper mark, and at or below the lower mark, as the write-up says. Example: crucible 3 at 4 with lower mark 4 went back to BASE in cycle 2."
+   },
+   {
+    "point": "Melt returned in the draw-off that leaves a crucible over capacity.",
+    "assumption": "It is not trimmed in that cycle. The overflow is carried into the next cycle's step 2, and after cycle 5 it is left in place (crucible 2 ends at 10 against a capacity of 8)."
+   },
+   {
+    "point": "Whether a crucible's draw-off amount depends on melt arriving from its neighbour in the same draw-off.",
+    "assumption": "No. All amounts come from the contents before the draw-off and then move at the same time."
+   }
+  ],
+  "cycleFigures": "Start: 3 6 6 2 2 1, all BASE, loss 0.\nC1: charge 3 12 9 7 5 4 | overflow 3 8 12 6 7 4 (loss 0) | state 3 8 12 6 7 4 [B S S S S B] | draw-off (amounts 0 4 6 3 3 1) 7 10 9 6 4 3, loss 1 | reset (total 39 > 38) 3 5 4 3 2 1, loss 22.\nC2: charge 7 7 4 4 3 8 | overflow 7 7 4 4 3 7 (3 to slag, loss 23) | state 7 7 4 4 3 7 [S S B S B S] | draw-off (amounts 3 3 1 2 0 3) 7 4 5 2 6 4, loss 27 | reset: total 28, none, 7 4 5 2 6 4.\nC3: charge 11 8 8 2 6 10 | overflow 10 8 9 2 6 7 (3 to slag, loss 30) | state 10 8 9 2 6 7 [S S S B B S] | draw-off (amounts 5 4 4 0 1 3) 9 8 5 2 8 4, loss 36 | reset: total 36, none, 9 8 5 2 8 4.\nC4: charge 16 14 12 3 11 4 | overflow 10 8 12 6 9 7 (8 to slag, loss 44) | state 10 8 12 6 9 7 [S S S S S S] | draw-off (amounts 5 4 6 3 4 3) 9 10 9 7 8 4, loss 49 | reset (total 47 > 38) 4 5 4 3 4 2, loss 74.\nC5: charge 4 11 10 6 7 2 | overflow 4 8 12 6 8 2 (loss 74) | state 4 8 12 6 8 2 [S S S S S B] | draw-off (amounts 2 4 6 3 4 0) 6 10 9 7 4 2, loss 76 | reset: total 38, not above 38, none, 6 10 9 7 4 2.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "BASE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting melt 20 + all charges 94 (cycle 1 20, cycle 2 15, cycle 3 17, cycle 4 24, cycle 5 18) = 114; end melt 38 + loss tally 76 = 114. It balances.",
+  "usedScript": true,
+  "notes": "The global reset fired in cycles 1 and 4. Crucible 2 ends at 10, above its capacity of 8, because melt returned in the cycle 5 draw-off stays where it lands after the last cycle. The script is C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "openPoints": 6,
+  "usedScript": true
+ },
+ "source": "opus-5.5"
+}

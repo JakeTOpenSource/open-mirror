@@ -1,0 +1,175 @@
+{
+ "key": "metallurgy",
+ "n": 3,
+ "run": {
+  "procedureSummary": "1. Charge: add each crucible's cycle charge to its contents. It may sit above capacity for now. 2. Overflow: walk positions 1 to 6. Any excess over capacity leaves the crucible, which is set to exactly its capacity, and goes into the next crucible before that one is checked, so it can carry down the line. Excess from crucible 6 goes to slag and is added to the loss tally. 3. State check, on the contents after overflow: a BASE crucible with melt at or above its upper mark becomes SUPERHEATED; a SUPERHEATED crucible at or below its lower mark becomes BASE; otherwise the state stays as it is. Each crucible is checked once per cycle. 4. Draw-off: using the contents after step 3, work out all six amounts first, rounding down. BASE: floor(q/4) to slag. SUPERHEATED: floor(q/2) back to the previous crucible (position i-1); for crucible 1 that half goes to slag. Then all moves are applied at once. Returned melt can leave a crucible above capacity, and it is not corrected until the next cycle's overflow. 5. Global reset: add up all six. Only if the total is strictly above 38, set every crucible to floor(q/2), add the removed amount (q - floor(q/2)) to slag and note the cycle. At 38 or below, nothing happens.",
+  "openPoints": [
+   {
+    "point": "How 'halve every crucible, rounding down' applies in the global reset when a quantity is odd",
+    "assumption": "The rounding applies to what stays: the new quantity is floor(q/2) and the removed amount, q - floor(q/2), goes to slag. So for odd quantities the larger half goes to slag. This matters in cycles 1 and 4."
+   },
+   {
+    "point": "The global reset boundary at exactly 38",
+    "assumption": "'Strictly above 38' is read literally. The cycle 5 total is exactly 38, so no reset fires in cycle 5."
+   },
+   {
+    "point": "Where overflow from crucible 6 goes",
+    "assumption": "It goes to the slag pit and is added to the loss tally, as the write-up says ('not a ladle')."
+   },
+   {
+    "point": "Crucibles above capacity at the end of cycle 5 because of returned melt",
+    "assumption": "Left as they are, per the write-up ('or for good after cycle 5'). End quantities: crucible 2 holds 10 against a capacity of 8, and crucible 4 holds 7 against a capacity of 6."
+   },
+   {
+    "point": "Which contents the draw-off uses",
+    "assumption": "The contents after step 3 (after overflow). All six amounts are worked out before anything moves, so melt returned in a cycle is not drawn again in that same cycle."
+   },
+   {
+    "point": "Which state the draw-off uses",
+    "assumption": "The state after this cycle's step 3 state check."
+   }
+  ],
+  "cycleFigures": "Cycle 1: charge [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] (loss 0); state check [3,8,12,6,7,4], states B,S,S,S,S,B; draw-off amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3] (loss 1); reset: total 39 > 38, fires -> [3,5,4,3,2,1] (loss 22).\nCycle 2: charge [7,7,4,4,3,8]; overflow [7,7,4,4,3,7] (loss 23); state check [7,7,4,4,3,7], states S,S,B,S,B,S; draw-off amounts [3,3,1,2,0,3] -> [7,4,5,2,6,4] (loss 27); reset: total 28, no reset -> [7,4,5,2,6,4] (loss 27).\nCycle 3: charge [11,8,8,2,6,10]; overflow [10,8,9,2,6,7] (loss 30); state check [10,8,9,2,6,7], states S,S,S,B,B,S; draw-off amounts [5,4,4,0,1,3] -> [9,8,5,2,8,4] (loss 36); reset: total 36, no reset -> [9,8,5,2,8,4] (loss 36).\nCycle 4: charge [16,14,12,3,11,4]; overflow [10,8,12,6,9,7] (loss 44); state check [10,8,12,6,9,7], all S; draw-off amounts [5,4,6,3,4,3] -> [9,10,9,7,8,4] (loss 49); reset: total 47 > 38, fires -> [4,5,4,3,4,2] (loss 74).\nCycle 5: charge [4,11,10,6,7,2]; overflow [4,8,12,6,8,2] (loss 74); state check [4,8,12,6,8,2], states S,S,S,S,S,B; draw-off amounts [2,4,6,3,4,0] -> [6,10,9,7,4,2] (loss 76); reset: total 38, not strictly above 38, no reset -> [6,10,9,7,4,2] (loss 76).",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "BASE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting melt 15 (3+6+6+2+2+1) plus all charges 99 (cycle 1: 20, cycle 2: 15, cycle 3: 17, cycle 4: 24, cycle 5: 18) = 114. End melt 38 (6+10+9+7+4+2) plus loss tally 76 = 114. The two sides match.",
+  "usedScript": true,
+  "notes": "The arithmetic was done with a short Python script, C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py, and I checked cycles 1 and 5 by hand. Loss tally by source: overflow from crucible 6 = 1+3+8+0+0 = 12; draw-off to slag = 1+4+6+5+2 = 18; global resets = 21 (cycle 1) + 25 (cycle 4) = 46; total 76. Two results depend on the open points. The cycle 5 total is exactly 38, so the 'strictly above' reading decides that no reset fires in cycle 5. Crucibles 2 and 4 end above capacity because melt was returned to them in the last draw-off."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "openPoints": 6,
+  "usedScript": true
+ },
+ "source": "opus-5.5"
+}

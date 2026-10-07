@@ -1,0 +1,175 @@
+{
+ "key": "electrical",
+ "n": 1,
+ "run": {
+  "procedureSummary": "Step 1 Charge: add each stage's cycle input to its charge; no rating cap.\nStep 2 Shunts: sweep positions 1 to 6 in order; if charge > rating, set to rating and add the excess to the next position before that one is checked (cascades in one pass); position 6's excess goes to ground (loss tally).\nStep 3 Comparators: on post-shunt charge, evaluate each stage once: CLEAR with charge >= upper becomes ASSERTED; ASSERTED with charge <= lower becomes CLEAR; otherwise hold. Log each change (cycle, position, before, after).\nStep 4 Leak/feedback: compute all six amounts from the post-comparator charges and the states just set, then apply simultaneously. CLEAR: floor(charge/4) to ground. ASSERTED: floor(charge/2) moved to the previous position (toward source); position 1's ASSERTED feedback goes to ground. No rating cap.\nStep 5 Breaker: if the six-stage total is strictly > 38, every stage keeps floor(charge/2) and the remainder goes to ground; at <= 38 nothing happens.\nAll ground amounts (shunt-6 excess, CLEAR leak, stage-1 feedback, breaker remainder) are added to the loss tally. Repeat for cycles 1-5.",
+  "openPoints": [
+   {
+    "point": "Which state governs step 4 leak/feedback in a cycle where the comparator just changed",
+    "assumption": "Use the state as set by step 3 of the same cycle (steps finish everywhere before the next starts)."
+   },
+   {
+    "point": "Shunt passes excess to the next stage before it is checked",
+    "assumption": "Single sequential sweep 1 to 6; the received excess counts toward that stage's own over-rating check in the same sweep; no second sweep."
+   },
+   {
+    "point": "Rounding of quarter/half amounts and breaker halves",
+    "assumption": "All rounded down (floor) on whole units; the breaker's ground amount is charge minus floor(charge/2), so odd charges lose the extra unit."
+   },
+   {
+    "point": "Breaker test is on what total",
+    "assumption": "Six-stage total after step 4 of the same cycle; exactly 38 does not trip (cycle 5 total was exactly 38, no trip)."
+   },
+   {
+    "point": "Stage 1 feedback when ASSERTED",
+    "assumption": "Goes to ground and is counted in the loss tally."
+   },
+   {
+    "point": "Overcharge after leak/feedback in cycle 5",
+    "assumption": "Left as-is in end figures (stage 2 ends at 10 over its rating 8, stage 4 at 7 over rating 6); no extra shunt pass after cycle 5."
+   }
+  ],
+  "cycleFigures": "Cycle 1: charge [3,12,9,7,5,4]; shunts [3,8,12,6,7,4] (loss 0); comparators [3,8,12,6,7,4] states C,A,A,A,A,C; leak/feedback [7,10,9,6,4,3] (loss 1); breaker total 39 > 38 trips -> [3,5,4,3,2,1] (loss 22).\nCycle 2: charge [7,7,4,4,3,8]; shunts [7,7,4,4,3,7] (loss 23); comparators [7,7,4,4,3,7] states A,A,C,A,C,A; leak/feedback [7,4,5,2,6,4] (loss 27); breaker total 28, no trip [7,4,5,2,6,4].\nCycle 3: charge [11,8,8,2,6,10]; shunts [10,8,9,2,6,7] (loss 30); comparators [10,8,9,2,6,7] states A,A,A,C,C,A; leak/feedback [9,8,5,2,8,4] (loss 36); breaker total 36, no trip [9,8,5,2,8,4].\nCycle 4: charge [16,14,12,3,11,4]; shunts [10,8,12,6,9,7] (loss 44); comparators [10,8,12,6,9,7] states A,A,A,A,A,A; leak/feedback [9,10,9,7,8,4] (loss 49); breaker total 47 > 38 trips -> [4,5,4,3,4,2] (loss 74).\nCycle 5: charge [4,11,10,6,7,2]; shunts [4,8,12,6,8,2] (loss 74); comparators [4,8,12,6,8,2] states A,A,A,A,A,C; leak/feedback [6,10,9,7,4,2] (loss 76); breaker total 38, not strictly above, no trip [6,10,9,7,4,2].",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "ASSERTED",
+   "ASSERTED",
+   "ASSERTED",
+   "ASSERTED",
+   "ASSERTED",
+   "CLEAR"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting charge 20 + all input 94 = 114; end charge 38 + loss tally 76 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "I ran the arithmetic with a short Python script (sim.py in the session scratchpad) and checked the cycle 1 leak/feedback step by hand. The breaker tripped in cycle 1 (total 39) and cycle 4 (total 47). In cycle 5 the total came to exactly 38, so it did not trip. At the end, stages 2 and 4 hold more charge than their ratings. That is expected, because the write-up says no shunt runs after cycle 5."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "openPoints": 6,
+  "usedScript": true
+ },
+ "source": "opus-5.5"
+}

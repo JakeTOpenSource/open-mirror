@@ -1,0 +1,122 @@
+{
+ "arm": "W1",
+ "key": "xylem",
+ "results": [
+  {
+   "id": "R01",
+   "recoverable": true,
+   "quote": "Six stem segments: 1 at the root collar, 6 at the crown."
+  },
+  {
+   "id": "R02",
+   "recoverable": false,
+   "quote": "Each holds whole units of sap (non-negativity is not stated)"
+  },
+  {
+   "id": "R03",
+   "recoverable": true,
+   "quote": "Holding volume: 10, 8, 12, 6, 9, 7"
+  },
+  {
+   "id": "R04",
+   "recoverable": true,
+   "quote": "Upper mark: 7, 6, 9, 5, 7, 5"
+  },
+  {
+   "id": "R05",
+   "recoverable": true,
+   "quote": "Lower mark: 3, 2, 4, 2, 3, 2"
+  },
+  {
+   "id": "R06",
+   "recoverable": true,
+   "quote": "all start QUIET. ... Starting sap: 3, 6, 6, 2, 2, 1"
+  },
+  {
+   "id": "R07",
+   "recoverable": true,
+   "quote": "Stem limit: 38 ... Everything transpired or respired goes on the loss tally, starting at 0."
+  },
+  {
+   "id": "R08",
+   "recoverable": true,
+   "quote": "Cycle 1: 0, 6, 3, 5, 3, 3 / Cycle 2: 4, 2, 0, 1, 1, 7 / Cycle 3: 4, 4, 3, 0, 0, 6 / Cycle 4: 7, 6, 7, 1, 3, 0 / Cycle 5: 0, 6, 6, 3, 3, 0 ... Five cycles"
+  },
+  {
+   "id": "R09",
+   "recoverable": true,
+   "quote": "each runs these five steps in order, every step finished on all segments before the next."
+  },
+  {
+   "id": "R10",
+   "recoverable": true,
+   "quote": "Uptake: add each segment's uptake for the cycle; it may go over its holding volume."
+  },
+  {
+   "id": "R11",
+   "recoverable": true,
+   "quote": "work segments 1 to 6 in turn. Sap over a segment's holding volume goes up the xylem into the next segment toward the crown, leaving that segment full"
+  },
+  {
+   "id": "R12",
+   "recoverable": true,
+   "quote": "What arrives counts before that segment is worked, so excess can carry several segments up."
+  },
+  {
+   "id": "R13",
+   "recoverable": true,
+   "quote": "segment 6's excess is transpired."
+  },
+  {
+   "id": "R14",
+   "recoverable": true,
+   "quote": "State check, on sap after push-up: QUIET at or above its upper mark turns SINK-ACTIVE"
+  },
+  {
+   "id": "R15",
+   "recoverable": true,
+   "quote": "SINK-ACTIVE at or below its lower mark turns QUIET"
+  },
+  {
+   "id": "R16",
+   "recoverable": true,
+   "quote": "otherwise, including between the marks, the state stays. Log each change as (cycle, position, before, after)."
+  },
+  {
+   "id": "R17",
+   "recoverable": true,
+   "quote": "first, from sap and states as they stand, work out all six amounts, rounded down ... Then each gives its amount, all at once."
+  },
+  {
+   "id": "R18",
+   "recoverable": true,
+   "quote": "QUIET a quarter ... QUIET sap is respired."
+  },
+  {
+   "id": "R19",
+   "recoverable": true,
+   "quote": "SINK-ACTIVE half ... SINK-ACTIVE sap goes down the phloem into the next segment toward the root ... from segment 1 it goes on the tally."
+  },
+  {
+   "id": "R20",
+   "recoverable": true,
+   "quote": "Then each gives its amount, all at once. ... which may then sit over holding volume until next cycle's push-up, or for good after cycle 5"
+  },
+  {
+   "id": "R21",
+   "recoverable": true,
+   "quote": "Leaf-drop: if the six total strictly above 38"
+  },
+  {
+   "id": "R22",
+   "recoverable": true,
+   "quote": "halve every segment, rounded down, the removed sap transpired; log the cycle."
+  },
+  {
+   "id": "R23",
+   "recoverable": true,
+   "quote": "end sap per segment, positions 1 to 6; end states, 1 to 6; every state change as (cycle, position, before, after); the cycles leaf-drop fired; the loss tally; and the balance check: starting sap plus all uptake equals end sap plus loss tally."
+  }
+ ],
+ "recoverable": 22
+}
