@@ -1,0 +1,15 @@
+- Word count: first draft ran to 515 words (wc), over the 400 cap. I rewrote it to 390 words (bullet markers removed, all 55 required numbers kept).
+- Banned words: a grep of the final text for cell, level, mode, NORMAL, ELEVATED, period, intake, spill, release, purge, lost, abstract, metaphor, analogy, comparison, represents, corresponds and stands for found none. 'Overflow', 'burn-off', 'feed' and 'moult' replace the engineer's step names.
+- Direction: the opening line said 'feed and overflow run from 1 toward 6', which wrongly suggested feeding happens in order. Fixed to 'overflow runs toward 6, reabsorption back toward 1', which also gives the direction of 'previous chamber' in step 4.
+- Overflow ambiguity: 'leaving it exactly at its limit' could have meant the receiving chamber. Fixed to 'leaving the chamber exactly at its limit'.
+- State-check rule: 'In between, no change' covered only amounts between the two marks and left out cases like a LARVAL chamber at or below its lower mark. Fixed to 'Otherwise no change'.
+- Feed row: 'Add the table amount' did not say which row to use. Fixed to 'that cycle's table amount'.
+- Domain trap, pupation as one-way: real metamorphosis does not go back. The text says PUPAL returns to LARVAL at the lower mark and that this is routine on this line.
+- Domain trap, pupae not feeding: real pupae do not feed. Step 1 says PUPAL chambers are fed too.
+- Domain trap, where reabsorbed mass goes: a real pupa keeps its reabsorbed tissue. Step 4 says PUPAL mass goes back into the previous chamber, and chamber 1's goes to the loss tally.
+- Domain trap, moults: real moults happen to one animal and lose an uneven amount. Step 5 makes the moult line-wide, triggered only when the line total is strictly over 38, with an exact halving rounded down.
+- Holding limit enforced only at overflow: the text says it does not apply at feed or burn-off, and that any excess left after cycle 5 stays.
+- Calculating at once versus in order: the text says burn-off amounts all come from contents before any change and are applied together, while overflow goes in order and cascades.
+- Rounding: the text says whole units, with every quarter and half rounded down. That covers floor().
+- Report paragraph: I checked it holds no figures or results. It names the six end masses in chamber order, the end states, the state-change log format, the moult cycles, the loss tally, and the balance equation.
+- Process note: a parallel process overwrote my first scratch file with unrelated text partway through. I rewrote my draft to a uniquely named file before the final count and checks. The delivered text is mine and has been checked.

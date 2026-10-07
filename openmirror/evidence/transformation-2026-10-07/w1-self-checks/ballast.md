@@ -1,0 +1,14 @@
+- Word count: the first draft came to 489 words by wc, with every number counted as a word. I tightened it to 398, and it ended at exactly 400 after the fixes below. I also grep-checked for the forbidden words (cell, level, mode, NORMAL, ELEVATED, period, intake, spill, release, purge, LOST, abstract, metaphor, analogy, comparison, represents, corresponds, stands for). None appear.
+- Draft error found and fixed: one scupper sentence said the next compartment is left at its volume. It now says the compartment being handled is left at exactly its volume.
+- Domain trap, inception and desinence: in real practice these are cavitation or pressure thresholds. A reader might not read them as water marks. Fixed: the text now says 'with water at or above its inception mark' and 'when water is at or below its desinence mark'.
+- Domain trap, emergency blow: a real emergency blow empties the tanks, and 'halves, rounded down' could be read as rounding the amount removed. Fixed: the text now says 'every compartment keeps half, rounded down, the rest overboard', which matches floor(L/2) kept.
+- Domain trap, backflow direction: 'forward into the compartment toward the bow' could be read as any compartment toward the bow. Fixed: it now says 'the next compartment toward the bow', meaning n-1.
+- Balance check: the draft said 'against', which does not say the two sides must match. Fixed: it now says 'must equal'.
+- Domain trap, a cavitating pump moving more water, and moving it backward: in real behaviour a cavitating pump loses flow. The text states plainly what the line does (half, rounded down, forward, and compartment 1's goes overboard). No change needed.
+- Domain trap, compartments holding more than their volume: real compartments cannot. Step 1 says 'even past its volume', and step 4 says the compartment can be over volume until the next cycle's scuppers and stays over after cycle 5. No change needed.
+- Domain trap, continuous cavitation response: a reader might expect the pump state to change during pumping or after the blow. 'States change nowhere else' covers this. It also makes 'at most once per cycle' recoverable.
+- Pump amounts are figured before any water moves ('from current contents first, then move them together'), so water a compartment receives does not change its own amount that cycle. No change needed.
+- Blow threshold is strict: 'Only above 38, not at 38' is explicit.
+- Overboard tally covers all four sources (overflow from 6, LAMINAR pumping, backflow from compartment 1, the blow): each step names 'overboard', and 'Everything overboard goes on the tally' ties them together.
+- Rule D < U <= C is not stated in words, because the word cap is at its limit. It can be recovered from the printed figures, which satisfy it in every compartment. Left as is.
+- Report paragraph: it lists only what to hand in. It contains no figures, totals or results. The only numbers in it are labels: 'cycle 5' and 'position order 1 to 6'.

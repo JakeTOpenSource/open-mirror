@@ -1,0 +1,14 @@
+- Word count: the first draft was 530 words (wc -w) and broke the 400 cap. I compressed the prose and the table labels to get under it. The final text is exactly 400 by wc -w, which counts table labels and every number.
+- Banned-word scan: I ran a case-insensitive grep over each draft for cell, level, mode, normal, elevated, period, intake, spill, release, purge, lost, abstract, metaphor, analog, comparison, represent, correspond and 'stands for'. Every draft had zero hits, so no change was needed.
+- Real-plant trap, feed only at the inlet: a reader would assume liquor enters only at tank 1. Fixed by saying each tank takes its own delivery directly.
+- Real-plant trap, a tank cannot hold more than its volume: the process lets a tank go over volume after feed and after the return line. Fixed by stating 'even past volume' in job 1, and in job 4 that there is no cap, that an overfull tank waits for next cycle's weirs, and that after cycle 5 it stays overfull.
+- Real-plant trap, the return line goes to the head of works: here it goes only to the tank immediately upstream, and tank 1's returned half goes to outfall. Both are stated explicitly.
+- Real-plant trap, storm bypass diverts incoming flow: here it halves each tank's contents after discharge, only when the total is strictly more than 38, with each tank keeping half rounded down and the rest going to outfall. Stated, including 'At 38 or under, nothing happens'.
+- Real-plant trap, treatment removes material inside the tanks: added 'Nothing else leaves the line' so the balance check is understood to hold exactly.
+- Hysteresis: a reader might expect the state to follow the contents directly. Stated that between the marks a tank keeps its state, that the change to OVERLOADED is at or above the upper mark and the change back to STEADY is at or below the lower mark, and that the check is made after the weirs.
+- Simultaneous discharge: a reader might apply the transfers one tank at a time. Stated that all six amounts are worked out from current contents before anything moves and then moved at once, using the states from job 3, rounding down.
+- Weir cascade order: stated that the walk goes tank 1 to 6 and that overflow lands before the next tank's turn. I fixed an ambiguous pronoun ('push it over') to 'push that one over'.
+- Row label ambiguity: the bare label 'Opening:' did not say opening what. Changed it to 'Opening liquor' and made the Report's balance-check wording match.
+- Upper and lower row labels: shortened labels ('Upper', 'Lower') in one draft would have left a stranger guessing. Restored 'Upper mark' and 'Lower mark' so they match the wording in job 3.
+- Numbers check: compared all six volumes, upper marks, lower marks and opening amounts, the limit 38, and all 30 feed entries against the engineer's data. All match.
+- No results anywhere: the explanation and the Report give no end figures or totals. The Report is a template only.

@@ -1,0 +1,29 @@
+{
+  "source": "inputs/plain-spec.md of the coherence study, decomposed into atomic rules by Claude on 2026-10-07. Applied identically to every write-up in both arms.",
+  "instruction_to_extractor": "For each rule, answer recoverable=true only if a reader holding ONLY the write-up could state this rule correctly, and quote the words that carry it. If the write-up is silent, ambiguous, or says something else, answer false and quote the closest text or write absent.",
+  "rules": [
+    {"id": "R01", "rule": "There are exactly six positions in a line, numbered 1 to 6, with a stated direction."},
+    {"id": "R02", "rule": "Each position holds a whole-number quantity that is never negative."},
+    {"id": "R03", "rule": "Each position has a fixed capacity: 10, 8, 12, 6, 9, 7."},
+    {"id": "R04", "rule": "Each position has an upper mark: 7, 6, 9, 5, 7, 5."},
+    {"id": "R05", "rule": "Each position has a lower mark: 3, 2, 4, 2, 3, 2."},
+    {"id": "R06", "rule": "Starting quantities are 3, 6, 6, 2, 2, 1, and all positions start in the resting state."},
+    {"id": "R07", "rule": "The global limit is 38 and the loss tally starts at 0."},
+    {"id": "R08", "rule": "There are exactly five cycles, and the input table gives one row of six amounts per cycle: (0,6,3,5,3,3), (4,2,0,1,1,7), (4,4,3,0,0,6), (7,6,7,1,3,0), (0,6,6,3,3,0)."},
+    {"id": "R09", "rule": "Each cycle has five steps in a fixed order, and each step finishes for all positions before the next step starts."},
+    {"id": "R10", "rule": "Step 1 adds the cycle's input to each position, and capacity is not enforced in this step."},
+    {"id": "R11", "rule": "Step 2 handles positions one at a time in order 1 to 6; a position over capacity passes its excess to the next position and is set to exactly its capacity."},
+    {"id": "R12", "rule": "In step 2, excess passed to the next position counts before that position is handled, so overflow can cascade within the same step."},
+    {"id": "R13", "rule": "In step 2, excess from position 6 goes to the loss tally."},
+    {"id": "R14", "rule": "Step 3 reads the quantity after step 2: a resting position at or above its upper mark becomes raised."},
+    {"id": "R15", "rule": "In step 3, a raised position at or below its lower mark becomes resting."},
+    {"id": "R16", "rule": "In step 3, a position strictly between the marks keeps its state, and a position changes at most once per cycle."},
+    {"id": "R17", "rule": "Step 4 computes all six amounts first, from the quantities at the start of the step and the states set in step 3, before any amount is applied."},
+    {"id": "R18", "rule": "In step 4, a resting position releases floor(quantity / 4), and the amount goes to the loss tally."},
+    {"id": "R19", "rule": "In step 4, a raised position releases floor(quantity / 2), and the amount goes to the previous position (n-1); position 1's raised release goes to the loss tally."},
+    {"id": "R20", "rule": "In step 4, every position loses its own release amount, and capacity is not enforced; a position may end over capacity, corrected only at the next cycle's step 2, and never after cycle 5."},
+    {"id": "R21", "rule": "Step 5 fires only when the total of the six quantities is strictly greater than 38; a total of exactly 38 does nothing."},
+    {"id": "R22", "rule": "When step 5 fires, each position becomes floor(quantity / 2), the removed amount from each position goes to the loss tally, and the cycle is recorded."},
+    {"id": "R23", "rule": "The report lists the six end quantities, the six end states, every state change as (cycle, position, before, after), the cycles in which step 5 fired, the loss tally, and a balance check: start total plus all inputs equals end total plus the loss tally."}
+  ]
+}
