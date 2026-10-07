@@ -133,7 +133,7 @@
   "lossTotal": 76,
   "balanceCheck": "Starting mass 20 + all feed 94 = 114; end mass 38 (6+10+9+7+4+2) + loss tally 76 = 114. Balanced.",
   "usedScript": true,
-  "notes": "I ran a Python script and committed it to the repo with its output, following the format of the earlier crucible-cascade handover commit. The commit is ce3b2fc on branch crucible-cascade-handover. It adds C:\\Users\\Jaket\\Downloads\\open-mirror\\openmirror\\evidence\\rearing-line-2026-10-07\\rearing.py and run-output.txt. I did not push. This run's inputs are the same as the crucible-cascade run in commit 4fe4b47, with different names, and the results match it exactly. Moult was close to firing in cycle 5: the total was exactly 38, so it did not fire under the strict 'over 38' rule."
+  "notes": "I ran a Python script and committed it to the repo with its output, following the format of the earlier crucible-cascade handover commit. The commit is ce3b2fc on branch crucible-cascade-handover. It adds C:\\Users\\USER\\Downloads\\open-mirror\\openmirror\\evidence\\rearing-line-2026-10-07\\rearing.py and run-output.txt. I did not push. This run's inputs are the same as the crucible-cascade run in commit 4fe4b47, with different names, and the results match it exactly. Moult was close to firing in cycle 5: the total was exactly 38, so it did not fire under the strict 'over 38' rule."
  },
  "grade": {
   "exact": true,

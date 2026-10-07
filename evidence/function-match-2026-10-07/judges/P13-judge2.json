@@ -340,7 +340,7 @@
   "differingRule": "In step 4, A sends a high-state (PUPAL) position's half to the previous position n-1, and position 1's half is lost, while B sends a high-state (ACTIVE) position's half to the next position i+1, and position 6's half is lost.",
   "foundBy": "both",
   "routesAgree": true,
-  "trust": "Both routes agree, so no tie-break was needed. The table pins the difference to the step 4 transfer direction. The probe isolates that rule and gives different end quantities, while everything else matches. The printed tables also diverge sharply (different end quantities, stage changes, halving cycles [1,4] vs [1,4,5], and loss 76 vs 95). I checked the probe runs by hand, and the script asserts the balance check on every run. Script: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P13\\sim.py"
+  "trust": "Both routes agree, so no tie-break was needed. The table pins the difference to the step 4 transfer direction. The probe isolates that rule and gives different end quantities, while everything else matches. The printed tables also diverge sharply (different end quantities, stage changes, halving cycles [1,4] vs [1,4,5], and loss 76 vs 95). I checked the probe runs by hand, and the script asserts the balance check on every run. Script: C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-fm\\P13\\sim.py"
  },
  "verdict_correct": true,
  "table_correct": true,

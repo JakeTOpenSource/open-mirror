@@ -1,4 +1,4 @@
-- Over the word cap: the first full draft was 381 words. I cut it in several passes to 245 by wc (246 if hyphenated words are split). The draft is in C:\Users\Jaket\AppData\Local\Temp\om\desk-250\draft.txt.
+- Over the word cap: the first full draft was 381 words. I cut it in several passes to 245 by wc (246 if hyphenated words are split). The draft is in C:\Users\USER\AppData\Local\Temp\om\desk-250\draft.txt.
 - Unclear direction for half-mass reabsorption: I said it goes into 'the chamber before it', stated at the top that carry runs toward 6, and noted that chamber 1's share goes to the tally.
 - Missing: limits are not checked after metabolism, and nothing clears an overfull chamber after cycle 5. I added 'Overfull waits for next cycle's carry forward; none follows cycle 5' so the end figures are not cut back to the limits.
 - Missing: feed can push a chamber past its limit before carry forward. I added 'overfull allowed' to the feed step.

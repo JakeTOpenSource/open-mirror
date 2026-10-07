@@ -114,7 +114,7 @@
   "lossTotal": 92,
   "balanceCheck": "Starting melt 20 + charges 94 (cycle 1: 20, cycle 2: 15, cycle 3: 17, cycle 4: 24, cycle 5: 18) = 114. In crucibles 22 (4+5+5+4+3+1) + slag 92 = 114. The two sides match.",
   "usedScript": true,
-  "notes": "I used a short Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\scratchm\\sim.py. The source was C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\coherence\\desk3\\metallurgy.md. The only decision that changes the result is how the tap rounds odd amounts. If instead each crucible were set to floor(q/2), the figures for cycles 1, 4 and 5 would change.",
+  "notes": "I used a short Python script for the arithmetic: C:\\Users\\USER\\AppData\\Local\\Temp\\claude\\scratchm\\sim.py. The source was C:\\Users\\USER\\AppData\\Local\\Temp\\om\\coherence\\desk3\\metallurgy.md. The only decision that changes the result is how the tap rounds odd amounts. If instead each crucible were set to floor(q/2), the figures for cycles 1, 4 and 5 would change.",
   "preReadNotes": "The write-up is self-contained, and nothing in it is written as instructions to the reader. The task touched no security-sensitive actions: it read a local file and ran local arithmetic."
  },
  "grade": {

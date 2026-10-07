@@ -364,7 +364,7 @@
   "differingRule": "In step 4, A moves a PUPAL chamber's half-share to the previous chamber (n-1), and chamber 1's goes to waste; B moves an ACTIVE component's half-share to the next component (i+1), and component 6's goes to slack.",
   "foundBy": "both",
   "routesAgree": true,
-  "trust": "The two routes agree. The table found the direction difference in step 4 and showed every other rule matches. The probe confirms it in isolation: the end quantities come out mirrored ([3,0,0,0,3,2] for A, [3,3,0,0,0,2] for B), while the state changes, halving cycles and loss tally stay identical. The printed tables also give different results (A: halving in cycles 1 and 4, loss 76; B: halving in cycles 1, 4 and 5, loss 95). The arithmetic was done with a Python script, C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P13\\sim.py, and the probe's cycle 1 was also checked by hand. The balance check (start + inputs = end + loss) holds on all four runs."
+  "trust": "The two routes agree. The table found the direction difference in step 4 and showed every other rule matches. The probe confirms it in isolation: the end quantities come out mirrored ([3,0,0,0,3,2] for A, [3,3,0,0,0,2] for B), while the state changes, halving cycles and loss tally stay identical. The printed tables also give different results (A: halving in cycles 1 and 4, loss 76; B: halving in cycles 1, 4 and 5, loss 95). The arithmetic was done with a Python script, C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-fm\\P13\\sim.py, and the probe's cycle 1 was also checked by hand. The balance check (start + inputs = end + loss) holds on all four runs."
  },
  "verdict_correct": true,
  "table_correct": true,

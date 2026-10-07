@@ -141,7 +141,7 @@
   "lossTotal": 76,
   "balanceCheck": "Start total 20 (3+6+6+2+2+1) + all feed 94 (20+15+17+24+18) = 114. End total 38 (6+10+9+7+4+2) + loss tally 76 = 114. Both sides are 114, so it balances.",
   "usedScript": true,
-  "notes": "The figures come from a Python script at C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py. Cycles 1 and 2 were also worked by hand and matched the script exactly. The result most exposed to interpretation is cycle 5: the total after metabolise is exactly 38, so whether the moult fires depends on reading 'over 38' as strictly greater. A >= reading would change the end figures and the tally. At the end, chamber 2 (10 vs capacity 8) and chamber 4 (7 vs capacity 6) are over capacity because no carry runs after cycle 5's metabolise. Both are reported as is."
+  "notes": "The figures come from a Python script at C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-250\\sim.py. Cycles 1 and 2 were also worked by hand and matched the script exactly. The result most exposed to interpretation is cycle 5: the total after metabolise is exactly 38, so whether the moult fires depends on reading 'over 38' as strictly greater. A >= reading would change the end figures and the tally. At the end, chamber 2 (10 vs capacity 8) and chamber 4 (7 vs capacity 6) are over capacity because no carry runs after cycle 5's metabolise. Both are reported as is."
  },
  "grade": {
   "available": true,

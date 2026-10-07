@@ -137,7 +137,7 @@
   "lossTotal": 76,
   "balanceCheck": "Starting total 20 + all feed 94 = 114. End total 38 (6+10+9+7+4+2) + loss tally 76 = 114. The two sides match.",
   "usedScript": true,
-  "notes": "I used a Python script for the arithmetic and kept it in the desk folder: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\desk250_claude_a592740d_verify_1531.py. Other processes are writing to the same folder. My first script, run.py, was overwritten by one of them between writing it and running it. Its output still matched these figures, but I don't rely on it. I reran everything from the uniquely named file above, writing and running it in one command. I also worked through cycles 1 and 2 by hand, and both match the script. I did not read any of the other files in the folder. On the tally: the moults removed 21 (cycle 1) and 25 (cycle 4), carry forward from chamber 6 sent 9, and metabolism sent the remaining 21, for 76 in total."
+  "notes": "I used a Python script for the arithmetic and kept it in the desk folder: C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-250\\desk250_claude_SESSION_verify_1531.py. Other processes are writing to the same folder. My first script, run.py, was overwritten by one of them between writing it and running it. Its output still matched these figures, but I don't rely on it. I reran everything from the uniquely named file above, writing and running it in one command. I also worked through cycles 1 and 2 by hand, and both match the script. I did not read any of the other files in the folder. On the tally: the moults removed 21 (cycle 1) and 25 (cycle 4), carry forward from chamber 6 sent 9, and metabolism sent the remaining 21, for 76 in total."
  },
  "grade": {
   "available": true,

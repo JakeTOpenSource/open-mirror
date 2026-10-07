@@ -133,7 +133,7 @@
   "lossTotal": 76,
   "balanceCheck": "Starting melt 15 (3+6+6+2+2+1) plus all charges 99 (cycle 1: 20, cycle 2: 15, cycle 3: 17, cycle 4: 24, cycle 5: 18) = 114. End melt 38 (6+10+9+7+4+2) plus loss tally 76 = 114. The two sides match.",
   "usedScript": true,
-  "notes": "The arithmetic was done with a short Python script, C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py, and I checked cycles 1 and 5 by hand. Loss tally by source: overflow from crucible 6 = 1+3+8+0+0 = 12; draw-off to slag = 1+4+6+5+2 = 18; global resets = 21 (cycle 1) + 25 (cycle 4) = 46; total 76. Two results depend on the open points. The cycle 5 total is exactly 38, so the 'strictly above' reading decides that no reset fires in cycle 5. Crucibles 2 and 4 end above capacity because melt was returned to them in the last draw-off."
+  "notes": "The arithmetic was done with a short Python script, C:\\Users\\USER\\AppData\\Local\\Temp\\claude\\C--Users-USER-scratch-workspace\\SESSION\\scratchpad\\sim.py, and I checked cycles 1 and 5 by hand. Loss tally by source: overflow from crucible 6 = 1+3+8+0+0 = 12; draw-off to slag = 1+4+6+5+2 = 18; global resets = 21 (cycle 1) + 25 (cycle 4) = 46; total 76. Two results depend on the open points. The cycle 5 total is exactly 38, so the 'strictly above' reading decides that no reset fires in cycle 5. Crucibles 2 and 4 end above capacity because melt was returned to them in the last draw-off."
  },
  "grade": {
   "available": true,

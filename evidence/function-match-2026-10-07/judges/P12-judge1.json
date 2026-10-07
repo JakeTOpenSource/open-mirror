@@ -333,7 +333,7 @@
   "differingRule": "Step 3 return-to-low-state threshold: A returns an OVERLOADED tank to STEADY when contents are at or below the lower mark (<=), while B returns an ESCALATED team to ROUTINE only when its count is strictly below the lower mark (<).",
   "foundBy": "both",
   "routesAgree": true,
-  "trust": "Both routes agree. The table pinned the single differing rule, which is Step 3, <= in A versus < in B. The probe sets off only that rule and shows it diverging. The printed tables trip it as well: A logs 13 state changes and B logs 6. End quantities differ at positions 5 and 6 (A 4,2 vs B 5,1) and end states differ, but halving cycles (1, 4) and loss (76) happen to match. Every other step matched clause for clause. The script is C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P12\\sim.py. It asserts the balance check (start plus inflows equals end plus loss) on all four runs, and all four passed."
+  "trust": "Both routes agree. The table pinned the single differing rule, which is Step 3, <= in A versus < in B. The probe sets off only that rule and shows it diverging. The printed tables trip it as well: A logs 13 state changes and B logs 6. End quantities differ at positions 5 and 6 (A 4,2 vs B 5,1) and end states differ, but halving cycles (1, 4) and loss (76) happen to match. Every other step matched clause for clause. The script is C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-fm\\P12\\sim.py. It asserts the balance check (start plus inflows equals end plus loss) on all four runs, and all four passed."
  },
  "verdict_correct": true,
  "table_correct": true,

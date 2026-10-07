@@ -30,7 +30,7 @@ for f in sorted(glob.glob(os.path.join(wf, "agent-*.jsonl"))):
                 if name in ("Bash", "PowerShell") and gitre.search(inp.get("command", "")): rec["git"].append(ts + " " + inp.get("command", "")[:160])
                 for p in pathre.findall(s):
                     p2 = p.replace("/c/", "c:/")
-                    if desk not in p2 and "scratchpad" not in p2 and not p2.startswith("c:/users/jaket/appdata/local/temp/claude"):
+                    if desk not in p2 and "scratchpad" not in p2 and not p2.startswith("c:/users/user/appdata/local/temp/claude"):
                         rec["outside"].append(ts + " " + name + " " + p2[:140])
                 if name in ("Read", "Glob", "Grep") and desk not in s: rec["outside"].append(ts + " " + name + " " + s[:140])
             if c.get("type") == "tool_result":

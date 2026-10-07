@@ -131,8 +131,8 @@
   "lossTotal": 76,
   "balanceCheck": "Starting charge 20 + total fed 94 = 114; on chain 38 (6+10+9+7+4+2) + ground tally 76 = 114. Balanced.",
   "usedScript": true,
-  "notes": "I did the arithmetic with a short Python script at C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py and checked cycle 1 by hand. Every rule is applied exactly as the write-up states it.",
-  "preReadNotes": "I read the write-up at C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\coherence\\desk3\\electrical.md in full before computing. It contains only the line's rules and figures, with no instructions aimed at the reader."
+  "notes": "I did the arithmetic with a short Python script at C:\\Users\\USER\\AppData\\Local\\Temp\\claude\\C--Users-USER-scratch-workspace\\SESSION\\scratchpad\\sim.py and checked cycle 1 by hand. Every rule is applied exactly as the write-up states it.",
+  "preReadNotes": "I read the write-up at C:\\Users\\USER\\AppData\\Local\\Temp\\om\\coherence\\desk3\\electrical.md in full before computing. It contains only the line's rules and figures, with no instructions aimed at the reader."
  },
  "grade": {
   "available": true,

@@ -297,7 +297,7 @@
     "lossTotal": 76,
     "balanceCheck": "Starting mix 20 + pours 94 (cycle by cycle: 20+15+17+24+18) = 114. End quantities 38 (6+10+9+7+4+2) + loss tally 76 = 114. The two sides match.",
     "usedScript": true,
-    "notes": "I used a short Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py. I checked cycle 1 bleed/washout and cycle 4 overtop by hand. Loss by cycle is 22, 5, 9, 38, 2. Cycle 5 lands exactly on the washout limit (38), so the strictly-over rule decides the outcome there."
+    "notes": "I used a short Python script for the arithmetic: C:\\Users\\USER\\AppData\\Local\\Temp\\claude\\C--Users-USER-scratch-workspace\\SESSION\\scratchpad\\sim.py. I checked cycle 1 bleed/washout and cycle 4 overtop by hand. Loss by cycle is 22, 5, 9, 38, 2. Cycle 5 lands exactly on the washout limit (38), so the strictly-over rule decides the outcome there."
    },
    "grade": {
     "available": true,
@@ -328,7 +328,7 @@
    "key": "metallurgy",
    "n": 1,
    "run": {
-    "procedureSummary": "Applied in cycles 1-5, steps in order. Each step finishes on all six crucibles before the next one starts.\n1 Charge: add each crucible's charge for the cycle to its melt. Contents may sit above capacity until step 2.\n2 Overflow: walk positions 1 to 6. Any excess over capacity is added to the next crucible before that crucible is checked, so overflow cascades, and the crucible is left exactly at capacity. Excess from crucible 6 goes to the slag pit (loss tally).\n3 State check on the contents after overflow: BASE with quantity >= upper mark becomes SUPERHEATED. SUPERHEATED with quantity <= lower mark becomes BASE. Otherwise the state is unchanged, with at most one change per crucible per cycle.\n4 Draw-off: compute all six amounts from the current contents first, rounding down. BASE sends floor(q/4) to slag. SUPERHEATED sends floor(q/2) to crucible i-1, and crucible 1's half goes to slag. Then apply all moves at once. Returned melt may leave a crucible over capacity, and it stays there.\n5 Global reset: if the total of all six is strictly > 38, each crucible becomes floor(q/2), the removed melt q - floor(q/2) goes to slag, and the cycle is noted. At 38 or below nothing happens.\nI used a short Python script for the arithmetic (C:/Users/Jaket/AppData/Local/Temp/claude/scratchm/sim.py) and checked cycle 1 and the cycle 4 overflow cascade by hand.",
+    "procedureSummary": "Applied in cycles 1-5, steps in order. Each step finishes on all six crucibles before the next one starts.\n1 Charge: add each crucible's charge for the cycle to its melt. Contents may sit above capacity until step 2.\n2 Overflow: walk positions 1 to 6. Any excess over capacity is added to the next crucible before that crucible is checked, so overflow cascades, and the crucible is left exactly at capacity. Excess from crucible 6 goes to the slag pit (loss tally).\n3 State check on the contents after overflow: BASE with quantity >= upper mark becomes SUPERHEATED. SUPERHEATED with quantity <= lower mark becomes BASE. Otherwise the state is unchanged, with at most one change per crucible per cycle.\n4 Draw-off: compute all six amounts from the current contents first, rounding down. BASE sends floor(q/4) to slag. SUPERHEATED sends floor(q/2) to crucible i-1, and crucible 1's half goes to slag. Then apply all moves at once. Returned melt may leave a crucible over capacity, and it stays there.\n5 Global reset: if the total of all six is strictly > 38, each crucible becomes floor(q/2), the removed melt q - floor(q/2) goes to slag, and the cycle is noted. At 38 or below nothing happens.\nI used a short Python script for the arithmetic (C:/Users/USER/AppData/Local/Temp/claude/scratchm/sim.py) and checked cycle 1 and the cycle 4 overflow cascade by hand.",
     "openPoints": [
      {
       "point": "Rounding for the global reset halving: should 'rounding down' apply to what remains or to what is removed?",
@@ -621,7 +621,7 @@
     "lossTotal": 76,
     "balanceCheck": "Starting melt 20 + all charges 94 (cycle 1 20, cycle 2 15, cycle 3 17, cycle 4 24, cycle 5 18) = 114; end melt 38 + loss tally 76 = 114. It balances.",
     "usedScript": true,
-    "notes": "The global reset fired in cycles 1 and 4. Crucible 2 ends at 10, above its capacity of 8, because melt returned in the cycle 5 draw-off stays where it lands after the last cycle. The script is C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py."
+    "notes": "The global reset fired in cycles 1 and 4. Crucible 2 ends at 10, above its capacity of 8, because melt returned in the cycle 5 draw-off stays where it lands after the last cycle. The script is C:\\Users\\USER\\AppData\\Local\\Temp\\claude\\C--Users-USER-scratch-workspace\\SESSION\\scratchpad\\sim.py."
    },
    "grade": {
     "available": true,
@@ -783,7 +783,7 @@
     "lossTotal": 76,
     "balanceCheck": "Starting melt 15 (3+6+6+2+2+1) plus all charges 99 (cycle 1: 20, cycle 2: 15, cycle 3: 17, cycle 4: 24, cycle 5: 18) = 114. End melt 38 (6+10+9+7+4+2) plus loss tally 76 = 114. The two sides match.",
     "usedScript": true,
-    "notes": "The arithmetic was done with a short Python script, C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py, and I checked cycles 1 and 5 by hand. Loss tally by source: overflow from crucible 6 = 1+3+8+0+0 = 12; draw-off to slag = 1+4+6+5+2 = 18; global resets = 21 (cycle 1) + 25 (cycle 4) = 46; total 76. Two results depend on the open points. The cycle 5 total is exactly 38, so the 'strictly above' reading decides that no reset fires in cycle 5. Crucibles 2 and 4 end above capacity because melt was returned to them in the last draw-off."
+    "notes": "The arithmetic was done with a short Python script, C:\\Users\\USER\\AppData\\Local\\Temp\\claude\\C--Users-USER-scratch-workspace\\SESSION\\scratchpad\\sim.py, and I checked cycles 1 and 5 by hand. Loss tally by source: overflow from crucible 6 = 1+3+8+0+0 = 12; draw-off to slag = 1+4+6+5+2 = 18; global resets = 21 (cycle 1) + 25 (cycle 4) = 46; total 76. Two results depend on the open points. The cycle 5 total is exactly 38, so the 'strictly above' reading decides that no reset fires in cycle 5. Crucibles 2 and 4 end above capacity because melt was returned to them in the last draw-off."
    },
    "grade": {
     "available": true,
@@ -945,7 +945,7 @@
     "lossTotal": 76,
     "balanceCheck": "Starting sap 20 + all uptake 94 = 114; end sap 38 (6+10+9+7+4+2) + loss tally 76 = 114. The balance holds.",
     "usedScript": true,
-    "notes": "Segment 2 ends at 10, over its holding volume of 8. This is the cycle 5 phloem inflow that the write-up allows to stay over volume for good. The loss tally is made up of: push-up transpiration 11 (C2 1, C3 3, C4 8), draw-down respiration and segment-1 phloem outflow 19, and leaf-drop transpiration 46 (C1 21, C4 25). Script (scratch copy): C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\x.py"
+    "notes": "Segment 2 ends at 10, over its holding volume of 8. This is the cycle 5 phloem inflow that the write-up allows to stay over volume for good. The loss tally is made up of: push-up transpiration 11 (C2 1, C3 3, C4 8), draw-down respiration and segment-1 phloem outflow 19, and leaf-drop transpiration 46 (C1 21, C4 25). Script (scratch copy): C:\\Users\\USER\\AppData\\Local\\Temp\\claude\\C--Users-USER-scratch-workspace\\SESSION\\scratchpad\\x.py"
    },
    "grade": {
     "available": true,
@@ -1111,7 +1111,7 @@
     "lossTotal": 76,
     "balanceCheck": "Starting water 20 + water taken on 94 (17+15+17+24+18) = 114. End water 38 (6+10+9+7+4+2) + overboard tally 76 = 114. The two sides match.",
     "usedScript": true,
-    "notes": "The arithmetic was done with a short Python script, C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\ballast.py. Cycle 1 was also checked by hand. The emergency blow fired in cycles 1 and 4. In cycle 5 the total was exactly 38, so it did not fire. Compartment 2 ends at 10, above its volume of 8; the write-up allows this after cycle 5."
+    "notes": "The arithmetic was done with a short Python script, C:\\Users\\USER\\AppData\\Local\\Temp\\claude\\C--Users-USER-scratch-workspace\\SESSION\\scratchpad\\ballast.py. Cycle 1 was also checked by hand. The emergency blow fired in cycles 1 and 4. In cycle 5 the total was exactly 38, so it did not fire. Compartment 2 ends at 10, above its volume of 8; the write-up allows this after cycle 5."
    },
    "grade": {
     "available": true,
@@ -1273,7 +1273,7 @@
     "lossTotal": 76,
     "balanceCheck": "Starting mass 20 + all feed 94 = 114; end mass 38 (6+10+9+7+4+2) + loss tally 76 = 114. The check holds.",
     "usedScript": true,
-    "notes": "I used a short Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\m.py. I also checked cycle 1 by hand. The result that rests most on an unsettled rule is the moult rounding (remaining mass = floor(m/2)). If you read it the other way (removed = floor(m/2)), the results from cycle 1 onward change. Cycle 5 ended at exactly 38, so the moult did not fire on the strict 'over 38' rule. Chambers 2 and 4 end above their holding limits, as the write-up allows."
+    "notes": "I used a short Python script for the arithmetic: C:\\Users\\USER\\AppData\\Local\\Temp\\claude\\C--Users-USER-scratch-workspace\\SESSION\\scratchpad\\m.py. I also checked cycle 1 by hand. The result that rests most on an unsettled rule is the moult rounding (remaining mass = floor(m/2)). If you read it the other way (removed = floor(m/2)), the results from cycle 1 onward change. Cycle 5 ended at exactly 38, so the moult did not fire on the strict 'over 38' rule. Chambers 2 and 4 end above their holding limits, as the write-up allows."
    },
    "grade": {
     "available": true,
@@ -1439,7 +1439,7 @@
     "lossTotal": 76,
     "balanceCheck": "Starting mass 20 + total feed 94 = 114; end mass 38 (6+10+9+7+4+2) + loss tally 76 = 114. Balanced.",
     "usedScript": true,
-    "notes": "I used a short Python script for the arithmetic and checked cycles 1, 2 and 5 by hand. The script is at C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\meta_h2.py. A file named sim.py was already in the scratchpad with different content, so I wrote a new file and did not use sim.py. Loss tally by source: overflow from chamber 6 is 1 (C2) + 3 (C3) + 8 (C4) = 12. Burn-off is 1 (C1) + 4 (C2) + 6 (C3) + 5 (C4) + 2 (C5) = 18. The moults are 21 (C1) + 25 (C4) = 46. 12 + 18 + 46 = 76. Chambers 2 and 4 end above their holding limits because excess stays after the cycle 5 burn-off."
+    "notes": "I used a short Python script for the arithmetic and checked cycles 1, 2 and 5 by hand. The script is at C:\\Users\\USER\\AppData\\Local\\Temp\\claude\\C--Users-USER-scratch-workspace\\SESSION\\scratchpad\\meta_h2.py. A file named sim.py was already in the scratchpad with different content, so I wrote a new file and did not use sim.py. Loss tally by source: overflow from chamber 6 is 1 (C2) + 3 (C3) + 8 (C4) = 12. Burn-off is 1 (C1) + 4 (C2) + 6 (C3) + 5 (C4) + 2 (C5) = 18. The moults are 21 (C1) + 25 (C4) = 46. 12 + 18 + 46 = 76. Chambers 2 and 4 end above their holding limits because excess stays after the cycle 5 burn-off."
    },
    "grade": {
     "available": true,
@@ -1767,7 +1767,7 @@
     "lossTotal": 76,
     "balanceCheck": "Opening liquor 20 + all feed 94 = 114; end quantities 38 + loss tally 76 = 114. Balanced.",
     "usedScript": true,
-    "notes": "Source write-up: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-w1\\treatment.md. The \"resetPeriods\" field lists the cycles in which the storm bypass (the halving event) fired. Cycle 5 ended with a total of exactly 38, which is at the limit, so the bypass did not fire. The arithmetic script is in the session scratchpad as t.py. Its hard-coded opening total was wrong (it used 18 instead of 20), so the balance figure it printed was off. The balance check above uses the correct opening total of 20."
+    "notes": "Source write-up: C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-w1\\treatment.md. The \"resetPeriods\" field lists the cycles in which the storm bypass (the halving event) fired. Cycle 5 ended with a total of exactly 38, which is at the limit, so the bypass did not fire. The arithmetic script is in the session scratchpad as t.py. Its hard-coded opening total was wrong (it used 18 instead of 20), so the balance figure it printed was off. The balance check above uses the correct opening total of 20."
    },
    "grade": {
     "available": true,
@@ -1928,7 +1928,7 @@
     ],
     "lossTotal": 76,
     "balanceCheck": "Starting chunks 20 + ingested 94 (cycles: 20, 15, 17, 24, 18) = 114. End chunks 38 + loss tally 76 = 114. The balance check holds. The loss tally breaks down as: tier-6 eviction overflow 12 (cycles 2, 3, 4: 1+3+8), compaction and tier-1 promotion 18 (1+4+6+5+2), and context resets 46 (21+25).",
-    "notes": "I used a Node.js script for the arithmetic, at C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\scr\\rag.js. I also checked cycle 2 step 4 by hand. A Python attempt hung on the WindowsApps python stub and was abandoned; that background task (bjkz9w2tf) should be stopped if it is still running. At the end of cycle 5, tier 2 holds 10 chunks against a budget of 8, and tier 4 holds 7 against a budget of 6. These are left as they are, because no eviction follows cycle 5.",
+    "notes": "I used a Node.js script for the arithmetic, at C:\\Users\\USER\\AppData\\Local\\Temp\\claude\\scr\\rag.js. I also checked cycle 2 step 4 by hand. A Python attempt hung on the WindowsApps python stub and was abandoned; that background task (bjkz9w2tf) should be stopped if it is still running. At the end of cycle 5, tier 2 holds 10 chunks against a budget of 8, and tier 4 holds 7 against a budget of 6. These are left as they are, because no eviction follows cycle 5.",
     "usedScript": true
    },
    "grade": {
@@ -2087,7 +2087,7 @@
     "lossTotal": 76,
     "balanceCheck": "Starting sum 20 + total input 94 = 114; end sum 38 + slack 76 = 114. Both sides are equal.",
     "usedScript": true,
-    "notes": "I computed the figures with a short Python script, which also checked the balance. The script is at C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py. Position 2 ends at 10, above its ceiling of 8, because the cycle 5 transfer moved amount into it after the last sweep; the write-up allows this. The write-up is C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-w1\\lagrangian.md."
+    "notes": "I computed the figures with a short Python script, which also checked the balance. The script is at C:\\Users\\USER\\AppData\\Local\\Temp\\claude\\C--Users-USER-scratch-workspace\\SESSION\\scratchpad\\sim.py. Position 2 ends at 10, above its ceiling of 8, because the cycle 5 transfer moved amount into it after the last sweep; the write-up allows this. The write-up is C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-w1\\lagrangian.md."
    },
    "grade": {
     "available": true,
@@ -2118,7 +2118,7 @@
    "key": "goodhart",
    "n": 1,
    "run": {
-    "procedureSummary": "Source: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-w1\\goodhart.md. Start: counts 3,6,6,2,2,1; all ROUTINE; tally 0. In each of cycles 1 to 5, every step finishes for all six teams before the next step starts.\nStep 1, Arrivals: add the cycle's new tickets to each team. No limit applies.\nStep 2, Overflow: go through teams 1 to 6 in order. If a team is over its WIP limit (10,8,12,6,9,7), set it to the limit and add the excess to the next team before that team is checked, so excess can cascade. Team 6's excess goes to the tally.\nStep 3, Status check (on post-overflow counts): a ROUTINE team with count >= upper mark (7,6,9,5,7,5) becomes ESCALATED. An ESCALATED team with count <= lower mark (3,2,4,2,3,2) becomes ROUTINE. Otherwise the status holds. Each team changes at most once, and each change is logged.\nStep 4, Closing: work out all amounts from the current counts first. A ROUTINE team closes floor(count/4), which goes to the tally. An ESCALATED team bounces floor(count/2) to the team upstream. All six are applied at once. Team 1's bounce goes to the tally. Limits are not enforced here.\nStep 5, Backlog cut: total the six counts. Only if the total is strictly above 38, every count becomes floor(count/2), the removed tickets go to the tally, and the cycle is noted.\nEnd: report the counts, statuses, changes, cut cycles and tally, and check that opening tickets plus all new tickets equals final counts plus tally.",
+    "procedureSummary": "Source: C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-w1\\goodhart.md. Start: counts 3,6,6,2,2,1; all ROUTINE; tally 0. In each of cycles 1 to 5, every step finishes for all six teams before the next step starts.\nStep 1, Arrivals: add the cycle's new tickets to each team. No limit applies.\nStep 2, Overflow: go through teams 1 to 6 in order. If a team is over its WIP limit (10,8,12,6,9,7), set it to the limit and add the excess to the next team before that team is checked, so excess can cascade. Team 6's excess goes to the tally.\nStep 3, Status check (on post-overflow counts): a ROUTINE team with count >= upper mark (7,6,9,5,7,5) becomes ESCALATED. An ESCALATED team with count <= lower mark (3,2,4,2,3,2) becomes ROUTINE. Otherwise the status holds. Each team changes at most once, and each change is logged.\nStep 4, Closing: work out all amounts from the current counts first. A ROUTINE team closes floor(count/4), which goes to the tally. An ESCALATED team bounces floor(count/2) to the team upstream. All six are applied at once. Team 1's bounce goes to the tally. Limits are not enforced here.\nStep 5, Backlog cut: total the six counts. Only if the total is strictly above 38, every count becomes floor(count/2), the removed tickets go to the tally, and the cycle is noted.\nEnd: report the counts, statuses, changes, cut cycles and tally, and check that opening tickets plus all new tickets equals final counts plus tally.",
     "openPoints": [
      {
       "point": "How the backlog cut rounds 'halved, rounding down' (is the kept amount or the removed amount rounded down?)",
@@ -2253,7 +2253,7 @@
     "lossTotal": 76,
     "balanceCheck": "Opening 20 + new tickets 94 (C1 20, C2 15, C3 17, C4 24, C5 18) = 114. Final counts 38 (6+10+9+7+4+2) + tally 76 = 114. The tally is made up of: team 6 overflow 12 (1+3+8), routine closes 4 (1+1+1+1), team 1 bounces 15 (3+5+5+2), backlog cuts 46 (21+25) (total 76). The check balances.",
     "usedScript": true,
-    "notes": "I used a short Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\g.py. The result depends on two boundary calls. (1) In cycle 5 the total is exactly 38, so the backlog cut does not fire. (2) In cycle 1 the total is 39, so the cut fires. If the cut instead rounded the removed amount down (keeping the larger half), cycle 1 and every later figure would change."
+    "notes": "I used a short Python script for the arithmetic: C:\\Users\\USER\\AppData\\Local\\Temp\\claude\\C--Users-USER-scratch-workspace\\SESSION\\scratchpad\\g.py. The result depends on two boundary calls. (1) In cycle 5 the total is exactly 38, so the backlog cut does not fire. (2) In cycle 1 the total is 39, so the cut fires. If the cut instead rounded the removed amount down (keeping the larger half), cycle 1 and every later figure would change."
    },
    "grade": {
     "available": true,

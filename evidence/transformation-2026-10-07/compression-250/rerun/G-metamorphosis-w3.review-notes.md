@@ -8,4 +8,4 @@
 - Moult condition reads 'over 38', meaning strictly greater, so a total of exactly 38 does not trigger it. Removed mass goes to the tally.
 - Changed the step-order sentence from 'each step finished on all chambers first' to 'each step finished on all chambers before the next', which removed an ambiguity.
 - The Report paragraph is only a template: positions 1 to 6, the state-change tuple format, moult cycles, loss tally, and the balance equation. It contains no figures or results.
-- I did not run the five cycles, so this list does not check any end results. Only the description was reviewed against the engineer's process. All scratch work stayed in C:\Users\Jaket\AppData\Local\Temp\om\desk-250 (expl.txt).
+- I did not run the five cycles, so this list does not check any end results. Only the description was reviewed against the engineer's process. All scratch work stayed in C:\Users\USER\AppData\Local\Temp\om\desk-250 (expl.txt).

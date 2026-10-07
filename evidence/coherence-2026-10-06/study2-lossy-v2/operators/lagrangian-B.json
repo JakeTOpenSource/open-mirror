@@ -127,7 +127,7 @@
   "lossTotal": 76,
   "balanceCheck": "Starting 1-norm 20 + loaded 94 = 114, against final 1-norm 38 + s 76 = 114. It balances.",
   "usedScript": true,
-  "notes": "I used a short Python script for the arithmetic (/tmp/x.py, run through Bash). The only input was the write-up at C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\coherence\\desk3\\lagrangian.md.",
+  "notes": "I used a short Python script for the arithmetic (/tmp/x.py, run through Bash). The only input was the write-up at C:\\Users\\USER\\AppData\\Local\\Temp\\om\\coherence\\desk3\\lagrangian.md.",
   "preReadNotes": "The write-up is self-contained and has no embedded instructions beyond the line rules. I applied its rules exactly as written."
  },
  "grade": {

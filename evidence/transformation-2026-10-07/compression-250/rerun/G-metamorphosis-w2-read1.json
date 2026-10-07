@@ -133,7 +133,7 @@
   "lossTotal": 76,
   "balanceCheck": "Starting total 20 + all feed 94 = 114. End total 38 + loss tally 76 = 114. Balanced.",
   "usedScript": true,
-  "notes": "I ran the arithmetic with a short Python script at C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py and checked cycle 1 by hand; the results match. Two figures depend on choices the write-up leaves open. Cycle 5 ends at exactly 38, so reading the rule as 'at or above 38' would add a moult in cycle 5. In cycles 1 and 4, rounding down the removed half instead of the kept half would change the end figures."
+  "notes": "I ran the arithmetic with a short Python script at C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-250\\sim.py and checked cycle 1 by hand; the results match. Two figures depend on choices the write-up leaves open. Cycle 5 ends at exactly 38, so reading the rule as 'at or above 38' would add a moult in cycle 5. In cycles 1 and 4, rounding down the removed half instead of the kept half would change the end figures."
  },
  "grade": {
   "available": true,

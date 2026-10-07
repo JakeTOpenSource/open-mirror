@@ -992,7 +992,7 @@ From `evidence/Open-Mirror-v1.1.md`. Revised by Claude after an A/B test of v1.0
 
 From `evidence/Open-Mirror-Skill.pdf`. Original. Concept and research direction by Jake Tiller; drafting and synthesis with OpenAI Codex. Five statuses, three lenses by default, one success example.
 
-**Published, 7 October 2026.** First public release of this repository at github.com/JakeTOpenSource/open-mirror, under the MIT license, with the skill text unchanged at v1.4.3. The repository was flattened for publication: the former `openmirror/` folder is now the root. Evidence, verifier, and manifest are unchanged in content; the manifest root label changed from `openmirror/` to `./`.
+**Published, 7 October 2026.** First public release of this repository at github.com/JakeTOpenSource/open-mirror, under the MIT license, with the skill text unchanged at v1.4.3. The repository was flattened for publication: the former `openmirror/` folder is now the root. Evidence, verifier, and manifest are unchanged in content; the manifest root label changed from `openmirror/` to `./`. Before the first push, local machine paths inside the evidence transcripts were redacted: the operating-system user name became `USER`, and the test-harness session and workspace identifiers became `SESSION` and `scratch-workspace`. Nothing else in any transcript was altered; the 551 replacements touched path strings only, and every JSON record still parses. The verifier and manifest were regenerated afterward.
 
 ## Part 6. Evidence
 
@@ -2238,7 +2238,7 @@ Every operator's grade, source model, and closing notes. Full reports with cycle
 > I used a short Python script for the arithmetic and checked cycle 1, the cycle 5 leaf-drop boundary (total exactly 38, so no drop) and the balance by hand. Correction to the cycle 3 step 2 note in the working: seg1 pushed 1 to seg2, then seg2 pushed 1 to seg3.
 
 **Operator B** (Opus 5.5): exact; used script: True.
-> I used a short Python script for the arithmetic and checked cycle 1 by hand. In cycle 5 the total is exactly 38, so the leaf-drop does not fire because the rule needs strictly more than 38. The script is at C:\Users\Jaket\AppData\Local\Temp\claude\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\scratchpad\stem.py
+> I used a short Python script for the arithmetic and checked cycle 1 by hand. In cycle 5 the total is exactly 38, so the leaf-drop does not fire because the rule needs strictly more than 38. The script is at C:\Users\USER\AppData\Local\Temp\claude\C--Users-USER-scratch-workspace\SESSION\scratchpad\stem.py
 
 **Operator C** (Opus 5.5): exact; used script: True.
 > I used a short Python script for the arithmetic and hand-checked cycles 1 and 2. Edge cases: cycle 5 ends at a total of exactly 38, so no leaf-drop fires. Segments 2 and 4 end above their holding volume because step 4 doesn't enforce the cap.
@@ -2297,7 +2297,7 @@ Every operator's grade, source model, and closing notes. Full reports with cycle
 > I used a short Python script for the arithmetic and checked cycle 1 by hand. Some results sit exactly on a rule threshold. In cycle 5 the Step 5 total is exactly 38, so the bypass did not fire. In cycle 2, T3 (4) and T5 (3) each sat exactly on their lower marks, and T1 (7) sat exactly on its upper mark. After cycle 5, T2 (10 vs 8) and T4 (7 vs 6) are left above their volumes from returned liquor, as the document specifies.
 
 **Operator C** (Opus 5.5): exact; used script: True.
-> I used a short Python script for the arithmetic: C:\Users\Jaket\AppData\Local\Temp\claude\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\scratchpad\sim.py. I also checked every cycle by hand. Cycle 5's combined total is exactly 38, so the storm bypass does not fire, because the rule needs a total strictly above 38. Tanks 2 and 4 end above their volumes (10 > 8 and 7 > 6). That is allowed, because liquor returned in cycle 5 is never dealt with. Outfall total by source: Step 4 discharges 1+4+6+5+2 = 18, weir outfall from tank 6 1+3+8 = 12, storm bypasses 21+25 = 46, total 76.
+> I used a short Python script for the arithmetic: C:\Users\USER\AppData\Local\Temp\claude\C--Users-USER-scratch-workspace\SESSION\scratchpad\sim.py. I also checked every cycle by hand. Cycle 5's combined total is exactly 38, so the storm bypass does not fire, because the rule needs a total strictly above 38. Tanks 2 and 4 end above their volumes (10 > 8 and 7 > 6). That is allowed, because liquor returned in cycle 5 is never dealt with. Outfall total by source: Step 4 discharges 1+4+6+5+2 = 18, weir outfall from tank 6 1+3+8 = 12, storm bypasses 21+25 = 46, total 76.
 
 **Note on the reviewer text below.** It was written before operators A were rerun, so where it says an operator returned null, a placeholder, or no report, that describes the refused first attempt. What actually ran is graded above: operator A exact.
 
@@ -2335,7 +2335,7 @@ Every operator's grade, source model, and closing notes. Full reports with cycle
 > I did the arithmetic with a short Python script and hand-checked iteration 1. My first copy of the script was saved to the scratchpad, but another process overwrote that file before it ran, and the output came from that other process's code. I discarded that output and re-ran my own script inline instead. Iteration 5 ends with a 1-norm of exactly 38, so the penalty does not fire, because it needs strictly more than 38. Components 2 and 4 end above their box bounds (10>8, 7>6). The document says excess left after iteration 5 is never corrected, so I left it as it is.
 
 **Operator C** (Opus 5.5): exact; used script: True.
-> I ran a short Python script for the arithmetic, then checked every step of all five cycles by hand. The hand check matched the script. The penalty step fired in cycles 1 (sum 39) and 4 (sum 47). In cycle 5 the sum was exactly 38, which is not strictly greater than 38, so it did not fire. At the end, x2=10 (bound 8) and x4=7 (bound 6) are over their bounds. That is allowed here, because the document says an excess from Step 4 in iteration 5 is never corrected. The pre-read (Open Mirror, filter mode) found that the linear-algebra wording adds nothing beyond the literal rules, and that reading it the real-domain way would give wrong answers. Script location: C:\Users\Jaket\AppData\Local\Temp\claude\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\scratchpad\solver.py
+> I ran a short Python script for the arithmetic, then checked every step of all five cycles by hand. The hand check matched the script. The penalty step fired in cycles 1 (sum 39) and 4 (sum 47). In cycle 5 the sum was exactly 38, which is not strictly greater than 38, so it did not fire. At the end, x2=10 (bound 8) and x4=7 (bound 6) are over their bounds. That is allowed here, because the document says an excess from Step 4 in iteration 5 is never corrected. The pre-read (Open Mirror, filter mode) found that the linear-algebra wording adds nothing beyond the literal rules, and that reading it the real-domain way would give wrong answers. Script location: C:\Users\USER\AppData\Local\Temp\claude\C--Users-USER-scratch-workspace\SESSION\scratchpad\solver.py
 
 **Note on the reviewer text below.** It was written before operators A, B were rerun, so where it says an operator returned null, a placeholder, or no report, that describes the refused first attempt. What actually ran is graded above: operator A exact; operator B exact.
 
@@ -2854,7 +2854,7 @@ All 30 operators are Opus 5.5 first attempts; no refusal occurred. For every ope
   - Rounding in the bleed and breaker → assumed: Floor on each stage's own amount. For the breaker, the ground gets the sum before halving minus the sum after.
   - Over-rating charge left after bleed → assumed: Left as it is until the next cycle's shunts. After cycle 5 it stays (stage 2 ends at 10, above its rating of 8), as the write-up allows.
   - Reading the breaker sum → assumed: Taken after the bleed is complete, from the chain charges only (the ground tally is not included).
-- Notes: I did the arithmetic with a short Python script at C:\Users\Jaket\AppData\Local\Temp\claude\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\scratchpad\sim.py and checked cycle 1 by hand. Every rule is applied exactly as the write-up states it.
+- Notes: I did the arithmetic with a short Python script at C:\Users\USER\AppData\Local\Temp\claude\C--Users-USER-scratch-workspace\SESSION\scratchpad\sim.py and checked cycle 1 by hand. Every rule is applied exactly as the write-up states it.
 
 **Operator C**: exact; used script: True; open points listed: 7.
 - Open points:
@@ -2865,7 +2865,7 @@ All 30 operators are Opus 5.5 first attempts; no refusal occurred. For every ope
   - Comparator flipping more than once in one read → assumed: Each stage is evaluated once per cycle from its pre-step state. A stage that has just flipped is not re-tested in the same step.
   - Where the stage 1 bleed and the breaker differences go → assumed: Both go to the ground tally. The ground tally counts every amount that leaves the chain: stage 6 shunt excess, CLEAR leaks, stage 1's return, and breaker halving.
   - Whether bleed-in can push a stage over its rating → assumed: Allowed, as written. Over-rating values carry into the next cycle (or stay, after cycle 5). For example, stage 2 ends at 10 against a rating of 8.
-- Notes: I used a Python script (C:\Users\Jaket\AppData\Local\Temp\claude\scr\sim.py) for the arithmetic, and hand-checked cycle 1 and the cycle 2 comparator boundary cases. The breaker tripped in cycles 1 (sum 39) and 4 (sum 47). In cycle 5 the post-bleed sum was exactly 38, so there was no trip. Stage 2 ends at 10 and stage 4 at 7, both above their ratings, which the write-up allows after cycle 5. The balance line checks: 114 = 114.
+- Notes: I used a Python script (C:\Users\USER\AppData\Local\Temp\claude\scr\sim.py) for the arithmetic, and hand-checked cycle 1 and the cycle 2 comparator boundary cases. The breaker tripped in cycles 1 (sum 39) and 4 (sum 47). In cycle 5 the post-bleed sum was exactly 38, so there was no trip. Stage 2 ends at 10 and stage 4 at 7, both above their ratings, which the write-up allows after cycle 5. The balance line checks: 114 = 114.
 
 **Reviewer:**
 - Applicable real losses in this write-up: 8
@@ -2889,7 +2889,7 @@ All 30 operators are Opus 5.5 first attempts; no refusal occurred. For every ope
   - Whether washout changes states → assumed: No. States change only in the Marks step.
   - Overtop excess → assumed: Only the amount strictly above capacity moves, and the form is left at exactly capacity.
   - Where the waste comes from → assumed: Form 6 overtop 12 (1 in cycle 2, 3 in cycle 3, 8 in cycle 4). GREEN evaporation plus form 1 HOT bleed 18 (1, 4, 6, 5 and 2 in cycles 1 to 5). Washout 46 (21 in cycle 1, 25 in cycle 4). Total 76.
-- Notes: I used a short Python script for the arithmetic: C:\Users\Jaket\AppData\Local\Temp\claude\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\scratchpad\sim.py. I also checked the cycle 1 bleed and the waste breakdown by hand. The result is sensitive to one rule: if washout instead removed floor(q/2) and the form kept ceil(q/2), the figures after cycle 1 would be different. Cycle 5 ended at exactly 38, so washout did not fire there.
+- Notes: I used a short Python script for the arithmetic: C:\Users\USER\AppData\Local\Temp\claude\C--Users-USER-scratch-workspace\SESSION\scratchpad\sim.py. I also checked the cycle 1 bleed and the waste breakdown by hand. The result is sensitive to one rule: if washout instead removed floor(q/2) and the form kept ceil(q/2), the figures after cycle 1 would be different. Cycle 5 ended at exactly 38, so washout did not fire there.
 
 **Operator B**: exact; used script: True; open points listed: 7.
 - Open points:
@@ -2900,7 +2900,7 @@ All 30 operators are Opus 5.5 first attempts; no refusal occurred. For every ope
   - Washout boundary at exactly 38. → assumed: 38 is not over 38, so no washout. This applied in cycle 5, where the total was 38.
   - Overtop cascade. → assumed: Excess is added to the next form before that form's own capacity check, so it can cascade. Form 6's excess goes to waste at once.
   - Initial state for the marks comparison. → assumed: All forms start GREEN, as stated. States carry over between cycles.
-- Notes: I used a short Python script for the arithmetic: C:/Users/Jaket/AppData/Local/Temp/claude/C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6/a592740d-2cb4-4ce4-b618-d8e0a8b4c716/scratchpad/sim.py. I checked cycle 1 by hand and it matches. Washout fired only in cycles 1 and 4. In cycle 5 the total was exactly 38, which is not over 38, so no washout. Form 2 finishes at 10, over its capacity of 8, because of a HOT bleed from form 3; the write-up allows this. The one assumption that changes the totals is the washout rounding (forms keep floor(q/2)). If instead floor(q/2) were removed, the figures from cycle 1 onward would be different.
+- Notes: I used a short Python script for the arithmetic: C:/Users/USER/AppData/Local/Temp/claude/C--Users-USER-scratch-workspace/SESSION/scratchpad/sim.py. I checked cycle 1 by hand and it matches. Washout fired only in cycles 1 and 4. In cycle 5 the total was exactly 38, which is not over 38, so no washout. Form 2 finishes at 10, over its capacity of 8, because of a HOT bleed from form 3; the write-up allows this. The one assumption that changes the totals is the washout rounding (forms keep floor(q/2)). If instead floor(q/2) were removed, the figures from cycle 1 onward would be different.
 
 **Operator C**: exact; used script: True; open points listed: 6.
 - Open points:
@@ -2910,7 +2910,7 @@ All 30 operators are Opus 5.5 first attempts; no refusal occurred. For every ope
   - Washout threshold equality (cycle 5 total is exactly 38). → assumed: 38 or under means no washout, so cycle 5 does not fire.
   - Whether bleed is counted in the waste tally. → assumed: GREEN evaporation, form 1's HOT bleed, form 6's overtop and washout removals all count as waste. HOT bleed into form i-1 stays in the line.
   - Over-capacity carry after bleed. → assumed: No trim after bleed or washout, as written. In cycle 5, forms 2 and 4 end above capacity (10 against 8, 7 against 6) and are reported as they stand.
-- Notes: Script path: C:\Users\Jaket\AppData\Local\Temp\claude\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\scratchpad\sim.py. The rule with the most effect on the result is the washout rounding: the form keeps floor(q/2). The other reading, where only floor(q/2) is removed, changes every figure from cycle 1 onward. Cycle 5 lands exactly on the threshold (total 38), so washout does not fire. Forms 2 and 4 finish above capacity, which the write-up allows. No real-concrete behaviour was used anywhere. Bleed runs upstream and HOT can return to GREEN, both as the write-up says.
+- Notes: Script path: C:\Users\USER\AppData\Local\Temp\claude\C--Users-USER-scratch-workspace\SESSION\scratchpad\sim.py. The rule with the most effect on the result is the washout rounding: the form keeps floor(q/2). The other reading, where only floor(q/2) is removed, changes every figure from cycle 1 onward. Cycle 5 lands exactly on the threshold (total 38), so washout does not fire. Forms 2 and 4 finish above capacity, which the write-up allows. No real-concrete behaviour was used anywhere. Bleed runs upstream and HOT can return to GREEN, both as the write-up says.
 
 **Reviewer:**
 - Applicable real losses in this write-up: 10
@@ -2937,7 +2937,7 @@ Read the write-up (metallurgy.md) and ran five cycles. In each cycle the five mo
   - What 'read all six before touching any' means for the bleed → assumed: All transfers are worked out from the amounts before the bleed. Melt a crucible receives from the next crucible down the line is not bled again in the same cycle.
   - A tap total exactly equal to 38 → assumed: No tap, because the rule says strictly over. This came up in cycle 3, where the total was exactly 38.
   - Melt above volume after the bleed in cycle 5 → assumed: It stays where it is. In fact no crucible was above volume after the cycle 5 tap.
-- Notes: I used a short Python script for the arithmetic: C:\Users\Jaket\AppData\Local\Temp\claude\scratchm\sim.py. The source was C:\Users\Jaket\AppData\Local\Temp\om\coherence\desk3\metallurgy.md. The only decision that changes the result is how the tap rounds odd amounts. If instead each crucible were set to floor(q/2), the figures for cycles 1, 4 and 5 would change.
+- Notes: I used a short Python script for the arithmetic: C:\Users\USER\AppData\Local\Temp\claude\scratchm\sim.py. The source was C:\Users\USER\AppData\Local\Temp\om\coherence\desk3\metallurgy.md. The only decision that changes the result is how the tap rounds odd amounts. If instead each crucible were set to floor(q/2), the figures for cycles 1, 4 and 5 would change.
 
 **Operator B**: NOT EXACT; used script: True; open points listed: 6.
 - Got: final [4, 5, 5, 4, 3, 1], states ['ELEVATED', 'ELEVATED', 'ELEVATED', 'ELEVATED', 'ELEVATED', 'ELEVATED'], resets [1, 4, 5], loss 92. Missing changes: ['2|3|ELEVATED|NORMAL', '3|3|NORMAL|ELEVATED', '5|6|ELEVATED|NORMAL']. Extra changes: [].
@@ -2970,7 +2970,7 @@ Each cycle runs five moves in order, each finished across all six crucibles befo
 3. Temperature: a BASE crucible with melt at or above its upper mark becomes SUPERHEATED. A SUPERHEATED crucible at or below its lower mark becomes BASE. Anything else keeps its state. Every change is logged with cycle, crucible, before and after.
 4. Bleed: take a snapshot of all six quantities and states (after the temperature step), then apply every move at once from that snapshot. BASE: floor(q/4) goes to slag. SUPERHEATED: floor(q/2) goes back to crucible i-1, except crucible 1, whose half goes to slag. A crucible can end the step over its working volume. That is left for the next cycle's overflow, and after cycle 5 it stays.
 5. Emergency tap: add up the line. Only if the total is strictly over 38, remove floor(q/2) from every crucible to slag (each keeps q - floor(q/2)) and log the cycle.
-Slag tally = overflow off crucible 6 + BASE skims + crucible 1's SUPERHEATED half + emergency-tap removals. The arithmetic was done with a short Python script at C:\Users\Jaket\AppData\Local\Temp\claude\scr\sim.py.
+Slag tally = overflow off crucible 6 + BASE skims + crucible 1's SUPERHEATED half + emergency-tap removals. The arithmetic was done with a short Python script at C:\Users\USER\AppData\Local\Temp\claude\scr\sim.py.
 ```
 - Open points:
   - How the emergency-tap halving rounds for odd quantities (the amount removed or the amount kept). → assumed: I read 'any split rounds down' as applying to the amount moved, the same way as in Bleed: removed = floor(q/2), so the crucible keeps the larger half on odd q. If the kept half is rounded down instead, the tap removes ceil(q/2) and the results change.
@@ -2998,7 +2998,7 @@ Step 6, graded like a stranger: picture 1, adds nothing. Taking out the picture 
 
 Step 7, sorting: Keep exploring is empty. Hold is empty. Discard is empty. The picture that added nothing appears only in the count. The halving rounding ambiguity is a gap in the text itself and is recorded under open points, not here.
 ```
-- Notes: At the end of cycle 5 the crucibles hold [4,5,5,4,3,1] and all six are SUPERHEATED. The emergency tap fired in cycles 1, 4 and 5. Slag totals 92, and 20 + 94 = 22 + 92 = 114, so the line balances. All figures depend on removing floor(q/2) at the tap. If the kept half is rounded down instead, the results differ. I used a short Python script at C:\Users\Jaket\AppData\Local\Temp\claude\scr\sim.py.
+- Notes: At the end of cycle 5 the crucibles hold [4,5,5,4,3,1] and all six are SUPERHEATED. The emergency tap fired in cycles 1, 4 and 5. Slag totals 92, and 20 + 94 = 22 + 92 = 114, so the line balances. All figures depend on removing floor(q/2) at the tap. If the kept half is rounded down instead, the results differ. I used a short Python script at C:\Users\USER\AppData\Local\Temp\claude\scr\sim.py.
 
 **Reviewer:**
 - Applicable real losses in this write-up: 12
@@ -3023,7 +3023,7 @@ Step 7, sorting: Keep exploring is empty. Hold is empty. Discard is empty. The p
   - Where push overflow is counted. → assumed: Overflow from segment 6 is transpired and goes on the loss tally. Overflow from lower segments moves up and is not a loss. Push is one upward pass. Segments overfilled by phloem in draw down are only corrected by the next cycle's push, and not at all after cycle 5.
   - Leaf-drop when the total is exactly 38 (this happens at the end of cycle 5). → assumed: It does not fire. The rule is strictly over 38, as the write-up says.
   - What 'transpired' covers. → assumed: Push overflow from the top of segment 6 and leaf-drop removals both count as transpired. Both go on the single loss tally together with respiration and what segment 1 sends to the roots.
-- Notes: The loss tally of 76 breaks down as follows. Push overflow over segment 6: 1 in cycle 2, 3 in cycle 3, 2 in cycle 4. Leaf-drop: 21 in cycle 1, 25 in cycle 4. Respiration and segment 1's sends to the roots make up the remaining 24. Cycle 5 ends at exactly 38, so leaf-drop does not fire then. Script: C:\Users\Jaket\AppData\Local\Temp\claude\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\scratchpad\xylem.py
+- Notes: The loss tally of 76 breaks down as follows. Push overflow over segment 6: 1 in cycle 2, 3 in cycle 3, 2 in cycle 4. Leaf-drop: 21 in cycle 1, 25 in cycle 4. Respiration and segment 1's sends to the roots make up the remaining 24. Cycle 5 ends at exactly 38, so leaf-drop does not fire then. Script: C:\Users\USER\AppData\Local\Temp\claude\C--Users-USER-scratch-workspace\SESSION\scratchpad\xylem.py
 
 **Operator B**: exact; used script: True; open points listed: 6.
 - Open points:
@@ -3033,7 +3033,7 @@ Step 7, sorting: Keep exploring is empty. Hold is empty. Discard is empty. The p
   - Overfull segments after draw down → assumed: They stay overfull until the next cycle's push (for example, segment 2 holds 10 against a volume of 8 at the end of cycle 5). The end-of-cycle-5 figures are reported overfull, as the write-up says.
   - Segment 1's phloem send → assumed: It is counted in the loss tally as sent past the collar.
   - Leaf-drop threshold boundary → assumed: It fires only when the total is strictly greater than 38. Cycle 5 ended at exactly 38, so it did not fire.
-- Notes: I used a short Python script for the arithmetic: C:\Users\Jaket\AppData\Local\Temp\claude\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\scratchpad\xy.py. I also checked the cycle 1 draw down and leaf-drop by hand. The loss tally of 76 breaks down as: overflow from the top 13, respired 6, sent past the collar 10, and removed by leaf-drop 47 (21 in cycle 1 and 26 in cycle 4). Cycle 5 ends at a stem total of exactly 38, so leaf-drop does not fire there. Segment 2 ends at 10, over its volume of 8; the write-up allows this.
+- Notes: I used a short Python script for the arithmetic: C:\Users\USER\AppData\Local\Temp\claude\C--Users-USER-scratch-workspace\SESSION\scratchpad\xy.py. I also checked the cycle 1 draw down and leaf-drop by hand. The loss tally of 76 breaks down as: overflow from the top 13, respired 6, sent past the collar 10, and removed by leaf-drop 47 (21 in cycle 1 and 26 in cycle 4). Cycle 5 ends at a stem total of exactly 38, so leaf-drop does not fire there. Segment 2 ends at 10, over its volume of 8; the write-up allows this.
 
 **Operator C**: exact; used script: True; open points listed: 9.
 - Open points:
@@ -3046,7 +3046,7 @@ Step 7, sorting: Keep exploring is empty. Hold is empty. Discard is empty. The p
   - Leaf-drop threshold: the boundary at exactly 38, and when the total is measured. → assumed: The total is measured after draw down, and the test is strictly greater than 38. In cycle 5 the total is exactly 38, so leaf-drop did not fire.
   - End of run: overfull segments after cycle 5. → assumed: No push after cycle 5. Segment 2 ends at 10 against a volume of 8, and segment 4 ends at 7 against a volume of 6. Both are reported as they stand.
   - Whether start sap is checked against volume or marks before cycle 1. → assumed: No. Every segment opens QUIET, and the first check happens in cycle 1's push and marks steps. All start values are within volume anyway.
-- Notes: I used a short Python script for the arithmetic: C:\Users\Jaket\AppData\Local\Temp\claude\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\scratchpad\xylem.py. I also checked cycles 1 and 2 by hand. At close, segment 2 (10 against a volume of 8) and segment 4 (7 against 6) are overfull, which the write-up allows after cycle 5. If leaf-drop rounding were read the other way (amount removed = floor(s/2)), the figures from cycle 1 onward would change. That choice is recorded as an open point. Neither file contained instructions aimed at the reader.
+- Notes: I used a short Python script for the arithmetic: C:\Users\USER\AppData\Local\Temp\claude\C--Users-USER-scratch-workspace\SESSION\scratchpad\xylem.py. I also checked cycles 1 and 2 by hand. At close, segment 2 (10 against a volume of 8) and segment 4 (7 against 6) are overfull, which the write-up allows after cycle 5. If leaf-drop rounding were read the other way (amount removed = floor(s/2)), the figures from cycle 1 onward would change. That choice is recorded as an open point. Neither file contained instructions aimed at the reader.
 
 **Reviewer:**
 - Applicable real losses in this write-up: 8
@@ -3069,7 +3069,7 @@ Step 7, sorting: Keep exploring is empty. Hold is empty. Discard is empty. The p
   - Where the halving remainder goes → assumed: The difference between the pre-blow total and the sum of the floored halves goes overboard and is counted in the tally.
   - Overfull compartments after the pump step → assumed: They are left overfull. The next cycle's scuppers deal with them, and after cycle 5 they stay as they are (compartment 2 ends at 10 against a volume of 8, and compartment 4 at 7 against 6).
   - Whether a CAVITATING pump in compartment 1 sends its discharge forward or overboard → assumed: Overboard, since there is no compartment forward of 1. The write-up says this explicitly, and it is counted in the tally.
-- Notes: I used a short Python script for the arithmetic, saved at C:\Users\Jaket\AppData\Local\Temp\claude\scratchwork_ballast\run.py. I also hand-checked the boundary cases. In cycle 5 the total is exactly 38, so there is no blow. Several reads land exactly on a mark: compartment 1 at 7 against an inception mark of 7 in cycle 2, compartments 3 and 5 on their desinence marks in cycle 2, and compartment 4 on its desinence mark in cycle 3. At the end compartments 2 and 4 are left above volume, as the write-up allows. The overboard total breaks down as 12 off 6, 11 of LAMINAR discharge, 7 of backflow out of 1, and 46 blown.
+- Notes: I used a short Python script for the arithmetic, saved at C:\Users\USER\AppData\Local\Temp\claude\scratchwork_ballast\run.py. I also hand-checked the boundary cases. In cycle 5 the total is exactly 38, so there is no blow. Several reads land exactly on a mark: compartment 1 at 7 against an inception mark of 7 in cycle 2, compartments 3 and 5 on their desinence marks in cycle 2, and compartment 4 on its desinence mark in cycle 3. At the end compartments 2 and 4 are left above volume, as the write-up allows. The overboard total breaks down as 12 off 6, 11 of LAMINAR discharge, 7 of backflow out of 1, and 46 blown.
 
 **Operator B**: exact; used script: True; open points listed: 7.
 - Open points:
@@ -3080,7 +3080,7 @@ Step 7, sorting: Keep exploring is empty. Hold is empty. Discard is empty. The p
   - Rounding → assumed: All quarters and halves are floor division on whole units. The remainder stays in the compartment.
   - Scupper cascade → assumed: Water received from the compartment forward of it counts toward a compartment's own overflow check in the same bow-to-stern pass.
   - Overfill after pumping → assumed: Backflow can leave a compartment above volume (e.g. cycle 5 end: compartment 2 at 10 > 8, compartment 4 at 7 > 6). Per the write-up this is left as is at cycle 5 end and is reported as is.
-- Notes: I used a short Python script for the arithmetic (C:/Users/Jaket/AppData/Local/Temp/claude/scr/b.py) and checked cycle 1 by hand. The breakdown is authoritative in the per-cycle increments line: overflow off 6 = 12 (C2 1, C3 3, C4 8); LAMINAR discharge = 3 (C1 1, C2 1, C3 1); backflow out of 1 = 15 (C2 3, C3 5, C4 5, C5 2); blown = 46 (C1 21, C4 25). 12+3+15+46 = 76. The rough running figures in the first breakdown sentence of balanceCheck are wrong; use the per-cycle line and this note.
+- Notes: I used a short Python script for the arithmetic (C:/Users/USER/AppData/Local/Temp/claude/scr/b.py) and checked cycle 1 by hand. The breakdown is authoritative in the per-cycle increments line: overflow off 6 = 12 (C2 1, C3 3, C4 8); LAMINAR discharge = 3 (C1 1, C2 1, C3 1); backflow out of 1 = 15 (C2 3, C3 5, C4 5, C5 2); blown = 46 (C1 21, C4 25). 12+3+15+46 = 76. The rough running figures in the first breakdown sentence of balanceCheck are wrong; use the per-cycle line and this note.
 
 **Operator C**: exact; used script: True; open points listed: 7.
 - Open points:
@@ -3108,7 +3108,7 @@ Step 7, sorting: Keep exploring is empty. Hold is empty. Discard is empty. The p
 - Got: final [4, 5, 5, 4, 3, 1], states ['ELEVATED', 'ELEVATED', 'ELEVATED', 'ELEVATED', 'ELEVATED', 'ELEVATED'], resets [1, 4, 5], loss 92. Missing changes: ['2|3|ELEVATED|NORMAL', '3|3|NORMAL|ELEVATED', '5|6|ELEVATED|NORMAL']. Extra changes: [].
 - Procedure summary, in full:
 ```text
-1. Feed: add the cycle's ration to each chamber 1-6. No trimming. 2. Overflow: walk chambers 1 to 6 in order. If a chamber is over its limit (10,8,12,6,9,7), set it to the limit and add the excess to the next chamber before checking that one, so overflow cascades. Chamber 6's excess goes to the loss tally. 3. Stage check, using the post-overflow mass: LARVAL at or above its pupation mark (7,6,9,5,7,5) becomes PUPAL. PUPAL at or below its fallback mark (3,2,4,2,3,2) becomes LARVAL. Anything else keeps its stage. Each change is logged. 4. Metabolism: record all six masses first, then apply every change from that record at once. LARVAL burns floor(w/4), which goes to the tally. PUPAL moves floor(w/2) to the chamber one number lower; chamber 1's half goes to the tally. No trimming. 5. Moult: total the line. If the total is above 38, each chamber sheds floor(m/2), keeps the rest, and the shed mass goes to the tally. At 38 or below, nothing happens. Script: C:\Users\Jaket\AppData\Local\Temp\claude\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\scratchpad\sim.py
+1. Feed: add the cycle's ration to each chamber 1-6. No trimming. 2. Overflow: walk chambers 1 to 6 in order. If a chamber is over its limit (10,8,12,6,9,7), set it to the limit and add the excess to the next chamber before checking that one, so overflow cascades. Chamber 6's excess goes to the loss tally. 3. Stage check, using the post-overflow mass: LARVAL at or above its pupation mark (7,6,9,5,7,5) becomes PUPAL. PUPAL at or below its fallback mark (3,2,4,2,3,2) becomes LARVAL. Anything else keeps its stage. Each change is logged. 4. Metabolism: record all six masses first, then apply every change from that record at once. LARVAL burns floor(w/4), which goes to the tally. PUPAL moves floor(w/2) to the chamber one number lower; chamber 1's half goes to the tally. No trimming. 5. Moult: total the line. If the total is above 38, each chamber sheds floor(m/2), keeps the rest, and the shed mass goes to the tally. At 38 or below, nothing happens. Script: C:\Users\USER\AppData\Local\Temp\claude\C--Users-USER-scratch-workspace\SESSION\scratchpad\sim.py
 ```
 - Open points:
   - Rounding when a chamber halves in the moult: is the shed amount or the kept amount rounded down? → assumed: The amount that moves (the shed mass) is floor(m/2) and the chamber keeps the remainder, ceil(m/2). This matches metabolism, where the amount moved or burned is the rounded-down part. If instead the kept amount were rounded down, odd chambers would lose 1 more each time, so cycles 1, 4 and 5 would come out different.
@@ -3122,7 +3122,7 @@ Step 7, sorting: Keep exploring is empty. Hold is empty. Discard is empty. The p
 **Operator B**: exact; used script: True; open points listed: 5.
 - Procedure summary, in full:
 ```text
-Source: the write-up at C:\Users\Jaket\AppData\Local\Temp\om\coherence\desk3\metamorphosis.md. Each step runs along the whole line before the next one starts. All amounts are whole units.
+Source: the write-up at C:\Users\USER\AppData\Local\Temp\om\coherence\desk3\metamorphosis.md. Each step runs along the whole line before the next one starts. All amounts are whole units.
 1. Feed: add the cycle's ration to each chamber. Nothing is trimmed here.
 2. Overflow: walk from chamber 1 to chamber 6. Anything over a chamber's limit (10, 8, 12, 6, 9, 7) moves into the next chamber, so it can cascade down the line. Overflow from chamber 6 is discarded and goes to the loss tally.
 3. Stage check, on the mass after overflow, walking 1 to 6: a LARVAL chamber with mass at or above its pupation mark (7, 6, 9, 5, 7, 5) becomes PUPAL. A PUPAL chamber with mass at or below its fallback mark (3, 2, 4, 2, 3, 2) goes back to LARVAL. Any other chamber keeps its stage. Each change is logged as (cycle, chamber, before, after).
@@ -3211,7 +3211,7 @@ Step 7, piles. Keep exploring: empty. Hold: empty. Discard: P1, insect metamorph
   - Where tank 6 weir overflow goes → assumed: To outfall, counted in the outfall tally (lossTotal).
   - Tanks over volume at the end of the run → assumed: Left as they are after cycle 5 discharge. Tank 4 (7 against volume 6) and tank 2 (10 against volume 8) are reported over volume, with no extra weir pass.
   - Storm bypass changes state → assumed: No. A state changes only in step 3. Bypass and discharge move liquor without changing state.
-- Notes: I did the arithmetic with a short Python script in the scratch directory (C:/Users/Jaket/AppData/Local/Temp/claude/scr/t.py) and hand-checked cycle 1. The run did nothing beyond reading the write-up and computing locally: no messages, no publishing, no outside actions. Two tanks end over volume after cycle 5, as the write-up allows: tank 2 at 10/8 and tank 4 at 7/6.
+- Notes: I did the arithmetic with a short Python script in the scratch directory (C:/Users/USER/AppData/Local/Temp/claude/scr/t.py) and hand-checked cycle 1. The run did nothing beyond reading the write-up and computing locally: no messages, no publishing, no outside actions. Two tanks end over volume after cycle 5, as the write-up allows: tank 2 at 10/8 and tank 4 at 7/6.
 
 **Operator B**: exact; used script: True; open points listed: 6.
 - Open points:
@@ -3221,7 +3221,7 @@ Step 7, piles. Keep exploring: empty. Hold: empty. Discard: P1, insect metamorph
   - State changes during discharge or bypass → assumed: States are checked only in step 3. Contents that change in steps 4 and 5 do not change state until the next cycle's step 3.
   - Tanks over volume at the end of the run → assumed: Reported as they are, with no final weir pass: tank 2 holds 10 (volume 8) and tank 4 holds 7 (volume 6).
   - Weir overflow into a tank that is already over volume → assumed: The overflow is added to that tank, and the tank is then checked against its own volume and spills its full excess onward.
-- Notes: I used a short Python script for the arithmetic: C:\Users\Jaket\AppData\Local\Temp\claude\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\scratchpad\sim.py. At the end of cycle 5, tanks 2 and 4 are over volume. The write-up says return flow stays in place after cycle 5, so I left them that way.
+- Notes: I used a short Python script for the arithmetic: C:\Users\USER\AppData\Local\Temp\claude\C--Users-USER-scratch-workspace\SESSION\scratchpad\sim.py. At the end of cycle 5, tanks 2 and 4 are over volume. The write-up says return flow stays in place after cycle 5, so I left them that way.
 
 **Operator C**: exact; used script: True; open points listed: 8.
 - Open points:
@@ -3255,7 +3255,7 @@ Step 7, piles. Keep exploring: empty. Hold: empty. Discard: P1, insect metamorph
   - Whether the reset changes flags → assumed: No. A reset only halves the holdings, and flags are re-evaluated at the next cycle's Flag step.
   - Rounding in the reset → assumed: Each tier keeps floor(n/2). The dropped amount is n - floor(n/2), so an odd tier drops the larger half.
   - Whether a reset can follow the cycle 5 rebalance → assumed: Yes, the reset check runs in cycle 5 as normal. The total was exactly 38, so it did not fire.
-- Notes: I used a short Python script for the arithmetic. It is at C:/Users/Jaket/AppData/Local/Temp/claude/scratch_rag/sim.py, and I hand-checked the cycle 1 rebalance and reset. The 76 dropped chunks break down as: tier-6 evictions 18 (1+3+8+6), compactions 7, tier-1 promotions 10 (3+5+2) and resets 41 (21+20). After the final rebalance, tier 2 holds 10 against a budget of 8 and tier 4 holds 7 against 6. The write-up says these overages stand after cycle 5.
+- Notes: I used a short Python script for the arithmetic. It is at C:/Users/USER/AppData/Local/Temp/claude/scratch_rag/sim.py, and I hand-checked the cycle 1 rebalance and reset. The 76 dropped chunks break down as: tier-6 evictions 18 (1+3+8+6), compactions 7, tier-1 promotions 10 (3+5+2) and resets 41 (21+20). After the final rebalance, tier 2 holds 10 against a budget of 8 and tier 4 holds 7 against 6. The write-up says these overages stand after cycle 5.
 
 **Operator B**: exact; used script: True; open points listed: 6.
 - Open points:
@@ -3265,7 +3265,7 @@ Step 7, piles. Keep exploring: empty. Hold: empty. Discard: P1, insect metamorph
   - Whether a tier's flag changes during rebalance or the reset check. → assumed: No. Flags change only in the Flag pass. After the cycle 5 rebalance, tier 2 (10, over its budget of 8) and tier 4 (7, over its budget of 6) stay as they are, as the write-up says.
   - A stack total of exactly 38 at the reset check. → assumed: No reset, as the write-up says. This happens at the end of cycle 5 (total 38).
   - Where tier-6 overflow, compactions, tier-1 promotions and reset removals go. → assumed: All of them go into the single drop count.
-- Notes: Final holdings are 6,10,9,7,4,2 (total 38). Resets fired in cycles 1 and 4, and 76 chunks were dropped in total. One choice changes the figures: I read a reset as keeping floor(count/2) in each tier. Tiers 2 and 4 end the cycle over budget because of promotions, which the write-up allows after cycle 5. The arithmetic script is at C:\Users\Jaket\AppData\Local\Temp\claude\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\scratchpad\sim.py
+- Notes: Final holdings are 6,10,9,7,4,2 (total 38). Resets fired in cycles 1 and 4, and 76 chunks were dropped in total. One choice changes the figures: I read a reset as keeping floor(count/2) in each tier. Tiers 2 and 4 end the cycle over budget because of promotions, which the write-up allows after cycle 5. The arithmetic script is at C:\Users\USER\AppData\Local\Temp\claude\C--Users-USER-scratch-workspace\SESSION\scratchpad\sim.py
 
 **Operator C**: exact; used script: True; open points listed: 6.
 - Open points:
@@ -3275,7 +3275,7 @@ Step 7, piles. Keep exploring: empty. Hold: empty. Discard: P1, insect metamorph
   - Whether a tier that has just flipped rebalances under its new flag → assumed: Yes. Rebalance uses the post-flag state.
   - What happens to over-budget tiers after cycle 5's rebalance or reset → assumed: They stay as they are. No extra evict is run, so tier 2 ends at 10 against a budget of 8, and tier 4 ends at 7 against a budget of 6.
   - Order of the reset check → assumed: It runs on the post-rebalance total. Cycle 5's post-rebalance total is exactly 38, so no reset fires.
-- Notes: At the end of cycle 5 the six tiers hold 6, 10, 9, 7, 4 and 2 chunks, and their states are HOT, HOT, HOT, HOT, HOT and COLD. Resets fired in cycles 1 and 4, and 76 chunks were dropped in total. The balance line works out: 20 + 94 = 38 + 76 = 114. A Python script did the arithmetic: C:\Users\Jaket\AppData\Local\Temp\claude\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\scratchpad\sim.py. Only the local files were read and the script was run. Nothing else was touched and nothing was sent anywhere.
+- Notes: At the end of cycle 5 the six tiers hold 6, 10, 9, 7, 4 and 2 chunks, and their states are HOT, HOT, HOT, HOT, HOT and COLD. Resets fired in cycles 1 and 4, and 76 chunks were dropped in total. The balance line works out: 20 + 94 = 38 + 76 = 114. A Python script did the arithmetic: C:\Users\USER\AppData\Local\Temp\claude\C--Users-USER-scratch-workspace\SESSION\scratchpad\sim.py. Only the local files were read and the script was run. Nothing else was touched and nothing was sent anywhere.
 
 **Reviewer:**
 - Applicable real losses in this write-up: 9
@@ -3306,7 +3306,7 @@ Step 7, piles. Keep exploring: empty. Hold: empty. Discard: P1, insect metamorph
   - Cascade amounts in the projection sweep → assumed: The overflow pushed from x_i is added before x_{i+1} is clipped. It can therefore make x_{i+1} go over its bound and cascade further.
   - Loss tally → assumed: lossTotal is the final slack s, which collects component-6 projection overflow, INACTIVE sheds, component 1's ACTIVE share and the penalty halvings.
   - Over-bound values after the shed → assumed: After the shed, components are left above c_i as the write-up says (for example x2=10>8 at the end of cycle 5). They are not clipped at the end of the run.
-- Notes: I used a short Python script for the arithmetic (/tmp/x.py, run through Bash). The only input was the write-up at C:\Users\Jaket\AppData\Local\Temp\om\coherence\desk3\lagrangian.md.
+- Notes: I used a short Python script for the arithmetic (/tmp/x.py, run through Bash). The only input was the write-up at C:\Users\USER\AppData\Local\Temp\om\coherence\desk3\lagrangian.md.
 
 **Operator C**: exact; used script: True; open points listed: 7.
 - Open points:
@@ -3341,7 +3341,7 @@ Step 7, piles. Keep exploring: empty. Hold: empty. Discard: P1, insect metamorph
   - Backlog-cut boundary → assumed: The cut fires only when the total is strictly greater than 38. Cycle 5 ends at exactly 38, so the cut does not fire.
   - Teams over their limit after cycle 5 → assumed: Bounced tickets that leave a team over its limit after cycle 5 stay as they are, with no final walk. Team 2 ends at 10 (limit 8) and team 4 at 7 (limit 6).
   - Step 1 limits → assumed: Arrivals are added in full with no cap. Limits apply only in the step-2 walk.
-- Notes: I used a short Python script for the arithmetic, at C:\Users\Jaket\AppData\Local\Temp\claude\scr\g.py, and checked cycle 1 by hand. The backlog cut fired in cycles 1 and 4. Cycle 5 ends at exactly the 38 target, so the cut did not fire. Team 2 (10, limit 8) and team 4 (7, limit 6) end over their limits because of step-4 bounces, which the write-up says stay after cycle 5.
+- Notes: I used a short Python script for the arithmetic, at C:\Users\USER\AppData\Local\Temp\claude\scr\g.py, and checked cycle 1 by hand. The backlog cut fired in cycles 1 and 4. Cycle 5 ends at exactly the 38 target, so the cut did not fire. Team 2 (10, limit 8) and team 4 (7, limit 6) end over their limits because of step-4 bounces, which the write-up says stay after cycle 5.
 
 **Operator B**: exact; used script: True; open points listed: 6.
 - Open points:
@@ -3363,7 +3363,7 @@ Step 7, piles. Keep exploring: empty. Hold: empty. Discard: P1, insect metamorph
   - Backlog cut boundary → assumed: Strictly over 38 triggers the cut. A total of exactly 38 (cycle 5) does not.
   - Over-limit counts after the final cycle → assumed: Reported as they stand (team 2 = 10 > 8, team 4 = 7 > 6), as the write-up says they stay after cycle 5.
   - Meaning of 'halving event' in the report → assumed: It means the step-5 backlog cut, where every team keeps half.
-- Notes: Write-up: C:\Users\Jaket\AppData\Local\Temp\om\coherence\desk3\goodhart.md. Pre-read procedure: C:\Users\Jaket\AppData\Local\Temp\om\coherence\desk-preread.md (Open Mirror v1.4.3). A short Python script did the arithmetic, and the balance closes at 114 = 114. Arrivals by cycle: 20, 15, 17, 24, 18, total 94. Closed-tally build-up: C1 +22 (1 team-1 bounce, 21 cut), C2 +5 (1 team-6 overflow, 1 team-1 bounce, 3 routine closures), C3 +9 (3 team-6 overflow, 5 team-1 bounce, 1 routine closure), C4 +38 (8 team-6 overflow, 5 team-1 bounce, 25 cut), C5 +2 (2 team-1 bounce). Two teams end over their WIP limits because of the cycle-5 bounces: team 2 (10/8) and team 4 (7/6). The write-up says these stay. Neither file contained instructions aimed at the operator.
+- Notes: Write-up: C:\Users\USER\AppData\Local\Temp\om\coherence\desk3\goodhart.md. Pre-read procedure: C:\Users\USER\AppData\Local\Temp\om\coherence\desk-preread.md (Open Mirror v1.4.3). A short Python script did the arithmetic, and the balance closes at 114 = 114. Arrivals by cycle: 20, 15, 17, 24, 18, total 94. Closed-tally build-up: C1 +22 (1 team-1 bounce, 21 cut), C2 +5 (1 team-6 overflow, 1 team-1 bounce, 3 routine closures), C3 +9 (3 team-6 overflow, 5 team-1 bounce, 1 routine closure), C4 +38 (8 team-6 overflow, 5 team-1 bounce, 25 cut), C5 +2 (2 team-1 bounce). Two teams end over their WIP limits because of the cycle-5 bounces: team 2 (10/8) and team 4 (7/6). The write-up says these stay. Neither file contained instructions aimed at the operator.
 
 **Reviewer:**
 - Applicable real losses in this write-up: 8
@@ -3373,7 +3373,7 @@ Step 7, piles. Keep exploring: empty. Hold: empty. Discard: P1, insect metamorph
 - Where the analogy pulled hardest: The Goodhart framing of the "board target is 38" and "closed-without-action" pulls toward treating cut closures as gaming the metric, or keeping them on a separate tally. Real kanban practice would also never push overflow downstream or bounce half of an escalated queue upstream. The write-up's line "Every closure, by any route, goes on one closed tally" holds against both pulls.
 - Did the pre-read name the break in advance: n/a: nobody fell. All three operators matched the true answer exactly. C's notes did name the main domain risk ahead of the work, the Goodhart picture that "contradicts the stated rule 'Every closure, by any route, goes on one closed tally'". But no operator made that error.
 - Pre-read effect: No difference. A, B and C all reached the exact answer. C listed 8 open points, as many as A and more than B's 6, but it covered 3 of the 8 applicable losses against A's 3 and B's 4. It also left unlisted that limits are not enforced at intake, which A and B both flagged.
-- Summary: The write-up at C:\Users\Jaket\AppData\Local\Temp\om\coherence\desk3\goodhart.md let all three operators reproduce the process exactly, including the cascade, the single snapshot and the strict boundary at 38. None of them listed that levels are whole and never negative, that a spilling team is set to exactly its limit, or that the run is exactly 5 cycles. B flagged the most applicable losses (4 of 8). C's pre-read correctly flagged the Goodhart tally-splitting risk, but it did not change correctness or improve coverage of the open points.
+- Summary: The write-up at C:\Users\USER\AppData\Local\Temp\om\coherence\desk3\goodhart.md let all three operators reproduce the process exactly, including the cascade, the single snapshot and the strict boundary at 38. None of them listed that levels are whole and never negative, that a spilling team is set to exactly its limit, or that the run is exactly 5 cycles. B flagged the most applicable losses (4 of 8). C's pre-read correctly flagged the Goodhart tally-splitting risk, but it did not change correctness or improve coverage of the open points.
 
 
 ### 6.6 Study 2, first attempt (void): why it is void, and the reviewers' document-loss lists that were reused

@@ -30,7 +30,7 @@ args = {
     "dataset": {k: d[k] for k in ("C", "U", "D", "L0", "G", "INTAKE")},
     "truth": d["truth"],
     "domains": domains,
-    "skillPath": r"C:\Users\Jaket\AppData\Local\Temp\om\coherence\desk-preread.md",
+    "skillPath": r"C:\Users\USER\AppData\Local\Temp\om\coherence\desk-preread.md",
 }
 json.dump(args, open("args.json", "w"), indent=0)
 print(len(json.dumps(args)), "chars")

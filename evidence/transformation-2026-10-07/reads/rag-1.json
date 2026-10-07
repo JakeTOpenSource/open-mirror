@@ -132,7 +132,7 @@
   ],
   "lossTotal": 76,
   "balanceCheck": "Starting chunks 20 + ingested 94 (cycles: 20, 15, 17, 24, 18) = 114. End chunks 38 + loss tally 76 = 114. The balance check holds. The loss tally breaks down as: tier-6 eviction overflow 12 (cycles 2, 3, 4: 1+3+8), compaction and tier-1 promotion 18 (1+4+6+5+2), and context resets 46 (21+25).",
-  "notes": "I used a Node.js script for the arithmetic, at C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\scr\\rag.js. I also checked cycle 2 step 4 by hand. A Python attempt hung on the WindowsApps python stub and was abandoned; that background task (bjkz9w2tf) should be stopped if it is still running. At the end of cycle 5, tier 2 holds 10 chunks against a budget of 8, and tier 4 holds 7 against a budget of 6. These are left as they are, because no eviction follows cycle 5.",
+  "notes": "I used a Node.js script for the arithmetic, at C:\\Users\\USER\\AppData\\Local\\Temp\\claude\\scr\\rag.js. I also checked cycle 2 step 4 by hand. A Python attempt hung on the WindowsApps python stub and was abandoned; that background task (bjkz9w2tf) should be stopped if it is still running. At the end of cycle 5, tier 2 holds 10 chunks against a budget of 8, and tier 4 holds 7 against a budget of 6. These are left as they are, because no eviction follows cycle 5.",
   "usedScript": true
  },
  "grade": {

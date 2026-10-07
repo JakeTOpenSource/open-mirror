@@ -131,8 +131,8 @@
   "lossTotal": 76,
   "balanceCheck": "Chunks at start 20 + everything loaded 94 = 114, and chunks held 38 + dropped 76 = 114. The two sides match.",
   "usedScript": true,
-  "notes": "I used a short Python script for the arithmetic. It is at C:/Users/Jaket/AppData/Local/Temp/claude/scratch_rag/sim.py, and I hand-checked the cycle 1 rebalance and reset. The 76 dropped chunks break down as: tier-6 evictions 18 (1+3+8+6), compactions 7, tier-1 promotions 10 (3+5+2) and resets 41 (21+20). After the final rebalance, tier 2 holds 10 against a budget of 8 and tier 4 holds 7 against 6. The write-up says these overages stand after cycle 5.",
-  "preReadNotes": "The write-up at C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\coherence\\desk3\\rag.md was read in full. It holds data and rules only, with no instructions aimed at the operator."
+  "notes": "I used a short Python script for the arithmetic. It is at C:/Users/USER/AppData/Local/Temp/claude/scratch_rag/sim.py, and I hand-checked the cycle 1 rebalance and reset. The 76 dropped chunks break down as: tier-6 evictions 18 (1+3+8+6), compactions 7, tier-1 promotions 10 (3+5+2) and resets 41 (21+20). After the final rebalance, tier 2 holds 10 against a budget of 8 and tier 4 holds 7 against 6. The write-up says these overages stand after cycle 5.",
+  "preReadNotes": "The write-up at C:\\Users\\USER\\AppData\\Local\\Temp\\om\\coherence\\desk3\\rag.md was read in full. It holds data and rules only, with no instructions aimed at the operator."
  },
  "grade": {
   "available": true,

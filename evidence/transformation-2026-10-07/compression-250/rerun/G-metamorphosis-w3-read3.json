@@ -2,7 +2,7 @@
  "id": "G-metamorphosis-w3",
  "n": 3,
  "run": {
-  "procedureSummary": "Feed: add that cycle's row to each chamber, ignoring capacity. Carry: go through chambers 1 to 6 in order. Any amount above a chamber's capacity is cut back to capacity and added to the next chamber before that chamber's turn, so it can cascade. Chamber 6's excess goes to the tally. States: these use the mass after carry. LARVAL with mass at or above its upper mark becomes PUPAL. PUPAL with mass at or below its lower mark becomes LARVAL. Otherwise the state stays the same, and every change is logged. Metabolise: take all amounts from the post-carry masses and the new states, then apply them at the same time. LARVAL loses floor(m/4) to the tally. PUPAL loses floor(m/2) to chamber i-1, and chamber 1's PUPAL amount goes to the tally. There is no capacity check here, because overfull chambers wait for the next cycle's carry. Moult: if the six chambers total more than 38 (strictly), each chamber becomes floor(m/2) and the removed part (ceil(m/2)) goes to the tally. A short Python script did the arithmetic (C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py). I also checked cycles 1 and 2 by hand.",
+  "procedureSummary": "Feed: add that cycle's row to each chamber, ignoring capacity. Carry: go through chambers 1 to 6 in order. Any amount above a chamber's capacity is cut back to capacity and added to the next chamber before that chamber's turn, so it can cascade. Chamber 6's excess goes to the tally. States: these use the mass after carry. LARVAL with mass at or above its upper mark becomes PUPAL. PUPAL with mass at or below its lower mark becomes LARVAL. Otherwise the state stays the same, and every change is logged. Metabolise: take all amounts from the post-carry masses and the new states, then apply them at the same time. LARVAL loses floor(m/4) to the tally. PUPAL loses floor(m/2) to chamber i-1, and chamber 1's PUPAL amount goes to the tally. There is no capacity check here, because overfull chambers wait for the next cycle's carry. Moult: if the six chambers total more than 38 (strictly), each chamber becomes floor(m/2) and the removed part (ceil(m/2)) goes to the tally. A short Python script did the arithmetic (C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-250\\sim.py). I also checked cycles 1 and 2 by hand.",
   "openPoints": [
    {
     "point": "Moult rounding: 'halve each, rounding down' could mean keeping floor(m/2) or removing floor(m/2).",
@@ -137,7 +137,7 @@
   "lossTotal": 76,
   "balanceCheck": "Start total 20 + all feed 94 = 114; end total 38 + tally 76 = 114. The balance holds.",
   "usedScript": true,
-  "notes": "The arithmetic script is at C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py, and nothing outside that folder was used. I checked cycles 1 and 2 by hand and they match the script. Two results depend on choices the write-up leaves open. First, the end figures depend on reading the moult as 'keep floor(m/2)'. Second, they depend on cycle 5's total of exactly 38 not counting as over 38."
+  "notes": "The arithmetic script is at C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-250\\sim.py, and nothing outside that folder was used. I checked cycles 1 and 2 by hand and they match the script. Two results depend on choices the write-up leaves open. First, the end figures depend on reading the moult as 'keep floor(m/2)'. Second, they depend on cycle 5's total of exactly 38 not counting as over 38."
  },
  "grade": {
   "available": true,

@@ -133,7 +133,7 @@
   "lossTotal": 76,
   "balanceCheck": "Starting sap 20 + all uptake 94 = 114; end sap 38 (6+10+9+7+4+2) + loss tally 76 = 114. The balance holds.",
   "usedScript": true,
-  "notes": "Segment 2 ends at 10, over its holding volume of 8. This is the cycle 5 phloem inflow that the write-up allows to stay over volume for good. The loss tally is made up of: push-up transpiration 11 (C2 1, C3 3, C4 8), draw-down respiration and segment-1 phloem outflow 19, and leaf-drop transpiration 46 (C1 21, C4 25). Script (scratch copy): C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\x.py"
+  "notes": "Segment 2 ends at 10, over its holding volume of 8. This is the cycle 5 phloem inflow that the write-up allows to stay over volume for good. The loss tally is made up of: push-up transpiration 11 (C2 1, C3 3, C4 8), draw-down respiration and segment-1 phloem outflow 19, and leaf-drop transpiration 46 (C1 21, C4 25). Script (scratch copy): C:\\Users\\USER\\AppData\\Local\\Temp\\claude\\C--Users-USER-scratch-workspace\\SESSION\\scratchpad\\x.py"
  },
  "grade": {
   "available": true,

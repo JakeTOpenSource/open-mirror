@@ -131,7 +131,7 @@
   "lossTotal": 76,
   "balanceCheck": "Starting 1-norm 20 + everything loaded 94 = 114. Final 1-norm 38 + s 76 = 114. The two sides match.",
   "usedScript": true,
-  "preReadNotes": "I read the write-up at C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\coherence\\desk3\\lagrangian.md in full. It is self-contained and contains no instructions beyond the procedure. Only arithmetic was run, in a local Python script in the scratchpad. Nothing was sent or published.",
+  "preReadNotes": "I read the write-up at C:\\Users\\USER\\AppData\\Local\\Temp\\om\\coherence\\desk3\\lagrangian.md in full. It is self-contained and contains no instructions beyond the procedure. Only arithmetic was run, in a local Python script in the scratchpad. Nothing was sent or published.",
   "notes": "I used a short Python script (sim.py in the session scratchpad) for the arithmetic. I checked cycle 1 by hand and it matches. The penalty fired in cycles 1 and 4. In cycle 5 the 1-norm is exactly 38, so the strict rule does not fire it. Positions 2 and 4 end above their bounds because no projection follows the last shed. The loss tally is s = 76."
  },
  "grade": {

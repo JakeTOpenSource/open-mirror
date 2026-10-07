@@ -473,7 +473,7 @@
   "foundBy": "none",
   "routesAgree": true,
   "differingRule": "None. Every rule matches under the translation LAMINAR=GREEN, CAVITATING=HOT, inception=upper mark, desinence=lower mark, overboard=waste pit, aft=down the chute, forward=up the chute. The only gap is wording: A says to report 'none' when no halving fired, and B does not cover that case.",
-  "trust": "Both routes agree, so there is no conflict to resolve. Balance checks pass. On the printed tables: start 20 + fills 94 = 114 = end 38 + loss 76. On the probe: start 24 + fills 129 = 153 = end 38 + loss 115. The script is C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P01\\sim.py. It has two separate implementations, one written from each document's own wording. It also ran 200,000 random start and input tables (values 0-9) through both, with 0 mismatches."
+  "trust": "Both routes agree, so there is no conflict to resolve. Balance checks pass. On the printed tables: start 20 + fills 94 = 114 = end 38 + loss 76. On the probe: start 24 + fills 129 = 153 = end 38 + loss 115. The script is C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-fm\\P01\\sim.py. It has two separate implementations, one written from each document's own wording. It also ran 200,000 random start and input tables (values 0-9) through both, with 0 mismatches."
  },
  "verdict_correct": true,
  "table_correct": true,

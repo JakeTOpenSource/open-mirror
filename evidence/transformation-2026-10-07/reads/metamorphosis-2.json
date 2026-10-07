@@ -137,7 +137,7 @@
   "lossTotal": 76,
   "balanceCheck": "Starting mass 20 + total feed 94 = 114; end mass 38 (6+10+9+7+4+2) + loss tally 76 = 114. Balanced.",
   "usedScript": true,
-  "notes": "I used a short Python script for the arithmetic and checked cycles 1, 2 and 5 by hand. The script is at C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\meta_h2.py. A file named sim.py was already in the scratchpad with different content, so I wrote a new file and did not use sim.py. Loss tally by source: overflow from chamber 6 is 1 (C2) + 3 (C3) + 8 (C4) = 12. Burn-off is 1 (C1) + 4 (C2) + 6 (C3) + 5 (C4) + 2 (C5) = 18. The moults are 21 (C1) + 25 (C4) = 46. 12 + 18 + 46 = 76. Chambers 2 and 4 end above their holding limits because excess stays after the cycle 5 burn-off."
+  "notes": "I used a short Python script for the arithmetic and checked cycles 1, 2 and 5 by hand. The script is at C:\\Users\\USER\\AppData\\Local\\Temp\\claude\\C--Users-USER-scratch-workspace\\SESSION\\scratchpad\\meta_h2.py. A file named sim.py was already in the scratchpad with different content, so I wrote a new file and did not use sim.py. Loss tally by source: overflow from chamber 6 is 1 (C2) + 3 (C3) + 8 (C4) = 12. Burn-off is 1 (C1) + 4 (C2) + 6 (C3) + 5 (C4) + 2 (C5) = 18. The moults are 21 (C1) + 25 (C4) = 46. 12 + 18 + 46 = 76. Chambers 2 and 4 end above their holding limits because excess stays after the cycle 5 burn-off."
  },
  "grade": {
   "available": true,

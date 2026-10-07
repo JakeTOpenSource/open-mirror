@@ -131,8 +131,8 @@
   "lossTotal": 76,
   "balanceCheck": "Sap at start 20 + fed in 94 (row totals 20, 15, 17, 24, 18) = 114. Sap standing 38 (6+10+9+7+4+2) + loss tally 76 = 114. The two sides match.",
   "usedScript": true,
-  "notes": "The loss tally of 76 breaks down as follows. Push overflow over segment 6: 1 in cycle 2, 3 in cycle 3, 2 in cycle 4. Leaf-drop: 21 in cycle 1, 25 in cycle 4. Respiration and segment 1's sends to the roots make up the remaining 24. Cycle 5 ends at exactly 38, so leaf-drop does not fire then. Script: C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\xylem.py",
-  "preReadNotes": "Source: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\coherence\\desk3\\xylem.md. It contains only rules and figures, with no embedded instructions. The task required only reading that file and doing the arithmetic locally, so nothing needed any approval."
+  "notes": "The loss tally of 76 breaks down as follows. Push overflow over segment 6: 1 in cycle 2, 3 in cycle 3, 2 in cycle 4. Leaf-drop: 21 in cycle 1, 25 in cycle 4. Respiration and segment 1's sends to the roots make up the remaining 24. Cycle 5 ends at exactly 38, so leaf-drop does not fire then. Script: C:\\Users\\USER\\AppData\\Local\\Temp\\claude\\C--Users-USER-scratch-workspace\\SESSION\\scratchpad\\xylem.py",
+  "preReadNotes": "Source: C:\\Users\\USER\\AppData\\Local\\Temp\\om\\coherence\\desk3\\xylem.md. It contains only rules and figures, with no embedded instructions. The task required only reading that file and doing the arithmetic locally, so nothing needed any approval."
  },
  "grade": {
   "available": true,

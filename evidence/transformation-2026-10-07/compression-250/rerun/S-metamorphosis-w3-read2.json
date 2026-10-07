@@ -141,7 +141,7 @@
   "lossTotal": 76,
   "balanceCheck": "Start 20 (3+6+6+2+2+1) plus feed 94 (20+15+17+24+18) = 114. End 38 (6+10+9+7+4+2) plus tally 76 = 114. The two sides match.",
   "usedScript": true,
-  "notes": "The arithmetic comes from a Python script, C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py. I also checked cycle 1 by hand and got the same figures. The script works only inside the desk folder. Two points are sensitive to interpretation. First, in cycle 5 the total is exactly 38, so under the strict 'over 38' reading the moult does not fire; if it did, the end figures would be different. Second, chamber 2 ends at 10, above its capacity of 8, because the mass it reabsorbed waits for the next overflow and there is no further cycle."
+  "notes": "The arithmetic comes from a Python script, C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-250\\sim.py. I also checked cycle 1 by hand and got the same figures. The script works only inside the desk folder. Two points are sensitive to interpretation. First, in cycle 5 the total is exactly 38, so under the strict 'over 38' reading the moult does not fire; if it did, the end figures would be different. Second, chamber 2 ends at 10, above its capacity of 8, because the mass it reabsorbed waits for the next overflow and there is no further cycle."
  },
  "grade": {
   "available": true,

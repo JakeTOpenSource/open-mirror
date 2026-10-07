@@ -145,7 +145,7 @@
   "lossTotal": 76,
   "balanceCheck": "Start 20 + all feed 94 = 114; end 38 + loss tally 76 = 114. Balanced.",
   "usedScript": true,
-  "notes": "The script is C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\opus55_h7_d250_sim.py. Cycle 1 was also checked by hand and matches.\n\nTwo figures are at a boundary. In cycle 5 the moult did not fire because the total was exactly 38, not above it. Chambers 2 and 4 end over their limits (10 against 8, and 7 against 6), which the write-up allows after cycle 5.\n\nThe main unresolved point is the rounding in the moult halving. I did not get to test the other reading (chamber keeps ceil(m/2)): the variant run was blocked by the session's automatic permission check. If the desk wants that reading confirmed, the variant can be run outside auto mode.\n\nThe desk folder already held scripts and drafts from other runs. I did not read or use any of them."
+  "notes": "The script is C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-250\\opus55_h7_d250_sim.py. Cycle 1 was also checked by hand and matches.\n\nTwo figures are at a boundary. In cycle 5 the moult did not fire because the total was exactly 38, not above it. Chambers 2 and 4 end over their limits (10 against 8, and 7 against 6), which the write-up allows after cycle 5.\n\nThe main unresolved point is the rounding in the moult halving. I did not get to test the other reading (chamber keeps ceil(m/2)): the variant run was blocked by the session's automatic permission check. If the desk wants that reading confirmed, the variant can be run outside auto mode.\n\nThe desk folder already held scripts and drafts from other runs. I did not read or use any of them."
  },
  "grade": {
   "available": true,

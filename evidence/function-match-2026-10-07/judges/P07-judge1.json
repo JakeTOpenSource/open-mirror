@@ -487,7 +487,7 @@
   "foundBy": "none",
   "routesAgree": true,
   "differingRule": "None. The only rule worded differently is Step 4 (A applies all amounts at once, B works through positions 1 to 6 in order), and it gives the same result. Feedback only goes to n-1, which has already been handled, so no position's contents change before it is reached.",
-  "trust": "Both routes agree, so neither has to be preferred. The table route explains why: in B the sequential order never lets one position's result reach a later position before that position is handled. The script confirms it: both rules matched on the printed tables, on the probe, and on 200,000 random tables. Every run also passed the balance check (start plus inputs equals end plus loss). The script is C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P07\\sim.py. Limitation: the random tables never fed an exact total of 38 into the halving check on purpose, but both documents state the strict \"more than 38\" rule in matching words."
+  "trust": "Both routes agree, so neither has to be preferred. The table route explains why: in B the sequential order never lets one position's result reach a later position before that position is handled. The script confirms it: both rules matched on the printed tables, on the probe, and on 200,000 random tables. Every run also passed the balance check (start plus inputs equals end plus loss). The script is C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-fm\\P07\\sim.py. Limitation: the random tables never fed an exact total of 38 into the halving check on purpose, but both documents state the strict \"more than 38\" rule in matching words."
  },
  "verdict_correct": true,
  "table_correct": true,

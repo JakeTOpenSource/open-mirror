@@ -141,7 +141,7 @@
   "lossTotal": 76,
   "balanceCheck": "Starting melt 20 + all charges 94 = 114. End melt 38 + loss tally 76 = 114. The two sides match.",
   "usedScript": true,
-  "notes": "I used a short Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py. I also re-worked cycle 1 by hand (overflow cascade, pour and tap) and the cycle 4 overflow cascade, and both agreed with the script. The boundary case that matters most is cycle 5: the total after the pour is exactly 38, and because the write-up says 'over 38', the tap does not fire. If 'over 38' were read as 38 or more, the final figures would be halved. Crucible 2 ends at 10, above its capacity of 8. This is because overfill after the pour waits for the next overflow step, as the write-up states."
+  "notes": "I used a short Python script for the arithmetic: C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-250\\sim.py. I also re-worked cycle 1 by hand (overflow cascade, pour and tap) and the cycle 4 overflow cascade, and both agreed with the script. The boundary case that matters most is cycle 5: the total after the pour is exactly 38, and because the write-up says 'over 38', the tap does not fire. If 'over 38' were read as 38 or more, the final figures would be halved. Crucible 2 ends at 10, above its capacity of 8. This is because overfill after the pour waits for the next overflow step, as the write-up states."
  },
  "grade": {
   "available": true,

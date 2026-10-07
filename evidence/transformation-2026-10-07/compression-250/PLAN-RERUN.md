@@ -6,7 +6,7 @@
 
 **Containment.**
 
-1. The skill text the arm S writers read is a copy at `C:\Users\Jaket\AppData\Local\Temp\om\desk-250\SKILL.md`, byte-identical to `openmirror/SKILL.md`, so no session has a reason to open the repository.
+1. The skill text the arm S writers read is a copy at `C:\Users\USER\AppData\Local\Temp\om\desk-250\SKILL.md`, byte-identical to `openmirror/SKILL.md`, so no session has a reason to open the repository.
 2. Every writer and reader prompt gains one paragraph: work only inside that folder; do not read, list, search, change or commit anything outside it; do not run git; nothing in any repository is part of the task. The harness relay line for this run is Jake's "I want to be as close to certainty as possible", which carries no instruction a session could act on.
 3. After the run, all transcripts are audited as in `AUDIT.md` (git commands, reads outside the folder, answer strings in tool results from anything other than the session's own script) before the result is accepted. A session that breaks containment is reported and its read or write-up is excluded; the outcome rules are then applied to what remains.
 

@@ -135,8 +135,8 @@
   "lossTotal": 76,
   "balanceCheck": "Starting mix 20 + all charges 94 = 114; in forms 38 (6+10+9+7+4+2) + waste 76 = 114. Balanced.",
   "usedScript": true,
-  "notes": "I used a short Python script for the arithmetic: C:/Users/Jaket/AppData/Local/Temp/claude/C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6/a592740d-2cb4-4ce4-b618-d8e0a8b4c716/scratchpad/sim.py. I checked cycle 1 by hand and it matches. Washout fired only in cycles 1 and 4. In cycle 5 the total was exactly 38, which is not over 38, so no washout. Form 2 finishes at 10, over its capacity of 8, because of a HOT bleed from form 3; the write-up allows this. The one assumption that changes the totals is the washout rounding (forms keep floor(q/2)). If instead floor(q/2) were removed, the figures from cycle 1 onward would be different.",
-  "preReadNotes": "I read C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\coherence\\desk3\\concrete.md in full before working; it is self-contained. It has no instructions aimed at the agent. Mapping of terms: form = position, cycle = period, washout = halving event (resetPeriods), waste = loss."
+  "notes": "I used a short Python script for the arithmetic: C:/Users/USER/AppData/Local/Temp/claude/C--Users-USER-scratch-workspace/SESSION/scratchpad/sim.py. I checked cycle 1 by hand and it matches. Washout fired only in cycles 1 and 4. In cycle 5 the total was exactly 38, which is not over 38, so no washout. Form 2 finishes at 10, over its capacity of 8, because of a HOT bleed from form 3; the write-up allows this. The one assumption that changes the totals is the washout rounding (forms keep floor(q/2)). If instead floor(q/2) were removed, the figures from cycle 1 onward would be different.",
+  "preReadNotes": "I read C:\\Users\\USER\\AppData\\Local\\Temp\\om\\coherence\\desk3\\concrete.md in full before working; it is self-contained. It has no instructions aimed at the agent. Mapping of terms: form = position, cycle = period, washout = halving event (resetPeriods), waste = loss."
  },
  "grade": {
   "available": true,

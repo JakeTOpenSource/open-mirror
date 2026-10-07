@@ -106,7 +106,7 @@
   "balanceCheck": "Left side: starting counts 3+6+6+2+2+1 = 20, plus ingest total (cycle 1: 20, cycle 2: 15, cycle 3: 17, cycle 4: 24, cycle 5: 18) = 94, which gives 114. Right side: end counts 6+10+9+7+4+2 = 38, plus drop count 76, which gives 114. Both sides are 114, so the check balances.",
   "usedScript": true,
   "notes": "I used a short Python script for the arithmetic and checked cycle 1 by hand. The cycle 5 total is exactly 38, so no reset fires there. In cycle 4 tier tier 2 ends above its budget (10 against 8) after promotion. Under the rules that is never corrected in cycle 5, but it was not an issue in cycle 4 either, because the next cycle's eviction handles it.",
-  "preReadNotes": "Script: C:/Users/Jaket/AppData/Local/Temp/claude/scr/sim.py"
+  "preReadNotes": "Script: C:/Users/USER/AppData/Local/Temp/claude/scr/sim.py"
  },
  "grade": {
   "available": true,

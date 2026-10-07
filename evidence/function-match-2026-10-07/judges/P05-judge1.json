@@ -487,7 +487,7 @@
   "foundBy": "none",
   "routesAgree": true,
   "differingRule": "None. The only wording difference is Step 4: A computes everything first and applies it all at once, while B handles each position in turn. These are equivalent because returned melt only moves from position n back to n-1, and n-1 has always been handled before n.",
-  "trust": "Both routes agree. The table argument proves the Step 4 wording difference has no effect for any input. A script (C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P05\\sim.py) ran both documents as written on the printed tables and on the probe. It also ran 200,000 random starting and input tables (values 0-9) and found zero differences."
+  "trust": "Both routes agree. The table argument proves the Step 4 wording difference has no effect for any input. A script (C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-fm\\P05\\sim.py) ran both documents as written on the printed tables and on the probe. It also ran 200,000 random starting and input tables (values 0-9) and found zero differences."
  },
  "verdict_correct": true,
  "table_correct": true,

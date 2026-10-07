@@ -470,7 +470,7 @@
   "foundBy": "none",
   "routesAgree": true,
   "differingRule": "None. Every rule matches once the names are translated: INACTIVE/ACTIVE = COLD/HOT, component = tier, slack s = drop count, penalty step = context reset.",
-  "trust": "Both routes agree that the documents are SAME. The table checked every switch point: the 1-to-6 cascade, strict > for the bound and the 38 limit, >= for heat and <= for cool, the /4 or /2 rounding of the start-of-step value, the upstream destination, tier 1 HOT and tier 6 overflow going to the tally, and the whole-line halving. The script C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P03\\sim.py runs a separate literal implementation of each document. Their outputs matched on the printed tables, on the probe and on 200,000 random tables, and the balance check held each time (114=114 printed, 136=136 probe)."
+  "trust": "Both routes agree that the documents are SAME. The table checked every switch point: the 1-to-6 cascade, strict > for the bound and the 38 limit, >= for heat and <= for cool, the /4 or /2 rounding of the start-of-step value, the upstream destination, tier 1 HOT and tier 6 overflow going to the tally, and the whole-line halving. The script C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-fm\\P03\\sim.py runs a separate literal implementation of each document. Their outputs matched on the printed tables, on the probe and on 200,000 random tables, and the balance check held each time (114=114 printed, 136=136 probe)."
  },
  "verdict_correct": true,
  "table_correct": true,

@@ -123,7 +123,7 @@
   "lossTotal": 76,
   "balanceCheck": "20 at start + 94 loaded (14+15+17+24+18) = 114 = 38 held (6+10+9+7+4+2) + 76 dropped. Dropped by cycle: 22 (1 compaction + 21 reset), 5, 9, 38 (8 tier-6 eviction + 5 promotion/compaction + 25 reset), 2.",
   "usedScript": true,
-  "notes": "I recomputed every figure independently with a short Python script and did not take the Report paragraph's figures as given. My results match the Report paragraph exactly. Script: C:/Users/Jaket/AppData/Local/Temp/claude/C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6/a592740d-2cb4-4ce4-b618-d8e0a8b4c716/scratchpad/sim.py",
+  "notes": "I recomputed every figure independently with a short Python script and did not take the Report paragraph's figures as given. My results match the Report paragraph exactly. Script: C:/Users/USER/AppData/Local/Temp/claude/C--Users-USER-scratch-workspace/SESSION/scratchpad/sim.py",
   "preReadNotes": "The Report paragraph already lists the end figures. I treated them as claims to check, not as inputs, and the independent recomputation confirms them."
  },
  "grade": {

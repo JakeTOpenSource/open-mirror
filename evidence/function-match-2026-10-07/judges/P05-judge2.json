@@ -493,7 +493,7 @@
   "foundBy": "none",
   "routesAgree": true,
   "differingRule": "None. The only difference is in wording. A's Step 4 is simultaneous and B's is sequential from 1 to 6. Because returns flow only upstream (n to n-1) and B processes downstream (1 to 6), no chamber receives a return before its own amount is computed. The two rules therefore give the same result for every input.",
-  "trust": "The two routes agree. If they had disagreed, I would trust the table plus its structural argument over any single probe, because a probe only samples inputs. Here the simulations back the argument: with the names translated, A and B gave identical reports on the printed tables (both balances 114 = 114), on the probe (both balances 187 = 187), and on 200,000 random tables. Script: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P05\\sim.py"
+  "trust": "The two routes agree. If they had disagreed, I would trust the table plus its structural argument over any single probe, because a probe only samples inputs. Here the simulations back the argument: with the names translated, A and B gave identical reports on the printed tables (both balances 114 = 114), on the probe (both balances 187 = 187), and on 200,000 random tables. Script: C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-fm\\P05\\sim.py"
  },
  "verdict_correct": true,
  "table_correct": true,

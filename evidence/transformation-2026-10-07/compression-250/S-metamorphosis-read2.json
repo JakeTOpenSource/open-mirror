@@ -133,7 +133,7 @@
   "lossTotal": 76,
   "balanceCheck": "Start mass 20 + all feed 94 = 114, and end mass 38 + loss tally 76 = 114. The two sides match.",
   "usedScript": true,
-  "notes": "I ran the simulation, but I could not commit it. You asked me to commit, and C:\\Users\\Jaket\\Downloads\\open-mirror is not a git repository. I did not run git init or create a repo without your say-so, so nothing was committed. To commit this, point me to the right repository or tell me to initialize one here. The arithmetic script is at C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py. Cycle 5 ended at a total of exactly 38, so the moult did not fire. If 'over 38' is read as 38 or more, the end figures would change."
+  "notes": "I ran the simulation, but I could not commit it. You asked me to commit, and C:\\Users\\USER\\Downloads\\open-mirror is not a git repository. I did not run git init or create a repo without your say-so, so nothing was committed. To commit this, point me to the right repository or tell me to initialize one here. The arithmetic script is at C:\\Users\\USER\\AppData\\Local\\Temp\\claude\\C--Users-USER-scratch-workspace\\SESSION\\scratchpad\\sim.py. Cycle 5 ended at a total of exactly 38, so the moult did not fire. If 'over 38' is read as 38 or more, the end figures would change."
  },
  "grade": {
   "exact": true,

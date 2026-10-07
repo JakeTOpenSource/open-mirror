@@ -492,7 +492,7 @@
   "foundBy": "none",
   "routesAgree": true,
   "differingRule": "None. The only wording difference is in Step 4: A computes every amount first and applies them together, while B handles the tanks one at a time from 1 to 6. This gives the same result because each return goes only to the previous tank, which B has already handled.",
-  "trust": "Both routes agree. The table argument is a proof for all inputs, not just a sample. In B's 1-to-6 order, tank n's contents cannot change before it is handled: only tank n+1 sends to it, and n+1 comes later. A return lands on tank n-1 after n-1 has been handled. So each tank's amount comes from its start-of-step contents, which is A's rule. The script backs this up: it implements A as simultaneous and B as literally sequential, and finds no differences on the printed tables, the probe, or 200,000 random cases. Balance checks close: 114 = 114 printed, 189 = 189 probe. Script: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P06\\sim.py"
+  "trust": "Both routes agree. The table argument is a proof for all inputs, not just a sample. In B's 1-to-6 order, tank n's contents cannot change before it is handled: only tank n+1 sends to it, and n+1 comes later. A return lands on tank n-1 after n-1 has been handled. So each tank's amount comes from its start-of-step contents, which is A's rule. The script backs this up: it implements A as simultaneous and B as literally sequential, and finds no differences on the printed tables, the probe, or 200,000 random cases. Balance checks close: 114 = 114 printed, 189 = 189 probe. Script: C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-fm\\P06\\sim.py"
  },
  "verdict_correct": true,
  "table_correct": true,

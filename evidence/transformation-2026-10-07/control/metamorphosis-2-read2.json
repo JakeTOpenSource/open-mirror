@@ -129,7 +129,7 @@
   "lossTotal": 76,
   "balanceCheck": "Starting quantities 20 + all feed 94 = 114 = end quantities 38 (6+10+9+7+4+2) + loss tally 76. The balance holds.",
   "usedScript": true,
-  "notes": "I used a short Python script for the arithmetic: C:/Users/Jaket/AppData/Local/Temp/claude/C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6/a592740d-2cb4-4ce4-b618-d8e0a8b4c716/scratchpad/sim.py. I also checked cycle 1 by hand. In cycle 5 the total came to exactly 38, so the moult did not fire, because it needs a total strictly above 38. Loss by source: carry-forward discards from chamber 6 come to 12 (1+3+8). LARVAL metabolism and chamber 1's PUPAL reabsorption come to 18. Moult discards come to 46 (21+25). Together these make 76."
+  "notes": "I used a short Python script for the arithmetic: C:/Users/USER/AppData/Local/Temp/claude/C--Users-USER-scratch-workspace/SESSION/scratchpad/sim.py. I also checked cycle 1 by hand. In cycle 5 the total came to exactly 38, so the moult did not fire, because it needs a total strictly above 38. Loss by source: carry-forward discards from chamber 6 come to 12 (1+3+8). LARVAL metabolism and chamber 1's PUPAL reabsorption come to 18. Moult discards come to 46 (21+25). Together these make 76."
  },
  "grade": {
   "exact": true,

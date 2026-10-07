@@ -9,4 +9,4 @@
 - Start conditions: added that all chambers start LARVAL and the loss tally starts at 0.
 - Report: checked that it lists end mass in order 1 to 6, the six end states, the state changes as (cycle, position, before, after), the moult cycles, the loss tally and the balance check, with no figures or results.
 - Banned words: scanned the text with grep for the forbidden terms and any variants (cell, level, mode, NORMAL, ELEVATED, period, intake, spill, release, purge, LOST, abstract, metaphor, analog, comparison, represent, correspond, stands for) and found none.
-- Not committed: the working directory C:\Users\Jaket\Downloads\open-mirror is not a git repository, so this subagent made no commit. The explanation is returned here only; a scratch copy is in the session scratchpad as doc.txt.
+- Not committed: the working directory C:\Users\USER\Downloads\open-mirror is not a git repository, so this subagent made no commit. The explanation is returned here only; a scratch copy is in the session scratchpad as doc.txt.

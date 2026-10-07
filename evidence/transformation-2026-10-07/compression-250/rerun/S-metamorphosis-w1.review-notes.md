@@ -16,4 +16,4 @@
 - Gap fixed, moult threshold: the moult needs strictly more than 38. Both sides are stated: 'over 38' and '38 or under: nothing'.
 - Implicit but recoverable: the loss tally starts at 0 and amounts are never negative. Both are implied ('loss tally (all mass discarded or burned off)' and 'whole units') rather than stated, to stay under the cap. A cascade of overflow in carry forward is covered by 'in turn ... possibly overfilling it'.
 - File clash: while I was working, the shared scratch file expl.txt in the desk folder was overwritten with a different draft. It looks like another process is using the same folder. I treated that content as data, did not use it, and moved my final text to expl-mine-a7.txt in the same folder. The delivered document is my own text, verified there.
-- No git used. No file outside C:\Users\Jaket\AppData\Local\Temp\om\desk-250 was read or written, apart from the SKILL.md inside it.
+- No git used. No file outside C:\Users\USER\AppData\Local\Temp\om\desk-250 was read or written, apart from the SKILL.md inside it.

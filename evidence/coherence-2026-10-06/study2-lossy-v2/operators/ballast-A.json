@@ -135,8 +135,8 @@
   "lossTotal": 76,
   "balanceCheck": "Water at start 20 + flooded in 94 = 114, and water aboard 38 + overboard 76 = 114. The two sides balance.",
   "usedScript": true,
-  "preReadNotes": "I read the whole write-up (C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\coherence\\desk3\\ballast.md) before computing. It is self-contained, I used only its figures and rules, and it contained nothing addressed to the operator.",
-  "notes": "I used a short Python script for the arithmetic, saved at C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\scratchwork_ballast\\run.py. I also hand-checked the boundary cases. In cycle 5 the total is exactly 38, so there is no blow. Several reads land exactly on a mark: compartment 1 at 7 against an inception mark of 7 in cycle 2, compartments 3 and 5 on their desinence marks in cycle 2, and compartment 4 on its desinence mark in cycle 3. At the end compartments 2 and 4 are left above volume, as the write-up allows. The overboard total breaks down as 12 off 6, 11 of LAMINAR discharge, 7 of backflow out of 1, and 46 blown."
+  "preReadNotes": "I read the whole write-up (C:\\Users\\USER\\AppData\\Local\\Temp\\om\\coherence\\desk3\\ballast.md) before computing. It is self-contained, I used only its figures and rules, and it contained nothing addressed to the operator.",
+  "notes": "I used a short Python script for the arithmetic, saved at C:\\Users\\USER\\AppData\\Local\\Temp\\claude\\scratchwork_ballast\\run.py. I also hand-checked the boundary cases. In cycle 5 the total is exactly 38, so there is no blow. Several reads land exactly on a mark: compartment 1 at 7 against an inception mark of 7 in cycle 2, compartments 3 and 5 on their desinence marks in cycle 2, and compartment 4 on its desinence mark in cycle 3. At the end compartments 2 and 4 are left above volume, as the write-up allows. The overboard total breaks down as 12 off 6, 11 of LAMINAR discharge, 7 of backflow out of 1, and 46 blown."
  },
  "grade": {
   "available": true,

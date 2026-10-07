@@ -131,8 +131,8 @@
   "lossTotal": 76,
   "balanceCheck": "Sap at start 20 + total fed 94 = 114. Sap standing 38 + loss tally 76 = 114. The two sides match.",
   "usedScript": true,
-  "notes": "I used a short Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\xy.py. I also checked the cycle 1 draw down and leaf-drop by hand. The loss tally of 76 breaks down as: overflow from the top 13, respired 6, sent past the collar 10, and removed by leaf-drop 47 (21 in cycle 1 and 26 in cycle 4). Cycle 5 ends at a stem total of exactly 38, so leaf-drop does not fire there. Segment 2 ends at 10, over its volume of 8; the write-up allows this.",
-  "preReadNotes": "I read the write-up at C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\coherence\\desk3\\xylem.md in full before computing. It is self-contained: six segments, five cycles, five steps per cycle. It contains no instructions beyond the line's rules."
+  "notes": "I used a short Python script for the arithmetic: C:\\Users\\USER\\AppData\\Local\\Temp\\claude\\C--Users-USER-scratch-workspace\\SESSION\\scratchpad\\xy.py. I also checked the cycle 1 draw down and leaf-drop by hand. The loss tally of 76 breaks down as: overflow from the top 13, respired 6, sent past the collar 10, and removed by leaf-drop 47 (21 in cycle 1 and 26 in cycle 4). Cycle 5 ends at a stem total of exactly 38, so leaf-drop does not fire there. Segment 2 ends at 10, over its volume of 8; the write-up allows this.",
+  "preReadNotes": "I read the write-up at C:\\Users\\USER\\AppData\\Local\\Temp\\om\\coherence\\desk3\\xylem.md in full before computing. It is self-contained: six segments, five cycles, five steps per cycle. It contains no instructions beyond the line's rules."
  },
  "grade": {
   "available": true,

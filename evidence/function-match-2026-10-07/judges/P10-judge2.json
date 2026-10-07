@@ -451,7 +451,7 @@
   "differingRule": "The Step 5 line-wide halving fires only when the total is strictly greater than 38 in A (washout), but when the total is 38 or more in B (context reset), so a total of exactly 38 halves the line in B and not in A.",
   "foundBy": "both",
   "routesAgree": true,
-  "trust": "Both routes agree. The table points to the 38 boundary in Step 5 and nothing else. The probe hits a total of exactly 38 in cycle 1, and the printed tables hit it in cycle 5, and in both cases the runs differ. The printed-table runs match through cycle 4 (same changes, same totals 39/28/36/47/38) and differ only from B's cycle 5 reset onward. The script is C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P10\\sim.py. The two documents share one simulator that differs only in the threshold comparison, and every run passed its balance-check assertion."
+  "trust": "Both routes agree. The table points to the 38 boundary in Step 5 and nothing else. The probe hits a total of exactly 38 in cycle 1, and the printed tables hit it in cycle 5, and in both cases the runs differ. The printed-table runs match through cycle 4 (same changes, same totals 39/28/36/47/38) and differ only from B's cycle 5 reset onward. The script is C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-fm\\P10\\sim.py. The two documents share one simulator that differs only in the threshold comparison, and every run passed its balance-check assertion."
  },
  "verdict_correct": true,
  "table_correct": true,

@@ -133,7 +133,7 @@
   "lossTotal": 76,
   "balanceCheck": "Starting melt 20 + charges 94 (20+15+17+24+18) = 114; end melt 38 (6+10+9+7+4+2) + slag 76 = 114. The two sides balance.",
   "usedScript": true,
-  "notes": "I used a short Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py. I also checked cycle 1 and the balance by hand. Crucible 2 ends at 10, over its capacity of 8, because melt came back up the return launder in the cycle 5 bleed. The write-up says overfull crucibles stay that way after cycle 5. In cycle 5 the total after bleed is exactly 38, so the tap does not fire, because the rule is over 38."
+  "notes": "I used a short Python script for the arithmetic: C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-250\\sim.py. I also checked cycle 1 and the balance by hand. Crucible 2 ends at 10, over its capacity of 8, because melt came back up the return launder in the cycle 5 bleed. The write-up says overfull crucibles stay that way after cycle 5. In cycle 5 the total after bleed is exactly 38, so the tap does not fire, because the rule is over 38."
  },
  "grade": {
   "available": true,

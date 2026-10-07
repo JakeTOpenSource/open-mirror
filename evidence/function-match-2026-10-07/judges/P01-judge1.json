@@ -473,7 +473,7 @@
   "foundBy": "none",
   "routesAgree": true,
   "differingRule": "None. Every rule matches once the names are mapped: LAMINAR=GREEN, CAVITATING=HOT, inception=upper mark, desinence=lower mark, overboard=waste tally, emergency blow=washout. The only wording difference is that A's Report (d) explicitly allows 'none'; B's does not say so. This changes nothing in the output.",
-  "trust": "Both routes agree. The two procedures were implemented as two separate functions, each written from its own document's wording, in C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P01\\p01_claude_check.py (Python). Balance checks hold: printed 114 = 114, probe 153 = 153. 200,000 random start/input tables gave 0 mismatches. Caveat: another process in the same folder overwrote my first scratch file (sim.py) partway through. All reported results come from my own self-contained p01_claude_check.py. The probe also exercised equality at volume; the printed tables did not."
+  "trust": "Both routes agree. The two procedures were implemented as two separate functions, each written from its own document's wording, in C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-fm\\P01\\p01_claude_check.py (Python). Balance checks hold: printed 114 = 114, probe 153 = 153. 200,000 random start/input tables gave 0 mismatches. Caveat: another process in the same folder overwrote my first scratch file (sim.py) partway through. All reported results come from my own self-contained p01_claude_check.py. The probe also exercised equality at volume; the printed tables did not."
  },
  "verdict_correct": true,
  "table_correct": true,

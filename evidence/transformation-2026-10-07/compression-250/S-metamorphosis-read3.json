@@ -141,7 +141,7 @@
   "lossTotal": 76,
   "balanceCheck": "Start mass 20 + all feed 94 = 114; end mass 38 (6+10+9+7+4+2) + loss tally 76 = 114. Balanced.",
   "usedScript": true,
-  "notes": "I did the arithmetic with a short Python script (sim.py in the session scratchpad) and checked cycle 1 by hand. Chamber 2 ends at 10, over its capacity of 8, because no carry runs after cycle 5. Cycle 5's total after metabolise is exactly 38, so the moult did not fire. I treated this as a blind read and did not open the repo's study files. I did not make a git commit from this subagent: this read is one of several parallel handover copies, and the parent workflow collects this structured output. Committing the run's results (repo: C:\\Users\\Jaket\\Downloads\\open-mirror, branch main) is the parent's step after all reads finish, per the user's 'run it then commit it'."
+  "notes": "I did the arithmetic with a short Python script (sim.py in the session scratchpad) and checked cycle 1 by hand. Chamber 2 ends at 10, over its capacity of 8, because no carry runs after cycle 5. Cycle 5's total after metabolise is exactly 38, so the moult did not fire. I treated this as a blind read and did not open the repo's study files. I did not make a git commit from this subagent: this read is one of several parallel handover copies, and the parent workflow collects this structured output. Committing the run's results (repo: C:\\Users\\USER\\Downloads\\open-mirror, branch main) is the parent's step after all reads finish, per the user's 'run it then commit it'."
  },
  "grade": {
   "exact": true,

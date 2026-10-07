@@ -136,7 +136,7 @@
   "balanceCheck": "Starting charge 20 + fed in 94 = 114; on chain 38 (6+10+9+7+4+2) + ground tally 76 = 114. Balanced.",
   "usedScript": true,
   "notes": "I ran a short Python script for the arithmetic (sim.py in the session scratchpad) and checked cycle 1 and the boundary cases by hand. Feeds by cycle were 17, 15, 17, 24 and 21, for a total of 94. In cycle 5 the breaker sum was exactly 38, so it did not trip. At the end, stages 2 and 4 are over their ratings (10 against 8, and 7 against 6). The write-up allows this.",
-  "preReadNotes": "I read C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\coherence\\desk3\\electrical.md in full before computing. It is self-contained, and it held no instructions beyond the line rules and the report spec."
+  "preReadNotes": "I read C:\\Users\\USER\\AppData\\Local\\Temp\\om\\coherence\\desk3\\electrical.md in full before computing. It is self-contained, and it held no instructions beyond the line rules and the report spec."
  },
  "grade": {
   "available": true,

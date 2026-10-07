@@ -487,7 +487,7 @@
   "foundBy": "none",
   "routesAgree": true,
   "differingRule": "None. With INACTIVE=ROUTINE, ACTIVE=ESCALATED, component=team and slack=closed tally, every rule matches. That includes A's 'x becomes floor(x/2), the removed amount goes to s' against B's 'close the larger half, rounded up, and keep the rest'.",
-  "trust": "Both routes agree. Rule by rule, the table finds the same functions. The script codes each document separately as written, and A and B match on the printed tables, on the probe, and on 200,000 random tables. Both balance checks hold: 114 = 114 on the printed tables and 180 = 180 on the probe. Script: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P08\\sim.py"
+  "trust": "Both routes agree. Rule by rule, the table finds the same functions. The script codes each document separately as written, and A and B match on the printed tables, on the probe, and on 200,000 random tables. Both balance checks hold: 114 = 114 on the printed tables and 180 = 180 on the probe. Script: C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-fm\\P08\\sim.py"
  },
  "verdict_correct": true,
  "table_correct": true,

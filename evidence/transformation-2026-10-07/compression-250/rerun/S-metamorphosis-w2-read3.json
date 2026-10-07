@@ -141,7 +141,7 @@
   "lossTotal": 76,
   "balanceCheck": "Start mass 20 + feed 94 = 114. End mass 38 + loss tally 76 = 114. Balanced.",
   "usedScript": true,
-  "notes": "Script: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py (Python). I checked cycle 1 by hand and it matched the script.\nThe loss tally of 76 breaks down as:\n- moult removals: 21 in cycle 1 and 25 in cycle 4, 46 in total\n- chamber 6 overflow: 1 in cycle 2, 3 in cycle 3 and 1 in cycle 4, 5 in total\n- LARVAL metabolism, chamber 1's discarded PUPAL reabsorption and chamber 1-5 overflow cascades: 25 in total\nAt the end, chambers 2 and 4 are over their holding limits (10 > 8 and 7 > 6). That excess is left in place because overflow does not run again after cycle 5.\nThe result is sensitive to the moult boundary. The cycle 5 total is exactly 38, so the moult does not fire because the rule says 'over 38'."
+  "notes": "Script: C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-250\\sim.py (Python). I checked cycle 1 by hand and it matched the script.\nThe loss tally of 76 breaks down as:\n- moult removals: 21 in cycle 1 and 25 in cycle 4, 46 in total\n- chamber 6 overflow: 1 in cycle 2, 3 in cycle 3 and 1 in cycle 4, 5 in total\n- LARVAL metabolism, chamber 1's discarded PUPAL reabsorption and chamber 1-5 overflow cascades: 25 in total\nAt the end, chambers 2 and 4 are over their holding limits (10 > 8 and 7 > 6). That excess is left in place because overflow does not run again after cycle 5.\nThe result is sensitive to the moult boundary. The cycle 5 total is exactly 38, so the moult does not fire because the rule says 'over 38'."
  },
  "grade": {
   "available": true,

@@ -133,7 +133,7 @@
   "lossTotal": 76,
   "balanceCheck": "Starting mass 20 + all feed 94 = 114; end mass 38 (6+10+9+7+4+2) + loss tally 76 = 114. The check holds.",
   "usedScript": true,
-  "notes": "I used a short Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\m.py. I also checked cycle 1 by hand. The result that rests most on an unsettled rule is the moult rounding (remaining mass = floor(m/2)). If you read it the other way (removed = floor(m/2)), the results from cycle 1 onward change. Cycle 5 ended at exactly 38, so the moult did not fire on the strict 'over 38' rule. Chambers 2 and 4 end above their holding limits, as the write-up allows."
+  "notes": "I used a short Python script for the arithmetic: C:\\Users\\USER\\AppData\\Local\\Temp\\claude\\C--Users-USER-scratch-workspace\\SESSION\\scratchpad\\m.py. I also checked cycle 1 by hand. The result that rests most on an unsettled rule is the moult rounding (remaining mass = floor(m/2)). If you read it the other way (removed = floor(m/2)), the results from cycle 1 onward change. Cycle 5 ended at exactly 38, so the moult did not fire on the strict 'over 38' rule. Chambers 2 and 4 end above their holding limits, as the write-up allows."
  },
  "grade": {
   "available": true,

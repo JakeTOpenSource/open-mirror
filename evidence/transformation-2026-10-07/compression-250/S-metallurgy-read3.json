@@ -124,7 +124,7 @@
   "lossTotal": 92,
   "balanceCheck": "Starting melt 20 + charges 94 (cycles 1 to 5: 20, 15, 17, 24, 18) = 114. End melt 22 (4+5+5+4+3+1) + slag 92 = 114. The balance holds.",
   "usedScript": true,
-  "notes": "I ran the arithmetic with a short Python script, crucible.py, saved in the session scratchpad and not in the repo. I made no git commit. The repo at C:\\Users\\Jaket\\Downloads\\open-mirror (branch main, working tree clean) has a pre-registered plan at openmirror/evidence/transformation-2026-10-07/compression-250/PLAN.md. It says results go into RESULTS.md in that folder and into verify.py once the run is complete. This report is one blind read within that run, so recording and committing it is a step for the session running the study."
+  "notes": "I ran the arithmetic with a short Python script, crucible.py, saved in the session scratchpad and not in the repo. I made no git commit. The repo at C:\\Users\\USER\\Downloads\\open-mirror (branch main, working tree clean) has a pre-registered plan at openmirror/evidence/transformation-2026-10-07/compression-250/PLAN.md. It says results go into RESULTS.md in that folder and into verify.py once the run is complete. This report is one blind read within that run, so recording and committing it is a step for the session running the study."
  },
  "grade": {
   "exact": false,

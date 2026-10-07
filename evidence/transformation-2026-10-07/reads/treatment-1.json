@@ -133,7 +133,7 @@
   "lossTotal": 76,
   "balanceCheck": "Opening liquor 20 + all feed 94 = 114; end quantities 38 + loss tally 76 = 114. Balanced.",
   "usedScript": true,
-  "notes": "Source write-up: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-w1\\treatment.md. The \"resetPeriods\" field lists the cycles in which the storm bypass (the halving event) fired. Cycle 5 ended with a total of exactly 38, which is at the limit, so the bypass did not fire. The arithmetic script is in the session scratchpad as t.py. Its hard-coded opening total was wrong (it used 18 instead of 20), so the balance figure it printed was off. The balance check above uses the correct opening total of 20."
+  "notes": "Source write-up: C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-w1\\treatment.md. The \"resetPeriods\" field lists the cycles in which the storm bypass (the halving event) fired. Cycle 5 ended with a total of exactly 38, which is at the limit, so the bypass did not fire. The arithmetic script is in the session scratchpad as t.py. Its hard-coded opening total was wrong (it used 18 instead of 20), so the balance figure it printed was off. The balance check above uses the correct opening total of 20."
  },
  "grade": {
   "available": true,

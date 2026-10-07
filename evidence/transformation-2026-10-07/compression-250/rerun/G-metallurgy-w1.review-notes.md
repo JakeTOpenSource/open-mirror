@@ -9,5 +9,5 @@
 - Added 'halves and quarters round down' near the top so it covers the BASE quarter, the SUPERHEATED half and the tap halving.
 - Report: kept it as a template with no figures, totals or results. It lists end quantities and states in positions 1 to 6, state changes as (cycle, position, before, after), tap cycles, slag tally and the balance equation.
 - Ran a scan for the forbidden words, including as substrings (cell, level, mode, NORMAL, ELEVATED, period, intake, spill, release, purge, LOST, abstract, metaphor, analog, comparison, represent, correspond, stands for): zero hits. Replaced 'spill' with 'overflow'.
-- Checked my reading of the process with a simulation script, C:\Users\Jaket\AppData\Local\Temp\om\desk-250\sim.py. The balance check holds. No results from it appear in the explanation.
+- Checked my reading of the process with a simulation script, C:\Users\USER\AppData\Local\Temp\om\desk-250\sim.py. The balance check holds. No results from it appear in the explanation.
 - Remaining risk: 'leaving this one full' means left at exactly its working volume, and 'previous crucible' means the one nearer the charging end. Both follow from the line picture, but they are compressed to stay under 250 words.

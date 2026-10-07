@@ -140,7 +140,7 @@
   "lossTotal": 76,
   "balanceCheck": "Start 3+6+6+2+2+1 = 20. Loaded rows 20+15+17+24+18 = 94. Total in = 114. End x = 6+10+9+7+4+2 = 38. End s = 76 (12 from sweep overflow at p6, 3 from INACTIVE sheds, 15 from p1's ACTIVE share, 46 from penalties in cycles 1 and 4). 38 + 76 = 114. Balanced.",
   "usedScript": true,
-  "notes": "I used a short Python script for the arithmetic: C:/Users/Jaket/AppData/Local/Temp/claude/sim.py. I worked the figures independently, and every one matches the write-up's Report paragraph. The rules were applied from the write-up's literal text. The pre-read flagged the optimisation vocabulary (projection, penalty, budget, active set) as misleading if read with its usual meanings, so I did not apply those meanings. The pre-read file is a reading-aid procedure; it contained nothing directed at me beyond that procedure."
+  "notes": "I used a short Python script for the arithmetic: C:/Users/USER/AppData/Local/Temp/claude/sim.py. I worked the figures independently, and every one matches the write-up's Report paragraph. The rules were applied from the write-up's literal text. The pre-read flagged the optimisation vocabulary (projection, penalty, budget, active set) as misleading if read with its usual meanings, so I did not apply those meanings. The pre-read file is a reading-aid procedure; it contained nothing directed at me beyond that procedure."
  },
  "grade": {
   "available": true,

@@ -381,7 +381,7 @@
   "differingRule": "In Step 3, A reads each position's amount as it stood after Step 1 (before the push), while B reads it after the Step 2 overflow.",
   "foundBy": "both",
   "routesAgree": true,
-  "trust": "The two routes agree. The table pinned the difference to when Step 3 reads the amounts. The probe isolates that one rule and changes the state-change log. The printed tables also expose it: the state-change logs differ (9 entries in A, 13 in B) and so do the halving cycles (A: [2,4], B: [1,4]). End quantities (6,10,9,7,4,2) and the loss tally (76) happen to match on the printed tables, so comparing only end amounts would wrongly say SAME. I used a Python script, C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P14\\sim_p14.py. It asserts the balance check in every run: start total plus input total equals end total plus loss. I did not read or run the sim.py that was already in the folder."
+  "trust": "The two routes agree. The table pinned the difference to when Step 3 reads the amounts. The probe isolates that one rule and changes the state-change log. The printed tables also expose it: the state-change logs differ (9 entries in A, 13 in B) and so do the halving cycles (A: [2,4], B: [1,4]). End quantities (6,10,9,7,4,2) and the loss tally (76) happen to match on the printed tables, so comparing only end amounts would wrongly say SAME. I used a Python script, C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-fm\\P14\\sim_p14.py. It asserts the balance check in every run: start total plus input total equals end total plus loss. I did not read or run the sim.py that was already in the folder."
  },
  "verdict_correct": true,
  "table_correct": true,

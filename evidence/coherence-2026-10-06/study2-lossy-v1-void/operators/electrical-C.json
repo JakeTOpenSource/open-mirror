@@ -132,7 +132,7 @@
   "lossTotal": 76,
   "balanceCheck": "Starting charge 3+6+6+2+2+1 = 20. Feeds: 20+15+17+24+18 = 94. Total in = 114. End chain 6+10+9+7+4+2 = 38, plus ground 76, = 114. The two totals match.",
   "usedScript": false,
-  "notes": "I recomputed all five cycles by hand, and the result matches the Report paragraph in every item. Stage 2 ends at 10, above its rating of 8. This comes from the cycle-5 diode return (bleed does not enforce ratings), so it is reported as read. Cycle 5 closes at exactly 38, so the breaker does not trip. The pre-read file at C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\coherence\\desk-preread.md was used only as a reading aid. It contained no instructions beyond its procedure."
+  "notes": "I recomputed all five cycles by hand, and the result matches the Report paragraph in every item. Stage 2 ends at 10, above its rating of 8. This comes from the cycle-5 diode return (bleed does not enforce ratings), so it is reported as read. Cycle 5 closes at exactly 38, so the breaker does not trip. The pre-read file at C:\\Users\\USER\\AppData\\Local\\Temp\\om\\coherence\\desk-preread.md was used only as a reading aid. It contained no instructions beyond its procedure."
  },
  "grade": {
   "available": true,

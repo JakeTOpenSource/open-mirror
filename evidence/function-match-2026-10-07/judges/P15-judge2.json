@@ -476,7 +476,7 @@
   "differingRule": "In Step 5, A halves every stage's charge when the total is over 38, but B halves only the OVERLOADED tanks and leaves STEADY tanks as they are.",
   "foundBy": "both",
   "routesAgree": true,
-  "trust": "Both routes found the same difference. The table found it by reading Step 5. The probe showed it in the numbers: position 6 ends at 1 under A and 3 under B, and the loss tally is 34 under A and 32 under B. The printed tables cannot reveal it. At both halvings (cycles 1 and 4), every CLEAR/STEADY stage holds 0 or 1, and half of that rounded down leaves it unchanged, so A and B give identical reports on the printed data. All four runs pass the balance check. The script is C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P15\\sim.py."
+  "trust": "Both routes found the same difference. The table found it by reading Step 5. The probe showed it in the numbers: position 6 ends at 1 under A and 3 under B, and the loss tally is 34 under A and 32 under B. The printed tables cannot reveal it. At both halvings (cycles 1 and 4), every CLEAR/STEADY stage holds 0 or 1, and half of that rounded down leaves it unchanged, so A and B give identical reports on the printed data. All four runs pass the balance check. The script is C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-fm\\P15\\sim.py."
  },
  "verdict_correct": true,
  "table_correct": true,

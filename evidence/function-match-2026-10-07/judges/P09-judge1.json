@@ -424,7 +424,7 @@
   "differingRule": "In step 5, when the line-wide halving fires, A keeps each position's amount halved and rounded down, while B keeps it halved and rounded up. So with an odd amount, A sends the extra unit to the loss tally and B keeps it in the crucible.",
   "foundBy": "both",
   "routesAgree": true,
-  "trust": "The two routes agree. The table isolates the rounding direction in step 5 as the only difference; all other rules match one to one. Running both documents confirms it. On the probe, and on the printed tables too, A and B end with different quantities and loss tallies, and on the printed tables they also differ in state changes, end states and halving cycles (A: 1,4; B: 1,4,5). The balance check holds for all four runs (printed 114 = 114; probe 324 = 324). The script is C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P09\\sim.py."
+  "trust": "The two routes agree. The table isolates the rounding direction in step 5 as the only difference; all other rules match one to one. Running both documents confirms it. On the probe, and on the printed tables too, A and B end with different quantities and loss tallies, and on the printed tables they also differ in state changes, end states and halving cycles (A: 1,4; B: 1,4,5). The balance check holds for all four runs (printed 114 = 114; probe 324 = 324). The script is C:\\Users\\USER\\AppData\\Local\\Temp\\om\\desk-fm\\P09\\sim.py."
  },
  "verdict_correct": true,
  "table_correct": true,
