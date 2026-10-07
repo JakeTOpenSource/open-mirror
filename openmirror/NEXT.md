@@ -23,3 +23,20 @@ Same two-route method, applied to pairs of descriptions that cannot be run (two 
 ## 4. Open decisions, no tokens needed
 
 License; the Jake/Jacob credit line; repository name; whether "Hold" absorbs "Missing a fact"; the carry-both-results rule; whether the skill text should state its own evidence; adding function match as a third mode and the two rules named in `ARCHITECTURE.md` to the skill text (a v1.5 candidate, to be red-teamed before use).
+
+## 5. Mode routing, a v1.5 candidate (text only, not yet in the skill)
+
+Drafted from Gemini's proposal of 7 October 2026 with three corrections: the subjective-comparison fallback goes to filter mode, not explanation mode; "executable" is tested operationally rather than by feel; and the triggers are called operational, not deterministic, because two of them are judgments made explicit.
+
+**Step 1. Count.** How many descriptions did the person supply? One: never function match. Two compared against each other: go to step 2. A comparison inside one description ("X is like Y") counts as one description with an embedded picture.
+
+**Step 2. Can both be run?** Try to write each description as a list of rules so that one probe input gives a definite output under each. If both can be written that way, they are executable. If either cannot, they are not. This is the method's own first move, so it costs nothing extra.
+
+**Step 3. What is the verb?** Understand, explain, summarise, report, "what does this mean", a tool output or test result handed to a person: explanation. "Are these the same thing", "equivalent", "two words for one mechanism": function match. "Does this comparison hold", a picture used as a premise or an argument: filter.
+
+**Routes.**
+- **Function match** when there are two descriptions, both executable, and the question is whether they compute the same function. Two routes required, table and probe; they must agree or the disagreement is reported.
+- **Filter** when a comparison is being used to argue, or when two descriptions are compared and at least one cannot be run. In that second case the correspondence table is the mapping step, and the verdict is marked "not settled by probe".
+- **Explanation** when one thing needs to be made plain for a person, including every tool call and test result, and whenever nothing else fires. It is the default.
+
+**Fallbacks.** A request to compare with only one description supplied: explanation mode on what was supplied; do not invent the second. Two triggers firing: run the one the person's verb asks for and say so at the top, as the skill already requires. Medical, legal, financial, security, safety-critical material: keep the mode, label the output exploratory.
