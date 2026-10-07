@@ -114,3 +114,5 @@ From `evidence/Open-Mirror-v1.1.md`. Revised by Claude after an A/B test of v1.0
 ## v1.0 — 2026-08-14
 
 From `evidence/Open-Mirror-Skill.pdf`. Original. Concept and research direction by Jake Tiller; drafting and synthesis with OpenAI Codex. Five statuses, three lenses by default, one success example.
+
+**Published, 7 October 2026.** First public release of this repository at github.com/JakeTOpenSource/open-mirror, under the MIT license, with the skill text unchanged at v1.4.3. The repository was flattened for publication: the former `openmirror/` folder is now the root. Evidence, verifier, and manifest are unchanged in content; the manifest root label changed from `openmirror/` to `./`.

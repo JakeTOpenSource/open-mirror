@@ -22,7 +22,7 @@ Same two-route method, applied to pairs of descriptions that cannot be run (two 
 
 ## 4. Open decisions, no tokens needed
 
-License; the Jake/Jacob credit line; repository name; whether "Hold" absorbs "Missing a fact"; the carry-both-results rule; whether the skill text should state its own evidence; adding function match as a third mode and the two rules named in `ARCHITECTURE.md` to the skill text (a v1.5 candidate, to be red-teamed before use).
+License: decided, MIT, 7 October 2026. Still open: the Jake/Jacob credit line; repository name; whether "Hold" absorbs "Missing a fact"; the carry-both-results rule; whether the skill text should state its own evidence; adding function match as a third mode and the two rules named in `ARCHITECTURE.md` to the skill text (a v1.5 candidate, to be red-teamed before use).
 
 ## 5. Mode routing, a v1.5 candidate (text only, not yet in the skill)
 

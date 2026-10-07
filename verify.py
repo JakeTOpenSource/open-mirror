@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Open Mirror evidence verifier.
 
-Run from the openmirror/ folder:   python verify.py
+Run from the repository root:   python verify.py
 Reads only files under this folder. Calls no model. Writes CLAIMS.md and MANIFEST.json.
 
 Every quantitative claim in the reports is recomputed here from the raw records. A claim passes
@@ -110,7 +110,7 @@ claim("R2-2", "Red-team round 2 packet is byte-identical to the v1.4.1 text it c
 # ------------------------------------------------------------------ text consistency
 skill = rd(os.path.join(HERE, "SKILL.md")); readme = rd(os.path.join(HERE, "README.md")); coh = rd(os.path.join(HERE, "COHERENCE-STUDY.md")); full = rd(os.path.join(HERE, "OPEN-MIRROR-FULL-REPORT-2026-10-06.md"))
 claim("V-1", "SKILL.md footer version", "v1.4.3", re.search(r"\*v(1\.\d\.\d), 2026-10-06", skill).group(0)[1:7], ["SKILL.md"])
-claim("V-2", "README labels SKILL.md as v1.4.3", True, "The method, v1.4.3" in readme, ["README.md"])
+claim("V-2", "README labels SKILL.md as v1.4.3", True, "the skill text, v1.4.3" in readme, ["README.md"])
 claim("V-3", "no document claims the pre-read's value is nil", 0, sum(t.count("is nil") for t in (skill, readme, coh, full)), ["*.md"])
 claim("V-4", "the scoped result sentence appears in the study report", True, "fixed numerical procedure" in coh, ["COHERENCE-STUDY.md"])
 claim("V-5", "Study 1 table in the study report matches the record", True, all(
@@ -232,13 +232,14 @@ unverified = [
 
 # ------------------------------------------------------------------ manifest
 manifest = {}
-for root, _, files in os.walk(HERE):
+for root, dirs, files in os.walk(HERE):
+    dirs[:] = [d for d in dirs if d not in (".git", "keys", "__pycache__")]
     for f in files:
         p = os.path.join(root, f)
         rel = os.path.relpath(p, HERE).replace("\\", "/")
         if rel in ("MANIFEST.json", "CLAIMS.md"): continue
         manifest[rel] = {"sha256": sha(p), "bytes": os.path.getsize(p)}
-json.dump({"root": "openmirror/", "files": dict(sorted(manifest.items()))}, open(os.path.join(HERE, "MANIFEST.json"), "w", encoding="utf-8", newline="\n"), indent=1)
+json.dump({"root": "./", "files": dict(sorted(manifest.items()))}, open(os.path.join(HERE, "MANIFEST.json"), "w", encoding="utf-8", newline="\n"), indent=1)
 
 # ------------------------------------------------------------------ CLAIMS.md
 passed = sum(1 for c in claims if c[5])
@@ -252,7 +253,7 @@ for cid, text, stated, recomputed, sources, ok in claims:
     out.append(f"| {cid} | {text} | {f(stated)} | {f(recomputed)} | {'yes' if ok else '**NO**'} | {', '.join(sources)} |")
 out.append("\n## Not verified by this script\n")
 for u in unverified: out.append(f"- {u}")
-out.append(f"\n## Manifest\n\n`MANIFEST.json` lists SHA-256 and byte count for {len(manifest)} files under `openmirror/`. To check that nothing has changed since it was written: `python verify.py --check-manifest`.\n")
+out.append(f"\n## Manifest\n\n`MANIFEST.json` lists SHA-256 and byte count for {len(manifest)} files under the repository root. To check that nothing has changed since it was written: `python verify.py --check-manifest`.\n")
 open(os.path.join(HERE, "CLAIMS.md"), "w", encoding="utf-8", newline="\n").write("\n".join(out) + "\n")
 
 if "--check-manifest" in sys.argv:
