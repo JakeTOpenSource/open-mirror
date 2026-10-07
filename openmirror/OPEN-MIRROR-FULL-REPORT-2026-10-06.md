@@ -17,9 +17,9 @@ Part 1 is the summary. Parts 2 to 4 are the three reports as written. Part 5 is 
 
 **Where coherence actually broke.** All five failures in the compressed condition were one failure: a writer compressed "each position becomes floor(level/2)" into "halve, rounds down" with the removed amount made salient, and the reader floored the removed half. The analogy's physics (concrete that un-sets, pupae that revert, melt running uphill, Goodhart targets) never overrode a stated rule in 60 reports.
 
-**The 7 October result.** With the skill moved to the writer's side, ten writers ran it on their own 400-word analogies before handing them over. Fourteen blind readers then executed those analogies: 14 of 14 exact by the engine, including 6 of 6 on the two analogies that had failed 5 of 6 times the day before. The same meaning went into ten analogies and came back from every one without drift. Not yet tested: whether a generic "reread your draft" instruction would do the same.
+**The 7 October result.** With the skill moved to the writer's side, ten writers ran it on their own 400-word analogies before handing them over. Fourteen blind readers then executed those analogies: 14 of 14 exact by the engine, including 6 of 6 on the two analogies that had failed 5 of 6 times the day before. The same meaning went into ten analogies and came back from every one without drift. A control the same afternoon replaced the skill with one sentence, "review your explanation against the engineer's process and fix what you find": 12 of 12 exact on the two analogies that had drifted. By the rule set before the run, the active ingredient is a review pass against the source, not the seven steps. Open Mirror has not yet been shown to beat that sentence on any tested task.
 
-**What it cost and what went wrong.** About 13.8M subagent tokens across 221 sessions over the two days. Roughly 1.5M was wasted: an operator prompt of mine tripped an API safety classifier 31 times, I reran it twice unchanged before rewording, and the first compressed-condition run leaked the true answer into the write-ups and had to be discarded. Jake has since set token waste as a hard constraint; the corrected run was the only one launched with a stated cost and a go-ahead, and it had zero refusals.
+**What it cost and what went wrong.** About 14.8M subagent tokens across 237 sessions over the two days. Roughly 1.5M was wasted: an operator prompt of mine tripped an API safety classifier 31 times, I reran it twice unchanged before rewording, and the first compressed-condition run leaked the true answer into the write-ups and had to be discarded. Jake has since set token waste as a hard constraint; the corrected run was the only one launched with a stated cost and a go-ahead, and it had zero refusals.
 
 **Open decisions for Jake and Ed.** License (CC BY 4.0 suggested). The Jake/Jacob credit line. Repository name (OpenMirror collides with screen-mirroring projects). Whether "Missing a fact" should yield to "Worth exploring" in filter mode, where Keep exploring was empty in every run. Whether to add the one rule the study suggests: when a flagged gap changes the result, carry both results forward. And whether the skill should state, on its face, the scope and result of the one controlled test so far: no measured benefit for model operators executing a numerical procedure from an analogy, and no test yet of its stated purpose.
 
@@ -515,18 +515,26 @@ Every baseline failure traced to one compressed sentence about the global halvin
 
 The checklist agrees at the level of the whole text: the disciplined write-ups carried seven more rules across the ten, and no disciplined write-up lost a rule the baseline had kept.
 
+## The control, run the same afternoon
+
+The confound named below as "most important" was tested before this report shipped. Four writers, two for metallurgy and two for metamorphosis, got the identical prompt with the skill paragraph replaced by one sentence: "review your explanation carefully for errors, omissions, or ambiguities against the engineer's process, and fix any you find." No skill file, no plain statement first, no stranger framing, no rule-by-rule check. Twelve blind readers, three per write-up, then executed them. The outcome rule was fixed before the run: six of six on both domains under the control would mean structured self-review of any kind is the active ingredient.
+
+**Control: 12 of 12 exact.** All four control write-ups were within the cap and free of figures. Their fix lists show the writers finding the halving ambiguity unprompted: metallurgy copy 1 wrote "the draft said 'halve every crucible', which doesn't say which half gets rounded down. It now says each crucible keeps half, rounded down." Three of the four control write-ups use "keeps half, rounded down"; the fourth, metamorphosis copy 1, uses "halves, rounded down", and all three of its readers still kept the smaller half.
+
+So the comparison stands as: no review, 1 of 6 on these two domains; any review against the source, 6 of 6; the skill's review, 6 of 6. **The skill's seven steps did not add anything a one-sentence review instruction did not.** Record: `evidence/transformation-2026-10-07/control/`. Cost: 16 sessions, 1.04M tokens. One protocol difference: control readers received the write-up inline rather than by file, because the workflow could not write files; the reader wording was otherwise identical.
+
 ## What this does and does not show
 
 It shows:
 
-1. Meaning carried into ten parallel analogies can be read back with zero drift, deterministically checked, when the writer works the way the skill prescribes.
-2. The drift seen on 6 October was a writing defect, and the writer-side discipline removed it on the two analogies where it had occurred.
-3. The reader-side pre-read, tested the day before, is not where the skill's value is; the writer side is.
+1. Meaning carried into ten parallel analogies can be read back with zero drift, deterministically checked, when the writer reviews the analogy against the source before handing it over. 14 of 14 with the skill; 12 of 12 with a one-sentence review instruction on the two domains that had drifted.
+2. The drift seen on 6 October was a writing defect: those writers were given no review instruction at all, and five of six reads on two domains went wrong. Any review pass against the source removed it.
+3. The reader-side pre-read, tested the day before, is not where value lies, and the skill's seven steps are not where it lies either. The value is in the review pass, which the skill contains but does not own.
 
 It does not show:
 
-4. That the skill's *text* is what mattered, as opposed to any careful "reread your own draft for lost rules" instruction. The disciplined prompt pointed the writer at the skill's steps 1, 4 and 5; a control with a generic self-review instruction was not run. That is the next cheapest test and the most important remaining confound.
-5. Zero drift in general. Fourteen reads is a sample; the two analogies with a history of drift got three reads each and the rest got one, by design, to save sessions.
+4. That the skill's text matters for this task. The control says it does not. What would still be worth testing is a harder compression, say 250 words, where a one-sentence review might fail and a rule-by-rule check might not; that is a hypothesis, not a result.
+5. Zero drift in general. Twenty-six reads across the two runs is a sample, concentrated by design on the two analogies with a history of drift.
 6. Anything about human readers or writers. Every session was Opus 5.5 or Sonnet 5.5.
 
 ## Cost, honestly
@@ -542,7 +550,11 @@ The readers came in under estimate. The writers ran over because they used a she
 
 ## What should change in the skill
 
-Nothing in the seven steps. The study used them as written. What should change is the pitch: the README has said "no measured benefit" since yesterday, and that sentence now needs a second half. The skill's measured value is on the writing side, for a writer who runs it on their own analogy before handing it over. The README and the changelog carry that update; the compiled report carries this file.
+The outcome rule set before the control said: if generic review also goes six of six, the skill should be cut down to whatever did the work. What did the work, on this evidence, is one instruction: before you hand over an analogy, review it against the thing it describes and fix what it lost. That instruction is inside Open Mirror as steps 4 and 5 applied to your own text, and it is also a sentence anyone could write. The honest pitch, as of today: Open Mirror has not been shown to beat a plain review instruction on any task yet tested. The README and changelog say so. The seven steps stay as they are until a task is found where they beat the sentence; the 250-word compression above is the first candidate, and it is cheap.
+
+## Cost of the control
+
+16 sessions, 1.04M tokens, against an estimate of 1.0M to 1.1M. Study 3 total: 60 sessions, 3.91M.
 
 ## Part 5. The skill as it stands
 
@@ -720,7 +732,7 @@ Version 1.4 (this repository) is a plain-language rebuild for sharing. Its v1.4.
 
 A separate coherence study ([COHERENCE-STUDY.md](COHERENCE-STUDY.md)) put one exact process into ten analogies and had 60 blind operators execute it. Complete documents were read correctly 30 of 30 times; compressed write-ups 25 of 30, with all five failures caused by one ambiguous rounding sentence. **Model operators executing a fixed numerical procedure from analogical documents, with scripts, got no measurable benefit from the pre-read: no more accurate, no more gaps flagged.** That is a null result inside that scope. The study did not test a person using Open Mirror to inspect an argument made through metaphor, which is the skill's stated purpose.
 
-The next day's study ([TRANSFORMATION-STUDY.md](TRANSFORMATION-STUDY.md)) moved the skill to the writer's side. Writers who ran it on their own 400-word analogies before handing them over produced ten analogies that fourteen blind readers executed with zero drift, 14 of 14 exact by the engine, including 6 of 6 on the two analogies that had failed 5 of 6 times without the discipline. **The skill's measured value, so far, is for a writer checking their own analogy, not for a reader.** Whether the skill's text or any careful self-review would have done the same was not tested. All Claude and GPT runs so far are one provider each; no cross-provider replication has been done on the same text.
+The next day's study ([TRANSFORMATION-STUDY.md](TRANSFORMATION-STUDY.md)) moved the skill to the writer's side. Writers who ran it on their own 400-word analogies before handing them over produced ten analogies that fourteen blind readers executed with zero drift, 14 of 14 exact by the engine, including 6 of 6 on the two analogies that had failed 5 of 6 times without the discipline. A control run the same afternoon then replaced the skill with one sentence, "review your explanation against the engineer's process and fix what you find", on the two analogies that had drifted: 12 of 12 exact. **So far, Open Mirror has not been shown to beat a plain review instruction on any task tested.** The zero-drift result is real and repeatable; the skill's seven steps are not what produced it. All Claude and GPT runs so far are one provider each; no cross-provider replication has been done on the same text.
 
 ## Installing as a skill
 
@@ -739,7 +751,7 @@ Newest first. Each entry says what was tested and what was not. Earlier entries 
 
 ## Evidence note — 2026-10-07 — transformation study, no text change
 
-Ten writers used the skill's steps 1, 4 and 5 on their own 400-word analogies of the coherence-study process (`TRANSFORMATION-STUDY.md`). Fourteen blind readers then executed them: 14 of 14 exact by the engine, against 25 of 30 for the undisciplined write-ups the day before, and 6 of 6 against 1 of 6 on the two analogies that had drifted. A fixed 23-rule checklist found 226 of 230 rules recoverable against 219. This is the first measured benefit for the skill: on the writer's side. Not tested: whether a generic self-review instruction would do the same. No version bump.
+Ten writers used the skill's steps 1, 4 and 5 on their own 400-word analogies of the coherence-study process (`TRANSFORMATION-STUDY.md`). Fourteen blind readers then executed them: 14 of 14 exact by the engine, against 25 of 30 for the undisciplined write-ups the day before, and 6 of 6 against 1 of 6 on the two analogies that had drifted. A fixed 23-rule checklist found 226 of 230 rules recoverable against 219. A control the same afternoon replaced the skill with a one-sentence "review against the source and fix" instruction on the two drifting domains: 12 of 12 exact, with the writers catching the halving ambiguity unprompted. Conclusion by the pre-set rule: the active ingredient is a review pass against the source, which the skill contains but does not own. Open Mirror has not yet been shown to beat that sentence on any tested task. No version bump; next candidate test is a harder compression where a one-line review might fail.
 
 ## Evidence note — 2026-10-06 — coherence study, no text change
 
@@ -6066,5 +6078,6 @@ Open Mirror ends here.
 | Study 3 phase 1, disciplined writers (7 Oct) | 10 | 0.77M | zero refusals |
 | Study 3 phase 2, readers (7 Oct) | 14 | 0.88M | zero refusals; 14 of 14 exact |
 | Study 3 phase 3, rule checklist (7 Oct) | 20 | 1.22M | Sonnet; four times the estimate |
-| **Total** | **221** | **~13.8M** | about 1.5M bought nothing, all on 6 October |
+| Study 3 control, generic review (7 Oct) | 16 | 1.04M | zero refusals; 12 of 12 exact |
+| **Total** | **237** | **~14.8M** | about 1.5M bought nothing, all on 6 October |
 

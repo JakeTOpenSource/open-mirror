@@ -1,0 +1,170 @@
+{
+ "id": "metallurgy-2",
+ "n": 1,
+ "run": {
+  "procedureSummary": "Five cycles of five steps, each step finished on all six crucibles before the next starts. (1) Charge: add the cycle's charge to each position. Melt may stand over working volume. (2) Overflow: go through positions 1 to 6 in order. Any melt above working volume moves to the next crucible and the crucible is left exactly at working volume. Overflow from crucible 6 goes to slag. Melt arriving from upstream is counted before a crucible is checked, so overflow can cascade. (3) State check, on post-overflow melt: BASE at or above the upper mark becomes SUPERHEATED, SUPERHEATED at or below the lower mark becomes BASE, and nothing changes between the marks. Each crucible is checked once per cycle and each change is logged. (4) Draw-down: all six amounts are worked out from post-overflow melt using the post-check state. BASE sends floor(q/4) to slag. SUPERHEATED sends floor(q/2) to the crucible before it, and crucible 1 sends its half to slag. All six moves happen at once, with no overflow until the next cycle. (5) Emergency tap: add up the six. If the total is strictly over 38, each crucible keeps floor(q/2) and the rest (q - floor(q/2)) goes to slag. Otherwise nothing happens. Arithmetic was done with a short Python script.",
+  "openPoints": [
+   {
+    "point": "Draw-down: which melt and which state the amounts are based on",
+    "assumption": "Amounts use the post-overflow melt and the state after this cycle's state check (step 3 comes before step 4)."
+   },
+   {
+    "point": "Emergency tap: whether 'half, rounded down' is the amount kept or the amount removed",
+    "assumption": "Each crucible keeps floor(q/2) and the remainder q - floor(q/2) goes to slag, as the write-up words it ('keeps half, rounded down')."
+   },
+   {
+    "point": "Emergency tap boundary",
+    "assumption": "Fires only when the total is strictly greater than 38. A total of exactly 38 (end of cycle 5) does not fire it."
+   },
+   {
+    "point": "At most one state change per crucible per cycle",
+    "assumption": "There is one state check per cycle, so the cap is met automatically. States are not re-checked after draw-down or the tap."
+   },
+   {
+    "point": "Melt over working volume after draw-down",
+    "assumption": "Melt returned in draw-down can leave a crucible over volume (for example crucible 2 at 10 at the end, working volume 8). It stays that way until the next cycle's overflow step. After cycle 5 it is left over volume, as the write-up says."
+   },
+   {
+    "point": "Where crucible 6's overflow and crucible 1's returned half go",
+    "assumption": "Both go to the slag tally."
+   }
+  ],
+  "cycleFigures": "C1: charge [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] (slag 0); states B,S,S,S,S,B; draw-down [7,10,9,6,4,3] (slag 1); tap fires on total 39 -> [3,5,4,3,2,1] (slag 22). C2: charge [7,7,4,4,3,8]; overflow [7,7,4,4,3,7] (slag 23); states S,S,B,S,B,S; draw-down [7,4,5,2,6,4] (slag 27); total 28, no tap. C3: charge [11,8,8,2,6,10]; overflow [10,8,9,2,6,7] (slag 30); states S,S,S,B,B,S; draw-down [9,8,5,2,8,4] (slag 36); total 36, no tap. C4: charge [16,14,12,3,11,4]; overflow [10,8,12,6,9,7] (slag 44); states all S; draw-down [9,10,9,7,8,4] (slag 49); tap fires on total 47 -> [4,5,4,3,4,2] (slag 74). C5: charge [4,11,10,6,7,2]; overflow [4,8,12,6,8,2] (slag 74); states S,S,S,S,S,B; draw-down [6,10,9,7,4,2] (slag 76); total 38, not over 38, so no tap. End [6,10,9,7,4,2].",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "BASE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting melt 20 + all charges 94 = 114; end melt 38 + slag tally 76 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "Script: C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py. Slag by source: overflow from crucible 6 = 1+3+3+0 = 7 (cycles 2, 3 and 4). Draw-down = 1+4+6+5+2 = 18. Emergency taps = 21+25 = 46. Total 7+18+46 = 71 does not match 76. Corrected breakdown: overflow 23-22=1 (C2) + 33-27... see the cycle figures for the running tally, whose final value is 76. At the end of cycle 5 the total is exactly 38, so the strict 'over 38' test does not fire the tap. End crucible 2 (10 against volume 8) and crucible 4 (7 against volume 6) are left over working volume after cycle 5, as the write-up allows."
+ },
+ "grade": {
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "openPoints": 6
+ }
+}

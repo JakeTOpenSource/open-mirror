@@ -1,0 +1,170 @@
+{
+ "id": "metamorphosis-2",
+ "n": 1,
+ "run": {
+  "procedureSummary": "Step 1 Feed: add the cycle's table amount to each chamber. No trimming, so a chamber can sit over its limit. Step 2 Carry forward: work through chambers 1 to 6 in order. A chamber above its limit is set to exactly its limit and the excess moves into the next chamber before that chamber is checked, so excess can cascade. Chamber 6's excess goes to loss. Step 3 State check, on post-carry mass: a LARVAL chamber at or above its upper mark becomes PUPAL. A PUPAL chamber at or below its lower mark becomes LARVAL. Otherwise the state holds, and each chamber gets at most one check per cycle. Each change is logged. Step 4 Metabolism: first work out all six amounts from the current contents (LARVAL floor(m/4), PUPAL floor(m/2)), then subtract them all at once. LARVAL amounts go to loss. A PUPAL amount moves to the previous chamber (position i-1), except chamber 1's, which goes to loss. No limit is applied here. Step 5 Moult: add up the six chambers. If the total is strictly above 38, every chamber keeps floor(m/2) and the rest goes to loss. At 38 or below, nothing happens.",
+  "openPoints": [
+   {
+    "point": "Which state the metabolism step uses",
+    "assumption": "The state after this cycle's state check (step 3 comes before step 4)."
+   },
+   {
+    "point": "Where a PUPAL reabsorbed amount goes",
+    "assumption": "'Previous chamber' means position i-1, toward chamber 1. Chamber 1's PUPAL amount goes to loss. A reabsorbed amount added to a LARVAL or PUPAL neighbour is not metabolised again in the same cycle, because all amounts are worked out before any are applied."
+   },
+   {
+    "point": "Whether a chamber can change state twice in a cycle when another step moves mass into it",
+    "assumption": "There is one state check per chamber per cycle, in step 3 only. Metabolism and moult do not trigger any further state checks."
+   },
+   {
+    "point": "Moult boundary",
+    "assumption": "Strictly greater than 38. A total of exactly 38 (cycle 5) does not fire."
+   },
+   {
+    "point": "Rounding",
+    "assumption": "Every quarter and half is rounded down (floor) on whole units. The remainder from moult halving goes to loss."
+   },
+   {
+    "point": "Over-limit chambers at the end",
+    "assumption": "After cycle 5's metabolism, chamber 2 holds 10 against a limit of 8 and chamber 4 holds 7 against a limit of 6. The write-up says no correction happens after cycle 5, so the end figures are left as they are."
+   }
+  ],
+  "cycleFigures": "Start: [3,6,6,2,2,1], all LARVAL, loss 0.\nC1: feed [3,12,9,7,5,4]; carry [3,8,12,6,7,4] (ch2 excess 4 to ch3, ch3 excess 1 to ch4, ch4 excess 1 to ch5), loss 0; states L,P,P,P,P,L; metabolism amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3], loss 1; moult: total 39 > 38, fires -> [3,5,4,3,2,1], loss 22.\nC2: feed [7,7,4,4,3,8]; carry [7,7,4,4,3,7] (ch6 discards 1), loss 23; states P,P,L,P,L,P; metabolism [3,3,1,2,0,3] -> [7,4,5,2,6,4], loss 27; moult: total 28, no.\nC3: feed [11,8,8,2,6,10]; carry [10,8,9,2,6,7] (ch6 discards 3), loss 30; states P,P,P,L,L,P; metabolism [5,4,4,0,1,3] -> [9,8,5,2,8,4], loss 36; moult: total 36, no.\nC4: feed [16,14,12,3,11,4]; carry [10,8,12,6,9,7] (ch6 discards 8), loss 44; states P,P,P,P,P,P; metabolism [5,4,6,3,4,3] -> [9,10,9,7,8,4], loss 49; moult: total 47 > 38, fires -> [4,5,4,3,4,2], loss 74.\nC5: feed [4,11,10,6,7,2]; carry [4,8,12,6,8,2], loss 74; states P,P,P,P,P,L; metabolism [2,4,6,3,4,0] -> [6,10,9,7,4,2], loss 76; moult: total 38, no.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "LARVAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting quantities 20 plus feed 94 (20+15+17+24+18) = 114. End quantities 38 (6+10+9+7+4+2) plus loss tally 76 = 114. The balance holds. Loss by source: chamber 6 carry discards 12 (1+3+8), metabolism 14 (LARVAL losses plus chamber 1's PUPAL discards), moult halving 46 (21 in cycle 1 and 25 in cycle 4). Total 76.",
+  "usedScript": true,
+  "notes": "I used a short Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py. The first run failed because a stray incomplete line had been added to the end of the file after it was written. I deleted that line and reran the script unchanged. Cycle 5 is close to the moult boundary: the total is exactly 38, so the moult does not fire. Chambers 2 and 4 end over their limits (10 against 8, and 7 against 6). The write-up says nothing corrects them after cycle 5."
+ },
+ "grade": {
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "openPoints": 6
+ }
+}

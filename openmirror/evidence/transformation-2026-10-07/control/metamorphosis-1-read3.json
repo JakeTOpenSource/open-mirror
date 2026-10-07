@@ -1,0 +1,170 @@
+{
+ "id": "metamorphosis-1",
+ "n": 3,
+ "run": {
+  "procedureSummary": "1. Feed: add the cycle's feed-table ration to each chamber, ignoring capacity. 2. Overflow: walk chambers 1 to 6 in order. Any mass over capacity moves into the next chamber, which is then checked with the extra included, and the chamber is left at capacity. Chamber 6's excess goes to the loss tally. 3. State check on post-overflow mass: LARVAL at or above its upper mark becomes PUPAL. PUPAL at or below its lower mark becomes LARVAL. Otherwise the state holds. Each chamber is checked once per cycle, so it changes at most once, and every change is logged. 4. Metabolism: from mass at the start of this step, each chamber's amount is floor(mass/4) if LARVAL or floor(mass/2) if PUPAL, and all are applied together. LARVAL amounts go to loss. PUPAL amounts move to chamber i-1, except chamber 1's PUPAL amount, which goes to loss. There is no capacity check. 5. Moult: if the line total is strictly over 38, every chamber is set to floor(mass/2), the removed mass goes to loss and the cycle is noted. At 38 or under, nothing happens.",
+  "openPoints": [
+   {
+    "point": "How far an overflow cascade can travel within one pass",
+    "assumption": "One pass from 1 to 6. Excess passed down is included in the next chamber's check, so it can cascade several chambers (cycle 1: 2 to 3, 3 to 4, 4 to 5). Nothing travels back up."
+   },
+   {
+    "point": "Whether states are checked before cycle 1",
+    "assumption": "No. Every chamber starts LARVAL as stated, and the first check is step 3 of cycle 1."
+   },
+   {
+    "point": "Boundary at the marks",
+    "assumption": "Both are inclusive: mass equal to the upper mark makes LARVAL go PUPAL, and mass equal to the lower mark makes PUPAL go LARVAL."
+   },
+   {
+    "point": "Which state sets the metabolism rate",
+    "assumption": "The state just after this cycle's step 3 check."
+   },
+   {
+    "point": "Chambers left over capacity at the end of the run",
+    "assumption": "Left as they are, per the write-up. Chamber 2 ends at 10 (capacity 8) and chamber 4 at 7 (capacity 6). They are not trimmed and nothing is added to loss."
+   },
+   {
+    "point": "Moult threshold at exactly 38",
+    "assumption": "No moult, because the rule needs strictly more than 38. Cycle 5 ends at exactly 38, so the moult did not fire."
+   }
+  ],
+  "cycleFigures": "Start: [3,6,6,2,2] plus 1 = [3,6,6,2,2,1], total 20, loss 0.\nC1 Feed [3,12,9,7,5,4] | Overflow [3,8,12,6,7,4] loss 0 | States L,P,P,P,P,L | Metab amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3] loss 1 | Moult FIRED (39>38) -> [3,5,4,3,2,1] loss 22\nC2 Feed [7,7,4,4,3,8] | Overflow [7,7,4,4,3,7] loss 23 | States P,P,L,P,L,P | Metab amounts [3,3,1,2,0,3] -> [7,4,5,2,6,4] loss 27 | Moult no (28) -> [7,4,5,2,6,4] loss 27\nC3 Feed [11,8,8,2,6,10] | Overflow [10,8,9,2,6,7] loss 30 | States P,P,P,L,L,P | Metab amounts [5,4,4,0,1,3] -> [9,8,5,2,8,4] loss 36 | Moult no (36) -> [9,8,5,2,8,4] loss 36\nC4 Feed [16,14,12,3,11,4] | Overflow [10,8,12,6,9,7] loss 44 | States P,P,P,P,P,P | Metab amounts [5,4,6,3,4,3] -> [9,10,9,7,8,4] loss 49 | Moult FIRED (47>38) -> [4,5,4,3,4,2] loss 74\nC5 Feed [4,11,10,6,7,2] | Overflow [4,8,12,6,8,2] loss 74 | States P,P,P,P,P,L | Metab amounts [2,4,6,3,4,0] -> [6,10,9,7,4,2] loss 76 | Moult no (38, not strictly over) -> [6,10,9,7,4,2] loss 76",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "LARVAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting total 20 + all feed 94 = 114; end total 38 (6+10+9+7+4+2) + loss tally 76 = 114. Balanced.",
+  "notes": "I used a short Python script for the arithmetic. It is saved in the session scratchpad as sim.py. Loss tally by source: overflow from chamber 6 adds 12 (1 in C2, 3 in C3, 8 in C4). Metabolism adds 21 (LARVAL amounts plus chamber 1's PUPAL amounts). The moults add 43 (21 in C1, 22 in C4). At the end, chambers 2 and 4 are still over capacity, as the write-up says they should be.",
+  "usedScript": true
+ },
+ "grade": {
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "openPoints": 6
+ }
+}

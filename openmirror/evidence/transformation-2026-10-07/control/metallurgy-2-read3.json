@@ -1,0 +1,170 @@
+{
+ "id": "metallurgy-2",
+ "n": 3,
+ "run": {
+  "procedureSummary": "1 Charge: add the cycle's charge row to positions 1-6; no cap at this step. 2 Overflow: go through positions 1 to 6 in order. Anything above working volume goes into the next crucible, leaving this one exactly at volume. Overflow from 6 goes to slag. Upstream overflow is added before the next crucible is checked, so it can cascade. 3 State check, on the melt after overflow: BASE at or above the upper mark becomes SUPERHEATED; SUPERHEATED at or below the lower mark becomes BASE. Each crucible is checked once per cycle, so it changes at most once. 4 Draw-down: work out all six amounts from the melt after overflow first. BASE sends floor(q/4) to slag. SUPERHEATED sends floor(q/2) to position i-1, and position 1's goes to slag. All six moves happen at the same time, and a crucible can be left over volume. 5 Emergency tap: if the line total is strictly over 38, each crucible keeps floor(q/2) and the rest goes to slag. At 38 or under, nothing happens.",
+  "openPoints": [
+   {
+    "point": "Which melt the draw-down amounts are taken from",
+    "assumption": "The melt after overflow, which is also the melt the state check used. The states used are the ones just set by this cycle's state check."
+   },
+   {
+    "point": "Return melt that leaves a crucible over volume",
+    "assumption": "It stays there and nothing is checked again within the cycle. The next cycle's overflow step clears it. After cycle 5 it stays over (crucible 2 ends at 10 against a volume of 8)."
+   },
+   {
+    "point": "Rounding in the emergency tap",
+    "assumption": "Each crucible keeps floor(q/2) and gives up ceil(q/2) to slag."
+   },
+   {
+    "point": "Emergency tap boundary",
+    "assumption": "The tap fires only when the total is strictly over 38. In cycle 5 the total is exactly 38, so it does not fire."
+   },
+   {
+    "point": "State-check boundaries",
+    "assumption": "Both marks count as reached when melt equals them: BASE changes at melt >= upper, and SUPERHEATED changes back at melt <= lower."
+   },
+   {
+    "point": "Whether the emergency tap changes states",
+    "assumption": "It does not. States change only in step 3."
+   }
+  ],
+  "cycleFigures": "C1: charge [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] (slag 0); state check [3,8,12,6,7,4], states B,S,S,S,S,B; draw-down amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3] (slag 1); tap fired (total 39) -> [3,5,4,3,2,1] (slag 22). C2: charge [7,7,4,4,3,8]; overflow [7,7,4,4,3,7] (slag 23); states S,S,B,S,B,S; draw-down [3,3,1,2,0,3] -> [7,4,5,2,6,4] (slag 27); tap not fired (total 28). C3: charge [11,8,8,2,6,10]; overflow [10,8,9,2,6,7] (slag 30); states S,S,S,B,B,S; draw-down [5,4,4,0,1,3] -> [9,8,5,2,8,4] (slag 36); tap not fired (total 36). C4: charge [16,14,12,3,11,4]; overflow [10,8,12,6,9,7] (slag 44); states S,S,S,S,S,S; draw-down [5,4,6,3,4,3] -> [9,10,9,7,8,4] (slag 49); tap fired (total 47) -> [4,5,4,3,4,2] (slag 74). C5: charge [4,11,10,6,7,2]; overflow [4,8,12,6,8,2] (slag 74); states S,S,S,S,S,B; draw-down [2,4,6,3,4,0] -> [6,10,9,7,4,2] (slag 76); tap not fired (total 38).",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "BASE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting melt 20 + all charges 94 (C1 20, C2 15, C3 17, C4 24, C5 18) = 114. End melt 38 (6+10+9+7+4+2) + slag tally 76 = 114. The balance holds.",
+  "usedScript": true,
+  "notes": "I did the arithmetic with a short Python script, piped in through stdin, and checked cycle 1 by hand. The shared scratchpad's sim.py was overwritten by another process while I was working: its content was different, used the state word \"LARVAL\", and gave one stray run. I disregarded that file and its output. The figures above come only from my own stdin run. Crucible 2 ends at 10, over its working volume of 8, because of return melt in the cycle 5 draw-down. The write-up allows this."
+ },
+ "grade": {
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "openPoints": 6
+ }
+}

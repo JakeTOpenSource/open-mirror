@@ -1,0 +1,11 @@
+- The first draft was 517 words. I cut it to 399 (checked with wc -w) and kept every number: the six working volumes, six upper marks, six lower marks, six starting amounts, the limit of 38 and the 5-by-6 charge table.
+- The emergency tap is now 'every crucible keeps half, rounded down, the rest to slag'. This matches floor(level/2) exactly, with the larger half going to slag, and avoids an ambiguous 'halve'.
+- The tap trigger now says 'strictly over 38', with 'At 38 or under, nothing'. This makes clear that a total of exactly 38 does not fire it.
+- In the overflow step, 'leaving it exactly full' became 'leaving this one exactly full'. 'It' could have meant the receiving crucible.
+- The vague 'overflow reaching a crucible before you check it counts' became 'overflow from upstream arrives before you check a crucible, so it can cascade down the line'. This states the 1-to-6 cascade within one pass.
+- The bare 'Line limit: 38' became 'Emergency tap limit, whole line: 38', so the number is tied to the step that uses it.
+- The slag tally is now stated as starting at zero and counting everything sent to slag. This covers all three routes: overflow from crucible 6, BASE draw-down plus crucible 1's SUPERHEATED half, and the emergency tap.
+- I added that draw-down amounts are worked out from current melt before anything moves, and that all six moves happen at once.
+- I added that working volume is not enforced after charging or draw-down. An overfull crucible is cleared only at the next cycle's overflow and stays over after cycle 5.
+- I removed every banned word and checked by regex for cell, level, mode, period, intake, spill, release, lost and the rest. This included replacing the draft wording for the fourth step with 'Draw-down'.
+- I confirmed that the Report paragraph is a template only, with no figures or results, and that it asks for the balance check as starting melt plus all charges equals end melt plus slag tally.

@@ -1,0 +1,11 @@
+- The first draft was 555 words, over the 400-word cap. I cut it to 399 (counted with wc -w, numbers included) without losing any steps or numbers.
+- Added 'strictly' and 'At 38 or below, nothing' so the moult clearly does not fire at exactly 38.
+- Made the metabolism rule say that all six amounts are worked out from current contents before any chamber changes, and that each amount is rounded down.
+- Made clear that the moult keeps half of each chamber rounded down, so the part discarded is the rest (the larger half when the mass is odd).
+- Said that chamber 1's amount goes on the tally when chamber 1 is PUPAL, since there is no chamber before it.
+- Said that capacity is not enforced at feeding or metabolism, that an overfull chamber is only corrected at the next cycle's carry forward, and that after cycle 5 it is never corrected.
+- Spelled out that carry forward can cascade: chamber 1's excess reaches chamber 2 before chamber 2 is checked.
+- Added that the state check uses the mass after carry forward, that a chamber between its marks keeps its state, and that a chamber changes state at most once per cycle.
+- Defined the loss tally at the start as everything discarded or metabolised, so every later 'discarded' clearly goes on it.
+- Replaced the banned words 'spill-over', 'release' and 'intake' with carry forward, metabolism and feed. Checked the text with grep: none of the banned words remain.
+- Kept the Report paragraph as a template only, with no figures; the balance check is given as a formula.

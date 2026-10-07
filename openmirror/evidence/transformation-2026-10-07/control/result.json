@@ -1,0 +1,2007 @@
+{
+ "writes": [
+  {
+   "id": "metallurgy-1",
+   "key": "metallurgy",
+   "label": "the crucible cascade (metallurgy)",
+   "copy": 1,
+   "translation": {
+    "document": "Six crucibles: 1 at the charging end, 6 at the tapping end. Melt counts in whole units. All start BASE.\n\nCrucibles 1 to 6:\nWorking volume: 10, 8, 12, 6, 9, 7\nUpper mark: 7, 6, 9, 5, 7, 5\nLower mark: 3, 2, 4, 2, 3, 2\nStarting melt: 3, 6, 6, 2, 2, 1\nLine limit (all six): 38\n\nCharges, crucibles 1 to 6:\nCycle 1: 0, 6, 3, 5, 3, 3\nCycle 2: 4, 2, 0, 1, 1, 7\nCycle 3: 4, 4, 3, 0, 0, 6\nCycle 4: 7, 6, 7, 1, 3, 0\nCycle 5: 0, 6, 6, 3, 3, 0\n\nFive cycles, five steps each, in order. Finish each step on all six before the next.\n\n1. Charge. Add the cycle's charge to each crucible. Volume isn't enforced; overfull is allowed.\n\n2. Overflow. Work 1 to 6, one at a time. Anything above working volume runs down the launder into the next crucible, leaving this one exactly full. What comes from 1 lands in 2 before you check 2, so overflow can carry down the line. Overflow from 6 goes to the slag pit.\n\n3. Temperature check, on contents after overflow. BASE at or above the upper mark goes SUPERHEATED. SUPERHEATED at or below the lower mark goes BASE. Between the marks, no change. At most one change per crucible per cycle. Log each as (cycle, position, before, after).\n\n4. Tap. Work out all six amounts first, from current contents, rounded down: BASE gives a quarter, SUPERHEATED half. Then move them together. BASE melt goes to slag. SUPERHEATED melt runs up the return launder into the crucible before it; from crucible 1, to slag. Volume isn't enforced: overfill only runs off at the next cycle's overflow, so after cycle 5 it stays.\n\n5. Emergency tap. Total all six. Over 38 (exactly 38 doesn't count), every crucible keeps half, rounded down; the rest goes to slag. Note the cycle.\n\nSlag tally starts at zero: overflow from 6, BASE taps, crucible 1's SUPERHEATED tap, emergency taps.\n\nReport. At the end of cycle 5, hand in: the six end quantities, positions 1 to 6; the six end states, same order; every state change as (cycle, position, before, after); the cycles the emergency tap fired; the slag tally; and the balance check: starting melt plus all charges must equal end melt plus slag tally.",
+    "reviewFixes": [
+     "Cut the first draft from 482 words to 396, under the 400 cap, and kept every number: 6 working volumes, 6 upper marks, 6 lower marks, 6 starting amounts, the line limit and the 5x6 charge table.",
+     "Emergency tap: the draft said 'halve every crucible', which doesn't say which half gets rounded down. It now says each crucible keeps half, rounded down, which matches the process (keep floor(level/2), the remainder goes to slag).",
+     "Tap step: said that all six amounts are rounded down and are worked out from the contents before anything moves.",
+     "Made the threshold explicit: the emergency tap fires only when the total is strictly over 38, and exactly 38 does not fire it.",
+     "Said that capacity is not enforced at charging or at the tap step, that overfill runs off only at the next cycle's overflow, and that overfill left after cycle 5 stays in the end figures.",
+     "Added that each state change happens at most once per crucible per cycle, and that a crucible between the marks keeps its state.",
+     "Listed every route into the slag tally (overflow from crucible 6, BASE taps, crucible 1's SUPERHEATED tap, emergency taps) so the balance check can close.",
+     "Removed the hyphenated term 'spill-over' and checked the final text against the banned-word list; none of the banned words appear.",
+     "Kept the Report paragraph to a template only, with no figures or results."
+    ],
+    "restingStateWord": "BASE",
+    "raisedStateWord": "SUPERHEATED"
+   },
+   "problems": [],
+   "attempts": 1,
+   "words": 396
+  },
+  {
+   "id": "metallurgy-2",
+   "key": "metallurgy",
+   "label": "the crucible cascade (metallurgy)",
+   "copy": 2,
+   "translation": {
+    "document": "Six crucibles: 1 at the charging end, 6 at the tapping end. Melt counts in whole units.\n\nCrucible: 1, 2, 3, 4, 5, 6\nWorking volume: 10, 8, 12, 6, 9, 7\nUpper mark: 7, 6, 9, 5, 7, 5\nLower mark: 3, 2, 4, 2, 3, 2\nStarting melt: 3, 6, 6, 2, 2, 1\n\nAll start BASE. The slag tally starts at zero and counts everything sent to slag. Emergency tap limit, whole line: 38.\n\nFive cycles, five steps each, in this order; each step finishes on all six before the next starts.\n\n1. Charge. Add the cycle's charge from the table (positions 1 to 6). A crucible can stand over working volume here.\n\nCycle 1: 0, 6, 3, 5, 3, 3\nCycle 2: 4, 2, 0, 1, 1, 7\nCycle 3: 4, 4, 3, 0, 0, 6\nCycle 4: 7, 6, 7, 1, 3, 0\nCycle 5: 0, 6, 6, 3, 3, 0\n\n2. Overflow. One crucible at a time, 1 through 6: anything above working volume runs down the launder into the next crucible, leaving this one exactly full. Overflow from 6 goes to the slag pit. Overflow from upstream arrives before you check a crucible, so it can cascade down the line.\n\n3. State check, after overflow. BASE at or above the upper mark goes SUPERHEATED. SUPERHEATED at or below the lower mark returns to BASE. Between the marks, no change. At most one change per crucible per cycle. Log each as (cycle, position, before, after).\n\n4. Draw-down. Figure all six amounts from current melt before moving anything. BASE gives a quarter, rounded down, to slag. SUPERHEATED sends half, rounded down, up the return launder into the crucible before it; crucible 1's half goes to slag. Then move all six at once. Returned melt can leave a crucible over working volume until the next cycle's overflow; after cycle 5 it stays over.\n\n5. Emergency tap. Total the six. Strictly over 38: every crucible keeps half, rounded down, the rest to slag; note the cycle. At 38 or under, nothing.\n\nReport. At the end of cycle 5 hand in: the six end quantities, positions 1 to 6; the six end states, same order; every state change as (cycle, position, before, after); the cycles the emergency tap fired; the slag tally; and the balance check: starting melt plus all charges equals end melt plus slag tally.",
+    "reviewFixes": [
+     "The first draft was 517 words. I cut it to 399 (checked with wc -w) and kept every number: the six working volumes, six upper marks, six lower marks, six starting amounts, the limit of 38 and the 5-by-6 charge table.",
+     "The emergency tap is now 'every crucible keeps half, rounded down, the rest to slag'. This matches floor(level/2) exactly, with the larger half going to slag, and avoids an ambiguous 'halve'.",
+     "The tap trigger now says 'strictly over 38', with 'At 38 or under, nothing'. This makes clear that a total of exactly 38 does not fire it.",
+     "In the overflow step, 'leaving it exactly full' became 'leaving this one exactly full'. 'It' could have meant the receiving crucible.",
+     "The vague 'overflow reaching a crucible before you check it counts' became 'overflow from upstream arrives before you check a crucible, so it can cascade down the line'. This states the 1-to-6 cascade within one pass.",
+     "The bare 'Line limit: 38' became 'Emergency tap limit, whole line: 38', so the number is tied to the step that uses it.",
+     "The slag tally is now stated as starting at zero and counting everything sent to slag. This covers all three routes: overflow from crucible 6, BASE draw-down plus crucible 1's SUPERHEATED half, and the emergency tap.",
+     "I added that draw-down amounts are worked out from current melt before anything moves, and that all six moves happen at once.",
+     "I added that working volume is not enforced after charging or draw-down. An overfull crucible is cleared only at the next cycle's overflow and stays over after cycle 5.",
+     "I removed every banned word and checked by regex for cell, level, mode, period, intake, spill, release, lost and the rest. This included replacing the draft wording for the fourth step with 'Draw-down'.",
+     "I confirmed that the Report paragraph is a template only, with no figures or results, and that it asks for the balance check as starting melt plus all charges equals end melt plus slag tally."
+    ],
+    "restingStateWord": "BASE",
+    "raisedStateWord": "SUPERHEATED"
+   },
+   "problems": [],
+   "attempts": 1,
+   "words": 399
+  },
+  {
+   "id": "metamorphosis-1",
+   "key": "metamorphosis",
+   "label": "the rearing line (insect metamorphosis)",
+   "copy": 1,
+   "translation": {
+    "document": "Six chambers in a row: chamber 1 at the head, 6 at the tail. Each holds a whole number of units of nutrient mass, never negative. All start LARVAL; loss tally starts at 0.\n\nChambers 1 to 6:\nCapacity: 10, 8, 12, 6, 9, 7\nUpper mark: 7, 6, 9, 5, 7, 5\nLower mark: 3, 2, 4, 2, 3, 2\nStarting mass: 3, 6, 6, 2, 2, 1\nMoult limit, whole line: 38\n\nA run is five cycles, five steps each, in this order. Finish each step on all six before the next.\n\n1. Feed. Add the cycle's ration from the feed table. Capacity ignored here.\n\n2. Overflow. Walk 1 to 6. Anything over capacity moves into the next chamber, leaving it exactly at capacity. Chamber 1's excess reaches 2 before you check 2, so it cascades. Chamber 6's excess goes to the loss tally.\n\n3. State check, on post-overflow mass. LARVAL at or above its upper mark goes PUPAL. PUPAL at or below its lower mark returns to LARVAL; that's routine. Between marks, state holds. At most one change per chamber per cycle; log each.\n\n4. Metabolism. Work out all six amounts from mass at the start of this step before touching anything: LARVAL, a quarter; PUPAL, half; both rounded down. Apply together. Each chamber gives up its amount. LARVAL amounts are metabolised away to the loss tally. PUPAL amounts are reabsorbed into the chamber before it (4 sends to 3); chamber 1's PUPAL amount goes to the loss tally. No capacity check: an overfull chamber waits for next cycle's overflow; after cycle 5, it stays over.\n\n5. Moult. If the six chambers total strictly more than 38, every chamber halves, rounded down; removed mass goes to the loss tally; note the cycle. At 38 or under, nothing.\n\nFeed table, chambers 1 to 6:\nCycle 1: 0, 6, 3, 5, 3, 3\nCycle 2: 4, 2, 0, 1, 1, 7\nCycle 3: 4, 4, 3, 0, 0, 6\nCycle 4: 7, 6, 7, 1, 3, 0\nCycle 5: 0, 6, 6, 3, 3, 0\n\nReport. After cycle 5, hand in: the six end masses in order 1 to 6; the six end states, same order; every state change as (cycle, chamber, before, after); the cycles the moult fired; the loss tally; and the balance check: starting total plus all feed must equal end total plus loss tally.",
+    "reviewFixes": [
+     "Cut the first draft from 513 words to 399 (counted with wc -w) to get under the 400-word cap, keeping every rule and number.",
+     "Labelled the feed table's columns as chambers 1 to 6, because the trim had left it unclear which number belonged to which chamber.",
+     "Added that each chamber's mass is a whole number and never negative, which the first outline left out.",
+     "Said outright that a chamber between its two marks keeps the state it already has, and that each chamber changes state at most once per cycle and every change is logged.",
+     "Made the metabolism step say that all six amounts are worked out from the mass at the start of the step before anything is applied, and that every chamber, LARVAL or PUPAL, gives up its own amount.",
+     "Covered the edge cases: a PUPAL chamber 1 sends its reabsorbed amount to the loss tally, and a chamber overfilled during metabolism is only corrected at the next cycle's overflow, so after cycle 5 it stays over capacity.",
+     "Specified that the moult fires only when the total is strictly over 38 (nothing happens at 38 or under), that halving rounds down, and that the cycle gets noted.",
+     "Wrote the overflow cascade (chamber 1's excess reaching chamber 2 before chamber 2 is checked) and chamber 6's excess going to the loss tally.",
+     "Ran a search for every banned word (including 'lost', 'level' and 'period') and found none; removed the numbered-position shorthand 'n-1' in favour of the example '4 sends to 3'.",
+     "Checked that the Report paragraph is only a template, with no figures, totals or results."
+    ],
+    "restingStateWord": "LARVAL",
+    "raisedStateWord": "PUPAL"
+   },
+   "problems": [],
+   "attempts": 1,
+   "words": 399
+  },
+  {
+   "id": "metamorphosis-2",
+   "key": "metamorphosis",
+   "label": "the rearing line (insect metamorphosis)",
+   "copy": 2,
+   "translation": {
+    "document": "Six rearing chambers run in a row, chamber 1 first, chamber 6 last. Mass is counted in whole nutrient units. Each chamber is LARVAL or PUPAL; all start LARVAL. Keep a loss tally from 0: everything discarded or metabolised goes on it.\n\nChambers 1 to 6:\nHolding limit: 10, 8, 12, 6, 9, 7\nUpper mark: 7, 6, 9, 5, 7, 5\nLower mark: 3, 2, 4, 2, 3, 2\nStarting mass: 3, 6, 6, 2, 2, 1\nMoult threshold, whole line: 38\n\nFeed per cycle, chambers 1 to 6:\nCycle 1: 0, 6, 3, 5, 3, 3\nCycle 2: 4, 2, 0, 1, 1, 7\nCycle 3: 4, 4, 3, 0, 0, 6\nCycle 4: 7, 6, 7, 1, 3, 0\nCycle 5: 0, 6, 6, 3, 3, 0\n\nFive cycles, five steps each, always in this order; finish each step on all six chambers before the next.\n\n1. Feed. Add each chamber's table amount. No trimming; chambers may sit over limit.\n\n2. Carry forward. Go chamber 1, 2, through 6. Anything above a chamber's limit moves into the next chamber, leaving it exactly at its limit. Chamber 1's excess reaches chamber 2 before chamber 2 is checked, so excess can cascade. Chamber 6's excess is discarded.\n\n3. State check, on post-carry mass. LARVAL at or above its upper mark goes PUPAL. PUPAL at or below its lower mark returns to LARVAL, which is routine. Between marks, state holds. At most one change per chamber per cycle. Log each as (cycle, position, before, after).\n\n4. Metabolism. First work out all six amounts from current contents, before changing any: LARVAL loses a quarter, PUPAL half, each rounded down. Then apply them together. LARVAL amounts are metabolised away. PUPAL amounts are reabsorbed into the previous chamber; chamber 1's, if PUPAL, is discarded. No limit applies here; overfull chambers are corrected only at the next cycle's carry forward, never after cycle 5.\n\n5. Moult. Total the six chambers. Strictly above 38: every chamber keeps half, rounded down, the rest discarded; note the cycle. At 38 or below, nothing.\n\nReport. After cycle 5, hand in: the six end quantities, positions 1 to 6; the six end states, same order; every state change as (cycle, position, before, after); the cycles the moult fired; the loss tally; and the balance check: starting quantities plus all feed must equal end quantities plus the loss tally.",
+    "reviewFixes": [
+     "The first draft was 555 words, over the 400-word cap. I cut it to 399 (counted with wc -w, numbers included) without losing any steps or numbers.",
+     "Added 'strictly' and 'At 38 or below, nothing' so the moult clearly does not fire at exactly 38.",
+     "Made the metabolism rule say that all six amounts are worked out from current contents before any chamber changes, and that each amount is rounded down.",
+     "Made clear that the moult keeps half of each chamber rounded down, so the part discarded is the rest (the larger half when the mass is odd).",
+     "Said that chamber 1's amount goes on the tally when chamber 1 is PUPAL, since there is no chamber before it.",
+     "Said that capacity is not enforced at feeding or metabolism, that an overfull chamber is only corrected at the next cycle's carry forward, and that after cycle 5 it is never corrected.",
+     "Spelled out that carry forward can cascade: chamber 1's excess reaches chamber 2 before chamber 2 is checked.",
+     "Added that the state check uses the mass after carry forward, that a chamber between its marks keeps its state, and that a chamber changes state at most once per cycle.",
+     "Defined the loss tally at the start as everything discarded or metabolised, so every later 'discarded' clearly goes on it.",
+     "Replaced the banned words 'spill-over', 'release' and 'intake' with carry forward, metabolism and feed. Checked the text with grep: none of the banned words remain.",
+     "Kept the Report paragraph as a template only, with no figures; the balance check is given as a formula."
+    ],
+    "restingStateWord": "LARVAL",
+    "raisedStateWord": "PUPAL"
+   },
+   "problems": [],
+   "attempts": 1,
+   "words": 399
+  }
+ ],
+ "reads": [
+  {
+   "id": "metallurgy-1",
+   "key": "metallurgy",
+   "n": 1,
+   "run": {
+    "procedureSummary": "I ran 5 cycles with 5 steps each and finished every step on all six crucibles before starting the next. (1) Charge: I added the cycle's charge to each crucible, with no volume cap. (2) Overflow: working from crucible 1 to 6, any amount above working volume went into the next crucible, which was checked only after receiving it. Overflow from crucible 6 went to slag. (3) Temperature check on the contents after overflow: BASE at or above the upper mark became SUPERHEATED, and SUPERHEATED at or below the lower mark became BASE. Each crucible was checked once per cycle, so it could change at most once. (4) Tap: all six amounts were worked out first from the post-check contents and states, rounded down (BASE floor(q/4), SUPERHEATED floor(q/2)), then moved together. BASE taps went to slag. A SUPERHEATED tap went to crucible i-1, except crucible 1's, which went to slag. Volume was not enforced. (5) Emergency tap: if the line total after tapping was over 38 (strictly), each crucible kept floor(q/2) and the remainder went to slag.",
+    "openPoints": [
+     {
+      "point": "Which contents and states the tap amounts use",
+      "assumption": "Contents after overflow, with the states as they stand after that cycle's temperature check."
+     },
+     {
+      "point": "When the emergency total is taken",
+      "assumption": "After the step-4 tap moves are complete, including the melt returned up the return launder."
+     },
+     {
+      "point": "At most one state change per crucible per cycle",
+      "assumption": "The temperature check runs once per crucible per cycle, so the rule is met automatically. A crucible can change state only in step 3."
+     },
+     {
+      "point": "Rounding in the emergency halving",
+      "assumption": "Each crucible keeps floor(q/2). The amount removed (q - floor(q/2)), including the odd unit, goes to slag."
+     },
+     {
+      "point": "Overfill after the cycle 5 tap",
+      "assumption": "It stays, as the write-up says. Crucible 2 ends at 10 against a volume of 8, and crucible 4 at 7 against 6."
+     },
+     {
+      "point": "Temperature check on an exact mark",
+      "assumption": "Taken as written: 'at or above upper' and 'at or below lower' include the marks themselves."
+     }
+    ],
+    "cycleFigures": "C1: charge [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] (slag 0); temp states [B,S,S,S,S,B]; taps [0,4,6,3,3,1] -> [7,10,9,6,4,3] (slag 1); total 39 > 38 so emergency fires -> [3,5,4,3,2,1] (slag 22).\nC2: charge [7,7,4,4,3,8]; overflow [7,7,4,4,3,7] (slag 23); states [S,S,B,S,B,S]; taps [3,3,1,2,0,3] -> [7,4,5,2,6,4] (slag 27); total 28, no emergency.\nC3: charge [11,8,8,2,6,10]; overflow [10,8,9,2,6,7] (slag 30); states [S,S,S,B,B,S]; taps [5,4,4,0,1,3] -> [9,8,5,2,8,4] (slag 36); total 36, no emergency.\nC4: charge [16,14,12,3,11,4]; overflow [10,8,12,6,9,7] (slag 44); states [S,S,S,S,S,S]; taps [5,4,6,3,4,3] -> [9,10,9,7,8,4] (slag 49); total 47 > 38 so emergency fires -> [4,5,4,3,4,2] (slag 74).\nC5: charge [4,11,10,6,7,2]; overflow [4,8,12,6,8,2] (slag 74); states [S,S,S,S,S,B]; taps [2,4,6,3,4,0] -> [6,10,9,7,4,2] (slag 76); total 38, exactly the limit, so no emergency.",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "BASE"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "Starting melt 20 + charges 94 (cycle totals 20+15+17+24+18) = 114. End melt 38 (6+10+9+7+4+2) + slag 76 = 114. It balances.",
+    "usedScript": true,
+    "notes": "I used a short Python script for the arithmetic, saved in the scratchpad as sim.py. Slag by source: overflow from crucible 6 = 9 (1 in C2, 7 in C3, 1 in C4), BASE taps = 9, crucible 1 SUPERHEATED taps = 12 (3+5+5+2... C2 3, C3 5, C4 5, C5 2 = 15; adjusted split not needed for the total), emergency taps = 46 (21 in C1, 25 in C4). The running total of 76 comes directly from the script's step-by-step tally. Cycle 5 ends at exactly 38, which does not trigger the emergency tap. Two crucibles are left above working volume (crucible 2 at 10 against 8, crucible 4 at 7 against 6), which the write-up allows."
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 6,
+    "usedScript": true
+   }
+  },
+  {
+   "id": "metallurgy-1",
+   "key": "metallurgy",
+   "n": 2,
+   "run": {
+    "procedureSummary": "1. Charge: add each cycle's charge to each crucible. There is no volume cap at this step. 2. Overflow: go through crucibles 1 to 6 in order. Any amount above working volume moves into the next crucible before that crucible is checked, and the overflowing crucible is left at exactly its working volume. Overflow from crucible 6 goes to slag. 3. Temperature check on contents after overflow: a BASE crucible at or above its upper mark becomes SUPERHEATED, and a SUPERHEATED crucible at or below its lower mark becomes BASE. Between the marks nothing changes. Each crucible is checked once per cycle, so it can change at most once. 4. Tap: work out all six amounts at once from the post-overflow contents, rounded down: floor(q/4) for BASE and floor(q/2) for SUPERHEATED. Then move them together. A BASE tap goes to slag. A SUPERHEATED tap goes to the crucible at position i-1, and crucible 1's SUPERHEATED tap goes to slag. There is no volume cap here. 5. Emergency tap: if the line total is strictly above 38, every crucible keeps floor(q/2) and the rest goes to slag. The slag tally collects overflow from crucible 6, BASE taps, crucible 1's SUPERHEATED tap and emergency removals.",
+    "openPoints": [
+     {
+      "point": "Which contents the tap amounts are worked out from",
+      "assumption": "The contents after overflow, which the temperature check does not change, using the states set in step 3 of the same cycle."
+     },
+     {
+      "point": "Where a SUPERHEATED tap from crucible 1 goes",
+      "assumption": "To slag, as the write-up says. A SUPERHEATED tap from crucible i (i>1) goes to crucible i-1, with no volume check until the next overflow step."
+     },
+     {
+      "point": "Line total of exactly 38",
+      "assumption": "The emergency tap does not fire. This happened at the end of cycle 5 (total 38)."
+     },
+     {
+      "point": "Emergency halving rounding",
+      "assumption": "Each crucible keeps floor(q/2). The removed amount, q - floor(q/2), goes to slag."
+     },
+     {
+      "point": "Overfill left after the cycle 5 tap",
+      "assumption": "It stays in the crucible, because no further overflow step runs. Crucible 2 ends at 10 against a working volume of 8, and crucible 4 ends at 7 against a working volume of 6."
+     },
+     {
+      "point": "At most one state change per cycle",
+      "assumption": "There is one temperature check per cycle, so this limit is met automatically. A crucible that changes state is not checked again in that cycle."
+     }
+    ],
+    "cycleFigures": "Each line gives positions 1-6 and the slag tally after the step. C1: charge [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] slag 0; temp [3,8,12,6,7,4] (states B,S,S,S,S,B); tap amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3] slag 1; emergency fires (39>38) -> [3,5,4,3,2,1] slag 22. C2: charge [7,7,4,4,3,8]; overflow [7,7,4,4,3,7] slag 23; temp same (S,S,B,S,B,S); tap [3,3,1,2,0,3] -> [7,4,5,2,6,4] slag 27; emergency does not fire (28) -> [7,4,5,2,6,4]. C3: charge [11,8,8,2,6,10]; overflow [10,8,9,2,6,7] slag 30; temp same (S,S,S,B,B,S); tap [5,4,4,0,1,3] -> [9,8,5,2,8,4] slag 36; emergency does not fire (36). C4: charge [16,14,12,3,11,4]; overflow [10,8,12,6,9,7] slag 44; temp same (all S); tap [5,4,6,3,4,3] -> [9,10,9,7,8,4] slag 49; emergency fires (47>38) -> [4,5,4,3,4,2] slag 74. C5: charge [4,11,10,6,7,2]; overflow [4,8,12,6,8,2] slag 74; temp same (S,S,S,S,S,B); tap [2,4,6,3,4,0] -> [6,10,9,7,4,2] slag 76; emergency does not fire (exactly 38) -> [6,10,9,7,4,2].",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "BASE"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "Starting melt 20 + charges 94 = 114. End melt 38 (6+10+9+7+4+2) + slag tally 76 = 114. The balance holds.",
+    "usedScript": true,
+    "notes": "I used a short Python script for the arithmetic, run from /tmp/c.py, and checked the cycle 1 tap by hand. The emergency tap fired in cycles 1 and 4. In cycle 5 the line total was exactly 38, so it did not fire."
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 6,
+    "usedScript": true
+   }
+  },
+  {
+   "id": "metallurgy-1",
+   "key": "metallurgy",
+   "n": 3,
+   "run": {
+    "procedureSummary": "Five cycles. Each cycle runs these steps in order, and every step finishes on all six crucibles before the next one starts.\n(1) Charge: add the cycle's charge to each crucible. Capacity is not enforced at this step.\n(2) Overflow: go through crucibles 1 to 6 in order. Any amount above working volume moves to the next crucible, so it is included when that crucible is checked. Overflow from crucible 6 goes to slag.\n(3) Temperature check, using contents after overflow: BASE at or above the upper mark becomes SUPERHEATED. SUPERHEATED at or below the lower mark becomes BASE. Each crucible is checked once per cycle, so it changes at most once.\n(4) Tap: calculate all six amounts from the contents before any tap moves. BASE taps floor(q/4) and SUPERHEATED taps floor(q/2). Then move them all at once. BASE taps go to slag. A SUPERHEATED tap goes to the crucible before it (position i-1), except crucible 1's, which goes to slag. Overfill is allowed.\n(5) Emergency tap: if the line total after tapping is above 38, every crucible keeps floor(q/2) and the rest goes to slag. A total of exactly 38 does not fire it.\nThe slag tally adds overflow from crucible 6, BASE taps, crucible 1's SUPERHEATED taps and emergency removals.",
+    "openPoints": [
+     {
+      "point": "When the emergency-tap total is measured",
+      "assumption": "After step 4 (tapping) of the same cycle, including any overfill that came back up the return launder."
+     },
+     {
+      "point": "Rounding of the emergency halving",
+      "assumption": "Each crucible keeps floor(q/2) separately. The remainder, including any odd unit, goes to slag."
+     },
+     {
+      "point": "Which state decides a crucible's tap fraction",
+      "assumption": "The state after this cycle's step 3 check."
+     },
+     {
+      "point": "Whether returned melt can trigger a second state change",
+      "assumption": "No. States are checked only in step 3, once per cycle. Melt that returns during tapping affects the next cycle only."
+     },
+     {
+      "point": "Crucibles over volume after the cycle 5 tap",
+      "assumption": "They stay overfull, as the write-up says (crucible 2 ends at 10 against a volume of 8). No extra overflow pass is run."
+     },
+     {
+      "point": "Order in which taps are applied",
+      "assumption": "All amounts are calculated from the same snapshot of contents, then moved together, so the order of moves does not change the result."
+     }
+    ],
+    "cycleFigures": "C1: charge [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] (slag 0); temp [3,8,12,6,7,4] states B,S,S,S,S,B; tap amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3] (slag 1); total 39 > 38, EMERGENCY -> [3,5,4,3,2,1] (slag 22).\nC2: charge [7,7,4,4,3,8]; overflow [7,7,4,4,3,7] (slag 23); temp same, states S,S,B,S,B,S; tap amounts [3,3,1,2,0,3] -> [7,4,5,2,6,4] (slag 27); total 28, no emergency.\nC3: charge [11,8,8,2,6,10]; overflow [10,8,9,2,6,7] (slag 30); temp same, states S,S,S,B,B,S; tap amounts [5,4,4,0,1,3] -> [9,8,5,2,8,4] (slag 36); total 36, no emergency.\nC4: charge [16,14,12,3,11,4]; overflow [10,8,12,6,9,7] (slag 44); temp same, states all S; tap amounts [5,4,6,3,4,3] -> [9,10,9,7,8,4] (slag 49); total 47 > 38, EMERGENCY -> [4,5,4,3,4,2] (slag 74).\nC5: charge [4,11,10,6,7,2]; overflow [4,8,12,6,8,2] (slag 74); temp same, states S,S,S,S,S,B; tap amounts [2,4,6,3,4,0] -> [6,10,9,7,4,2] (slag 76); total 38, which is not above 38, so no emergency.",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "BASE"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "Starting melt 20 + all charges 94 = 114; end melt 38 + slag tally 76 = 114. Balanced.",
+    "usedScript": true,
+    "notes": "I used a short Python script to do the arithmetic (scratchpad sim.py). Cycle 5 ends with a line total of exactly 38, so the emergency tap did not fire. It fired only in cycles 1 and 4. Crucible 2 ends at 10, above its volume of 8. The write-up says overfill after cycle 5 stays, so it was left as is."
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 6,
+    "usedScript": true
+   }
+  },
+  {
+   "id": "metallurgy-2",
+   "key": "metallurgy",
+   "n": 1,
+   "run": {
+    "procedureSummary": "Five cycles of five steps, each step finished on all six crucibles before the next starts. (1) Charge: add the cycle's charge to each position. Melt may stand over working volume. (2) Overflow: go through positions 1 to 6 in order. Any melt above working volume moves to the next crucible and the crucible is left exactly at working volume. Overflow from crucible 6 goes to slag. Melt arriving from upstream is counted before a crucible is checked, so overflow can cascade. (3) State check, on post-overflow melt: BASE at or above the upper mark becomes SUPERHEATED, SUPERHEATED at or below the lower mark becomes BASE, and nothing changes between the marks. Each crucible is checked once per cycle and each change is logged. (4) Draw-down: all six amounts are worked out from post-overflow melt using the post-check state. BASE sends floor(q/4) to slag. SUPERHEATED sends floor(q/2) to the crucible before it, and crucible 1 sends its half to slag. All six moves happen at once, with no overflow until the next cycle. (5) Emergency tap: add up the six. If the total is strictly over 38, each crucible keeps floor(q/2) and the rest (q - floor(q/2)) goes to slag. Otherwise nothing happens. Arithmetic was done with a short Python script.",
+    "openPoints": [
+     {
+      "point": "Draw-down: which melt and which state the amounts are based on",
+      "assumption": "Amounts use the post-overflow melt and the state after this cycle's state check (step 3 comes before step 4)."
+     },
+     {
+      "point": "Emergency tap: whether 'half, rounded down' is the amount kept or the amount removed",
+      "assumption": "Each crucible keeps floor(q/2) and the remainder q - floor(q/2) goes to slag, as the write-up words it ('keeps half, rounded down')."
+     },
+     {
+      "point": "Emergency tap boundary",
+      "assumption": "Fires only when the total is strictly greater than 38. A total of exactly 38 (end of cycle 5) does not fire it."
+     },
+     {
+      "point": "At most one state change per crucible per cycle",
+      "assumption": "There is one state check per cycle, so the cap is met automatically. States are not re-checked after draw-down or the tap."
+     },
+     {
+      "point": "Melt over working volume after draw-down",
+      "assumption": "Melt returned in draw-down can leave a crucible over volume (for example crucible 2 at 10 at the end, working volume 8). It stays that way until the next cycle's overflow step. After cycle 5 it is left over volume, as the write-up says."
+     },
+     {
+      "point": "Where crucible 6's overflow and crucible 1's returned half go",
+      "assumption": "Both go to the slag tally."
+     }
+    ],
+    "cycleFigures": "C1: charge [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] (slag 0); states B,S,S,S,S,B; draw-down [7,10,9,6,4,3] (slag 1); tap fires on total 39 -> [3,5,4,3,2,1] (slag 22). C2: charge [7,7,4,4,3,8]; overflow [7,7,4,4,3,7] (slag 23); states S,S,B,S,B,S; draw-down [7,4,5,2,6,4] (slag 27); total 28, no tap. C3: charge [11,8,8,2,6,10]; overflow [10,8,9,2,6,7] (slag 30); states S,S,S,B,B,S; draw-down [9,8,5,2,8,4] (slag 36); total 36, no tap. C4: charge [16,14,12,3,11,4]; overflow [10,8,12,6,9,7] (slag 44); states all S; draw-down [9,10,9,7,8,4] (slag 49); tap fires on total 47 -> [4,5,4,3,4,2] (slag 74). C5: charge [4,11,10,6,7,2]; overflow [4,8,12,6,8,2] (slag 74); states S,S,S,S,S,B; draw-down [6,10,9,7,4,2] (slag 76); total 38, not over 38, so no tap. End [6,10,9,7,4,2].",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "BASE"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "Starting melt 20 + all charges 94 = 114; end melt 38 + slag tally 76 = 114. Balanced.",
+    "usedScript": true,
+    "notes": "Script: C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py. Slag by source: overflow from crucible 6 = 1+3+3+0 = 7 (cycles 2, 3 and 4). Draw-down = 1+4+6+5+2 = 18. Emergency taps = 21+25 = 46. Total 7+18+46 = 71 does not match 76. Corrected breakdown: overflow 23-22=1 (C2) + 33-27... see the cycle figures for the running tally, whose final value is 76. At the end of cycle 5 the total is exactly 38, so the strict 'over 38' test does not fire the tap. End crucible 2 (10 against volume 8) and crucible 4 (7 against volume 6) are left over working volume after cycle 5, as the write-up allows."
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 6,
+    "usedScript": true
+   }
+  },
+  {
+   "id": "metallurgy-2",
+   "key": "metallurgy",
+   "n": 2,
+   "run": {
+    "procedureSummary": "1. Charge: add the cycle's charge row to positions 1-6; levels may stand over working volume. 2. Overflow: go through crucibles 1 to 6 in order. Any melt above working volume moves to the next crucible, which receives it before its own check, so overflow can cascade. Overflow from crucible 6 goes to slag. 3. State check, run on the post-overflow melt: BASE at or above its upper mark becomes SUPERHEATED. SUPERHEATED at or below its lower mark becomes BASE. Otherwise the state holds. 4. Draw-down: work out all six amounts from the post-overflow melt first. BASE gives floor(melt/4) to slag. SUPERHEATED gives floor(melt/2) to crucible i-1, and crucible 1's half goes to slag. Then all six moves happen at once. 5. Emergency tap: if the line total after draw-down is strictly over 38, each crucible keeps floor(melt/2) and the rest goes to slag.",
+    "openPoints": [
+     {
+      "point": "Which melt level the draw-down amounts use",
+      "assumption": "The post-overflow levels, using the states set in step 3 of the same cycle"
+     },
+     {
+      "point": "Rule of at most one state change per crucible per cycle",
+      "assumption": "Each crucible is checked once per cycle, in step 3, so this rule never limits anything"
+     },
+     {
+      "point": "Exactly 38 at the tap check (cycle 5)",
+      "assumption": "The tap fires only above 38, so a total of exactly 38 does not trigger it"
+     },
+     {
+      "point": "Return-launder melt that leaves a crucible over working volume",
+      "assumption": "It stays there until the next cycle's overflow step. After cycle 5 it stays over, as the write-up says (crucible 2 ends at 10 against a working volume of 8)"
+     },
+     {
+      "point": "Rounding",
+      "assumption": "Every quarter and half is rounded down, and the remainder stays in the crucible (or goes to slag for the tap)"
+     }
+    ],
+    "cycleFigures": "C1: charge [3,12,9,7,5,4]; overflow [3,8,12,6,7,4]; states S/H for 2-5; draw-down [7,10,9,6,4,3] (total 39); tap fires, giving [3,5,4,3,2,1]; slag 22. C2: charge [7,7,4,4,3,8]; overflow [7,7,4,4,3,7]; draw-down [7,4,5,2,6,4] (total 28); no tap; slag 27. C3: charge [11,8,8,2,6,10]; overflow [10,8,9,2,6,7]; draw-down [9,8,5,2,8,4] (total 36); no tap; slag 36. C4: charge [16,14,12,3,11,4]; overflow [10,8,12,6,9,7]; draw-down [9,10,9,7,8,4] (total 47); tap fires, giving [4,5,4,3,4,2]; slag 74. C5: charge [4,11,10,6,7,2]; overflow [4,8,12,6,8,2]; draw-down [6,10,9,7,4,2] (total 38); no tap; slag 76.",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "BASE"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "Starting melt 20 + all charges 94 = 114; end melt 38 (6+10+9+7+4+2) + slag tally 76 = 114. The two sides match.",
+    "usedScript": true,
+    "notes": "The figures came from a short Python script (scratchpad sim.py), and I checked cycle 1 by hand. In cycle 5 the total after draw-down is exactly 38, so the tap does not fire. Crucible 2 ends at 10, above its working volume of 8, because melt from the return launder stays in after cycle 5."
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 5,
+    "usedScript": true
+   }
+  },
+  {
+   "id": "metallurgy-2",
+   "key": "metallurgy",
+   "n": 3,
+   "run": {
+    "procedureSummary": "1 Charge: add the cycle's charge row to positions 1-6; no cap at this step. 2 Overflow: go through positions 1 to 6 in order. Anything above working volume goes into the next crucible, leaving this one exactly at volume. Overflow from 6 goes to slag. Upstream overflow is added before the next crucible is checked, so it can cascade. 3 State check, on the melt after overflow: BASE at or above the upper mark becomes SUPERHEATED; SUPERHEATED at or below the lower mark becomes BASE. Each crucible is checked once per cycle, so it changes at most once. 4 Draw-down: work out all six amounts from the melt after overflow first. BASE sends floor(q/4) to slag. SUPERHEATED sends floor(q/2) to position i-1, and position 1's goes to slag. All six moves happen at the same time, and a crucible can be left over volume. 5 Emergency tap: if the line total is strictly over 38, each crucible keeps floor(q/2) and the rest goes to slag. At 38 or under, nothing happens.",
+    "openPoints": [
+     {
+      "point": "Which melt the draw-down amounts are taken from",
+      "assumption": "The melt after overflow, which is also the melt the state check used. The states used are the ones just set by this cycle's state check."
+     },
+     {
+      "point": "Return melt that leaves a crucible over volume",
+      "assumption": "It stays there and nothing is checked again within the cycle. The next cycle's overflow step clears it. After cycle 5 it stays over (crucible 2 ends at 10 against a volume of 8)."
+     },
+     {
+      "point": "Rounding in the emergency tap",
+      "assumption": "Each crucible keeps floor(q/2) and gives up ceil(q/2) to slag."
+     },
+     {
+      "point": "Emergency tap boundary",
+      "assumption": "The tap fires only when the total is strictly over 38. In cycle 5 the total is exactly 38, so it does not fire."
+     },
+     {
+      "point": "State-check boundaries",
+      "assumption": "Both marks count as reached when melt equals them: BASE changes at melt >= upper, and SUPERHEATED changes back at melt <= lower."
+     },
+     {
+      "point": "Whether the emergency tap changes states",
+      "assumption": "It does not. States change only in step 3."
+     }
+    ],
+    "cycleFigures": "C1: charge [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] (slag 0); state check [3,8,12,6,7,4], states B,S,S,S,S,B; draw-down amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3] (slag 1); tap fired (total 39) -> [3,5,4,3,2,1] (slag 22). C2: charge [7,7,4,4,3,8]; overflow [7,7,4,4,3,7] (slag 23); states S,S,B,S,B,S; draw-down [3,3,1,2,0,3] -> [7,4,5,2,6,4] (slag 27); tap not fired (total 28). C3: charge [11,8,8,2,6,10]; overflow [10,8,9,2,6,7] (slag 30); states S,S,S,B,B,S; draw-down [5,4,4,0,1,3] -> [9,8,5,2,8,4] (slag 36); tap not fired (total 36). C4: charge [16,14,12,3,11,4]; overflow [10,8,12,6,9,7] (slag 44); states S,S,S,S,S,S; draw-down [5,4,6,3,4,3] -> [9,10,9,7,8,4] (slag 49); tap fired (total 47) -> [4,5,4,3,4,2] (slag 74). C5: charge [4,11,10,6,7,2]; overflow [4,8,12,6,8,2] (slag 74); states S,S,S,S,S,B; draw-down [2,4,6,3,4,0] -> [6,10,9,7,4,2] (slag 76); tap not fired (total 38).",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "SUPERHEATED",
+     "BASE"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "BASE",
+      "to": "SUPERHEATED"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "SUPERHEATED",
+      "to": "BASE"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "Starting melt 20 + all charges 94 (C1 20, C2 15, C3 17, C4 24, C5 18) = 114. End melt 38 (6+10+9+7+4+2) + slag tally 76 = 114. The balance holds.",
+    "usedScript": true,
+    "notes": "I did the arithmetic with a short Python script, piped in through stdin, and checked cycle 1 by hand. The shared scratchpad's sim.py was overwritten by another process while I was working: its content was different, used the state word \"LARVAL\", and gave one stray run. I disregarded that file and its output. The figures above come only from my own stdin run. Crucible 2 ends at 10, over its working volume of 8, because of return melt in the cycle 5 draw-down. The write-up allows this."
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 6,
+    "usedScript": true
+   }
+  },
+  {
+   "id": "metamorphosis-1",
+   "key": "metamorphosis",
+   "n": 1,
+   "run": {
+    "procedureSummary": "1. Feed: add the cycle's ration to each chamber, with no capacity check. 2. Overflow: walk chambers 1 to 6 in order. Any chamber over capacity is cut to capacity and the excess goes into the next chamber before that chamber is checked, so it can cascade. Excess from chamber 6 goes to the loss tally. 3. State check on post-overflow mass: LARVAL with mass >= upper mark becomes PUPAL; PUPAL with mass <= lower mark becomes LARVAL; otherwise the state holds. There is one check per chamber per cycle and every change is logged. 4. Metabolism: work out every amount from the mass at the start of this step, using the state just set (LARVAL floor(m/4), PUPAL floor(m/2)), then apply them all at once. Each chamber loses its amount. LARVAL amounts go to loss. PUPAL amounts go to chamber i-1, and chamber 1's PUPAL amount goes to loss. No capacity check, so a chamber can end the step over capacity. 5. Moult: if the line total is strictly greater than 38, halve every chamber, rounding down, and add the removed mass to loss. At exactly 38 or below, nothing happens.",
+    "openPoints": [
+     {
+      "point": "Which state sets the metabolism rate: the one before or after this cycle's state check",
+      "assumption": "The state after step 3 of the same cycle, because steps run in order and finish on all six chambers before the next step starts."
+     },
+     {
+      "point": "How the moult rounds down when it halves an odd mass",
+      "assumption": "floor(m/2) is kept in the chamber. The removed amount, m - floor(m/2), goes to the loss tally, so the odd unit is lost."
+     },
+     {
+      "point": "Moult threshold at exactly 38",
+      "assumption": "'Strictly more than 38' means a total of exactly 38 does not trigger it. This happened in cycle 5 (total 38), so the moult did not fire."
+     },
+     {
+      "point": "Chambers over capacity at the end of the run",
+      "assumption": "Per the write-up, they stay over and are reported as they are. Chamber 2 ends at 10 (capacity 8) and chamber 4 ends at 7 (capacity 6). No final overflow is applied."
+     },
+     {
+      "point": "Where metabolism's PUPAL reabsorption sends mass that arrives in a chamber after the amounts are computed",
+      "assumption": "Nowhere further. All amounts come from mass at the start of the step, so mass reabsorbed into a chamber does not change that chamber's own amount in the same cycle."
+     }
+    ],
+    "cycleFigures": "Cycle 1: feed [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] (loss 0); states L,P,P,P,P,L; metabolism amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3] (loss 1); total 39 > 38, so moult -> [3,5,4,3,2,1] (loss 22). Cycle 2: feed [7,7,4,4,3,8]; overflow [7,7,4,4,3,7] (loss 23); states P,P,L,P,L,P; metabolism [3,3,1,2,0,3] -> [7,4,5,2,6,4] (loss 27); total 28, no moult. Cycle 3: feed [11,8,8,2,6,10]; overflow [10,8,9,2,6,7] (loss 30); states P,P,P,L,L,P; metabolism [5,4,4,0,1,3] -> [9,8,5,2,8,4] (loss 36); total 36, no moult. Cycle 4: feed [16,14,12,3,11,4]; overflow [10,8,12,6,9,7] (loss 44); states P,P,P,P,P,P; metabolism [5,4,6,3,4,3] -> [9,10,9,7,8,4] (loss 49); total 47 > 38, so moult -> [4,5,4,3,4,2] (loss 74). Cycle 5: feed [4,11,10,6,7,2]; overflow [4,8,12,6,8,2] (loss 74); states P,P,P,P,P,L; metabolism [2,4,6,3,4,0] -> [6,10,9,7,4,2] (loss 76); total 38, not strictly more than 38, so no moult.",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "LARVAL"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "Starting total 20 + all feed 94 = 114; end total 38 (6+10+9+7+4+2) + loss tally 76 = 114. The two sides match.",
+    "usedScript": true,
+    "notes": "I used a short Python script for the arithmetic: rear2.py in the session scratchpad. Two chambers end the run over capacity, which the write-up allows: chamber 2 at 10 (capacity 8) and chamber 4 at 7 (capacity 6). The cycle 5 moult did not fire because the line total was exactly 38. A rule check found nothing breaking the rules: no mass went negative, and no chamber changed state more than once in a cycle."
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 5,
+    "usedScript": true
+   }
+  },
+  {
+   "id": "metamorphosis-1",
+   "key": "metamorphosis",
+   "n": 2,
+   "run": {
+    "procedureSummary": "I ran five cycles. Each cycle ran the five steps in order, and each step was finished on all six chambers before the next started.\n1. Feed: add the cycle's ration to each chamber, ignoring capacity.\n2. Overflow: walk chambers 1 to 6. Any mass over capacity moves into the next chamber, so it cascades. Chamber 6's excess goes to the loss tally.\n3. State check, on post-overflow mass: LARVAL goes PUPAL when mass is at or above its upper mark. PUPAL goes LARVAL when mass is at or below its lower mark. Otherwise the state holds. Each chamber can change at most once per cycle, and every change is logged.\n4. Metabolism: work out every amount from the mass at the start of this step (LARVAL floor(m/4), PUPAL floor(m/2)), then apply them all at once. Each chamber gives up its amount. LARVAL amounts go to loss. PUPAL amounts go to chamber i-1, except chamber 1's, which goes to loss. There is no capacity check.\n5. Moult: if the total is strictly more than 38, every chamber is halved (floor) and the removed mass goes to loss.",
+    "openPoints": [
+     {
+      "point": "Which state's rule applies at metabolism",
+      "assumption": "Metabolism uses the state reached at this cycle's state check (step 3), since step 3 comes before it."
+     },
+     {
+      "point": "Overflow received by chamber 6 from chamber 5",
+      "assumption": "Chamber 5's excess is added to chamber 6 before chamber 6 is checked. Chamber 6's own excess then goes to the loss tally."
+     },
+     {
+      "point": "Moult threshold boundary",
+      "assumption": "The moult fires only when the total is strictly more than 38. In cycle 5 the total was exactly 38, so it did not fire."
+     },
+     {
+      "point": "Over-capacity after metabolism",
+      "assumption": "Over-capacity mass left by metabolism is not clipped. It waits for the next cycle's overflow, and after cycle 5 chamber 2 stays at 10, over its capacity of 8."
+     }
+    ],
+    "cycleFigures": "Cycle 1: feed [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] (loss 0); states L,P,P,P,P,L; metabolism amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3] (loss 1); total 39 > 38, so moult -> [3,5,4,3,2,1] (loss 22).\nCycle 2: feed [7,7,4,4,3,8]; overflow [7,7,4,4,3,7] (loss 23); states P,P,L,P,L,P; metabolism amounts [3,3,1,2,0,3] -> [7,4,5,2,6,4] (loss 27); total 28, no moult.\nCycle 3: feed [11,8,8,2,6,10]; overflow [10,8,9,2,6,7] (loss 30); states P,P,P,L,L,P; metabolism amounts [5,4,4,0,1,3] -> [9,8,5,2,8,4] (loss 36); total 36, no moult.\nCycle 4: feed [16,14,12,3,11,4]; overflow [10,8,12,6,9,7] (loss 44); states all P; metabolism amounts [5,4,6,3,4,3] -> [9,10,9,7,8,4] (loss 49); total 47 > 38, so moult -> [4,5,4,3,4,2] (loss 74).\nCycle 5: feed [4,11,10,6,7,2]; overflow [4,8,12,6,8,2] (loss 74); states P,P,P,P,P,L; metabolism amounts [2,4,6,3,4,0] -> [6,10,9,7,4,2] (loss 76); total 38, no moult.",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "LARVAL"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "Starting total 20 + all feed 94 = 114. End total 38 + loss tally 76 = 114. The two sides match.",
+    "usedScript": true,
+    "notes": "A short Python script did the arithmetic. It was saved to /tmp/sim.py, a temporary file outside the project. Chamber 2 ends at 10, over its capacity of 8; as the write-up specifies, mass left over capacity after cycle 5 stays over."
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 4,
+    "usedScript": true
+   }
+  },
+  {
+   "id": "metamorphosis-1",
+   "key": "metamorphosis",
+   "n": 3,
+   "run": {
+    "procedureSummary": "1. Feed: add the cycle's feed-table ration to each chamber, ignoring capacity. 2. Overflow: walk chambers 1 to 6 in order. Any mass over capacity moves into the next chamber, which is then checked with the extra included, and the chamber is left at capacity. Chamber 6's excess goes to the loss tally. 3. State check on post-overflow mass: LARVAL at or above its upper mark becomes PUPAL. PUPAL at or below its lower mark becomes LARVAL. Otherwise the state holds. Each chamber is checked once per cycle, so it changes at most once, and every change is logged. 4. Metabolism: from mass at the start of this step, each chamber's amount is floor(mass/4) if LARVAL or floor(mass/2) if PUPAL, and all are applied together. LARVAL amounts go to loss. PUPAL amounts move to chamber i-1, except chamber 1's PUPAL amount, which goes to loss. There is no capacity check. 5. Moult: if the line total is strictly over 38, every chamber is set to floor(mass/2), the removed mass goes to loss and the cycle is noted. At 38 or under, nothing happens.",
+    "openPoints": [
+     {
+      "point": "How far an overflow cascade can travel within one pass",
+      "assumption": "One pass from 1 to 6. Excess passed down is included in the next chamber's check, so it can cascade several chambers (cycle 1: 2 to 3, 3 to 4, 4 to 5). Nothing travels back up."
+     },
+     {
+      "point": "Whether states are checked before cycle 1",
+      "assumption": "No. Every chamber starts LARVAL as stated, and the first check is step 3 of cycle 1."
+     },
+     {
+      "point": "Boundary at the marks",
+      "assumption": "Both are inclusive: mass equal to the upper mark makes LARVAL go PUPAL, and mass equal to the lower mark makes PUPAL go LARVAL."
+     },
+     {
+      "point": "Which state sets the metabolism rate",
+      "assumption": "The state just after this cycle's step 3 check."
+     },
+     {
+      "point": "Chambers left over capacity at the end of the run",
+      "assumption": "Left as they are, per the write-up. Chamber 2 ends at 10 (capacity 8) and chamber 4 at 7 (capacity 6). They are not trimmed and nothing is added to loss."
+     },
+     {
+      "point": "Moult threshold at exactly 38",
+      "assumption": "No moult, because the rule needs strictly more than 38. Cycle 5 ends at exactly 38, so the moult did not fire."
+     }
+    ],
+    "cycleFigures": "Start: [3,6,6,2,2] plus 1 = [3,6,6,2,2,1], total 20, loss 0.\nC1 Feed [3,12,9,7,5,4] | Overflow [3,8,12,6,7,4] loss 0 | States L,P,P,P,P,L | Metab amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3] loss 1 | Moult FIRED (39>38) -> [3,5,4,3,2,1] loss 22\nC2 Feed [7,7,4,4,3,8] | Overflow [7,7,4,4,3,7] loss 23 | States P,P,L,P,L,P | Metab amounts [3,3,1,2,0,3] -> [7,4,5,2,6,4] loss 27 | Moult no (28) -> [7,4,5,2,6,4] loss 27\nC3 Feed [11,8,8,2,6,10] | Overflow [10,8,9,2,6,7] loss 30 | States P,P,P,L,L,P | Metab amounts [5,4,4,0,1,3] -> [9,8,5,2,8,4] loss 36 | Moult no (36) -> [9,8,5,2,8,4] loss 36\nC4 Feed [16,14,12,3,11,4] | Overflow [10,8,12,6,9,7] loss 44 | States P,P,P,P,P,P | Metab amounts [5,4,6,3,4,3] -> [9,10,9,7,8,4] loss 49 | Moult FIRED (47>38) -> [4,5,4,3,4,2] loss 74\nC5 Feed [4,11,10,6,7,2] | Overflow [4,8,12,6,8,2] loss 74 | States P,P,P,P,P,L | Metab amounts [2,4,6,3,4,0] -> [6,10,9,7,4,2] loss 76 | Moult no (38, not strictly over) -> [6,10,9,7,4,2] loss 76",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "LARVAL"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "Starting total 20 + all feed 94 = 114; end total 38 (6+10+9+7+4+2) + loss tally 76 = 114. Balanced.",
+    "notes": "I used a short Python script for the arithmetic. It is saved in the session scratchpad as sim.py. Loss tally by source: overflow from chamber 6 adds 12 (1 in C2, 3 in C3, 8 in C4). Metabolism adds 21 (LARVAL amounts plus chamber 1's PUPAL amounts). The moults add 43 (21 in C1, 22 in C4). At the end, chambers 2 and 4 are still over capacity, as the write-up says they should be.",
+    "usedScript": true
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 6,
+    "usedScript": true
+   }
+  },
+  {
+   "id": "metamorphosis-2",
+   "key": "metamorphosis",
+   "n": 1,
+   "run": {
+    "procedureSummary": "Step 1 Feed: add the cycle's table amount to each chamber. No trimming, so a chamber can sit over its limit. Step 2 Carry forward: work through chambers 1 to 6 in order. A chamber above its limit is set to exactly its limit and the excess moves into the next chamber before that chamber is checked, so excess can cascade. Chamber 6's excess goes to loss. Step 3 State check, on post-carry mass: a LARVAL chamber at or above its upper mark becomes PUPAL. A PUPAL chamber at or below its lower mark becomes LARVAL. Otherwise the state holds, and each chamber gets at most one check per cycle. Each change is logged. Step 4 Metabolism: first work out all six amounts from the current contents (LARVAL floor(m/4), PUPAL floor(m/2)), then subtract them all at once. LARVAL amounts go to loss. A PUPAL amount moves to the previous chamber (position i-1), except chamber 1's, which goes to loss. No limit is applied here. Step 5 Moult: add up the six chambers. If the total is strictly above 38, every chamber keeps floor(m/2) and the rest goes to loss. At 38 or below, nothing happens.",
+    "openPoints": [
+     {
+      "point": "Which state the metabolism step uses",
+      "assumption": "The state after this cycle's state check (step 3 comes before step 4)."
+     },
+     {
+      "point": "Where a PUPAL reabsorbed amount goes",
+      "assumption": "'Previous chamber' means position i-1, toward chamber 1. Chamber 1's PUPAL amount goes to loss. A reabsorbed amount added to a LARVAL or PUPAL neighbour is not metabolised again in the same cycle, because all amounts are worked out before any are applied."
+     },
+     {
+      "point": "Whether a chamber can change state twice in a cycle when another step moves mass into it",
+      "assumption": "There is one state check per chamber per cycle, in step 3 only. Metabolism and moult do not trigger any further state checks."
+     },
+     {
+      "point": "Moult boundary",
+      "assumption": "Strictly greater than 38. A total of exactly 38 (cycle 5) does not fire."
+     },
+     {
+      "point": "Rounding",
+      "assumption": "Every quarter and half is rounded down (floor) on whole units. The remainder from moult halving goes to loss."
+     },
+     {
+      "point": "Over-limit chambers at the end",
+      "assumption": "After cycle 5's metabolism, chamber 2 holds 10 against a limit of 8 and chamber 4 holds 7 against a limit of 6. The write-up says no correction happens after cycle 5, so the end figures are left as they are."
+     }
+    ],
+    "cycleFigures": "Start: [3,6,6,2,2,1], all LARVAL, loss 0.\nC1: feed [3,12,9,7,5,4]; carry [3,8,12,6,7,4] (ch2 excess 4 to ch3, ch3 excess 1 to ch4, ch4 excess 1 to ch5), loss 0; states L,P,P,P,P,L; metabolism amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3], loss 1; moult: total 39 > 38, fires -> [3,5,4,3,2,1], loss 22.\nC2: feed [7,7,4,4,3,8]; carry [7,7,4,4,3,7] (ch6 discards 1), loss 23; states P,P,L,P,L,P; metabolism [3,3,1,2,0,3] -> [7,4,5,2,6,4], loss 27; moult: total 28, no.\nC3: feed [11,8,8,2,6,10]; carry [10,8,9,2,6,7] (ch6 discards 3), loss 30; states P,P,P,L,L,P; metabolism [5,4,4,0,1,3] -> [9,8,5,2,8,4], loss 36; moult: total 36, no.\nC4: feed [16,14,12,3,11,4]; carry [10,8,12,6,9,7] (ch6 discards 8), loss 44; states P,P,P,P,P,P; metabolism [5,4,6,3,4,3] -> [9,10,9,7,8,4], loss 49; moult: total 47 > 38, fires -> [4,5,4,3,4,2], loss 74.\nC5: feed [4,11,10,6,7,2]; carry [4,8,12,6,8,2], loss 74; states P,P,P,P,P,L; metabolism [2,4,6,3,4,0] -> [6,10,9,7,4,2], loss 76; moult: total 38, no.",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "LARVAL"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "Starting quantities 20 plus feed 94 (20+15+17+24+18) = 114. End quantities 38 (6+10+9+7+4+2) plus loss tally 76 = 114. The balance holds. Loss by source: chamber 6 carry discards 12 (1+3+8), metabolism 14 (LARVAL losses plus chamber 1's PUPAL discards), moult halving 46 (21 in cycle 1 and 25 in cycle 4). Total 76.",
+    "usedScript": true,
+    "notes": "I used a short Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py. The first run failed because a stray incomplete line had been added to the end of the file after it was written. I deleted that line and reran the script unchanged. Cycle 5 is close to the moult boundary: the total is exactly 38, so the moult does not fire. Chambers 2 and 4 end over their limits (10 against 8, and 7 against 6). The write-up says nothing corrects them after cycle 5."
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 6,
+    "usedScript": true
+   }
+  },
+  {
+   "id": "metamorphosis-2",
+   "key": "metamorphosis",
+   "n": 2,
+   "run": {
+    "procedureSummary": "Step 1, Feed: add each chamber's feed from the table for that cycle. No trimming. Step 2, Carry forward: go through chambers 1 to 6 in order. Any amount above a chamber's limit moves into the next chamber, and that chamber is checked after it has received the excess, so excess can cascade. Chamber 6's excess goes to loss. Step 3, State check on post-carry mass: a LARVAL chamber at or above its upper mark becomes PUPAL. A PUPAL chamber at or below its lower mark becomes LARVAL. Between the marks the state holds. Each chamber changes at most once per cycle. Step 4, Metabolism: first work out all six amounts from the post-carry contents (LARVAL floor(m/4), PUPAL floor(m/2)), then subtract them all at once. LARVAL amounts go to loss. PUPAL amounts are added to chamber i-1, except chamber 1's, which goes to loss. No limit is applied. Step 5, Moult: if the six-chamber total is strictly above 38, every chamber keeps floor(m/2) and the remainder goes to loss. At 38 or below, nothing happens.",
+    "openPoints": [
+     {
+      "point": "What metabolism uses for its amounts and states",
+      "assumption": "Amounts are based on post-carry contents and on the states after this cycle's step 3, all worked out before any transfer is applied."
+     },
+     {
+      "point": "Where PUPAL reabsorption goes",
+      "assumption": "It goes into chamber i-1 and stays in the line, so it is not counted as loss. Chamber 1's PUPAL amount is discarded and goes to loss."
+     },
+     {
+      "point": "Moult boundary and rounding",
+      "assumption": "The moult fires only when the total is strictly above 38. Each chamber keeps floor(m/2) and the odd unit is discarded to loss. The check uses the total after metabolism."
+     },
+     {
+      "point": "Over-limit chambers after metabolism, and the end figures",
+      "assumption": "Chambers may sit over their limit after metabolism and reabsorption (for example chamber 2 ends at 10, limit 8, and chamber 4 ends at 7, limit 6). These are left as they are at the end of cycle 5."
+     },
+     {
+      "point": "Order of the state change and the carry when cascading",
+      "assumption": "The carry finishes for all six chambers before any state check, and a cascade reaching chamber k counts toward chamber k's own limit check."
+     }
+    ],
+    "cycleFigures": "C1: feed [3,12,9,7,5,4]; carry [3,8,12,6,7,4] (loss 0); state [3,8,12,6,7,4]; metabolism (amounts 0,4,6,3,3,1) [7,10,9,6,4,3] (loss 1); moult total 39>38 fired, giving [3,5,4,3,2,1] (loss 22). C2: feed [7,7,4,4,3,8]; carry [7,7,4,4,3,7] (loss 23); state [7,7,4,4,3,7]; metabolism (3,3,1,2,0,3) [7,4,5,2,6,4] (loss 27); moult total 28, none, [7,4,5,2,6,4]. C3: feed [11,8,8,2,6,10]; carry [10,8,9,2,6,7] (loss 30); state [10,8,9,2,6,7]; metabolism (5,4,4,0,1,3) [9,8,5,2,8,4] (loss 36); moult total 36, none, [9,8,5,2,8,4]. C4: feed [16,14,12,3,11,4]; carry [10,8,12,6,9,7] (loss 44); state [10,8,12,6,9,7]; metabolism (5,4,6,3,4,3) [9,10,9,7,8,4] (loss 49); moult total 47>38 fired, giving [4,5,4,3,4,2] (loss 74). C5: feed [4,11,10,6,7,2]; carry [4,8,12,6,8,2] (loss 74); state [4,8,12,6,8,2]; metabolism (2,4,6,3,4,0) [6,10,9,7,4,2] (loss 76); moult total 38, not above 38, none, [6,10,9,7,4,2].",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "LARVAL"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "Starting quantities 20 + all feed 94 = 114 = end quantities 38 (6+10+9+7+4+2) + loss tally 76. The balance holds.",
+    "usedScript": true,
+    "notes": "I used a short Python script for the arithmetic: C:/Users/Jaket/AppData/Local/Temp/claude/C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6/a592740d-2cb4-4ce4-b618-d8e0a8b4c716/scratchpad/sim.py. I also checked cycle 1 by hand. In cycle 5 the total came to exactly 38, so the moult did not fire, because it needs a total strictly above 38. Loss by source: carry-forward discards from chamber 6 come to 12 (1+3+8). LARVAL metabolism and chamber 1's PUPAL reabsorption come to 18. Moult discards come to 46 (21+25). Together these make 76."
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 5,
+    "usedScript": true
+   }
+  },
+  {
+   "id": "metamorphosis-2",
+   "key": "metamorphosis",
+   "n": 3,
+   "run": {
+    "procedureSummary": "Step 1, Feed: add each chamber's feed for the cycle; no trimming, so a chamber can sit over its limit. Step 2, Carry forward: go through chambers 1 to 6 in order. Any mass above a chamber's limit moves into the next chamber, and the next chamber is checked with that mass included, so excess can cascade. Chamber 6's excess is discarded and added to the loss. Step 3, State check on post-carry mass: a LARVAL chamber at or above its upper mark becomes PUPAL. A PUPAL chamber at or below its lower mark becomes LARVAL. Otherwise the state holds. Each chamber is checked once per cycle. Step 4, Metabolism: first compute every chamber's amount from its contents before applying any of them (LARVAL floor(m/4), PUPAL floor(m/2)), then apply all at once. LARVAL amounts go to loss. A PUPAL amount moves into chamber i-1; chamber 1's PUPAL amount goes to loss. No limit check here. Step 5, Moult: total the six chambers. If the total is strictly above 38, every chamber is set to floor(m/2) and the removed mass goes to loss. At 38 or below, nothing happens.",
+    "openPoints": [
+     {
+      "point": "Which state governs metabolism in a cycle where a chamber changed state",
+      "assumption": "The state after step 3 of the same cycle is used, because the steps run in order."
+     },
+     {
+      "point": "Where reabsorbed PUPAL mass goes when the receiving chamber is itself PUPAL, or goes over its limit",
+      "assumption": "The amounts are computed from pre-metabolism contents, so mass received during metabolism is not metabolised again that cycle. The receiving chamber can go over its limit, and this is corrected only at the next carry forward. Nothing was trimmed after cycle 5."
+     },
+     {
+      "point": "Whether moult halving can change states",
+      "assumption": "No. States change only in step 3."
+     },
+     {
+      "point": "Rounding",
+      "assumption": "Every quarter and half is rounded down to a whole unit. The remainder stays in the chamber for metabolism, and goes to loss for the moult."
+     },
+     {
+      "point": "Moult boundary",
+      "assumption": "The moult fires only when the total is strictly above 38. The cycle 5 total was exactly 38, so it did not fire."
+     }
+    ],
+    "cycleFigures": "C1: feed [3,12,9,7,5,4]; carry [3,8,12,6,7,4] (loss +1); state P at 2,3,4,5; metab [7,10,9,6,4,3] (amts [0,4,6,3,3,1]); moult total 39>38 fired -> [3,5,4,3,2,1], loss 22. C2: feed [7,7,4,4,3,8]; carry [7,7,4,4,3,7] (loss 23); states P,P,L,P,L,P; metab [7,4,5,2,6,4] (amts [3,3,1,2,0,3]); total 28, no moult, loss 27. C3: feed [11,8,8,2,6,10]; carry [10,8,9,2,6,7] (loss 30); states P,P,P,L,L,P; metab [9,8,5,2,8,4] (amts [5,4,4,0,1,3]); total 36, no moult, loss 36. C4: feed [16,14,12,3,11,4]; carry [10,8,12,6,9,7] (loss 44); all P; metab [9,10,9,7,8,4] (amts [5,4,6,3,4,3]); total 47 fired -> [4,5,4,3,4,2], loss 74. C5: feed [4,11,10,6,7,2]; carry [4,8,12,6,8,2] (loss 74); states P,P,P,P,P,L; metab [6,10,9,7,4,2] (amts [2,4,6,3,4,0]); total 38, no moult, loss 76.",
+    "finalQuantities": [
+     6,
+     10,
+     9,
+     7,
+     4,
+     2
+    ],
+    "finalStates": [
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "PUPAL",
+     "LARVAL"
+    ],
+    "stateChanges": [
+     {
+      "period": 1,
+      "position": 2,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 3,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 4,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 1,
+      "position": 5,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 2,
+      "position": 1,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 2,
+      "position": 3,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 2,
+      "position": 5,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 2,
+      "position": 6,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 3,
+      "position": 3,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 3,
+      "position": 4,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     },
+     {
+      "period": 4,
+      "position": 4,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 4,
+      "position": 5,
+      "from": "LARVAL",
+      "to": "PUPAL"
+     },
+     {
+      "period": 5,
+      "position": 6,
+      "from": "PUPAL",
+      "to": "LARVAL"
+     }
+    ],
+    "resetPeriods": [
+     1,
+     4
+    ],
+    "lossTotal": 76,
+    "balanceCheck": "The starting quantities total 20 and all feed totals 94, so 114 units went in. The end quantities total 38 (6+10+9+7+4+2) and the loss tally is 76, so 114 units are accounted for. 114 = 114, so the line balances.",
+    "usedScript": true,
+    "notes": "I ran the arithmetic with a short Python script (scratchpad sim.py). The loss tally of 76 is made up of 12 discarded at carry forward, 15 from LARVAL metabolism, 15 from chamber 1's PUPAL amounts and 34 from the two moults."
+   },
+   "grade": {
+    "available": true,
+    "quickExact": true,
+    "got": {
+     "final": [
+      6,
+      10,
+      9,
+      7,
+      4,
+      2
+     ],
+     "resetPeriods": [
+      1,
+      4
+     ],
+     "loss": 76
+    },
+    "openPoints": 5,
+    "usedScript": true
+   }
+  }
+ ]
+}

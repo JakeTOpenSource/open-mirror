@@ -26,18 +26,26 @@ Every baseline failure traced to one compressed sentence about the global halvin
 
 The checklist agrees at the level of the whole text: the disciplined write-ups carried seven more rules across the ten, and no disciplined write-up lost a rule the baseline had kept.
 
+## The control, run the same afternoon
+
+The confound named below as "most important" was tested before this report shipped. Four writers, two for metallurgy and two for metamorphosis, got the identical prompt with the skill paragraph replaced by one sentence: "review your explanation carefully for errors, omissions, or ambiguities against the engineer's process, and fix any you find." No skill file, no plain statement first, no stranger framing, no rule-by-rule check. Twelve blind readers, three per write-up, then executed them. The outcome rule was fixed before the run: six of six on both domains under the control would mean structured self-review of any kind is the active ingredient.
+
+**Control: 12 of 12 exact.** All four control write-ups were within the cap and free of figures. Their fix lists show the writers finding the halving ambiguity unprompted: metallurgy copy 1 wrote "the draft said 'halve every crucible', which doesn't say which half gets rounded down. It now says each crucible keeps half, rounded down." Three of the four control write-ups use "keeps half, rounded down"; the fourth, metamorphosis copy 1, uses "halves, rounded down", and all three of its readers still kept the smaller half.
+
+So the comparison stands as: no review, 1 of 6 on these two domains; any review against the source, 6 of 6; the skill's review, 6 of 6. **The skill's seven steps did not add anything a one-sentence review instruction did not.** Record: `evidence/transformation-2026-10-07/control/`. Cost: 16 sessions, 1.04M tokens. One protocol difference: control readers received the write-up inline rather than by file, because the workflow could not write files; the reader wording was otherwise identical.
+
 ## What this does and does not show
 
 It shows:
 
-1. Meaning carried into ten parallel analogies can be read back with zero drift, deterministically checked, when the writer works the way the skill prescribes.
-2. The drift seen on 6 October was a writing defect, and the writer-side discipline removed it on the two analogies where it had occurred.
-3. The reader-side pre-read, tested the day before, is not where the skill's value is; the writer side is.
+1. Meaning carried into ten parallel analogies can be read back with zero drift, deterministically checked, when the writer reviews the analogy against the source before handing it over. 14 of 14 with the skill; 12 of 12 with a one-sentence review instruction on the two domains that had drifted.
+2. The drift seen on 6 October was a writing defect: those writers were given no review instruction at all, and five of six reads on two domains went wrong. Any review pass against the source removed it.
+3. The reader-side pre-read, tested the day before, is not where value lies, and the skill's seven steps are not where it lies either. The value is in the review pass, which the skill contains but does not own.
 
 It does not show:
 
-4. That the skill's *text* is what mattered, as opposed to any careful "reread your own draft for lost rules" instruction. The disciplined prompt pointed the writer at the skill's steps 1, 4 and 5; a control with a generic self-review instruction was not run. That is the next cheapest test and the most important remaining confound.
-5. Zero drift in general. Fourteen reads is a sample; the two analogies with a history of drift got three reads each and the rest got one, by design, to save sessions.
+4. That the skill's text matters for this task. The control says it does not. What would still be worth testing is a harder compression, say 250 words, where a one-sentence review might fail and a rule-by-rule check might not; that is a hypothesis, not a result.
+5. Zero drift in general. Twenty-six reads across the two runs is a sample, concentrated by design on the two analogies with a history of drift.
 6. Anything about human readers or writers. Every session was Opus 5.5 or Sonnet 5.5.
 
 ## Cost, honestly
@@ -53,4 +61,8 @@ The readers came in under estimate. The writers ran over because they used a she
 
 ## What should change in the skill
 
-Nothing in the seven steps. The study used them as written. What should change is the pitch: the README has said "no measured benefit" since yesterday, and that sentence now needs a second half. The skill's measured value is on the writing side, for a writer who runs it on their own analogy before handing it over. The README and the changelog carry that update; the compiled report carries this file.
+The outcome rule set before the control said: if generic review also goes six of six, the skill should be cut down to whatever did the work. What did the work, on this evidence, is one instruction: before you hand over an analogy, review it against the thing it describes and fix what it lost. That instruction is inside Open Mirror as steps 4 and 5 applied to your own text, and it is also a sentence anyone could write. The honest pitch, as of today: Open Mirror has not been shown to beat a plain review instruction on any task yet tested. The README and changelog say so. The seven steps stay as they are until a task is found where they beat the sentence; the 250-word compression above is the first candidate, and it is cheap.
+
+## Cost of the control
+
+16 sessions, 1.04M tokens, against an estimate of 1.0M to 1.1M. Study 3 total: 60 sessions, 3.91M.

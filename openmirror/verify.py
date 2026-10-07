@@ -157,6 +157,14 @@ if os.path.exists(os.path.join(S3, "phase2-result.json")):
     claim("S3-7", "Study 3: checklist rules recoverable, baseline W0 of 230", 219, tot["W0"], ["transformation-2026-10-07/phase3-result.json"])
     claim("S3-8", "Study 3: checklist rules recoverable, disciplined W1 of 230", 226, tot["W1"], ["transformation-2026-10-07/phase3-result.json"])
     claim("S3-9", "Study 3: every checklist extraction returned exactly 23 answers", 20, sum(1 for e in p3["extractions"] if e["results"] and len(e["results"]) == 23), ["transformation-2026-10-07/phase3-result.json"])
+    ctrl = os.path.join(S3, "control", "result.json")
+    if os.path.exists(ctrl):
+        c = jl(ctrl)
+        cw = {w["id"]: w for w in c["writes"]}
+        claim("S3-10", "Control: write-ups passing the cap and figure checks", 4, sum(1 for w in c["writes"] if not w["problems"] and len(w["translation"]["document"].split()) <= 400), ["transformation-2026-10-07/control/result.json"])
+        claim("S3-11", "Control: reads attempted", 12, len(c["reads"]), ["transformation-2026-10-07/control/result.json"])
+        claim("S3-12", "Control: reads exactly right (all five fields, regraded here)", 12, sum(1 for r in c["reads"] if r["run"] and g3(r["run"], cw[r["id"]]["translation"]["restingStateWord"], cw[r["id"]]["translation"]["raisedStateWord"])), ["transformation-2026-10-07/control/result.json"])
+        claim("S3-13", "Control: the control writer prompt contains none of the skill's moves (plain statement, stranger, recoverable, picture)", True, not any(k in open(os.path.join(S3, "control", "writer-instruction.txt"), encoding="utf-8").read().lower() for k in ["plain statement", "stranger", "recoverable", "picture", "open mirror"]) if os.path.exists(os.path.join(S3, "control", "writer-instruction.txt")) else None, ["transformation-2026-10-07/control/writer-instruction.txt"])
 
 # ------------------------------------------------------------------ what is NOT verified here (stated, not hidden)
 unverified = [

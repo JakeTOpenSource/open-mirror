@@ -1,0 +1,10 @@
+- Cut the first draft from 513 words to 399 (counted with wc -w) to get under the 400-word cap, keeping every rule and number.
+- Labelled the feed table's columns as chambers 1 to 6, because the trim had left it unclear which number belonged to which chamber.
+- Added that each chamber's mass is a whole number and never negative, which the first outline left out.
+- Said outright that a chamber between its two marks keeps the state it already has, and that each chamber changes state at most once per cycle and every change is logged.
+- Made the metabolism step say that all six amounts are worked out from the mass at the start of the step before anything is applied, and that every chamber, LARVAL or PUPAL, gives up its own amount.
+- Covered the edge cases: a PUPAL chamber 1 sends its reabsorbed amount to the loss tally, and a chamber overfilled during metabolism is only corrected at the next cycle's overflow, so after cycle 5 it stays over capacity.
+- Specified that the moult fires only when the total is strictly over 38 (nothing happens at 38 or under), that halving rounds down, and that the cycle gets noted.
+- Wrote the overflow cascade (chamber 1's excess reaching chamber 2 before chamber 2 is checked) and chamber 6's excess going to the loss tally.
+- Ran a search for every banned word (including 'lost', 'level' and 'period') and found none; removed the numbered-position shorthand 'n-1' in favour of the example '4 sends to 3'.
+- Checked that the Report paragraph is only a template, with no figures, totals or results.

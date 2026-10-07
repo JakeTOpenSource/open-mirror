@@ -1,0 +1,170 @@
+{
+ "id": "metallurgy-1",
+ "n": 3,
+ "run": {
+  "procedureSummary": "Five cycles. Each cycle runs these steps in order, and every step finishes on all six crucibles before the next one starts.\n(1) Charge: add the cycle's charge to each crucible. Capacity is not enforced at this step.\n(2) Overflow: go through crucibles 1 to 6 in order. Any amount above working volume moves to the next crucible, so it is included when that crucible is checked. Overflow from crucible 6 goes to slag.\n(3) Temperature check, using contents after overflow: BASE at or above the upper mark becomes SUPERHEATED. SUPERHEATED at or below the lower mark becomes BASE. Each crucible is checked once per cycle, so it changes at most once.\n(4) Tap: calculate all six amounts from the contents before any tap moves. BASE taps floor(q/4) and SUPERHEATED taps floor(q/2). Then move them all at once. BASE taps go to slag. A SUPERHEATED tap goes to the crucible before it (position i-1), except crucible 1's, which goes to slag. Overfill is allowed.\n(5) Emergency tap: if the line total after tapping is above 38, every crucible keeps floor(q/2) and the rest goes to slag. A total of exactly 38 does not fire it.\nThe slag tally adds overflow from crucible 6, BASE taps, crucible 1's SUPERHEATED taps and emergency removals.",
+  "openPoints": [
+   {
+    "point": "When the emergency-tap total is measured",
+    "assumption": "After step 4 (tapping) of the same cycle, including any overfill that came back up the return launder."
+   },
+   {
+    "point": "Rounding of the emergency halving",
+    "assumption": "Each crucible keeps floor(q/2) separately. The remainder, including any odd unit, goes to slag."
+   },
+   {
+    "point": "Which state decides a crucible's tap fraction",
+    "assumption": "The state after this cycle's step 3 check."
+   },
+   {
+    "point": "Whether returned melt can trigger a second state change",
+    "assumption": "No. States are checked only in step 3, once per cycle. Melt that returns during tapping affects the next cycle only."
+   },
+   {
+    "point": "Crucibles over volume after the cycle 5 tap",
+    "assumption": "They stay overfull, as the write-up says (crucible 2 ends at 10 against a volume of 8). No extra overflow pass is run."
+   },
+   {
+    "point": "Order in which taps are applied",
+    "assumption": "All amounts are calculated from the same snapshot of contents, then moved together, so the order of moves does not change the result."
+   }
+  ],
+  "cycleFigures": "C1: charge [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] (slag 0); temp [3,8,12,6,7,4] states B,S,S,S,S,B; tap amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3] (slag 1); total 39 > 38, EMERGENCY -> [3,5,4,3,2,1] (slag 22).\nC2: charge [7,7,4,4,3,8]; overflow [7,7,4,4,3,7] (slag 23); temp same, states S,S,B,S,B,S; tap amounts [3,3,1,2,0,3] -> [7,4,5,2,6,4] (slag 27); total 28, no emergency.\nC3: charge [11,8,8,2,6,10]; overflow [10,8,9,2,6,7] (slag 30); temp same, states S,S,S,B,B,S; tap amounts [5,4,4,0,1,3] -> [9,8,5,2,8,4] (slag 36); total 36, no emergency.\nC4: charge [16,14,12,3,11,4]; overflow [10,8,12,6,9,7] (slag 44); temp same, states all S; tap amounts [5,4,6,3,4,3] -> [9,10,9,7,8,4] (slag 49); total 47 > 38, EMERGENCY -> [4,5,4,3,4,2] (slag 74).\nC5: charge [4,11,10,6,7,2]; overflow [4,8,12,6,8,2] (slag 74); temp same, states S,S,S,S,S,B; tap amounts [2,4,6,3,4,0] -> [6,10,9,7,4,2] (slag 76); total 38, which is not above 38, so no emergency.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "BASE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting melt 20 + all charges 94 = 114; end melt 38 + slag tally 76 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "I used a short Python script to do the arithmetic (scratchpad sim.py). Cycle 5 ends with a line total of exactly 38, so the emergency tap did not fire. It fired only in cycles 1 and 4. Crucible 2 ends at 10, above its volume of 8. The write-up says overfill after cycle 5 stays, so it was left as is."
+ },
+ "grade": {
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "openPoints": 6
+ }
+}

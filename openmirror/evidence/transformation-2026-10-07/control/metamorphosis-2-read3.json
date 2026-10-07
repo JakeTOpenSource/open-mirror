@@ -1,0 +1,166 @@
+{
+ "id": "metamorphosis-2",
+ "n": 3,
+ "run": {
+  "procedureSummary": "Step 1, Feed: add each chamber's feed for the cycle; no trimming, so a chamber can sit over its limit. Step 2, Carry forward: go through chambers 1 to 6 in order. Any mass above a chamber's limit moves into the next chamber, and the next chamber is checked with that mass included, so excess can cascade. Chamber 6's excess is discarded and added to the loss. Step 3, State check on post-carry mass: a LARVAL chamber at or above its upper mark becomes PUPAL. A PUPAL chamber at or below its lower mark becomes LARVAL. Otherwise the state holds. Each chamber is checked once per cycle. Step 4, Metabolism: first compute every chamber's amount from its contents before applying any of them (LARVAL floor(m/4), PUPAL floor(m/2)), then apply all at once. LARVAL amounts go to loss. A PUPAL amount moves into chamber i-1; chamber 1's PUPAL amount goes to loss. No limit check here. Step 5, Moult: total the six chambers. If the total is strictly above 38, every chamber is set to floor(m/2) and the removed mass goes to loss. At 38 or below, nothing happens.",
+  "openPoints": [
+   {
+    "point": "Which state governs metabolism in a cycle where a chamber changed state",
+    "assumption": "The state after step 3 of the same cycle is used, because the steps run in order."
+   },
+   {
+    "point": "Where reabsorbed PUPAL mass goes when the receiving chamber is itself PUPAL, or goes over its limit",
+    "assumption": "The amounts are computed from pre-metabolism contents, so mass received during metabolism is not metabolised again that cycle. The receiving chamber can go over its limit, and this is corrected only at the next carry forward. Nothing was trimmed after cycle 5."
+   },
+   {
+    "point": "Whether moult halving can change states",
+    "assumption": "No. States change only in step 3."
+   },
+   {
+    "point": "Rounding",
+    "assumption": "Every quarter and half is rounded down to a whole unit. The remainder stays in the chamber for metabolism, and goes to loss for the moult."
+   },
+   {
+    "point": "Moult boundary",
+    "assumption": "The moult fires only when the total is strictly above 38. The cycle 5 total was exactly 38, so it did not fire."
+   }
+  ],
+  "cycleFigures": "C1: feed [3,12,9,7,5,4]; carry [3,8,12,6,7,4] (loss +1); state P at 2,3,4,5; metab [7,10,9,6,4,3] (amts [0,4,6,3,3,1]); moult total 39>38 fired -> [3,5,4,3,2,1], loss 22. C2: feed [7,7,4,4,3,8]; carry [7,7,4,4,3,7] (loss 23); states P,P,L,P,L,P; metab [7,4,5,2,6,4] (amts [3,3,1,2,0,3]); total 28, no moult, loss 27. C3: feed [11,8,8,2,6,10]; carry [10,8,9,2,6,7] (loss 30); states P,P,P,L,L,P; metab [9,8,5,2,8,4] (amts [5,4,4,0,1,3]); total 36, no moult, loss 36. C4: feed [16,14,12,3,11,4]; carry [10,8,12,6,9,7] (loss 44); all P; metab [9,10,9,7,8,4] (amts [5,4,6,3,4,3]); total 47 fired -> [4,5,4,3,4,2], loss 74. C5: feed [4,11,10,6,7,2]; carry [4,8,12,6,8,2] (loss 74); states P,P,P,P,P,L; metab [6,10,9,7,4,2] (amts [2,4,6,3,4,0]); total 38, no moult, loss 76.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "LARVAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "The starting quantities total 20 and all feed totals 94, so 114 units went in. The end quantities total 38 (6+10+9+7+4+2) and the loss tally is 76, so 114 units are accounted for. 114 = 114, so the line balances.",
+  "usedScript": true,
+  "notes": "I ran the arithmetic with a short Python script (scratchpad sim.py). The loss tally of 76 is made up of 12 discarded at carry forward, 15 from LARVAL metabolism, 15 from chamber 1's PUPAL amounts and 34 from the two moults."
+ },
+ "grade": {
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "openPoints": 5
+ }
+}

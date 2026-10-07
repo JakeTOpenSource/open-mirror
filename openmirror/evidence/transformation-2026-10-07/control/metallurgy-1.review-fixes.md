@@ -1,0 +1,9 @@
+- Cut the first draft from 482 words to 396, under the 400 cap, and kept every number: 6 working volumes, 6 upper marks, 6 lower marks, 6 starting amounts, the line limit and the 5x6 charge table.
+- Emergency tap: the draft said 'halve every crucible', which doesn't say which half gets rounded down. It now says each crucible keeps half, rounded down, which matches the process (keep floor(level/2), the remainder goes to slag).
+- Tap step: said that all six amounts are rounded down and are worked out from the contents before anything moves.
+- Made the threshold explicit: the emergency tap fires only when the total is strictly over 38, and exactly 38 does not fire it.
+- Said that capacity is not enforced at charging or at the tap step, that overfill runs off only at the next cycle's overflow, and that overfill left after cycle 5 stays in the end figures.
+- Added that each state change happens at most once per crucible per cycle, and that a crucible between the marks keeps its state.
+- Listed every route into the slag tally (overflow from crucible 6, BASE taps, crucible 1's SUPERHEATED tap, emergency taps) so the balance check can close.
+- Removed the hyphenated term 'spill-over' and checked the final text against the banned-word list; none of the banned words appear.
+- Kept the Report paragraph to a template only, with no figures or results.

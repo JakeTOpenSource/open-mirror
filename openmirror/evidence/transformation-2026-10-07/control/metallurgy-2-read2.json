@@ -1,0 +1,166 @@
+{
+ "id": "metallurgy-2",
+ "n": 2,
+ "run": {
+  "procedureSummary": "1. Charge: add the cycle's charge row to positions 1-6; levels may stand over working volume. 2. Overflow: go through crucibles 1 to 6 in order. Any melt above working volume moves to the next crucible, which receives it before its own check, so overflow can cascade. Overflow from crucible 6 goes to slag. 3. State check, run on the post-overflow melt: BASE at or above its upper mark becomes SUPERHEATED. SUPERHEATED at or below its lower mark becomes BASE. Otherwise the state holds. 4. Draw-down: work out all six amounts from the post-overflow melt first. BASE gives floor(melt/4) to slag. SUPERHEATED gives floor(melt/2) to crucible i-1, and crucible 1's half goes to slag. Then all six moves happen at once. 5. Emergency tap: if the line total after draw-down is strictly over 38, each crucible keeps floor(melt/2) and the rest goes to slag.",
+  "openPoints": [
+   {
+    "point": "Which melt level the draw-down amounts use",
+    "assumption": "The post-overflow levels, using the states set in step 3 of the same cycle"
+   },
+   {
+    "point": "Rule of at most one state change per crucible per cycle",
+    "assumption": "Each crucible is checked once per cycle, in step 3, so this rule never limits anything"
+   },
+   {
+    "point": "Exactly 38 at the tap check (cycle 5)",
+    "assumption": "The tap fires only above 38, so a total of exactly 38 does not trigger it"
+   },
+   {
+    "point": "Return-launder melt that leaves a crucible over working volume",
+    "assumption": "It stays there until the next cycle's overflow step. After cycle 5 it stays over, as the write-up says (crucible 2 ends at 10 against a working volume of 8)"
+   },
+   {
+    "point": "Rounding",
+    "assumption": "Every quarter and half is rounded down, and the remainder stays in the crucible (or goes to slag for the tap)"
+   }
+  ],
+  "cycleFigures": "C1: charge [3,12,9,7,5,4]; overflow [3,8,12,6,7,4]; states S/H for 2-5; draw-down [7,10,9,6,4,3] (total 39); tap fires, giving [3,5,4,3,2,1]; slag 22. C2: charge [7,7,4,4,3,8]; overflow [7,7,4,4,3,7]; draw-down [7,4,5,2,6,4] (total 28); no tap; slag 27. C3: charge [11,8,8,2,6,10]; overflow [10,8,9,2,6,7]; draw-down [9,8,5,2,8,4] (total 36); no tap; slag 36. C4: charge [16,14,12,3,11,4]; overflow [10,8,12,6,9,7]; draw-down [9,10,9,7,8,4] (total 47); tap fires, giving [4,5,4,3,4,2]; slag 74. C5: charge [4,11,10,6,7,2]; overflow [4,8,12,6,8,2]; draw-down [6,10,9,7,4,2] (total 38); no tap; slag 76.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "BASE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting melt 20 + all charges 94 = 114; end melt 38 (6+10+9+7+4+2) + slag tally 76 = 114. The two sides match.",
+  "usedScript": true,
+  "notes": "The figures came from a short Python script (scratchpad sim.py), and I checked cycle 1 by hand. In cycle 5 the total after draw-down is exactly 38, so the tap does not fire. Crucible 2 ends at 10, above its working volume of 8, because melt from the return launder stays in after cycle 5."
+ },
+ "grade": {
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "openPoints": 5
+ }
+}

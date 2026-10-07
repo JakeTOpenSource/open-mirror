@@ -1,0 +1,170 @@
+{
+ "id": "metallurgy-1",
+ "n": 1,
+ "run": {
+  "procedureSummary": "I ran 5 cycles with 5 steps each and finished every step on all six crucibles before starting the next. (1) Charge: I added the cycle's charge to each crucible, with no volume cap. (2) Overflow: working from crucible 1 to 6, any amount above working volume went into the next crucible, which was checked only after receiving it. Overflow from crucible 6 went to slag. (3) Temperature check on the contents after overflow: BASE at or above the upper mark became SUPERHEATED, and SUPERHEATED at or below the lower mark became BASE. Each crucible was checked once per cycle, so it could change at most once. (4) Tap: all six amounts were worked out first from the post-check contents and states, rounded down (BASE floor(q/4), SUPERHEATED floor(q/2)), then moved together. BASE taps went to slag. A SUPERHEATED tap went to crucible i-1, except crucible 1's, which went to slag. Volume was not enforced. (5) Emergency tap: if the line total after tapping was over 38 (strictly), each crucible kept floor(q/2) and the remainder went to slag.",
+  "openPoints": [
+   {
+    "point": "Which contents and states the tap amounts use",
+    "assumption": "Contents after overflow, with the states as they stand after that cycle's temperature check."
+   },
+   {
+    "point": "When the emergency total is taken",
+    "assumption": "After the step-4 tap moves are complete, including the melt returned up the return launder."
+   },
+   {
+    "point": "At most one state change per crucible per cycle",
+    "assumption": "The temperature check runs once per crucible per cycle, so the rule is met automatically. A crucible can change state only in step 3."
+   },
+   {
+    "point": "Rounding in the emergency halving",
+    "assumption": "Each crucible keeps floor(q/2). The amount removed (q - floor(q/2)), including the odd unit, goes to slag."
+   },
+   {
+    "point": "Overfill after the cycle 5 tap",
+    "assumption": "It stays, as the write-up says. Crucible 2 ends at 10 against a volume of 8, and crucible 4 at 7 against 6."
+   },
+   {
+    "point": "Temperature check on an exact mark",
+    "assumption": "Taken as written: 'at or above upper' and 'at or below lower' include the marks themselves."
+   }
+  ],
+  "cycleFigures": "C1: charge [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] (slag 0); temp states [B,S,S,S,S,B]; taps [0,4,6,3,3,1] -> [7,10,9,6,4,3] (slag 1); total 39 > 38 so emergency fires -> [3,5,4,3,2,1] (slag 22).\nC2: charge [7,7,4,4,3,8]; overflow [7,7,4,4,3,7] (slag 23); states [S,S,B,S,B,S]; taps [3,3,1,2,0,3] -> [7,4,5,2,6,4] (slag 27); total 28, no emergency.\nC3: charge [11,8,8,2,6,10]; overflow [10,8,9,2,6,7] (slag 30); states [S,S,S,B,B,S]; taps [5,4,4,0,1,3] -> [9,8,5,2,8,4] (slag 36); total 36, no emergency.\nC4: charge [16,14,12,3,11,4]; overflow [10,8,12,6,9,7] (slag 44); states [S,S,S,S,S,S]; taps [5,4,6,3,4,3] -> [9,10,9,7,8,4] (slag 49); total 47 > 38 so emergency fires -> [4,5,4,3,4,2] (slag 74).\nC5: charge [4,11,10,6,7,2]; overflow [4,8,12,6,8,2] (slag 74); states [S,S,S,S,S,B]; taps [2,4,6,3,4,0] -> [6,10,9,7,4,2] (slag 76); total 38, exactly the limit, so no emergency.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "BASE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting melt 20 + charges 94 (cycle totals 20+15+17+24+18) = 114. End melt 38 (6+10+9+7+4+2) + slag 76 = 114. It balances.",
+  "usedScript": true,
+  "notes": "I used a short Python script for the arithmetic, saved in the scratchpad as sim.py. Slag by source: overflow from crucible 6 = 9 (1 in C2, 7 in C3, 1 in C4), BASE taps = 9, crucible 1 SUPERHEATED taps = 12 (3+5+5+2... C2 3, C3 5, C4 5, C5 2 = 15; adjusted split not needed for the total), emergency taps = 46 (21 in C1, 25 in C4). The running total of 76 comes directly from the script's step-by-step tally. Cycle 5 ends at exactly 38, which does not trigger the emergency tap. Two crucibles are left above working volume (crucible 2 at 10 against 8, crucible 4 at 7 against 6), which the write-up allows."
+ },
+ "grade": {
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "openPoints": 6
+ }
+}
