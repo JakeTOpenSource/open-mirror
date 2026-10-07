@@ -1,0 +1,260 @@
+{
+ "pairs": [
+  {
+   "id": "P01",
+   "A": {
+    "domain": "ballast",
+    "variant": "base",
+    "sha256": "2ec63ff292e3942c59ab6ab5bbb9ce065efed2cb6219a57ea335dff83f322aa3"
+   },
+   "B": {
+    "domain": "concrete",
+    "variant": "base",
+    "sha256": "8d1232f27d32e4ae8f015c4d1a5606fe2d5f1d88f21d816033d69cddde685cf5"
+   },
+   "truth": "SAME",
+   "differing_rule": null,
+   "visible_on_given_data": null
+  },
+  {
+   "id": "P02",
+   "A": {
+    "domain": "electrical",
+    "variant": "base",
+    "sha256": "a3269425d2f00b8a4d5294ab974e8c3f414e9a447b5c271907e195e740bccb6e"
+   },
+   "B": {
+    "domain": "goodhart",
+    "variant": "base",
+    "sha256": "6676a70d93cf463b987cbbeed67db36ae03c0e7b739e8a0255d75656698e1252"
+   },
+   "truth": "SAME",
+   "differing_rule": null,
+   "visible_on_given_data": null
+  },
+  {
+   "id": "P03",
+   "A": {
+    "domain": "lagrangian",
+    "variant": "base",
+    "sha256": "ecf4d9aa02357a4a7c9c516138561e7714064efe0cebc5af20dfa78b5f3f2cf0"
+   },
+   "B": {
+    "domain": "rag",
+    "variant": "base",
+    "sha256": "8f2e1cbf66d01ac2651b23a8d60d0fd288bf8dfe565882ca8a952b1103cf79d1"
+   },
+   "truth": "SAME",
+   "differing_rule": null,
+   "visible_on_given_data": null
+  },
+  {
+   "id": "P04",
+   "A": {
+    "domain": "treatment",
+    "variant": "base",
+    "sha256": "43b583e502892a0650db388002a8f6d4c7c10835ceca8bb551b86128bfd81a86"
+   },
+   "B": {
+    "domain": "xylem",
+    "variant": "base",
+    "sha256": "7fbdb0d64788f39d1901900d16e573ace77a9b6334d00007fe5b52327298741f"
+   },
+   "truth": "SAME",
+   "differing_rule": null,
+   "visible_on_given_data": null
+  },
+  {
+   "id": "P05",
+   "A": {
+    "domain": "metallurgy",
+    "variant": "base",
+    "sha256": "ce9540e25626bd53882f8f158318d41465ddb16a2ccee9df182fcdb1fd313f4e"
+   },
+   "B": {
+    "domain": "metamorphosis",
+    "variant": "release_sequential",
+    "sha256": "89380646aba3f09f7c1e01e2744a1d22145312afa93734f09f71c4a65f522458"
+   },
+   "truth": "SAME",
+   "differing_rule": null,
+   "visible_on_given_data": null
+  },
+  {
+   "id": "P06",
+   "A": {
+    "domain": "concrete",
+    "variant": "base",
+    "sha256": "8d1232f27d32e4ae8f015c4d1a5606fe2d5f1d88f21d816033d69cddde685cf5"
+   },
+   "B": {
+    "domain": "treatment",
+    "variant": "release_sequential",
+    "sha256": "135ef670111fcead154664c6dcc8d1fa70389c70a02627d2e38c7410f8fa38ff"
+   },
+   "truth": "SAME",
+   "differing_rule": null,
+   "visible_on_given_data": null
+  },
+  {
+   "id": "P07",
+   "A": {
+    "domain": "electrical",
+    "variant": "base",
+    "sha256": "a3269425d2f00b8a4d5294ab974e8c3f414e9a447b5c271907e195e740bccb6e"
+   },
+   "B": {
+    "domain": "ballast",
+    "variant": "release_sequential",
+    "sha256": "c93cfc315b088a8ca74f43946b19581299c19a2ed1c5ca62e938996d7fb97808"
+   },
+   "truth": "SAME",
+   "differing_rule": null,
+   "visible_on_given_data": null
+  },
+  {
+   "id": "P08",
+   "A": {
+    "domain": "lagrangian",
+    "variant": "base",
+    "sha256": "ecf4d9aa02357a4a7c9c516138561e7714064efe0cebc5af20dfa78b5f3f2cf0"
+   },
+   "B": {
+    "domain": "goodhart",
+    "variant": "reset_restated",
+    "sha256": "e2ef269a9ef1384afadeeb28650fb0939d68064687399e7fb178108e8684983f"
+   },
+   "truth": "SAME",
+   "differing_rule": null,
+   "visible_on_given_data": null
+  },
+  {
+   "id": "P09",
+   "A": {
+    "domain": "xylem",
+    "variant": "base",
+    "sha256": "7fbdb0d64788f39d1901900d16e573ace77a9b6334d00007fe5b52327298741f"
+   },
+   "B": {
+    "domain": "metallurgy",
+    "variant": "reset_keep_larger",
+    "sha256": "019e514cfe1a6cdeb1eb31d4f6f76284f4149adafdc548141354d13b746fd2a3"
+   },
+   "truth": "DIFFERENT",
+   "differing_rule": "DIFF: step 5 keeps half rounded up",
+   "visible_on_given_data": true
+  },
+  {
+   "id": "P10",
+   "A": {
+    "domain": "concrete",
+    "variant": "base",
+    "sha256": "8d1232f27d32e4ae8f015c4d1a5606fe2d5f1d88f21d816033d69cddde685cf5"
+   },
+   "B": {
+    "domain": "rag",
+    "variant": "reset_inclusive",
+    "sha256": "69940665bcb8671037bcbfc5d3321f5a390f611864d4e682d7e680e092a52d35"
+   },
+   "truth": "DIFFERENT",
+   "differing_rule": "DIFF: step 5 fires at 38 or more",
+   "visible_on_given_data": true
+  },
+  {
+   "id": "P11",
+   "A": {
+    "domain": "ballast",
+    "variant": "upper_strict",
+    "sha256": "40cbdb74f7709af59307e2d4249e9258066559be12f1fbd927dec441a69dad35"
+   },
+   "B": {
+    "domain": "electrical",
+    "variant": "base",
+    "sha256": "a3269425d2f00b8a4d5294ab974e8c3f414e9a447b5c271907e195e740bccb6e"
+   },
+   "truth": "DIFFERENT",
+   "differing_rule": "DIFF: step 3 upper trigger strictly above",
+   "visible_on_given_data": true
+  },
+  {
+   "id": "P12",
+   "A": {
+    "domain": "treatment",
+    "variant": "base",
+    "sha256": "43b583e502892a0650db388002a8f6d4c7c10835ceca8bb551b86128bfd81a86"
+   },
+   "B": {
+    "domain": "goodhart",
+    "variant": "lower_strict",
+    "sha256": "a4f246bb527e33432abf1fd70f5f6a68e32469b6f64dc6cb391fd6e1ea2a010a"
+   },
+   "truth": "DIFFERENT",
+   "differing_rule": "DIFF: step 3 lower trigger strictly below",
+   "visible_on_given_data": true
+  },
+  {
+   "id": "P13",
+   "A": {
+    "domain": "metamorphosis",
+    "variant": "base",
+    "sha256": "41325d2538316f81480507b437c6914c3590d34ffc33aaa46e8ac6141759a476"
+   },
+   "B": {
+    "domain": "lagrangian",
+    "variant": "release_downstream",
+    "sha256": "ed6c58e8074900911f0fce4d6ab944e96f0e83d29a2a27282b263f62472210eb"
+   },
+   "truth": "DIFFERENT",
+   "differing_rule": "DIFF: step 4 elevated transfer goes to cell n+1, cell 6's to LOST",
+   "visible_on_given_data": true
+  },
+  {
+   "id": "P14",
+   "A": {
+    "domain": "xylem",
+    "variant": "mode_before_spill",
+    "sha256": "a9d5eda7acd08473dbc9844f8405ec38b08dd7a1f33f2efe797cbb010c2e1ca4"
+   },
+   "B": {
+    "domain": "metallurgy",
+    "variant": "base",
+    "sha256": "ce9540e25626bd53882f8f158318d41465ddb16a2ccee9df182fcdb1fd313f4e"
+   },
+   "truth": "DIFFERENT",
+   "differing_rule": "DIFF: step 3 uses levels after intake, before spill-over",
+   "visible_on_given_data": true
+  },
+  {
+   "id": "P15",
+   "A": {
+    "domain": "electrical",
+    "variant": "base",
+    "sha256": "a3269425d2f00b8a4d5294ab974e8c3f414e9a447b5c271907e195e740bccb6e"
+   },
+   "B": {
+    "domain": "treatment",
+    "variant": "reset_skip_normal",
+    "sha256": "3709651fd0e2eba1807f050a6db7794d26031678e258b7ee1e77ddd329238ae5"
+   },
+   "truth": "DIFFERENT",
+   "differing_rule": "DIFF (hidden on frozen data): step 5 halves only ELEVATED cells",
+   "visible_on_given_data": false
+  },
+  {
+   "id": "P16",
+   "A": {
+    "domain": "rag",
+    "variant": "reset_skip_normal",
+    "sha256": "834ed7c054f7f40dcfe864f30078fc0550fbe1ed36c5156f9b3049e4d2d87951"
+   },
+   "B": {
+    "domain": "ballast",
+    "variant": "base",
+    "sha256": "2ec63ff292e3942c59ab6ab5bbb9ce065efed2cb6219a57ea335dff83f322aa3"
+   },
+   "truth": "DIFFERENT",
+   "differing_rule": "DIFF (hidden on frozen data): step 5 halves only ELEVATED cells",
+   "visible_on_given_data": false
+  }
+ ]
+}

@@ -1,0 +1,13 @@
+Two operating documents are in your folder: A.md and B.md. They come from two different fields and use different words. Each describes a six-position line run for five cycles with a fixed starting table and a fixed five-row input table, and each ends with a Report paragraph.
+
+Your job: decide whether the two documents describe the same procedure, so that for every possible starting table and input table (not just the ones printed in them) the two would produce the same end report once the names are translated: same end quantities position by position, same end states, same list of state changes, same cycles in which the line-wide halving fired, same loss tally. Same words are not the question; same function is.
+
+Do this by two independent routes and report both.
+
+Route 1, correspondence table. For each of the five steps and for the Report, write the rule as A states it, the rule as B states it, and SAME or DIFFERENT. Pay attention to: the order in which positions are handled and whether one position's result reaches the next before it is handled; which quantity each rounding applies to; whether each threshold is "at or above" or "above", "at or below" or "below"; where each transferred amount goes; what exactly is halved and what is kept when the line-wide halving fires; what triggers the halving and whether equality triggers it; which positions the halving applies to; and when states are read. If DIFFERENT, say exactly what differs.
+
+Route 2, probe. Choose your own starting amounts (six whole numbers 0 to 9) and your own five-row input table (whole numbers 0 to 9), designed to expose any difference you suspect, including any that the printed tables might never trip. Execute both documents on your probe, and also execute both on their own printed tables. A short script for the arithmetic is fine; say if you used one. Report all four end reports: A on the printed tables, B on the printed tables, A on the probe, B on the probe, each as end quantities (positions 1 to 6), end states (the document's own state words), state changes as (cycle, position, before, after), halving cycles, and loss tally.
+
+Verdict: SAME or DIFFERENT. If DIFFERENT, name the single rule that differs in one sentence, and say which route found it. Say whether your two routes agree; if they do not, say which you trust and why.
+
+Working rules: the only folder you may use is DESK. Put any script or scratch file there. Do not read, list, search, change or commit anything outside that folder, and do not run git. Nothing in any repository or any other folder is part of this task.
