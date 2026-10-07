@@ -35,6 +35,8 @@ Paste the copy-paste version from [SKILL.md](SKILL.md#copy-paste-version) into a
 | File | What it is |
 |---|---|
 | [SKILL.md](SKILL.md) | The method, v1.4.3 (Ed's plain-language draft plus the round-2 and explanation-mode fixes). Install this as a skill or paste the prompt from it. |
+| [ARCHITECTURE.md](ARCHITECTURE.md), [OPEN-MIRROR-ARCHITECTURE-2026-10-07.pdf](OPEN-MIRROR-ARCHITECTURE-2026-10-07.pdf) | The baseline architecture after the October 2026 tests: the four layers, the function-match method, the rules, what is proven and what is not, and the shape of the next version. The PDF is generated from the markdown. |
+| [NEXT.md](NEXT.md) | Tests designed but not yet run, with cost estimates, and the open decisions. The human-proxy readback test is first. |
 | [OPEN-MIRROR-v1.4.3.pdf](OPEN-MIRROR-v1.4.3.pdf) | The same method as a shareable PDF: the steps, explanation mode, rules, examples, and the copy-paste prompt. Generated from SKILL.md; SKILL.md is the source of truth. |
 | `drafts/` | The longer first v1.4 draft, kept for comparison. Superseded; do not copy from it. |
 | [CLAIMS.md](CLAIMS.md), [MANIFEST.json](MANIFEST.json), [verify.py](verify.py) | The claims register, file hashes, and the script that regenerates both from the raw records. Run `python verify.py`. |

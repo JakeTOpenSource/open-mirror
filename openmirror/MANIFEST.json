@@ -5,6 +5,10 @@
    "sha256": "1a6eff9ae431ad0313d3557e6db6bff0f04f42446f3354e40560f656cd127a41",
    "bytes": 6
   },
+  "ARCHITECTURE.md": {
+   "sha256": "bb4a2b40428bc34d41b882f28500c5e5eeb90c906cd2c17d5f3309bacc8ab629",
+   "bytes": 7630
+  },
   "CHANGELOG.md": {
    "sha256": "6937e9df2686f76e2fb3a374ec938fd9f71e1888c2b8c1981527b5cc437bfe36",
    "bytes": 15616
@@ -13,9 +17,17 @@
    "sha256": "00580b07b8a266caa5b929f9038e5403b964c1a5ee8109f805b174b29f024964",
    "bytes": 13580
   },
+  "NEXT.md": {
+   "sha256": "52a4b25294cfcef6266fa0837dc86bebaca127000e20310dc91e05baaf27bf8f",
+   "bytes": 2083
+  },
+  "OPEN-MIRROR-ARCHITECTURE-2026-10-07.pdf": {
+   "sha256": "5c0827518ae608958af86552aeeae724f41ac53649f9e9e3bbcf794e17c8bdb6",
+   "bytes": 8577
+  },
   "OPEN-MIRROR-FULL-REPORT-2026-10-06.md": {
-   "sha256": "e9b0bc1d6c3065ec3683390b597191f4d0771adab1cd215418918d786a66fb49",
-   "bytes": 618700
+   "sha256": "a4568247b10903d0c5fb32d27617fdd420b5b562e65f525a329b285ab7831d00",
+   "bytes": 619185
   },
   "OPEN-MIRROR-SKILL-v1.4.3-COPY-ME.md": {
    "sha256": "74c9657f5959569e06add394e7763b71d1c63e3f989135475019696772423966",
@@ -26,8 +38,8 @@
    "bytes": 12048
   },
   "README.md": {
-   "sha256": "6731854ed970ac860a206e5e4f129ea60611e8e16af1f686e25e74d38193cf24",
-   "bytes": 8499
+   "sha256": "b1f65f822581e341b607d0c8ef003e5f4a93c8242b87abc3d97b408ec8091f24",
+   "bytes": 8984
   },
   "RED-TEAM-REPORT-R2.md": {
    "sha256": "74767dd278d5036e6ba5531358741ce402e36b0bdd32c6b0725312336603f558",
