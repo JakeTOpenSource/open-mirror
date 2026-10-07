@@ -1,0 +1,181 @@
+{
+ "run": {
+  "rulesInOwnWords": "Setup: six teams in a line, team 1 (intake) to team 6 (customer). Per team: WIP limit 10,8,12,6,9,7; escalate mark 7,6,9,5,7,5; stand-down mark 3,2,4,2,3,2; opening tickets 3,6,6,2,2,1 (20 total). All start ROUTINE. Board target 38. Closed tally starts at 0. Each cycle runs five steps, and each step finishes for all teams before the next starts.\nStep 1 (arrivals): add that cycle's new tickets to each team. Limits are not applied here.\nStep 2 (walk): go team 1 to team 6 in order. If a team is over its WIP limit, cut it to the limit and pass the excess to the next team. That excess counts toward the next team's total when the walk reaches it, so overflow can cascade. Excess from team 6 is closed-without-action and goes on the closed tally.\nStep 3 (status): ROUTINE with tickets >= escalate mark becomes ESCALATED. ESCALATED with tickets <= stand-down mark becomes ROUTINE. Otherwise status stays the same. Each flip is logged with cycle, team, before and after.\nStep 4 (work): take one snapshot of all counts after step 2 and use the statuses from step 3. ROUTINE teams close floor(snapshot/4), which goes on the tally. ESCALATED teams send floor(snapshot/2) to the team upstream (team i-1). Team 1's bounce is closed and goes on the tally. Bounced tickets may leave a team over its limit. That is allowed, and they are not re-walked until the next cycle's step 2, or ever after cycle 5.\nStep 5 (backlog cut): add up the board. If the total is strictly greater than 38, each team keeps floor(count/2) and the rest are closed-without-action (tally). If the total is 38 or less, nothing happens. A cycle where this fires counts as a reset.\nBalance: 20 start + all arrivals = open at end + closed tally.",
+  "gapsFlagged": [
+   {
+    "rule": "Step 2 walk: what 'excess' means and how the cascade works",
+    "whatYouAssumed": "Excess = tickets above the WIP limit, so the team ends at exactly its limit. The excess is added to the next team before that team is checked, so it can cascade further down the line in the same walk."
+   },
+   {
+    "rule": "Step 4 snapshot: whether bounces received in the same step change what a team works on",
+    "whatYouAssumed": "All closures and bounces are computed from the post-walk counts, then applied together. Tickets bounced in are not worked or re-bounced in that step."
+   },
+   {
+    "rule": "Step 3 status timing: whether step 4 uses statuses from before or after this cycle's flips",
+    "whatYouAssumed": "Step 4 uses the statuses as updated in step 3 of the same cycle."
+   },
+   {
+    "rule": "Step 3 thresholds: whether a team can flip twice in one check",
+    "whatYouAssumed": "Each team is checked once per cycle, so there is at most one flip per team per cycle."
+   },
+   {
+    "rule": "Step 5 boundary: a total of exactly 38",
+    "whatYouAssumed": "Taken as written: the cut only fires when the total is strictly over 38. Cycle 5 ends at exactly 38, so no cut."
+   },
+   {
+    "rule": "Step 5 rounding of the half kept",
+    "whatYouAssumed": "Each team keeps floor(count/2) and the remainder is closed, so an odd count closes the larger half."
+   },
+   {
+    "rule": "Where team 1's bounce and team 6's overflow go",
+    "whatYouAssumed": "Both are added to the single closed tally, as the 'every closure, by any route' line says."
+   },
+   {
+    "rule": "What counts as a 'reset' for resetPeriods",
+    "whatYouAssumed": "The backlog cut in step 5 is the global reset. The cycles listed are the ones where it fired."
+   }
+  ],
+  "working": "Format: counts for teams 1-6 [closed tally].\nStart: 3,6,6,2,2,1 [0]; all ROUTINE.\nC1: arrive 3,12,9,7,5,4 | walk 3,8,12,6,7,4 [0] (T2 excess 4 to T3, T3 13->12 with 1 to T4, T4 8->6 with 2 to T5; nothing reaches T6's limit) | status: T2,T3,T4,T5 go ESCALATED | work (snapshot 3,8,12,6,7,4): T1 R closes 0; T2 E bounces 4 to T1; T3 E bounces 6 to T2; T4 E bounces 3 to T3; T5 E bounces 3 to T4; T6 R closes 1 -> 7,10,9,6,4,3 [1], total 39 | cut (39>38): keep 3,5,4,3,2,1, close 21 -> 3,5,4,3,2,1 [22].\nC2: arrive 7,7,4,4,3,8 | walk 7,7,4,4,3,7 [23] (T6 overflow 1 closed) | status: T1 R->E (7>=7), T3 E->R (4<=4), T5 E->R (3<=3), T6 R->E (7>=5); T2 E holds (7), T4 E holds (4) | work: T1 E bounces 3, closed; T2 E bounces 3 to T1; T3 R closes 1; T4 E bounces 2 to T3; T5 R closes 0; T6 E bounces 3 to T5 -> 7,4,5,2,6,4 [27], total 28 | no cut.\nC3: arrive 11,8,8,2,6,10 | walk 10,8,9,2,6,7 [30] (T1 excess 1 to T2; T2 9->8 with 1 to T3; T6 overflow 3 closed) | status: T3 R->E (9>=9), T4 E->R (2<=2) | work: T1 bounces 5, closed; T2 bounces 4 to T1; T3 bounces 4 to T2; T4 R closes 0; T5 R closes 1; T6 E bounces 3 to T5 -> 9,8,5,2,8,4 [36], total 36 | no cut.\nC4: arrive 16,14,12,3,11,4 | walk 10,8,12,6,9,7 [44] (T1 6 excess to T2 = 20 -> 8 with 12 to T3 = 24 -> 12 with 12 to T4 = 15 -> 6 with 9 to T5 = 20 -> 9 with 11 to T6 = 15 -> 7, 8 closed) | status: T4 R->E (6>=5), T5 R->E (9>=7); all ESCALATED | work: T1 bounces 5, closed; T2 4 to T1; T3 6 to T2; T4 3 to T3; T5 4 to T4; T6 3 to T5 -> 9,10,9,7,8,4 [49], total 47 | cut (47>38): keep 4,5,4,3,4,2, close 25 -> [74].\nC5: arrive 4,11,10,6,7,2 | walk 4,8,12,6,8,2 [74] (T2 excess 3 to T3 = 13 -> 12 with 1 to T5... correction: T3 13 -> 12 with 1 to T4 = 7 -> 6 with 1 to T5 = 8) | status: T6 E->R (2<=2); T1 E holds (4 > 3) | work: T1 bounces 2, closed; T2 4 to T1; T3 6 to T2; T4 3 to T3; T5 4 to T4; T6 R closes 0 -> 6,10,9,7,4,2 [76], total 38 | 38 is not strictly over 38, so no cut.\nEnd: 6,10,9,7,4,2; tally 76.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "ESCALATED",
+   "ESCALATED",
+   "ESCALATED",
+   "ESCALATED",
+   "ESCALATED",
+   "ROUTINE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "ESCALATED",
+    "to": "ROUTINE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "ESCALATED",
+    "to": "ROUTINE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "ESCALATED",
+    "to": "ROUTINE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "ESCALATED",
+    "to": "ROUTINE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Start 20 (3+6+6+2+2+1) + arrivals 94 (C1 20, C2 15, C3 17, C4 24, C5 18) = 114. End open 38 (6+10+9+7+4+2) + closed 76 = 114. It balances.",
+  "usedScript": true,
+  "notes": "I ran a short Node.js script for the arithmetic (s.js in the session scratchpad). An earlier Bash command hung waiting on stdin and was dropped. Its leftover background job produced no results, and none were used. Every figure I computed matches the Report paragraph in the write-up: end counts 6,10,9,7,4,2; the statuses; all 13 status changes; cuts in cycles 1 and 4; tally 76; balance 114 = 38 + 76. The key boundary is cycle 5: the board ends at exactly 38, and that does not trigger the cut because the rule requires strictly over 38. Inline-correction note on C5 walk: T2 12->8 sends 3 to T3 (13 -> 12, 1 to T4); T4 7 -> 6 sends 1 to T5 (8); T6 2.",
+  "preReadNotes": "The write-up's own Report paragraph already states the expected results. I worked all five cycles independently from the rules and treated those stated figures only as something to check against at the end."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "gapsFlagged": 8
+ }
+}

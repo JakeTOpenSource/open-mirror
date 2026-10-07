@@ -1,0 +1,174 @@
+{
+ "run": {
+  "procedureSummary": "Start: sap 3,6,6,2,2,1 (total 20). All six segments start QUIET. Loss tally starts at 0. Each cycle runs the steps below in order, and each step is finished on all six segments before the next one starts.\n1. Feed: add the cycle's feed row to each segment. Volume is not checked at this step.\n2. Push: go up from segment 1 to segment 6, one pass. If a segment holds more than its volume, cap it at its volume and add the excess to the next segment before that segment is checked, so one surge can carry all the way up. Any excess over segment 6 is transpired and goes on the loss tally.\n3. Marks: check each segment against its state as it stood at the start of this step. A QUIET segment with sap at or above its upper mark becomes SINK-ACTIVE. A SINK-ACTIVE segment with sap at or below its lower mark becomes QUIET. Otherwise the state does not change. Log every flip.\n4. Draw down: work out every amount from the sap after the push, before anything moves. A QUIET segment loses floor(sap/4), which is respired and goes on the loss tally. A SINK-ACTIVE segment sends floor(sap/2) to the segment below. Segment 1's amount goes to the roots and on the loss tally. Apply all moves at the same time. Volume is not checked, so a segment can stay overfull.\n5. Leaf-drop: if the stem total is strictly over 38, set every segment to floor(sap/2). The amount removed (sap minus floor(sap/2)) is transpired and goes on the loss tally. A total of exactly 38 does not fire it.\nThe report is taken after leaf-drop in cycle 5. I used a short Python script for the arithmetic and checked cycle 1 by hand.",
+  "openPoints": [
+   {
+    "point": "How leaf-drop rounds: is the amount removed rounded down, or the amount kept?",
+    "assumption": "'Halve every segment, rounding down' means the segment keeps floor(sap/2). The removed amount, sap - floor(sap/2), is transpired, so on odd values the larger half is removed."
+   },
+   {
+    "point": "Which state the marks step checks against, and whether a segment can flip twice in one step.",
+    "assumption": "Each segment is checked once against its state at the start of the step, using the sap after the push. It can flip at most once per cycle."
+   },
+   {
+    "point": "Which sap value draw down is based on.",
+    "assumption": "The sap after the push and marks steps (marks do not move sap). All amounts are worked out before any are applied, and the state used is the one just set by the marks step."
+   },
+   {
+    "point": "Where push overflow is counted.",
+    "assumption": "Overflow from segment 6 is transpired and goes on the loss tally. Overflow from lower segments moves up and is not a loss. Push is one upward pass. Segments overfilled by phloem in draw down are only corrected by the next cycle's push, and not at all after cycle 5."
+   },
+   {
+    "point": "Leaf-drop when the total is exactly 38 (this happens at the end of cycle 5).",
+    "assumption": "It does not fire. The rule is strictly over 38, as the write-up says."
+   },
+   {
+    "point": "What 'transpired' covers.",
+    "assumption": "Push overflow from the top of segment 6 and leaf-drop removals both count as transpired. Both go on the single loss tally together with respiration and what segment 1 sends to the roots."
+   }
+  ],
+  "cycleFigures": "C1: feed 3,12,9,7,5,4 | push 3,8,12,6,7,4 (tally 0) | marks 3,8,12,6,7,4 [Q,S,S,S,S,Q] | draw 7,10,9,6,4,3 (tally 1) | leaf-drop FIRED (39>38) 3,5,4,3,2,1 total 18 (tally 22)\nC2: feed 7,7,4,4,3,8 | push 7,7,4,4,3,7 (tally 23) | marks 7,7,4,4,3,7 [S,S,Q,S,Q,S] | draw 7,4,5,2,6,4 (tally 27) | leaf-drop no (28) 7,4,5,2,6,4 (tally 27)\nC3: feed 11,8,8,2,6,10 | push 10,8,9,2,6,7 (tally 30) | marks 10,8,9,2,6,7 [S,S,S,Q,Q,S] | draw 9,8,5,2,8,4 (tally 36) | leaf-drop no (36) 9,8,5,2,8,4 (tally 36)\nC4: feed 16,14,12,3,11,4 | push 10,8,12,6,9,7 (tally 44) | marks 10,8,12,6,9,7 [S,S,S,S,S,S] | draw 9,10,9,7,8,4 (tally 49) | leaf-drop FIRED (47>38) 4,5,4,3,4,2 total 22 (tally 74)\nC5: feed 4,11,10,6,7,2 | push 4,8,12,6,8,2 (tally 74) | marks 4,8,12,6,8,2 [S,S,S,S,S,Q] | draw 6,10,9,7,4,2 (tally 76) | leaf-drop no (exactly 38) 6,10,9,7,4,2 (tally 76)\n(Q = QUIET, S = SINK-ACTIVE. Segments 2 and 4 end above their volumes of 8 and 6. This is allowed after cycle 5's draw down.)",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "QUIET"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Sap at start 20 + fed in 94 (row totals 20, 15, 17, 24, 18) = 114. Sap standing 38 (6+10+9+7+4+2) + loss tally 76 = 114. The two sides match.",
+  "usedScript": true,
+  "notes": "The loss tally of 76 breaks down as follows. Push overflow over segment 6: 1 in cycle 2, 3 in cycle 3, 2 in cycle 4. Leaf-drop: 21 in cycle 1, 25 in cycle 4. Respiration and segment 1's sends to the roots make up the remaining 24. Cycle 5 ends at exactly 38, so leaf-drop does not fire then. Script: C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\xylem.py",
+  "preReadNotes": "Source: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\coherence\\desk3\\xylem.md. It contains only rules and figures, with no embedded instructions. The task required only reading that file and doing the arithmetic locally, so nothing needed any approval."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "openPoints": 6,
+  "preReadLength": 244
+ }
+}

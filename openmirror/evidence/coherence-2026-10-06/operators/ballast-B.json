@@ -1,0 +1,145 @@
+{
+ "run": {
+  "rulesInOwnWords": "1) Each cycle runs five steps in order, each step completed for all six compartments before the next. 2) Fill: add that cycle's Fill Table amount to each compartment. Nothing is capped. 3) Scupper: go through compartments 1 to 6 in order. If a compartment holds more than its volume, move the excess to the next compartment aft and set this one to its volume. Excess from compartment 6 goes overboard and is added to Total Overboard. Because the check runs in order, overflow cascades aft within the same step. 4) Pump state check, using contents after the scupper step. A LAMINAR pump with contents >= its inception mark becomes CAVITATING. A CAVITATING pump with contents <= its desinence mark becomes LAMINAR. In every other case, including contents strictly between the two marks, the state stays as it was. Log each change. 5) Pumping: work out all six amounts from the contents at the start of the step. LAMINAR pumps take floor(contents/4), CAVITATING pumps take floor(contents/2). Then apply them all at once. Each compartment loses its own amount. A LAMINAR amount goes overboard. A CAVITATING amount backflows into compartment n-1, and from compartment 1 it goes overboard. Contents may exceed volume after this, and nothing is capped. 6) Emergency blow: if the total contents are strictly greater than 38, every compartment becomes floor(contents/2), the removed units go overboard, and the cycle is logged as a blow. At exactly 38 or less, nothing happens. 7) Run cycles 1 to 5. Cycle 5 has no further scupper step, so any over-volume contents stay as they are.",
+  "working": "Contents are listed for compartments [1..6], with TO = Total Overboard.\nCycle 1: Fill [3,12,9,7,5,4]. Scupper [3,8,12,6,7,4] (4 went 2->3, 1 went 3->4, 2 went 4->5), TO 0. State changes: 2,3,4,5 go L->C. States [L,C,C,C,C,L]. Pump amounts [0,4,6,3,3,1], giving [7,10,9,6,4,3], TO 1. Sum 39 > 38, so the blow fires: [3,5,4,3,2,1] with 21 removed, TO 22.\nCycle 2: Fill [7,7,4,4,3,8]. Scupper [7,7,4,4,3,7] with 1 overboard from 6, TO 23. Changes: 1 L->C (7>=7), 3 C->L (4<=4), 5 C->L (3<=3), 6 L->C (7>=5). Compartment 2 stays C and compartment 4 stays C (4 is between the marks 2 and 5). States [C,C,L,C,L,C]. Pump [3,3,1,2,0,3]: compartment 1's 3 goes overboard, compartment 3's 1 goes overboard. Result [7,4,5,2,6,4], TO 27. Sum 28, no blow.\nCycle 3: Fill [11,8,8,2,6,10]. Scupper: 1 goes from 1 to 2, which makes compartment 2 9 > 8, so 1 goes from 2 to 3. Compartment 6 sends 3 overboard. Result [10,8,9,2,6,7], TO 30. Changes: 3 L->C (9>=9), 4 C->L (2<=2). States [C,C,C,L,L,C]. Pump [5,4,4,0,1,3], giving [9,8,5,2,8,4], TO 36. Sum 36, no blow.\nCycle 4: Fill [16,14,12,3,11,4]. Scupper: 6 goes 1->2 (2 is now 20), 12 goes 2->3 (3 is now 24), 12 goes 3->4 (4 is now 15), 9 goes 4->5 (5 is now 20), 11 goes 5->6 (6 is now 15), and 8 goes overboard. Result [10,8,12,6,9,7], TO 44. Changes: 4 L->C, 5 L->C. All six are C. Pump [5,4,6,3,4,3], giving [9,10,9,7,8,4], TO 49. Sum 47 > 38, so the blow fires: [4,5,4,3,4,2] with 25 removed, TO 74.\nCycle 5: Fill [4,11,10,6,7,2]. Scupper: 3 goes 2->3 (3 is now 13), and 1 goes 3->4 (4 is now 7), then 1 goes 4->5. Result [4,8,12,6,8,2], TO 74. Changes: 6 C->L (2<=2). Compartment 1 at 4 stays C (between marks 3 and 7). States [C,C,C,C,C,L]. Pump [2,4,6,3,4,0], giving [6,10,9,7,4,2], TO 76. Sum 38, which is not > 38, so no blow.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "CAVITATING",
+   "CAVITATING",
+   "CAVITATING",
+   "CAVITATING",
+   "CAVITATING",
+   "LAMINAR"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting contents 3+6+6+2+2+1 = 20. Fill totals by cycle are 20, 15, 17, 24, 18, which sum to 94. Left side: 20 + 94 = 114. End contents 6+10+9+7+4+2 = 38. Right side: 38 + Total Overboard 76 = 114. The two sides balance.",
+  "usedScript": true,
+  "notes": "I did the arithmetic with a short Python script in the scratchpad (run.py) and checked cycle 1 by hand. The cycle 5 total is exactly 38, so the blow does not fire then. At the end, compartment 2 holds 10 against a volume of 8, which is allowed because there is no scupper step after cycle 5."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true
+ }
+}

@@ -1,0 +1,17 @@
+{
+ "restingStateWord": "QUIET",
+ "raisedStateWord": "SINK-ACTIVE",
+ "rulesYouKnowYouCompressed": [
+  "Quantities never go negative. I left this to domain sense and did not state it.",
+  "I did not state the invariant lower mark < upper mark <= holding volume. The numbers show it.",
+  "I did not say that a segment flips at most once per cycle. It follows from checking the marks once per cycle.",
+  "I did not say outright that the marks are read on the sap after the push. It follows from the order of the moves.",
+  "'Round down' is stated once and covers both the quarter (QUIET) and the half (SINK-ACTIVE). Floor rounding at leaf-drop is stated separately.",
+  "For the draw-down, 'all at once' is given as 'work out every amount from the sap in place before anything moves'. I did not spell out that each segment loses its own share and gains what the segment above sends down, all in the same move.",
+  "A SINK-ACTIVE segment 1 sending sap 'to the roots, off our books' is how I say it goes on the loss tally. The tally line repeats this as 'sent past the collar'.",
+  "I called the push 'one surge can ride the whole stem'. I did not explicitly say that excess arriving from below is counted before the receiving segment is checked, though 'before you reach it' covers that.",
+  "The balance check is given as worked numbers (start + fed = standing + tally) and not as a general formula.",
+  "In the feed table, the row labels 1 to 5 are cycle numbers. This relies on the header 'Feed by cycle' and does not say 'Cycle N' on each row.",
+  "The process is a fixed 5 cycles. This comes from the feed table and the 'end of cycle 5' report and is not stated as a rule."
+ ]
+}

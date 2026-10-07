@@ -1,0 +1,19 @@
+{
+ "restingStateWord": "GREEN",
+ "raisedStateWord": "HOT",
+ "rulesYouKnowYouCompressed": [
+  "Quantities are whole numbers and never negative: left to the reader's sense of counting units of mix, and only implied by 'rounded down'.",
+  "Lower mark < upper mark <= capacity: not stated; the table simply shows it.",
+  "A form changes state at most once per cycle: not stated; it follows from checking each form once in step 3.",
+  "The state check reads the quantity after overtop: implied only by the step order.",
+  "Bleed amounts are figured from the quantity at the start of step 4, using the state just set in step 3: compressed to 'Read all six first, then move mix'.",
+  "Bleeds are applied all at once, so a HOT form both loses its own half and receives the bleed of the form after it in the same step: left to 'read first, then move'.",
+  "Overtop excess is added on top of whatever the next form already holds, and that form is then capped to its own capacity in turn: compressed into 'runs down the chute into the next form before you get to that one'.",
+  "The washout fires only when the total is strictly over 38, and equal to 38 means no washout: stated as 'Over 38' versus '38 or under' and not stressed further.",
+  "The amount a halved form loses is quantity minus floor(quantity/2), so an odd quantity loses the larger half: left to 'halve, rounded down, and what comes off is waste'.",
+  "The waste tally starts at 0 and takes overtop from form 6, GREEN evaporation, form 1's HOT bleed and washout removals: listed across the steps but never collected into one definition.",
+  "The balance check formula (start sum + all charges = end sum + waste) is shown only through the worked numbers, not as a general rule.",
+  "The run is exactly 5 cycles: implied by the 5-row charge sheet and 'after cycle 5'.",
+  "Running the five steps in a fixed order for each cycle is stated once; there is no extra step for trimming after a bleed and no trim after cycle 5."
+ ]
+}

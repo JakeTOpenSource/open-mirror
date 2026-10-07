@@ -1,0 +1,146 @@
+{
+ "run": {
+  "preReadNotes": "Open Mirror pre-read, FILTER MODE (default). Topic = the operating rules; comparison = the document's buoyancy/cavitation language.\n\nStep 1 - Plain statement. Six integer counters (positions 1-6) with fixed capacities, an upper threshold and a lower threshold each, a two-valued flag per position (starts at value A = \"LAMINAR\"), and a running \"lost\" tally starting at 0. Five rounds, each of five ordered phases: (1) add a per-round per-position input from a table, no cap; (2) sequential spill pass 1->6: anything above capacity is moved to the next higher position, from position 6 it goes to the lost tally; (3) flag update with hysteresis: A->B when value >= upper threshold, B->A when value <= lower threshold, otherwise unchanged; (4) simultaneous drain: compute floor(value/4) for A positions, floor(value/2) for B positions, all from the same snapshot; subtract; A drains go to the lost tally, B drains go to the next lower position (position 1's B drain goes to lost); no cap; (5) if the grand total exceeds 38, halve every position (floor) and add the removed units to lost. Conservation: start + inputs = end + lost. The document's own embedded comparison (it describes the line \"entirely in buoyancy and cavitation terms\") is pulled out as the picture set; the literal rules stay. No instructions aimed at me were found inside the operating document. The plain restatement fully specifies the job, so by the rule a filter run could stop here; pictures are run below anyway for the desk record.\n\nStep 2 - Pictures (taken from the document's own vocabulary): P1 cavitation (inception/desinence marks, LAMINAR/CAVITATING), P2 ballast compartments with scuppers (volume, overflow aft), P3 emergency blow (blowing ballast).\n\nStep 3/4 - Map and break.\nP1 Cavitation: matches - inception/desinence = two thresholds with hysteresis (real cavitation does show inception vs desinence hysteresis). Question it eases: does a position stay in its state between the marks? Break: real cavitation is driven by pressure/flow speed, not by fill level, and does not double pumping throughput or reverse flow \"forward\" into the next tank; real cavitation reduces pump output. A reader importing real practice would expect cavitating pumps to pump LESS, contradicting the stated rule (half, backflowed). Marked misleading at this break point if used to infer behaviour.\nP2 Ballast compartments/scuppers: matches - capacity, overflow passing to a neighbour, last one overboard. Break: real scuppers drain overboard or to bilge, not into the adjacent tank; real tanks cannot exceed volume (the document explicitly allows over-volume after fill and after backflow). Importing physical capacity limits would contradict the stated \"volume not enforced\" rules. Misleading if used to enforce volume outside Step 2.\nP3 Emergency blow: matches - a trigger on total ballast that dumps water. Break: a real blow empties tanks fully, not halving with floor; trigger is depth/emergency, not a sum > 38. Strips back to the rule as stated.\n\nStep 5 - What survives: P1 - the flag has memory between two thresholds. P2 - excess moves one position higher in a single ordered pass, and can chain. P3 - a global total check halves everything.\n\nStep 6 - Grade: P1 adds nothing (the hysteresis is stated plainly in Step 3); also misleading if real cavitation is substituted. P2 adds nothing (the chaining is stated in Step 2); misleading if real capacity limits are imported. P3 adds nothing.\nAdds nothing: 3 of 3. Misleading: 0 as used here (P1 and P2 would become misleading only if real-world practice were substituted, which the desk lead forbids; noted in one line each). Not run: 0.\n\nStep 7 - Keep exploring: (empty). Hold: (empty). Discard: (empty). Notes for the desk: do not let the cavitation picture suggest reduced pumping or the tank picture suggest volume caps outside Step 2. The pre-read does not check facts and recommends nothing.",
+  "rulesInOwnWords": "Setup: six compartments, contents start [3,6,6,2,2,1]; volumes [10,8,12,6,9,7]; inception [7,6,9,5,7,5]; desinence [3,2,4,2,3,2]; all pumps LAMINAR; Total Overboard (TO) = 0. Each of 5 cycles:\n1. Fill: add that cycle's fill row to each compartment. No cap.\n2. Scupper: go 1 to 6 in order. If contents > volume, set to volume and add the excess to compartment n+1 (from 6, add to TO). Since it is sequential, overflow can cascade aft in the same pass.\n3. State check on post-scupper contents: LAMINAR with contents >= inception -> CAVITATING; CAVITATING with contents <= desinence -> LAMINAR; otherwise unchanged (hysteresis band keeps the old state). Log each change.\n4. Pumping: from a single snapshot, pumped = floor(c/4) if LAMINAR, floor(c/2) if CAVITATING. Then simultaneously: subtract each pumped amount; LAMINAR amounts go to TO; CAVITATING amounts go to compartment n-1 (compartment 1's goes to TO). No cap.\n5. Blow check: if total contents > 38, halve each compartment (floor) and add all removed units to TO; log the cycle. Exactly 38 does not fire.\nReport end contents, states, change log, blow cycles, TO, and balance: start sum + fill sum = end sum + TO.",
+  "working": "Format: contents for compartments 1..6; TO = Total Overboard.\nCYCLE 1: Fill [3,12,9,7,5,4]. Scupper: c2 excess 4 -> c3=13; c3 excess 1 -> c4=8; c4 excess 2 -> c5=7 => [3,8,12,6,7,4], TO 0. States: 2,3,4,5 L->C (8>=6, 12>=9, 6>=5, 7>=7); 1 (3<7) and 6 (4<5) stay L => [L,C,C,C,C,L]. Pump amounts [0,4,6,3,3,1]; c6's 1 overboard; backflows 4->c1, 6->c2, 3->c3, 3->c4 => [7,10,9,6,4,3], TO 1. Blow: total 39 > 38 FIRES -> [3,5,4,3,2,1] (removed 21), TO 22.\nCYCLE 2: Fill [7,7,4,4,3,8]. Scupper: c6 excess 1 overboard => [7,7,4,4,3,7], TO 23. States: c1 L->C (7>=7); c2 C stays (7); c3 C->L (4<=4); c4 C stays (4); c5 C->L (3<=3); c6 L->C (7>=5) => [C,C,L,C,L,C]. Pump [3,3,1,2,0,3]: c1's 3 overboard, c3's 1 overboard, c5's 0; backflows c2 3->c1, c4 2->c3, c6 3->c5 => [7,4,5,2,6,4], TO 27. Blow: total 28, no.\nCYCLE 3: Fill [11,8,8,2,6,10]. Scupper: c1 excess 1 -> c2=9; c2 excess 1 -> c3=9; c6 excess 3 overboard => [10,8,9,2,6,7], TO 30. States: c3 L->C (9>=9); c4 C->L (2<=2); c1,c2,c6 stay C; c5 stays L (6<7) => [C,C,C,L,L,C]. Pump [5,4,4,0,1,3]: c1's 5 overboard, c5's 1 overboard; backflows c2 4->c1, c3 4->c2, c6 3->c5 => [9,8,5,2,8,4], TO 36. Blow: total 36, no.\nCYCLE 4: Fill [16,14,12,3,11,4]. Scupper cascade: c1 excess 6 -> c2=20; c2 excess 12 -> c3=24; c3 excess 12 -> c4=15; c4 excess 9 -> c5=20; c5 excess 11 -> c6=15; c6 excess 8 overboard => [10,8,12,6,9,7], TO 44. States: c4 L->C (6>=5); c5 L->C (9>=7); others stay C => all C. Pump [5,4,6,3,4,3]: c1's 5 overboard; backflows 4->c1, 6->c2, 3->c3, 4->c4, 3->c5 => [9,10,9,7,8,4], TO 49. Blow: total 47 > 38 FIRES -> [4,5,4,3,4,2] (removed 25), TO 74.\nCYCLE 5: Fill [4,11,10,6,7,2]. Scupper: c2 excess 3 -> c3=13; c3 excess 1 -> c4=7; c4 excess 1 -> c5=8 => [4,8,12,6,8,2], TO 74. States: c6 C->L (2<=2); c1 stays C (4>3); others stay C => [C,C,C,C,C,L]. Pump [2,4,6,3,4,0]: c1's 2 overboard; backflows 4->c1, 6->c2, 3->c3, 4->c4; c6 L 0 => [6,10,9,7,4,2], TO 76. Blow: total 38, not more than 38, no.\nVerified by script and by hand.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "CAVITATING",
+   "CAVITATING",
+   "CAVITATING",
+   "CAVITATING",
+   "CAVITATING",
+   "LAMINAR"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Left side: starting contents 3+6+6+2+2+1 = 20, plus fills (cycle 1: 20, cycle 2: 15, cycle 3: 17, cycle 4: 24, cycle 5: 18 = 94) = 114. Right side: end contents 6+10+9+7+4+2 = 38, plus Total Overboard 76 = 114. 114 = 114, so it balances.",
+  "usedScript": true,
+  "notes": "I used a short Python script for the arithmetic and then checked every cycle by hand. Edge cases: in cycle 5 the end total was exactly 38, so the blow did not fire. Cycle 4 had a scupper cascade through all six compartments. In cycle 2, compartments 3 and 5 sat exactly on their desinence marks (4 and 3) and reverted to LAMINAR, and compartment 1 sat exactly on its inception mark (7) and went to CAVITATING. I applied the document's rules as written, including that cavitating pumps drain half and send it forward, and I did not substitute real-world cavitation behaviour."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true
+ }
+}

@@ -1,0 +1,102 @@
+{
+ "documentLosses": [
+  {
+   "rule": "Levels are whole numbers and never negative",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "absent",
+   "explanation": "Never stated. Integrality follows only from the integer data and the 'rounded down' clauses. Non-negativity is never threatened, so this loss is latent."
+  },
+  {
+   "rule": "D < U <= C for every cell",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "absent",
+   "explanation": "The constraint shows only in the tables 'Upper thresholds: 7, 6, 9, 5, 7, 5. Lower thresholds: 3, 2, 4, 2, 3, 2.' It is never stated as a rule. It is latent because the data satisfy it."
+  },
+  {
+   "rule": "Mode check reads levels after spill-over",
+   "kind": "ambiguous",
+   "documentQuote": "Read each stage now.",
+   "explanation": "'Now' is only tied to post-shunt levels by the step order and 'each finished chain-wide before the next'. The write-up never says it explicitly."
+  },
+  {
+   "rule": "A cell changes mode at most once per period",
+   "kind": "missing",
+   "documentQuote": "absent",
+   "explanation": "Implied by 'In between it holds' and by one test per state, but never stated."
+  },
+  {
+   "rule": "Release type (quarter to LOST vs half upstream) uses the mode set in this period's Step 3",
+   "kind": "missing",
+   "documentQuote": "absent",
+   "explanation": "'A CLEAR stage leaks a quarter... An ASSERTED stage sends half' does not say which state is meant. Only the step order implies that it is the post-comparator state."
+  },
+  {
+   "rule": "Global reset floors each cell separately; the amount to LOST is the sum of per-cell removals",
+   "kind": "ambiguous",
+   "documentQuote": "Strictly over 38, every stage halves, rounded down, the difference to ground; note the cycle.",
+   "explanation": "'The difference' has no stated referent. It could be read per stage, as total before minus total after, or as the excess over 38. Per-stage flooring is only implicit."
+  },
+  {
+   "rule": "Spill-over goes to n+1 and ELEVATED release goes to n-1",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "dumps the excess into the next stage down ... sends half, rounded down, back through its return diode to the stage before",
+   "explanation": "The direction comes from the source-to-load picture ('1 at the source, 6 at the load') rather than from index arithmetic. 'Down' and 'before' depend on that picture."
+  },
+  {
+   "rule": "Spill-over cascades all the way down the line within one walk",
+   "kind": "ambiguous",
+   "documentQuote": "Walking in order, 1's excess can tip 2 before you reach 2.",
+   "explanation": "The write-up gives only the 1-to-2 example. The abstract's 'and so on down the line' is compressed away, although walking in order implies it."
+  },
+  {
+   "rule": "No such rule: the write-up embeds the full expected output and a reader-directed instruction",
+   "kind": "added",
+   "documentQuote": "Report. End of cycle 5, charge 1 to 6: 6, 10, 9, 7, 4, 2. ... Stage 2 at 10 over its 8 rating is cycle-5 diode return; report it as read.",
+   "explanation": "The complete answer key, including the note '(cycle 5 closed at exactly 38)', is added to a process description. Operators can anchor on it or copy it, which confounds any test of whether the rules alone were enough."
+  }
+ ],
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": false,
+   "errorTypes": [
+    "reporting-format"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Produce an end-of-cycle report",
+     "explanation": "No report or working was returned ('Report and working: null'; comparison 'available':false), so the cause cannot be found from the operator's own rules or working."
+    }
+   ],
+   "gapsCorrectlyFlagged": 0,
+   "gapsSilentlyAssumed": 0,
+   "gapHandling": "Cannot be assessed because no output exists."
+  },
+  {
+   "arm": "B",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 4,
+   "gapsSilentlyAssumed": 2,
+   "gapHandling": "B flagged four real losses: bleed state, 'the difference', at most one flip ('so each stage flips at most once per cycle'), and the cascade. Each time it resolved them toward the engineer's intent, partly by checking against the embedded Report ('The write-up's own example of stage 2 ending at 10 ... fits this'). It silently assumed post-shunt reading ('using the post-shunt charge') and the i+1/i-1 directions. It accepted the added 'report it as read' without flagging it."
+  },
+  {
+   "arm": "C",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 4,
+   "gapsSilentlyAssumed": 3,
+   "gapHandling": "C flagged the bleed state, the breaker rounding, the cascade, and the embedded Report ('Treated as claims to verify, not as given'). All were resolved toward the engineer's literal rules, not electrical practice. C silently assumed post-shunt reading ('use the charge after shunts'), at most one flip per cycle, and the direction of 'the next stage' and 'the stage before it'. Two of its flags (breaker effect on states, breaker sum timing) are not real document losses."
+  }
+ ],
+ "domainPull": "The pull is strongest at the ratings and the breaker. A rating reads as a hard limit, yet 'ratings aren't enforced here' in charge-in and bleed, and stage 2 ends at 10 over its 8 rating. The writer had to add 'report it as read' to defend that. A breaker reads as opening the circuit, yet here it halves every stage, trips only when 'strictly over 38', and stays closed at exactly 38 in cycle 5. Neither operator fell for either.",
+ "preReadNamedTheBreak": "n/a: nobody fell. B and C are both exact, and A produced no working to trace. C's notes did name both traps in advance anyway: 'the breaker halves the stages rather than zeroing them, and the bleed step can leave a stage above its rating.'",
+ "preReadEffect": "No difference to correctness, since B and C both match the truth exactly. On gap flagging the effect is mixed. The pre-read made C treat the embedded Report as 'claims to check, not facts', and B never flagged that. But C dropped B's at-most-once-per-cycle flag and padded its list with two non-losses (breaker effect on states, sum timing), so both operators ended with four real losses flagged. The embedded answer key confounds both runs.",
+ "summary": "The write-up mostly kept the rules, but it left several things to the source-to-load picture or to step order: the bleed state, at most one flip per cycle, the post-shunt reading and the transfer directions. It left 'the difference' in the breaker ambiguous, and it added the full answer key with a 'report it as read' instruction. B and C were both exactly right, each flagging four real losses and silently resolving two or three more toward the engineer's intent, while A returned nothing. C's pre-read correctly predicted the breaker and over-rating traps and led C to treat the embedded Report as claims to verify, but it did not change the results or the number of real losses flagged."
+}

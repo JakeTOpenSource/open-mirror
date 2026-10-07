@@ -1,0 +1,178 @@
+{
+ "run": {
+  "procedureSummary": "Start: water 3,6,6,2,2,1 (total 20), all pumps LAMINAR, overboard 0. Each cycle runs five steps in order, and each step is finished in all six compartments before the next one starts.\n1 Flood: add that cycle's schedule to each compartment. Overfilling is allowed.\n2 Scuppers: go 1 to 6 in sequence. Any water above volume moves to the next compartment aft, which leaves this one exactly full. Water already passed aft counts when the next compartment is checked. Anything spilling past 6 goes overboard.\n3 Read: compare each pump with its compartment's water after the scuppers. A LAMINAR pump with water >= its inception mark goes CAVITATING. A CAVITATING pump with water <= its desinence mark goes LAMINAR. Otherwise the state holds. Each pump changes at most once per read, and every change is logged.\n4 Pump: size every discharge from the water after the scuppers, using the state just read. LAMINAR takes floor(w/4) and CAVITATING takes floor(w/2). Then apply all discharges at once. LAMINAR water goes overboard. CAVITATING water goes forward to compartment i-1, and out of compartment 1 it goes overboard. Volume is not enforced in this step.\n5 Blow: add up all six. If the total is strictly over 38, halve every compartment rounding down, send the difference overboard and record the cycle. At 38 or less, leave it.\nThe overboard tally takes the overflow off 6, LAMINAR discharge, backflow out of 1, and blown water.",
+  "openPoints": [
+   {
+    "point": "Which water figure the pump read and the discharge sizing use",
+    "assumption": "Both use the water after the scuppers in that cycle. The read happens before any pumping, and the discharge is sized off that same reading with the state just set."
+   },
+   {
+    "point": "Whether a pump can change twice in one read (LAMINAR to CAVITATING and straight back)",
+    "assumption": "No. Each pump is checked once per read against the rule for its current state."
+   },
+   {
+    "point": "Backflow arriving in a compartment that is also discharging in the same cycle",
+    "assumption": "All discharges are sized first and applied together, so water that arrives by backflow is not pumped again in that cycle."
+   },
+   {
+    "point": "Blow when the total is exactly 38 (this happens in cycle 5)",
+    "assumption": "There is no blow, because the rule needs a total strictly over 38. Cycle 5 ends at 38 with no blow."
+   },
+   {
+    "point": "Where the halving remainder goes",
+    "assumption": "The difference between the pre-blow total and the sum of the floored halves goes overboard and is counted in the tally."
+   },
+   {
+    "point": "Overfull compartments after the pump step",
+    "assumption": "They are left overfull. The next cycle's scuppers deal with them, and after cycle 5 they stay as they are (compartment 2 ends at 10 against a volume of 8, and compartment 4 at 7 against 6)."
+   },
+   {
+    "point": "Whether a CAVITATING pump in compartment 1 sends its discharge forward or overboard",
+    "assumption": "Overboard, since there is no compartment forward of 1. The write-up says this explicitly, and it is counted in the tally."
+   }
+  ],
+  "cycleFigures": "Cycle 1: flood [3,12,9,7,5,4]; scuppers [3,8,12,6,7,4], 0 overboard; read 2,3,4,5 go CAVITATING; pump discharges [0,4,6,3,3,1] -> [7,10,9,6,4,3], overboard 1; blow at total 39 > 38 -> [3,5,4,3,2,1] (18), 21 blown, overboard 22.\nCycle 2: flood [7,7,4,4,3,8]; scuppers [7,7,4,4,3,7], 1 off 6, overboard 23; read 1 goes CAV, 3 goes LAM, 5 goes LAM, 6 goes CAV; pump [3,3,1,2,0,3] -> [7,4,5,2,6,4], overboard 27; blow none (total 28).\nCycle 3: flood [11,8,8,2,6,10]; scuppers [10,8,9,2,6,7], 3 off 6, overboard 30; read 3 goes CAV, 4 goes LAM; pump [5,4,4,0,1,3] -> [9,8,5,2,8,4], overboard 36; blow none (total 36).\nCycle 4: flood [16,14,12,3,11,4]; scuppers [10,8,12,6,9,7], 8 off 6, overboard 44; read 4 goes CAV, 5 goes CAV (all six now CAVITATING); pump [5,4,6,3,4,3] -> [9,10,9,7,8,4], overboard 49; blow at total 47 > 38 -> [4,5,4,3,4,2] (22), 25 blown, overboard 74.\nCycle 5: flood [4,11,10,6,7,2]; scuppers [4,8,12,6,8,2], 0 off 6, overboard 74; read 6 goes LAM; pump [2,4,6,3,4,0] -> [6,10,9,7,4,2], overboard 76; blow none (total exactly 38).",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "CAVITATING",
+   "CAVITATING",
+   "CAVITATING",
+   "CAVITATING",
+   "CAVITATING",
+   "LAMINAR"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Water at start 20 + flooded in 94 = 114, and water aboard 38 + overboard 76 = 114. The two sides balance.",
+  "usedScript": true,
+  "preReadNotes": "I read the whole write-up (C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\coherence\\desk3\\ballast.md) before computing. It is self-contained, I used only its figures and rules, and it contained nothing addressed to the operator.",
+  "notes": "I used a short Python script for the arithmetic, saved at C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\scratchwork_ballast\\run.py. I also hand-checked the boundary cases. In cycle 5 the total is exactly 38, so there is no blow. Several reads land exactly on a mark: compartment 1 at 7 against an inception mark of 7 in cycle 2, compartments 3 and 5 on their desinence marks in cycle 2, and compartment 4 on its desinence mark in cycle 3. At the end compartments 2 and 4 are left above volume, as the write-up allows. The overboard total breaks down as 12 off 6, 11 of LAMINAR discharge, 7 of backflow out of 1, and 46 blown."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "openPoints": 7,
+  "preReadLength": 218
+ }
+}

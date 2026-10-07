@@ -1,0 +1,19 @@
+{
+ "restingStateWord": "LAMINAR",
+ "raisedStateWord": "CAVITATING",
+ "rulesYouKnowYouCompressed": [
+  "The pump readings in step 3 are taken after the scuppers have run; this follows from the step order and is not stated separately.",
+  "A pump changes state at most once per cycle. Never stated; it follows from a single reading per cycle.",
+  "The constraint that desinence mark < inception mark <= volume is never stated; the reader is trusted to see it in the numbers.",
+  "'Rounded down' (floor) for the blow is stated as halving rounded down, and 'the difference overboard' leaves the reader to work out that the amount removed is the water minus floor(water/2), not floor(water/2).",
+  "'CAVITATING half, rounded down' and 'LAMINAR moves a quarter' share one 'rounded down' that covers both; the separate floor(L/4) is implied.",
+  "Each discharge comes out of the compartment's own water, and the compartment's water drops by that amount. This is implied by 'moves', not stated as a subtraction.",
+  "Simultaneity in step 4: amounts are computed from pre-step contents. This is said as 'size off current readings before touching a valve ... open them all together' and not spelled out as 'backflow received does not change the discharge you already sized'.",
+  "In step 2, overflow arriving in a compartment counts toward that compartment's own overflow check. This is said only as 'one surge can carry down the whole line'.",
+  "The flooding schedule columns are compartments 1 to 6 and the rows are cycles. The 'Listed 1 to 6' header covers both tables, but the schedule's column order is left implicit.",
+  "The flood in step 1 ignores volume ('let it overfill'), and capacity is enforced only at the scuppers. This is stated briefly.",
+  "The blow's 38 is the sum of water after pumping, read at step 5. Implied by step order.",
+  "The balance check formula (start + flooded = aboard + overboard) is given as a worked instance only, not as a general rule.",
+  "Mapping words: compartment = position, water = quantity, volume = capacity, inception mark = upper trigger, desinence mark = lower trigger, flood = adding water, scuppers = overflow step, pump = discharge step, blow = global halving, overboard total = loss tally. These are used without being defined against the engineer's terms."
+ ]
+}

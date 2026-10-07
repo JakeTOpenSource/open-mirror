@@ -1,0 +1,178 @@
+{
+ "run": {
+  "procedureSummary": "Start: forms 1-6 = 3,6,6,2,2,1, all GREEN, waste 0. Each cycle, steps in order, each step applied to all six forms before the next:\n1. Charge: add the cycle's charge-sheet row to each form; no trimming.\n2. Overtop: walk forms 1 to 6 in turn; any amount over capacity (10,8,12,6,9,7) moves into the next form before that form is checked; form 6's excess goes to waste.\n3. Marks: GREEN with quantity >= upper mark (7,6,9,5,7,5) becomes HOT; HOT with quantity <= lower mark (3,2,4,2,3,2) becomes GREEN; otherwise no change; log each change.\n4. Bleed: take a snapshot of all six quantities and states, then apply all moves at once: GREEN loses floor(q/4) to waste; HOT loses floor(q/2) to the form before it (form 1's HOT bleed goes to waste). No trimming afterwards.\n5. Washout: if the line total is over 38, every form becomes floor(q/2) and the difference (total minus new total) goes to waste; if the total is 38 or less, nothing happens.\nReport after cycle 5.",
+  "openPoints": [
+   {
+    "point": "Washout rounding: 'halve every form, rounded down' could mean the form keeps floor(q/2) or that floor(q/2) is removed (so the form keeps ceil(q/2)).",
+    "assumption": "The form keeps floor(q/2). The remainder, ceil(q/2), goes to waste."
+   },
+   {
+    "point": "Bleed uses quantities from before or after other forms' moves.",
+    "assumption": "All bleed amounts come from a snapshot taken after Marks ('Read all six first'), so what a form receives from the form after it does not change what it loses."
+   },
+   {
+    "point": "Which state controls the bleed.",
+    "assumption": "The state after this cycle's Marks step."
+   },
+   {
+    "point": "A HOT bleed pushing the form before it over capacity.",
+    "assumption": "It is not trimmed. The excess carries into the next cycle's charge, as the write-up says. For example, form 2 ends at 10 against a capacity of 8."
+   },
+   {
+    "point": "Washout boundary at exactly 38.",
+    "assumption": "38 is not over 38, so no washout. This applied in cycle 5, where the total was 38."
+   },
+   {
+    "point": "Overtop cascade.",
+    "assumption": "Excess is added to the next form before that form's own capacity check, so it can cascade. Form 6's excess goes to waste at once."
+   },
+   {
+    "point": "Initial state for the marks comparison.",
+    "assumption": "All forms start GREEN, as stated. States carry over between cycles."
+   }
+  ],
+  "cycleFigures": "Cycle 1: charge [3,12,9,7,5,4]; overtop [3,8,12,6,7,4] (waste 0); marks [3,8,12,6,7,4] states G,H,H,H,H,G; bleed [7,10,9,6,4,3] (waste 1); washout total 39>38 -> [3,5,4,3,2,1] (waste 22).\nCycle 2: charge [7,7,4,4,3,8]; overtop [7,7,4,4,3,7] (waste 23); marks [7,7,4,4,3,7] states H,H,G,H,G,H; bleed [7,4,5,2,6,4] (waste 27); washout total 28, none -> [7,4,5,2,6,4] (waste 27).\nCycle 3: charge [11,8,8,2,6,10]; overtop [10,8,9,2,6,7] (waste 30); marks [10,8,9,2,6,7] states H,H,H,G,G,H; bleed [9,8,5,2,8,4] (waste 36); washout total 36, none -> [9,8,5,2,8,4] (waste 36).\nCycle 4: charge [16,14,12,3,11,4]; overtop [10,8,12,6,9,7] (waste 44); marks [10,8,12,6,9,7] states H,H,H,H,H,H; bleed [9,10,9,7,8,4] (waste 49); washout total 47>38 -> [4,5,4,3,4,2] (waste 74).\nCycle 5: charge [4,11,10,6,7,2]; overtop [4,8,12,6,8,2] (waste 74); marks [4,8,12,6,8,2] states H,H,H,H,H,G; bleed [6,10,9,7,4,2] (waste 76); washout total 38, not over 38, none -> [6,10,9,7,4,2] (waste 76).",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "HOT",
+   "HOT",
+   "HOT",
+   "HOT",
+   "HOT",
+   "GREEN"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "HOT",
+    "to": "GREEN"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "HOT",
+    "to": "GREEN"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "HOT",
+    "to": "GREEN"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "HOT",
+    "to": "GREEN"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting mix 20 + all charges 94 = 114; in forms 38 (6+10+9+7+4+2) + waste 76 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "I used a short Python script for the arithmetic: C:/Users/Jaket/AppData/Local/Temp/claude/C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6/a592740d-2cb4-4ce4-b618-d8e0a8b4c716/scratchpad/sim.py. I checked cycle 1 by hand and it matches. Washout fired only in cycles 1 and 4. In cycle 5 the total was exactly 38, which is not over 38, so no washout. Form 2 finishes at 10, over its capacity of 8, because of a HOT bleed from form 3; the write-up allows this. The one assumption that changes the totals is the washout rounding (forms keep floor(q/2)). If instead floor(q/2) were removed, the figures from cycle 1 onward would be different.",
+  "preReadNotes": "I read C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\coherence\\desk3\\concrete.md in full before working; it is self-contained. It has no instructions aimed at the agent. Mapping of terms: form = position, cycle = period, washout = halving event (resetPeriods), waste = loss."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "openPoints": 7,
+  "preReadLength": 265
+ }
+}

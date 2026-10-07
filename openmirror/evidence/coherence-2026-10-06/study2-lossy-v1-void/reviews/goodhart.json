@@ -1,0 +1,115 @@
+{
+ "documentLosses": [
+  {
+   "rule": "Levels are whole numbers and never negative",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "absent",
+   "explanation": "Never stated. Ticket counts make it obvious, and the floor operations keep it true, so it costs nothing in this run."
+  },
+  {
+   "rule": "Capacity is not enforced in INTAKE, so a level may exceed C after intake",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "Limits don't bite yet.",
+   "explanation": "The phrase is compressed slang. Under Kanban sense a WIP limit blocks new work from being pulled in. The reader has to infer that tickets land anyway and the team sits over its limit."
+  },
+  {
+   "rule": "In SPILL-OVER the handled cell's level becomes exactly C and only (level - C) moves on",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "A team's excess goes to the next team down, counting when you reach them.",
+   "explanation": "'Excess' implies the cut to exactly the WIP limit, but the cut is never stated."
+  },
+  {
+   "rule": "Spill-over is sequential 1 to 6, so excess received from upstream counts before the receiving cell is handled (cascade in the same step)",
+   "kind": "ambiguous",
+   "documentQuote": "counting when you reach them",
+   "explanation": "The cascade is only implied by this phrase. It also leaves open whether the arriving excess counts toward the receiving team's own check."
+  },
+  {
+   "rule": "RELEASE amounts are all computed from start-of-step levels and then applied simultaneously",
+   "kind": "ambiguous",
+   "documentQuote": "Work the queues off one snapshot.",
+   "explanation": "'One snapshot' compresses the compute-then-apply rule. It does not say outright that bounced-in tickets are not worked again in the same step."
+  },
+  {
+   "rule": "A cell changes mode at most once per period",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "absent",
+   "explanation": "This follows from there being one status check per cycle, but it is not stated."
+  },
+  {
+   "rule": "Exactly 5 periods are run",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "C1 ... C5 / Report (end of cycle 5)",
+   "explanation": "The run length is implied by the 5-row arrival table and the report heading. It is not stated as a rule."
+  },
+  {
+   "rule": "Trigger relation D < U <= C",
+   "kind": "missing",
+   "documentQuote": "absent",
+   "explanation": "Never stated. It is visible only in the numbers and has no effect on the run."
+  },
+  {
+   "rule": "Balance check formula: (sum starting levels) + (sum intake) = (sum final levels) + LOST",
+   "kind": "missing",
+   "documentQuote": "Balance: 20 at start + 94 arrived = 114 = 38 open + 76 closed.",
+   "explanation": "The check appears only filled in, inside the Report. No formula is given as a rule."
+  },
+  {
+   "rule": "The write-up embeds the complete expected output (final levels, modes, all 13 changes, reset periods, LOST, balance)",
+   "kind": "added",
+   "documentQuote": "Report (end of cycle 5) Open tickets, teams 1 to 6: 6, 10, 9, 7, 4, 2. ... Closed tally: 76.",
+   "explanation": "The abstract process has no answer inside it, and the writer's compression list does not mention this. An operator could copy the answer without running the process, so a correct report does not by itself show that the rules were understood."
+  }
+ ],
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": false,
+   "errorTypes": [
+    "reporting-format"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Deliver an end-of-cycle report",
+     "explanation": "No report and no working were returned, so there are no rules or working to locate a cause in. The comparison was 'not available'.",
+     "operatorQuote": "Report and working: null"
+    }
+   ],
+   "gapsCorrectlyFlagged": 0,
+   "gapsSilentlyAssumed": 0,
+   "gapHandling": "Not assessable. Operator A produced no report, rules or flags."
+  },
+  {
+   "arm": "B",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 4,
+   "gapsSilentlyAssumed": 4,
+   "gapHandling": "Where the write-up was silent, B resolved each gap toward the engineer's process rather than domain practice. It took excess to mean cutting to exactly the limit with a cascade, read 'one snapshot' as simultaneous apply, and allowed at most one flip per cycle. It applied the strict '>38' boundary even though '38' is called a 'target'. Of B's 8 flags, 4 match real losses (exact cut to the limit, cascade, snapshot simultaneity, one flip per cycle). The rest are points the text already settled (strict >38, keep-floor rounding, the closure tally) or label mapping. B used the 'Limits don't bite yet' reading, whole numbers, 5 cycles and the balance formula without flagging them. It openly acknowledged the embedded Report ('treated those stated figures only as something to check against at the end'), and its cycle-by-cycle working checks out independently."
+  },
+  {
+   "arm": "C",
+   "exactlyRight": false,
+   "errorTypes": [
+    "reporting-format"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Deliver an end-of-cycle report",
+     "explanation": "C returned schema placeholders after a stop it attributes to a safety classifier, and it says explicitly that they are not computed results. No rule-level cause can be located because no rules, working or pre-read notes were provided.",
+     "operatorQuote": "The zeros, the 'NOT REPORTED' values and the empty lists above are placeholders that the schema requires. They are not computed results"
+    }
+   ],
+   "gapsCorrectlyFlagged": 0,
+   "gapsSilentlyAssumed": 0,
+   "gapHandling": "Not assessable. C gave no rules in its own words, no flags and no working ('rulesInOwnWords': 'Not provided')."
+  }
+ ],
+ "domainPull": "The pull is strongest around WIP limits and closures. In Kanban a WIP limit blocks intake, but here 'Limits don't bite yet' lets tickets land over the limit and then pushes the excess downstream. A ROUTINE team's ordinary work ('closes a quarter of its tickets') is counted as LOST, in the same tally as 'closed-without-action' overflow and the backlog cut, whereas domain sense would count those closures as throughput. Two further traps sit in the same language. ESCALATED teams 'bounce half... to the team upstream', against the usual direction of escalation. 'The board target is 38' invites reading 38 as a goal or treating reaching it as a breach, when the rule is strictly over 38, and that boundary decides cycle 5 (total exactly 38, no cut). No operator who produced work fell for any of these. B explicitly applied 'strictly over 38'.",
+ "preReadNamedTheBreak": "n/a: nobody fell. B was exact, A returned null with no working, and C's pre-read notes read 'Not provided. The earlier response was stopped by a safety classifier.', so they name nothing.",
+ "preReadEffect": "No difference that can be measured. C's whole output, pre-read notes included, was lost to a stop it attributes to a safety classifier, so there are no pre-read notes, flags (0, against B's 8) or numbers to compare. Nothing in the texts ties that stop to the pre-read procedure itself.",
+ "summary": "Only B produced a report, and it matches the true answer exactly; its working checks out independently, and it flagged 4 of the 10 real document losses. A returned nothing, and C returned placeholders after a stop it attributes to a safety classifier, so neither the domain traps nor the pre-read can be tested on them. The biggest document flaw is not a compression: the write-up embeds the full expected Report, which the writer's list omits, so an exact match cannot by itself show the rules were understood."
+}

@@ -1,0 +1,130 @@
+{
+ "documentLosses": [
+  {
+   "rule": "STEP 5: each level becomes floor(level/2); the removed amount (the ceiling half) goes to LOST",
+   "kind": "ambiguous",
+   "documentQuote": "Above 38, every chamber halves and the shed mass is discarded.",
+   "explanation": "'any split rounds down' does not say whether the kept half or the shed half is rounded down. If an operator rounds the shed mass down (keeps the ceiling), the moult-1 pre-levels [7,10,9,6,4,3] give a different line. I re-ran the process that way and got final [4,5,5,4,3,1], all six chambers PUPAL, moults in cycles 1, 4 and 5, and loss 92. The true result is [6,10,9,7,4,2] with loss 76. This is the only loss that changes the outcome in this data."
+  },
+  {
+   "rule": "floor() applied separately to the quarter release, the half release and the reset halving",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "Nutrient mass is whole units; any split rounds down.",
+   "explanation": "One blanket rounding statement stands in for three separate floor() rules. For burn-off and reabsorption the rounded-down amount is the amount moved, which matches the abstract process."
+  },
+  {
+   "rule": "STEP 2: a cell's level is set to exactly C after its excess spills",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "Anything above a chamber's limit moves into the next chamber, so overflow can cascade down the line.",
+   "explanation": "The reset to exactly the limit is implied, not stated."
+  },
+  {
+   "rule": "STEP 2: sequential handling, where excess from cell n reaches n+1 before n+1 is handled",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "Walk from 1 to 6. ... overflow can cascade down the line.",
+   "explanation": "The order of the walk is given, but in-step arrival before handling is only implied by 'cascade'."
+  },
+  {
+   "rule": "STEP 1: capacity not enforced; a level may exceed C after intake",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "No trimming yet.",
+   "explanation": "Jargon ('trimming') stands in for an explicit statement that a level may exceed its limit at this point."
+  },
+  {
+   "rule": "STEP 4: release amounts computed from start-of-step levels, all six applied at once",
+   "kind": "ambiguous",
+   "documentQuote": "Weigh all six first, then act.",
+   "explanation": "Simultaneity is compressed into a phrase. Most readers would take 'weigh first' to mean the amounts are fixed from pre-step mass, but it is not stated."
+  },
+  {
+   "rule": "STEP 4: an ELEVATED cell's own level drops by its release",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "PUPAL chambers reabsorb half back into the chamber ahead (one number lower)",
+   "explanation": "The donor's own decrement is not stated. 'Reabsorb' could suggest the chamber keeps the mass."
+  },
+  {
+   "rule": "STEP 4: a NORMAL release is added to LOST",
+   "kind": "ambiguous",
+   "documentQuote": "LARVAL chambers burn off a quarter of their mass. / Keep one loss tally: tail overflow, burn-off, ...",
+   "explanation": "It is settled only by the separate tally line, not in the step itself."
+  },
+  {
+   "rule": "Record the periods in which a global reset happened",
+   "kind": "missing",
+   "documentQuote": "absent",
+   "explanation": "There is no in-run instruction to record resets. Only the Report line 'Moults: cycles 1 and 4' shows that they are tracked."
+  },
+  {
+   "rule": "Balance check: start sum + all intake = final sum + LOST",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "Balance: start 20 + feed 94 = 114 = end 38 + loss 76.",
+   "explanation": "It is shown only as a worked equation, never as a general rule."
+  },
+  {
+   "rule": "Levels are whole numbers and never negative",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "Nutrient mass is whole units",
+   "explanation": "Non-negativity is not stated. It holds automatically under the floor rules."
+  },
+  {
+   "rule": "No rule: the expected output is embedded in the write-up",
+   "kind": "added",
+   "documentQuote": "Report. After cycle 5, hand in: end mass 1 to 6: 6, 10, 9, 7, 4, 2 (chamber 2 over limit is right). ... Loss tally: 76.",
+   "explanation": "The write-up gives the complete true answer as the thing to 'hand in'. This is not a process rule. It means an operator can copy the result instead of deriving it, and can settle the moult-rounding ambiguity by back-solving from it."
+  }
+ ],
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": false,
+   "errorTypes": [
+    "reporting-format"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Produce an end-of-cycle report",
+     "explanation": "The report and working are null and no deterministic comparison is available. No report was produced, so there is nothing to score as right."
+    }
+   ],
+   "gapsCorrectlyFlagged": 0,
+   "gapsSilentlyAssumed": 0,
+   "gapHandling": "Not assessable: no report or working was produced."
+  },
+  {
+   "arm": "B",
+   "exactlyRight": false,
+   "errorTypes": [
+    "reporting-format"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Produce an end-of-cycle report",
+     "explanation": "The report and working are null and no deterministic comparison is available. No output to check."
+    }
+   ],
+   "gapsCorrectlyFlagged": 0,
+   "gapsSilentlyAssumed": 0,
+   "gapHandling": "Not assessable: no report or working was produced."
+  },
+  {
+   "arm": "C",
+   "exactlyRight": false,
+   "errorTypes": [
+    "reporting-format"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Produce an end-of-cycle report and pre-read notes",
+     "explanation": "The report and working are null, the pre-read notes said to be included are also absent, and no comparison is available."
+    }
+   ],
+   "gapsCorrectlyFlagged": 0,
+   "gapsSilentlyAssumed": 0,
+   "gapHandling": "Not assessable: no report, working or pre-read notes were produced."
+  }
+ ],
+ "domainPull": "The pull is strongest at the moult. In biology a moult sheds a casing, not half the body. 'Every chamber halves and the shed mass is discarded' plus 'any split rounds down' invites rounding the shed part down, which keeps the ceiling, and that reading changes the result (loss 92, plus an extra moult in cycle 5). Secondary pulls: the PUPAL-to-LARVAL reversal, which is biologically impossible and which the write-up pre-empts with 'that's routine, log it and move on'; 'reabsorb', which suggests the chamber keeps the mass; feeding PUPAL chambers, which do not feed in biology; and 'the chamber ahead', where 'ahead' could read as the next developmental stage (downstream) if '(one number lower)' were missed. Nobody can be shown to have fallen for any of these, because no operator output exists.",
+ "preReadNamedTheBreak": "n/a: nobody fell. All three reports and C's pre-read notes are null, so no trap was shown to be fallen for or named.",
+ "preReadEffect": "No difference that can be observed. Operator C's pre-read notes, report and working are all null, as are A's and B's, so neither gap flagging nor final numbers can be compared across arms.",
+ "summary": "The write-up is faithful apart from compressions, and its only outcome-changing loss is the moult rounding: 'every chamber halves' with 'any split rounds down' can be read as keeping the ceiling, which gives final [4,5,5,4,3,1] and loss 92 instead of [6,10,9,7,4,2] and loss 76. The write-up also embeds the full true answer in its Report section, an added element that would let operators copy or back-solve the result. All three operator outputs (and C's pre-read notes) are null, so no operator can be scored as right, no gaps were flagged or assumed, and the pre-read's effect cannot be assessed."
+}

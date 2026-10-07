@@ -1,0 +1,177 @@
+{
+ "run": {
+  "procedureSummary": "Script used: a short Python simulation, piped to the interpreter on stdin. Every cycle was also checked by hand. Start: water [3,6,6,2,2,1] (total 20), all pumps LAMINAR, overboard 0. Per cycle, in order, each step done for all six compartments before the next step:\n1. Flood: add that cycle's schedule to each compartment. No cap.\n2. Scuppers: go from compartment 1 to 6 in order. If water is above volume (10,8,12,6,9,7), set it to volume and add the excess to the next compartment before that one is checked, so one surge can run down the whole line. Excess from 6 goes overboard.\n3. Read pumps, once per cycle, on the water left after scuppers. LAMINAR with water at or above its inception mark (7,6,9,5,7,5) becomes CAVITATING. CAVITATING with water at or below its desinence mark (3,2,4,2,3,2) becomes LAMINAR. Otherwise the state holds. Every change is logged.\n4. Pump: work out every discharge from the post-scupper water and the new states first: LAMINAR moves floor(w/4), CAVITATING moves floor(w/2). Then apply them all at once. LAMINAR discharge goes overboard. CAVITATING discharge goes to compartment i-1, and from compartment 1 it goes overboard. No volume cap applies.\n5. Blow: add up all six. If the total is strictly over 38, every compartment becomes floor(w/2), the drop in the total goes overboard, and the cycle is recorded. At 38 or under, nothing happens.\nRunning overboard total = overflow from 6 + LAMINAR discharge + backflow out of 1 + blown water.",
+  "openPoints": [
+   {
+    "point": "Which water the pumps are read against",
+    "assumption": "The water after scuppers in the same cycle. Nothing is read before cycle 1 starts. One reading per cycle, so a pump changes state at most once per cycle."
+   },
+   {
+    "point": "Pump discharge: old state or new state",
+    "assumption": "The state just set in step 3, applied to the post-scupper water. All discharges are worked out before any water moves, so backflow arriving in a compartment does not change that compartment's own discharge."
+   },
+   {
+    "point": "Cascade order in scuppers",
+    "assumption": "Excess is added to the next compartment before that compartment is checked, as the write-up's 'one surge can carry down the whole line' says."
+   },
+   {
+    "point": "Overfill after pumping",
+    "assumption": "Left in place. It is only scuppered in the next cycle's step 2, and after cycle 5 it stays. The end figures for 2 (10 > 8) and 4 (7 > 6) are overfull because of this."
+   },
+   {
+    "point": "What the blow total includes",
+    "assumption": "All water aboard after pumping, overfull amounts included. 'Halves' means floor(w/2) for each compartment. The amount blown is the total before minus the total after."
+   },
+   {
+    "point": "Blow boundary",
+    "assumption": "Strictly over 38. In cycle 5 the total was exactly 38, so there was no blow."
+   },
+   {
+    "point": "Rounding",
+    "assumption": "Every quarter, half and halving rounds down (floor). Water is a whole number and never goes below zero, and no step drove it negative."
+   }
+  ],
+  "cycleFigures": "C1: flood [3,12,9,7,5,4]; scuppers [3,8,12,6,7,4] (ob 0); read states [L,C,C,C,C,L]; pump discharges [0,4,6,3,3,1] -> [7,10,9,6,4,3] (ob 1); blow total 39>38 -> [3,5,4,3,2,1] (ob 22).\nC2: flood [7,7,4,4,3,8]; scuppers [7,7,4,4,3,7] (ob 23); read [C,C,L,C,L,C]; pump discharges [3,3,1,2,0,3] -> [7,4,5,2,6,4] (ob 27); blow total 28, no blow [7,4,5,2,6,4] (ob 27).\nC3: flood [11,8,8,2,6,10]; scuppers [10,8,9,2,6,7] (ob 30); read [C,C,C,L,L,C]; pump discharges [5,4,4,0,1,3] -> [9,8,5,2,8,4] (ob 36); blow total 36, no blow (ob 36).\nC4: flood [16,14,12,3,11,4]; scuppers [10,8,12,6,9,7] (ob 44); read [C,C,C,C,C,C]; pump discharges [5,4,6,3,4,3] -> [9,10,9,7,8,4] (ob 49); blow total 47>38 -> [4,5,4,3,4,2] (ob 74).\nC5: flood [4,11,10,6,7,2]; scuppers [4,8,12,6,8,2] (ob 74); read [C,C,C,C,C,L]; pump discharges [2,4,6,3,4,0] -> [6,10,9,7,4,2] (ob 76); blow total 38, not over 38, no blow (ob 76).",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "CAVITATING",
+   "CAVITATING",
+   "CAVITATING",
+   "CAVITATING",
+   "CAVITATING",
+   "LAMINAR"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Water at start 20 + flooded in 94 (17+15+21+24+18) = 114; water aboard 38 (6+10+9+7+4+2) + overboard 76 = 114. Balanced. Overboard breakdown: overflow off 6 = 1+3+8 = 12; LAMINAR discharge = 1+1+1 = 3; backflow out of 1 = 3+5+5+2 = 15; blown = 21+25 = 46; total 76.",
+  "usedScript": true,
+  "preReadNotes": "Open Mirror, filter mode. Comparison: the buoyancy and cavitation vocabulary. Topic: the operating rules.\n\nStep 1, plain statement: Six numbered cells hold whole-number amounts, with capacities 10,8,12,6,9,7, starting at 3,6,6,2,2,1. Each cell has a two-state flag, A or B, starting at A, with an upper mark (7,6,9,5,7,5) and a lower mark (3,2,4,2,3,2). There are five rounds. In each round: (1) add scheduled amounts with no cap; (2) go from cell 1 to cell 6 and move anything over capacity into the next cell, with excess from cell 6 leaving the system; (3) a flag at A goes to B when the amount is at or above the upper mark, a flag at B goes to A when the amount is at or below the lower mark, otherwise it holds; (4) with all amounts fixed first, A cells send floor(1/4) out of the system and B cells send floor(1/2) to the previous cell (cell 1's goes out); (5) if the grand total is strictly over 38, every cell is halved (floor) and the difference leaves. Count everything that leaves. Report the end amounts, flags, flag changes, halving rounds, the amount that left, and a balance line. The desk lead's note says the write-up governs over real-world practice. The write-up contains no instructions aimed at the reader beyond these operating rules. The plain statement already answers how to compute the figures, so by the method the run could stop here. The pictures below are recorded anyway, as in the method's 'finds nothing' example.\n\nPicture 1 (the write-up's own picture, pulled out): ballast compartments, scuppers, pumps that cavitate, an emergency blow. Mapping: cells are compartments, capacity is volume, the flag is the pump regime, moving out is overboard. Where it breaks: real scuppers drain overboard, not aft into the next compartment; a real cavitating pump loses suction and does not push water toward the bow; real cavitation depends on flow and pressure, not on the amount stored. What survives in plain words: an integer pipeline with a forward cascade, a two-threshold flag, state-dependent transfers and a global halving. That is exactly the plain statement. Adds nothing.\n\nPicture 2: real cavitation inception and desinence hysteresis. Mapping: the separate upper and lower marks match the real gap between inception and desinence. Where it breaks: it suggests the regime depends on pump speed or pressure, which the write-up never says. What survives: the flag changes only at the far mark and holds between the marks. This is already stated. Adds nothing.\n\nPicture 3: a real emergency ballast blow, where compressed air drives water out until the boat surfaces. If used, it would suggest emptying the tanks fully, or blowing only the overfull ones. That contradicts the stated rule that every compartment halves, rounded down, only when the total is strictly over 38. Misleading. Discard, with that contradiction as the entry.\n\nCount: Adds nothing: 2 of 3. Misleading: 1. Not run: 0. Keep exploring: empty. Hold: empty. Discard: picture 3 (real blow mechanics contradict the halving rule). Result: the comparison earns nothing for the computation. The figures were computed only from the plain rules, with no real buoyancy or cavitation behaviour put in their place."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "openPoints": 7,
+  "preReadLength": 3203
+ }
+}

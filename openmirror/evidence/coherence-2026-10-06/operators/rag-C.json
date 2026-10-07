@@ -1,0 +1,146 @@
+{
+ "run": {
+  "rulesInOwnWords": "Setup: six tiers (1 nearest the generator, 6 furthest out). Each has a budget, a heat mark, a cool mark and a starting count. All start COLD, drop count 0, stack limit 38. Every division rounds down. Each cycle runs five steps in order, and each step finishes for all tiers before the next step starts.\n1) Ingest: add this cycle's schedule row to each tier. The budget is not enforced here.\n2) Eviction: go through tiers 1 to 6 in order. If a tier's count is over its budget, move the excess to the next tier out (n+1) and set the tier to exactly its budget. Tier 6's excess is dropped and added to the drop count. Because the pass goes in order, an overflow can cascade outward in the same step.\n3) Temperature: use the counts after eviction. A COLD tier with count >= heat mark becomes HOT. A HOT tier with count <= cool mark becomes COLD. Otherwise the state stays the same. At most one change per tier per cycle, and every change is logged.\n4) Compaction/promotion: take a snapshot of the counts and use the states from step 3. A COLD tier's amount is floor(count/4); a HOT tier's amount is floor(count/2). Work out all six amounts first, then apply them together. Each tier loses its amount. A COLD tier's amount is dropped. A HOT tier's amount goes to the next tier in (n-1); if tier 1 is HOT, its amount is dropped. The budget is not enforced, so an overflow waits until the next cycle's eviction (or is never corrected in cycle 5).\n5) Reset: if the total of the six counts is more than 38, every count becomes floor(count/2). The removed chunks are dropped and the cycle is logged. A total of 38 or less means nothing happens.\nBalance: starting sum + all ingest = end sum + drop count.",
+  "working": "Start [3,6,6,2,2,1], drop 0, all COLD.\nCYCLE 1. After ingest: [3,12,9,7,5,4]. Eviction: T2 sends 4 to T3 (13), T3 sends 1 to T4 (8), T4 sends 2 to T5 (7), giving [3,8,12,6,7,4], drop 0. Temperature: T2 8>=6, T3 12>=9, T4 6>=5 and T5 7>=7 all go COLD->HOT; T1 and T6 stay COLD. Amounts: T1 C 0, T2 H 4, T3 H 6, T4 H 3, T5 H 3, T6 C 1. After applying: [7,10,9,6,4,3], drop 1. The total is 39, which is over 38, so the RESET fires: [3,5,4,3,2,1] (21 removed), drop 22.\nCYCLE 2. After ingest: [7,7,4,4,3,8]. Eviction: T6 drops 1, giving [7,7,4,4,3,7], drop 23. Temperature: T1 C->H (7>=7), T3 H->C (4<=4), T5 H->C (3<=3), T6 C->H (7>=5). T2 and T4 stay HOT. States are H,H,C,H,C,H. Amounts: T1 3 (dropped), T2 3 to T1, T3 1 (dropped), T4 2 to T3, T5 0, T6 3 to T5. After applying: [7,4,5,2,6,4], drop 27. The total is 28, so there is no reset.\nCYCLE 3. After ingest: [11,8,8,2,6,10]. Eviction: T1 sends 1 to T2 (9), T2 sends 1 to T3 (9), T6 drops 3, giving [10,8,9,2,6,7], drop 30. Temperature: T3 C->H (9>=9), T4 H->C (2<=2). T5 is COLD at 6<7 and stays COLD. States are H,H,H,C,C,H. Amounts: T1 5 (dropped), T2 4 to T1, T3 4 to T2, T4 0, T5 1 (dropped), T6 3 to T5. After applying: [9,8,5,2,8,4], drop 36. The total is 36, so there is no reset.\nCYCLE 4. After ingest: [16,14,12,3,11,4]. Eviction cascade: T1 sends 6 (T2 to 20), T2 sends 12 (T3 to 24), T3 sends 12 (T4 to 15), T4 sends 9 (T5 to 20), T5 sends 11 (T6 to 15), T6 drops 8. Result [10,8,12,6,9,7], drop 44. Temperature: T4 C->H (6>=5), T5 C->H (9>=7), so all tiers are HOT. Amounts: 5,4,6,3,4,3, with T1's 5 dropped. After applying: [9,10,9,7,8,4], drop 49. The total is 47, which is over 38, so the RESET fires: [4,5,4,3,4,2] (25 removed), drop 74.\nCYCLE 5. After ingest: [4,11,10,6,7,2]. Eviction: T2 sends 3 (T3 to 13), T3 sends 1 (T4 to 7), T4 sends 1 (T5 to 8), giving [4,8,12,6,8,2], drop 74. Temperature: T6 H->C (2<=2); the others stay HOT. Amounts: T1 2 (dropped), T2 4 to T1, T3 6 to T2, T4 3 to T3, T5 4 to T4, T6 C 0. After applying: [6,10,9,7,4,2], drop 76. The total is 38, which is not over 38, so there is no reset.\nCross-check: I worked every step by hand and then ran a Node.js script of the same rules; both give identical results.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "HOT",
+   "HOT",
+   "HOT",
+   "HOT",
+   "HOT",
+   "COLD"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "HOT",
+    "to": "COLD"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "HOT",
+    "to": "COLD"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "HOT",
+    "to": "COLD"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "HOT",
+    "to": "COLD"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Left side: starting counts 3+6+6+2+2+1 = 20, plus ingest rows 20+15+17+24+18 = 94, for a total of 114. Right side: end counts 6+10+9+7+4+2 = 38, plus drop count 76, for a total of 114. The two sides match.\nWhere the 76 dropped chunks went: tier-6 eviction 1+3+8 = 12, cold compaction 1+1+1 = 3, HOT tier 1 promotion 3+5+5+2 = 15, resets 21+25 = 46. 12+3+15+46 = 76.",
+  "usedScript": true,
+  "preReadNotes": "Mode: filter mode (default).\nStep 1, plain statement: Six ordered integer counters, each with a capacity, an upper threshold and a lower threshold, and a two-valued flag with hysteresis. Each cycle: add a scheduled input; move overflow outward in order, with the last counter's overflow discarded; update the flags; remove a fraction of each counter (1/4 if the flag is low, 1/2 if high), discarding it if low and moving it one step inward if high (discarded at counter 1); if the total is over 38, halve every counter and discard the remainder. Track all discards and check conservation. The document's comparison is the RAG vocabulary (tier, chunk, generator, eviction, compaction, promotion, context reset). Under step 1 I pulled that out as the first picture to test. No instructions aimed at the reader were found in the operating document.\nPictures run: (1) the document's own RAG/cache-tier framing; (2) a multi-level cache hierarchy (L1-L6).\nStep 3/4, picture 1 (RAG): what matches is ingest -> chunks entering a store, budget -> index capacity, the reset -> context-window truncation. Where it breaks: in real RAG, promotion to the tier nearer the generator would deliver chunks to the generator. Here, a HOT tier 1's promoted amount is simply dropped, and that drop counts as loss. Real RAG also has no hysteresis states and no floor-division compaction. It also invites the reader to assume budgets are enforced at all times, but here they are only enforced at eviction. The picture does not contradict the rules if the rules are read as written, so it is not marked misleading; its risk is substituting outside practice. What survives in plain words: promotion moves counts inward and discards them at position 1, while eviction moves counts outward and discards them at position 6.\nPicture 2 (cache hierarchy): what matches is overflow spilling to the next level and hot items moving toward the core. Where it breaks: real caches move individual items, not floor-halved counts, and do not halve globally. It suggests eviction might go in to out or out to in, but the document fixes the order 1->6, so it adds nothing beyond what the text says.\nStep 6, grading: Picture 1 adds nothing. The document says every rule applies as written, so I would make the same calls without the picture; its only effect is a warning not to import real-RAG behaviour. Picture 2 adds nothing.\nAdds nothing: 2 of 2. Misleading: 0. Not run: 0.\nStep 7: Keep exploring: empty. Hold: empty. Discard: empty. Conclusion: the plain-rule reading is used for the job; the RAG wording is treated as labels only.",
+  "notes": "I worked every step by hand, then cross-checked with a short Node.js script of the same rules; the results were identical. A first try with Python hung (the interpreter stub never returned) and produced no output, so I did not use it. Points to note: the cycle-4 eviction cascades through all six tiers. The cycle-5 total is exactly 38, so no reset fires because the rule needs more than 38. A HOT tier 1's promoted amount is counted as dropped."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true
+ }
+}

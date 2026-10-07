@@ -1,0 +1,50 @@
+{
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": false,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [
+    {
+     "rule": "No report produced",
+     "explanation": "Operator A's record is \"Report and working: null\" and the comparison is {\"available\":false}. There are no rules in A's own words, no working and no numbers, so no rule-level error can be found or quoted. A is not exactly right only because nothing was delivered. None of the listed error types applies, so the type is given as none, meaning no rule-level cause can be identified, not that the run succeeded."
+    }
+   ]
+  },
+  {
+   "arm": "B",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": []
+  },
+  {
+   "arm": "C",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Balance check (report item f)",
+     "explanation": "This is a cosmetic slip in presentation that C corrected itself. It is not an error. C first wrote the cycle-1 inflow as 17, then corrected it to the row sums (20+15+17+24+18 = 94, Left = 114), which matches. The final figures all match the true answer.",
+     "operatorQuote": "inflows by cycle 17+15+17+24+18 = 91... corrected per row sums: cycle1 0+6+3+5+3+3=20"
+    }
+   ]
+  }
+ ],
+ "translationLoss": [
+  {
+   "rule": "none lost, blurred or added",
+   "explanation": "Every rule in the abstract process appears in the document without ambiguity. Spill-over is sequential, and excess from tank 6 goes to the outfall total. The thresholds match: \"at least its upper mark\" is >= U, \"at most its lower mark\" is <= D, and \"more than the train limit of 38\" is strictly > G. Release is computed from a snapshot and applied all at once, with an OVERLOADED tank 1 sending its amount to outfall. Floor rounding is stated. Capacity is not enforced in Steps 1 and 4, and excess left in cycle 5 stays. The document's extra lines (\"only ever increases\", \"Step 2 is the only step in which volume is enforced\", \"The train limit is checked only in this step\") follow from the abstract rules and add nothing new.",
+   "documentQuote": "If the combined total is more than the train limit of 38, operate the storm bypass ... If the combined total is 38 or less, nothing happens."
+  }
+ ],
+ "domainPull": "The pull was strongest at Step 4 and Step 5. The rule \\\"A tank may hold more than its volume after receiving returned liquor ... it is never dealt with and stays in the tank\\\" contradicts how a physical tank behaves, and so does the line \\\"If tank 1 is OVERLOADED, its amount goes to outfall\\\", since a return line at the inlet would not discharge to outfall. A real storm bypass diverts inflow rather than halving every tank's contents. The cycle-5 end state (T2 at 10 against a volume of 8, T4 at 7 against 6, and a total of exactly 38 with no bypass) is where water and sewage treatment intuition would most tempt a correction, but neither reporting operator made one.",
+ "preReadNamedTheBreak": "n/a: nobody went wrong. B is exact, and A produced no report, so A has no identifiable wrong point. C's notes still flagged in advance the most likely physical misreadings, in break points (a) to (c): \\\"a physical tank cannot hold more than its volume\\\", \\\"tank 1's returned amount goes to outfall\\\", and \\\"a real storm bypass diverts incoming flow\\\".",
+ "preReadEffect": "It made no visible difference. B reached the identical exact answer without a pre-read, and the threshold edge cases (cycle-5 total of exactly 38, T1 at exactly 7, T3 and T5 exactly on their lower marks) were handled correctly by both B and C. The pre-read's accurate list of where the treatment picture and the rules disagree may have acted as insurance, but these results give no evidence that it changed the outcome.",
+ "summary": "The water and sewage treatment document carried the abstract process without loss. Operators B and C both reproduced the true answer exactly: final [6,10,9,7,4,2], 13 state changes, bypasses in cycles 1 and 4, outfall 76, balance 114 = 114. Operator A produced no report, so its failure cannot be traced to any rule, and C's pre-read correctly named the places where the treatment picture and the rules disagree but made no measurable difference over B."
+}

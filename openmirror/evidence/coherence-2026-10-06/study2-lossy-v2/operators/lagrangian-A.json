@@ -1,0 +1,174 @@
+{
+ "run": {
+  "procedureSummary": "Start: x0=(3,6,6,2,2,1), s=0, all flags INACTIVE. Each cycle does five steps, and each step finishes across the whole vector before the next starts.\n1. Load: add the cycle's row of b to x. No bounds are enforced at this step.\n2. Projection sweep (Gauss-Seidel, i=1 to 6): if x_i>c_i, set x_i=c_i and add the excess to x_{i+1} before visiting it. The excess from position 6 goes to s.\n3. Active-set update on the projected x: an INACTIVE component becomes ACTIVE if x_i>=u_i. An ACTIVE component becomes INACTIVE if x_i<=d_i. Otherwise the flag stays. Every flip is logged.\n4. Jacobi shed: compute every amount from the same pre-shed x, using the flags just set. INACTIVE: floor(x_i/4) goes to s. ACTIVE: floor(x_i/2) goes to x_{i-1}, and position 1's share goes to s. There is no projection afterwards.\n5. Penalty: if sum(x)>38 (strictly), each x_i becomes floor(x_i/2) and the removed part, x_i-floor(x_i/2), goes to s. The cycle is noted.",
+  "openPoints": [
+   {
+    "point": "Penalty rounding: the write-up says to halve with floor and book what came off to s. It could also mean removing floor(x/2).",
+    "assumption": "New x_i = floor(x_i/2), and the amount booked to s is x_i - floor(x_i/2) (that is, ceil(x_i/2)). This conserves the total."
+   },
+   {
+    "point": "Which flags the shed uses",
+    "assumption": "The shed uses the flags just updated in step 3 of the same cycle. The final states are the flags after cycle 5 step 3, since no later step changes them."
+   },
+   {
+    "point": "The 1-norm the penalty tests",
+    "assumption": "It is the sum of the six x components only. Slack s is not included."
+   },
+   {
+    "point": "Boundary case in cycle 5: the 1-norm after the shed is exactly 38",
+    "assumption": "The rule says strictly above, so the penalty does not fire in cycle 5."
+   },
+   {
+    "point": "End values over their bounds (x2=10>8, x4=7>6)",
+    "assumption": "They are left as they are, because the write-up says no projection follows the cycle 5 shed."
+   },
+   {
+    "point": "Projection lower bound",
+    "assumption": "Only the upper bounds c bind. No component goes negative at any point."
+   }
+  ],
+  "cycleFigures": "Format: x after each step | s.\nC1: load (3,12,9,7,5,4) s0 | proj (3,8,12,6,7,4) s0 | active (3,8,12,6,7,4), flags I,A,A,A,A,I | shed (7,10,9,6,4,3) s1 | penalty fires (sum 39) -> (3,5,4,3,2,1) s22\nC2: load (7,7,4,4,3,8) s22 | proj (7,7,4,4,3,7) s23 | active (7,7,4,4,3,7), flags A,A,I,A,I,A | shed (7,4,5,2,6,4) s27 | penalty: sum 28, no\nC3: load (11,8,8,2,6,10) s27 | proj (10,8,9,2,6,7) s30 | active (10,8,9,2,6,7), flags A,A,A,I,I,A | shed (9,8,5,2,8,4) s36 | penalty: sum 36, no\nC4: load (16,14,12,3,11,4) s36 | proj (10,8,12,6,9,7) s44 | active (10,8,12,6,9,7), flags A,A,A,A,A,A | shed (9,10,9,7,8,4) s49 | penalty fires (sum 47) -> (4,5,4,3,4,2) s74\nC5: load (4,11,10,6,7,2) s74 | proj (4,8,12,6,8,2) s74 | active (4,8,12,6,8,2), flags A,A,A,A,A,I | shed (6,10,9,7,4,2) s76 | penalty: sum 38, not strictly above 38, no",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "ACTIVE",
+   "ACTIVE",
+   "ACTIVE",
+   "ACTIVE",
+   "ACTIVE",
+   "INACTIVE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting 1-norm 20 + everything loaded 94 = 114. Final 1-norm 38 + s 76 = 114. The two sides match.",
+  "usedScript": true,
+  "preReadNotes": "I read the write-up at C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\coherence\\desk3\\lagrangian.md in full. It is self-contained and contains no instructions beyond the procedure. Only arithmetic was run, in a local Python script in the scratchpad. Nothing was sent or published.",
+  "notes": "I used a short Python script (sim.py in the session scratchpad) for the arithmetic. I checked cycle 1 by hand and it matches. The penalty fired in cycles 1 and 4. In cycle 5 the 1-norm is exactly 38, so the strict rule does not fire it. Positions 2 and 4 end above their bounds because no projection follows the last shed. The loss tally is s = 76."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "openPoints": 6,
+  "preReadLength": 270
+ }
+}

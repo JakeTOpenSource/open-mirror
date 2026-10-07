@@ -1,0 +1,174 @@
+{
+ "run": {
+  "procedureSummary": "Start: holdings 3,6,6,2,2,1 (total 20), all six tiers COLD, ceiling 38. Each cycle runs five passes in order, and each pass finishes across all six tiers before the next one starts.\n1. Load: add the cycle's new chunks to each tier. Nothing is trimmed, so a tier can sit over budget.\n2. Evict: go from tier 1 to tier 6. Any excess over a tier's budget (10,8,12,6,9,7) moves into the next tier before that tier is checked. Tier 6's excess is dropped and counted.\n3. Flag: use the post-evict counts. A COLD tier at or above its HOT mark (7,6,9,5,7,5) becomes HOT. A HOT tier at or below its COLD mark (3,2,4,2,3,2) becomes COLD. A tier between the marks keeps its flag. Every flip is logged.\n4. Rebalance: work out all six amounts from the post-flag counts first. A COLD tier's amount is floor(count/4) and is dropped. A HOT tier's amount is floor(count/2) and moves to tier i-1, except tier 1, whose amount is dropped. Then apply all moves at once. A tier left over budget stays that way until the next evict pass.\n5. Reset check: if the stack total is above 38, every tier becomes floor(count/2) and the removed part (count - floor(count/2)) is dropped. A total of exactly 38 does not trigger a reset.\nOne running drop count covers tier-6 evictions, compactions, tier-1 promotions and reset removals. I used a short Python script for the arithmetic and checked cycle 1 by hand.",
+  "openPoints": [
+   {
+    "point": "How 'halves (round down)' works in a reset: which side gets rounded down.",
+    "assumption": "The kept amount is floor(count/2), so the dropped part is ceil(count/2). Example: 7 keeps 3 and drops 4."
+   },
+   {
+    "point": "Which counts the Flag pass uses.",
+    "assumption": "It uses the counts right after Evict in the same cycle, because the passes run in order."
+   },
+   {
+    "point": "Whether rebalance amounts use counts before or after promotions arrive.",
+    "assumption": "All six amounts come from the post-flag counts (before any moves) and are applied together, as the write-up says. A tier can therefore give away half its own count and also receive a promotion from the tier above."
+   },
+   {
+    "point": "Whether a tier's flag changes during rebalance or the reset check.",
+    "assumption": "No. Flags change only in the Flag pass. After the cycle 5 rebalance, tier 2 (10, over its budget of 8) and tier 4 (7, over its budget of 6) stay as they are, as the write-up says."
+   },
+   {
+    "point": "A stack total of exactly 38 at the reset check.",
+    "assumption": "No reset, as the write-up says. This happens at the end of cycle 5 (total 38)."
+   },
+   {
+    "point": "Where tier-6 overflow, compactions, tier-1 promotions and reset removals go.",
+    "assumption": "All of them go into the single drop count."
+   }
+  ],
+  "cycleFigures": "C1: load 3,12,9,7,5,4 | evict 3,8,12,6,7,4 (drop 0) | flag 3,8,12,6,7,4 with states C,H,H,H,H,C | rebalance 7,10,9,6,4,3 (moved/dropped 0,4,6,3,3,1; drop 1) | reset fires on 39: 3,5,4,3,2,1 (drop 22)\nC2: load 7,7,4,4,3,8 | evict 7,7,4,4,3,7 (drop 23) | flag 7,7,4,4,3,7 with states H,H,C,H,C,H | rebalance 7,4,5,2,6,4 (amounts 3,3,1,2,0,3; drop 27) | reset check: total 28, no reset\nC3: load 11,8,8,2,6,10 | evict 10,8,9,2,6,7 (drop 30) | flag 10,8,9,2,6,7 with states H,H,H,C,C,H | rebalance 9,8,5,2,8,4 (amounts 5,4,4,0,1,3; drop 36) | reset check: total 36, no reset\nC4: load 16,14,12,3,11,4 | evict 10,8,12,6,9,7 (drop 44) | flag 10,8,12,6,9,7, all H | rebalance 9,10,9,7,8,4 (amounts 5,4,6,3,4,3; drop 49) | reset fires on 47: 4,5,4,3,4,2 (drop 74)\nC5: load 4,11,10,6,7,2 | evict 4,8,12,6,8,2 (drop 74) | flag 4,8,12,6,8,2 with states H,H,H,H,H,C | rebalance 6,10,9,7,4,2 (amounts 2,4,6,3,4,0; drop 76) | reset check: total exactly 38, no reset",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "HOT",
+   "HOT",
+   "HOT",
+   "HOT",
+   "HOT",
+   "COLD"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "HOT",
+    "to": "COLD"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "HOT",
+    "to": "COLD"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "HOT",
+    "to": "COLD"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "HOT",
+    "to": "COLD"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Start 20 + loaded 94 = 114. Held 38 + dropped 76 = 114. The two sides match.",
+  "usedScript": true,
+  "notes": "Final holdings are 6,10,9,7,4,2 (total 38). Resets fired in cycles 1 and 4, and 76 chunks were dropped in total. One choice changes the figures: I read a reset as keeping floor(count/2) in each tier. Tiers 2 and 4 end the cycle over budget because of promotions, which the write-up allows after cycle 5. The arithmetic script is at C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py",
+  "preReadNotes": "I read C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\coherence\\desk3\\rag.md in full. It contains only the line's rules and figures and no instructions aimed at the agent. The only action taken was a local arithmetic script in the scratchpad."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "openPoints": 6,
+  "preReadLength": 232
+ }
+}

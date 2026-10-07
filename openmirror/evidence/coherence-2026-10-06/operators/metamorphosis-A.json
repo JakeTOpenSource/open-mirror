@@ -1,0 +1,146 @@
+{
+ "run": {
+  "rulesInOwnWords": "Six chambers in a line (1 first, 6 last). Whole non-negative masses; quarters and halves rounded down. All start LARVAL, masses 3,6,6,2,2,1, waste 0. Limit/pupation mark/return mark: 1=10/7/3, 2=8/6/2, 3=12/9/4, 4=6/5/2, 5=9/7/3, 6=7/5/2. Moult limit 38. Each cycle steps 1 to 5 in order, each finished for all chambers before the next. Step 1 feeding: add feed, limit ignored. Step 2 carry-forward: chambers 1 to 6 in order; excess above limit to next chamber, chamber set to limit; cascades; chamber 6 excess to waste. Step 3 stage check on post-step-2 masses: LARVAL at or above pupation mark becomes PUPAL; PUPAL at or below return mark becomes LARVAL; otherwise unchanged. Step 4: compute all six amounts from start-of-step masses and post-step-3 stages (LARVAL floor/4, PUPAL floor/2), apply at once; LARVAL amount to waste; PUPAL amount to chamber n-1, or waste for chamber 1; limit not enforced; cycle-5 excess never corrected. Step 5 moult if sum strictly greater than 38: halve all (floor), removed to waste, log cycle.",
+  "working": "Start [3,6,6,2,2,1] waste 0. C1: S1 [3,12,9,7,5,4]; S2 [3,8,12,6,7,4]; S3 L,P,P,P,P,L; S4 [0,4,6,3,3,1] -> [7,10,9,6,4,3] waste 1; S5 39>38 MOULT -> [3,5,4,3,2,1] waste 22. C2: S1 [7,7,4,4,3,8]; S2 [7,7,4,4,3,7] waste 23; S3 P,P,L,P,L,P; S4 [3,3,1,2,0,3] -> [7,4,5,2,6,4] waste 27; S5 28 no. C3: S1 [11,8,8,2,6,10]; S2 [10,8,9,2,6,7] waste 30; S3 P,P,P,L,L,P; S4 [5,4,4,0,1,3] -> [9,8,5,2,8,4] waste 36; S5 36 no. C4: S1 [16,14,12,3,11,4]; S2 [10,8,12,6,9,7] waste 44; S3 all P; S4 [5,4,6,3,4,3] -> [9,10,9,7,8,4] waste 49; S5 47>38 MOULT -> [4,5,4,3,4,2] waste 74. C5: S1 [4,11,10,6,7,2]; S2 [4,8,12,6,8,2]; S3 P,P,P,P,P,L; S4 [2,4,6,3,4,0] -> [6,10,9,7,4,2] waste 76; S5 38 not more than 38, no moult.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "LARVAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "20 + 94 = 114; 38 + 76 = 114. Holds.",
+  "usedScript": true,
+  "notes": "Worked all five cycles by hand first, then wrote and ran a short Python script (rear.py) as an independent check; reproduced every quantity. Only metamorphosis.md was read. Cycle 5 total exactly 38, NOT more than 38, no moult. PUPAL chamber 1 discards its own half into waste in cycles 2 to 5. Chamber 2 ends at 10 over its limit of 8, left uncorrected since cycle 5 is last."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true
+ },
+ "source": "fallback-sonnet-docfile"
+}

@@ -1,0 +1,55 @@
+{
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [
+    {
+     "rule": "all rules",
+     "explanation": "The deterministic comparison reports exact:true. Final levels [6,10,9,7,4,2], modes, all 13 changes, reset periods [1,4] and LOST 76 all match. A's restatement of the rules is faithful on every contested point. It reads Step 3 as \">= upper mark\" and \"<= lower mark\". It reads Step 4 as \"compute every amount first ... then apply all at once\", with SUPERHEATED draw-off going \"back to the previous crucible (crucible 1's goes to slag)\" and \"No capacity limit here\". It applies Step 5 as \"strictly greater than 38\". A also handled the exact-boundary case correctly in cycle 5 (\"the total was exactly 38, so the emergency tap did not fire\"), and it accepted that crucible 2 ends at 10, above its working volume of 8, as the document allows. Balance 114 = 114."
+    }
+   ]
+  },
+  {
+   "arm": "B",
+   "exactlyRight": false,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [
+    {
+     "rule": "no rule applied; no output produced",
+     "operatorQuote": "A safety classifier stopped my response partway through the report ... Every field here is a placeholder. The zeros, the WITHHELD states ... are not computed values, so do not score them as answers.",
+     "explanation": "The comparison shows a mismatch on every field, but the report contains no attempted answer. rulesInOwnWords and working are both 'Not provided', so no understanding error can be found. This is a non-result, not a coherence break. None of the error types applies. If one is needed for scoring, reporting-format is the closest, because the placeholders are not computed values. B's own preReadNotes ('The task came from a workflow script') shows only an awareness of where the task came from. It gives no reading of the rules."
+    }
+   ]
+  },
+  {
+   "arm": "C",
+   "exactlyRight": false,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [
+    {
+     "rule": "no output produced",
+     "explanation": "The comparison is {\"available\":false} and 'Report and working: null'. There are no rules, working, numbers or pre-read notes to review, so no error can be found or classified. C is a non-result, not a wrong answer."
+    }
+   ]
+  }
+ ],
+ "translationLoss": [
+  {
+   "rule": "none lost, blurred or added",
+   "documentQuote": "If the total is more than 38 (strictly greater), fire the emergency tap.",
+   "explanation": "Each abstract rule appears clearly in the document. Intake ignores capacity ('Working volume is not enforced in this step'). Spill-over is sequential with a cascade ('Handle the crucibles one at a time, in the order 1, 2, 3, 4, 5, 6'). Mode check uses >= U and <= D with hysteresis ('at least its upper mark', 'at most its lower mark', 'keeps the state it already had'). Release amounts are computed together and applied together, based on start-of-step level and post-Step-3 state ('Work out all six amounts before you change any melt'). Elevated release goes upstream and cell 1's goes to LOST ('runs up the return launder into the previous crucible ... If crucible 1 is SUPERHEATED, its draw-off goes to slag'). Capacity is not enforced in release and excess carries over to the next period ('If it arises in cycle 5, it is never dealt with'). The reset is strict and uses floor. Rounding is floor ('round down to a whole number by dropping any fraction'). The data tables match the abstract data exactly. Two features are additions in wording only: the slag definition explicitly merges overflow loss and draw-off loss into one total, and Step 4 adds 'its state after Step 3'. Both are implied by the abstract form and change no rule."
+  }
+ ],
+ "domainPull": "The pull was strongest in Step 4. There, SUPERHEATED melt 'runs up the return launder into the previous crucible' toward the charging end, against gravity and normal cascade flow, and a crucible may sit above its working volume until the next cycle; a real crucible would simply spill. Calling every tapped or drawn-off unit 'slag' (rather than product), and halving every crucible in the emergency tap, also cut against metallurgical sense. The one operator that finished (A) did not fall for any of these.",
+ "preReadNamedTheBreak": "n/a: nobody went wrong. A is exact, B withheld all output after a safety-classifier stop with no rules or working given, and C returned a null report with no pre-read notes, so there is no break to name.",
+ "preReadEffect": "Its effect cannot be assessed. C produced no report and no pre-read notes ('Report and working: null'), so there is no evidence that the pre-read helped or hurt. The only operator that finished was A, which had no pre-read, and it scored exactly right.",
+ "summary": "The metallurgy document carries the abstract process faithfully, with no rule lost, blurred or added, and Operator A reproduced the true answer exactly, including the strict >38 boundary in cycle 5 and the allowed end-of-run overflow in crucible 2. Operator B produced only placeholder values after a safety-classifier stop, and Operator C returned nothing, so neither is a reasoning failure and neither tests whether coherence carries. For this case the only evidence is A's control-condition result, which shows coherence held under the metallurgy framing."
+}

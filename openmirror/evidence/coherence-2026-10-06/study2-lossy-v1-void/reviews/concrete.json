@@ -1,0 +1,126 @@
+{
+ "documentLosses": [
+  {
+   "rule": "Levels are whole numbers and never negative.",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "absent (only implied by 'rounded down')",
+   "explanation": "Integrality and non-negativity are never stated. The reader is left to infer them from counting units of mix and from the floor operations."
+  },
+  {
+   "rule": "D < U <= C for every cell.",
+   "kind": "missing",
+   "documentQuote": "absent",
+   "explanation": "The constraint is never stated. The table happens to satisfy it."
+  },
+  {
+   "rule": "LOST starts at 0 and collects four things: cell 6 spill-over, NORMAL releases, cell 1's ELEVATED release, and reset removals.",
+   "kind": "ambiguous",
+   "documentQuote": "Form 6 overtops into the waste pit.",
+   "explanation": "The write-up uses 'waste pit', 'evaporation: waste', 'goes to waste' and 'what comes off is waste' in different steps but never defines one tally or its starting value. 'Waste tally' appears only in the Report line."
+  },
+  {
+   "rule": "The process runs exactly 5 periods.",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "After cycle 5, hand in: ...",
+   "explanation": "The run length is implied by the 5-row charge sheet and the reporting line. It is never stated as a rule."
+  },
+  {
+   "rule": "Spill-over: the excess is added to cell n+1 and the cell is set to exactly capacity, handled in order 1 to 6 so excess can cascade.",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "Whatever's over capacity runs down the chute into the next form before you get to that one, so one heavy form can push the whole line.",
+   "explanation": "The write-up states the cascade order, but 'the excess is added on top of what the next form holds' and 'the source is set to exactly capacity' are left to the image of overflow."
+  },
+  {
+   "rule": "The mode check reads the level after spill-over.",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "absent (only the step order and 'each step goes all the way down the line before the next one starts')",
+   "explanation": "Which quantity is tested is implied only by the step order."
+  },
+  {
+   "rule": "A cell changes mode at most once per period.",
+   "kind": "missing",
+   "documentQuote": "absent",
+   "explanation": "This is not stated. It follows only from checking each form once in step 3."
+  },
+  {
+   "rule": "Release amounts are computed from the level at the start of step 4, using the mode just set in step 3.",
+   "kind": "ambiguous",
+   "documentQuote": "Read all six first, then move mix.",
+   "explanation": "'Read all six first' points to a snapshot. It does not say what is read (quantity and post-Marks state)."
+  },
+  {
+   "rule": "All releases apply at once: an ELEVATED cell loses its own release and receives the release of cell n+1 in the same step, and received mix is not re-released.",
+   "kind": "ambiguous",
+   "documentQuote": "Read all six first, then move mix.",
+   "explanation": "Simultaneity is only implied by 'read first, then move'. Whether a cell both loses and receives in the same step is never spelled out."
+  },
+  {
+   "rule": "A reset removes level - floor(level/2), so an odd level loses the larger half.",
+   "kind": "ambiguous",
+   "documentQuote": "Over 38, halve every form, rounded down, and what comes off is waste.",
+   "explanation": "'Halve, rounded down' could mean rounding the kept amount or the removed amount. Only the kept amount is floor(level/2) in the true process."
+  },
+  {
+   "rule": "Balance check: sum of starting levels + sum of intakes = sum of final levels + LOST.",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "Balance: start 20 plus charges 94 is 114; end 38 plus waste 76 is 114.",
+   "explanation": "The check is shown only as worked numbers, not as a general formula."
+  },
+  {
+   "rule": "The output is to be computed by running the process.",
+   "kind": "added",
+   "documentQuote": "Report. After cycle 5, hand in: end quantities, forms 1 to 6: 6, 10, 9, 7, 4, 2 ... Washouts: cycles 1 and 4. Waste tally: 76.",
+   "explanation": "The write-up embeds the complete expected answer: final levels, modes, all 13 changes, reset periods, LOST and the balance. An operator could copy it rather than derive it."
+  },
+  {
+   "rule": "Capacity is not enforced after release, and any cell may end over capacity.",
+   "kind": "added",
+   "documentQuote": "(form 2 over capacity from a bleed, that's fine)",
+   "explanation": "This parenthetical is incomplete. It names only form 2, but form 4 also ends over capacity (7 against a capacity of 6). A reader could take it to mean form 2 is the only exception."
+  }
+ ],
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": false,
+   "errorTypes": [
+    "reporting-format"
+   ],
+   "breakPoints": [
+    {
+     "rule": "A report must be produced.",
+     "explanation": "Operator A returned no report and no working ('Report and working: null'; the deterministic comparison says 'available': false). Without its own rules or working, the failure cannot be traced to any document loss."
+    }
+   ],
+   "gapsCorrectlyFlagged": 0,
+   "gapsSilentlyAssumed": 0,
+   "gapHandling": "No report, working or gap list was returned, so gap handling cannot be assessed."
+  },
+  {
+   "arm": "B",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 4,
+   "gapsSilentlyAssumed": 5,
+   "gapHandling": "Where the write-up was silent, B guessed the engineer's intent each time and resisted the concrete picture. It flagged four real losses: the post-overtop quantity ('Marks are checked against the quantities after overtop'), the bleed snapshot and state, washout rounding ('the remainder ceil(q/2) goes to waste') and form 6 into the tally. It resolved five others silently in its own rules: overtop capping to capacity, the 5-cycle run, once-per-cycle changes, simultaneous moves ('make every move at once') and the conservation formula. It also accepted the incomplete form-2-only note ('Form 2 ends at 10 ... The write-up allows this') without noticing that form 4 also ends over capacity. It treated the embedded Report figures as 'claims to check', but only in its notes, not as a flagged gap."
+  },
+  {
+   "arm": "C",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 8,
+   "gapsSilentlyAssumed": 3,
+   "gapHandling": "C also guessed the engineer's intent throughout. It flagged eight real losses: washout rounding, the waste-tally composition, the bleed snapshot and state, simultaneity ('mix that arrives by bleed does not bleed again in the same cycle'), the post-overtop check and once-per-cycle changes ('checked once per form per cycle on the post-overtop quantities'), the embedded answer ('Pre-filled Report figures'), and the incomplete over-capacity note ('form 4 also ends over capacity (7 against 6)'). It resolved three silently: overtop capping to capacity, the 5-cycle run and the conservation formula."
+  }
+ ],
+ "domainPull": "The concrete language pulled hardest in the Bleed step. There the write-up says a HOT form 'bleeds half ... back up the chute into the form before it', which sends mix uphill, and lets HOT forms return to GREEN, which runs against irreversible setting. The pull continued in 'Nothing trims after this, so a form can carry over capacity', which contradicts what a physical form can hold, and in 'halve every form, rounded down', which leaves open which half is rounded. Nobody fell for any of it: B and C both applied upstream transfer, reversible states and uncapped post-bleed levels exactly as written. C's pre-read named the trap directly: 'Real concrete does not flow back uphill, and curing does not reverse'.",
+ "preReadNamedTheBreak": "n/a: nobody fell. B's report is exact and A returned no report, so there was no failure for the pre-read to anticipate. C's notes did name the uphill-bleed and reversible-state traps and the embedded Report figures in advance.",
+ "preReadEffect": "The pre-read helped with gap flagging and made no difference to the final numbers, which both B and C got exactly right. C flagged 8 real losses to B's 4, including simultaneity and the embedded pre-filled answer. It also caught the misleading 'form 2 over capacity' note, adding 'form 4 also ends over capacity (7 against 6)', which B missed. Its explicit commitment to 'Ignore real-concrete intuition' made its resolution of the domain traps deliberate rather than incidental.",
+ "summary": "The write-up compresses or blurs about a dozen rules: the bleed snapshot and simultaneity, washout rounding, the waste-tally definition and the balance formula. It also embeds the full expected answer, plus an incomplete note that names only form 2 as ending over capacity when form 4 does too. B and C both matched the true answer exactly by following the engineer's rules over the concrete picture; A returned no report, so its failure cannot be traced to the document. C's pre-read did not change the numbers, but it roughly doubled correct gap flagging (8 against 4) and caught the form-4 omission that B accepted."
+}

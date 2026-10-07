@@ -1,0 +1,42 @@
+{
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 3,
+   "gapsSilentlyAssumed": 9,
+   "followedEngineerNotDomain": "Engineer's process: where real projection would leave the iterate feasible, A kept the over-bound values as the write-up states, \"They are left as they are, because the write-up says no projection follows the cycle 5 shed.\""
+  },
+  {
+   "arm": "B",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 4,
+   "gapsSilentlyAssumed": 8,
+   "followedEngineerNotDomain": "Engineer's process: B treated slack as a one-way sink rather than a decision variable, \"lossTotal is the final slack s, which collects component-6 projection overflow, INACTIVE sheds, component 1's ACTIVE share and the penalty halvings.\""
+  },
+  {
+   "arm": "C",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 4,
+   "gapsSilentlyAssumed": 8,
+   "followedEngineerNotDomain": "Engineer's process: C explicitly refused to read real optimisation behaviour into the labels, \"do not substitute real projection, active-set, slack or penalty behaviour for the stated rules.\""
+  }
+ ],
+ "applicableLosses": 12,
+ "domainPull": "The pull is strongest at \"Projection sweep\" and \"Penalty\". A real projection onto a box throws the violation away, and a real penalty adds a cost term. In the write-up, the overflow cascades into x_{i+1}, the penalty halves the vector, and the removed amount is booked to a slack that only ever grows. \"moves floor(x_i/2) up to x_{i-1}\" also runs against the sweep direction, and nothing in the domain language marks that reversal.",
+ "preReadNamedTheBreak": "n/a: nobody fell. All three operators matched the true answer exactly. C's notes still named the main domain traps in advance, for example \"a real projection onto a box throws away the violation, but here it cascades into the next counter and is conserved.\"",
+ "preReadEffect": "No difference. All three were exactly right, and C's open points covered 4 of the 12 applicable losses, the same as B (4) and about the same as A (3). The 3,575-character pre-read concluded that \"The plain statement fully specifies the procedure\", so it did not lead C to list the missing rules: the once-per-period flip limit, the D<U<=C ordering, and the ordering of the flip list.",
+ "summary": "The write-up was clear enough that all three operators reproduced the true answer exactly (final levels [6,10,9,7,4,2], resets in periods 1 and 4, LOST 76), each using a script and confirming the balance 114 = 114. Each one silently resolved most of the 12 applicable losses; flagged coverage was 3 for A, 4 for B and 4 for C, mainly on rounding in the penalty, the boundary at exactly 38, which flags the shed uses, and what s contains. C's pre-read caught the domain traps but changed neither correctness nor the number of gaps flagged."
+}

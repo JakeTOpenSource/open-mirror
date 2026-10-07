@@ -1,0 +1,173 @@
+{
+ "run": {
+  "procedureSummary": "Start: mass [3,6,6,2,2,1], all LARVAL; limits [10,8,12,6,9,7], pupation marks [7,6,9,5,7,5], fallback marks [3,2,4,2,3,2]. Each cycle runs every step across all six chambers before the next step starts.\nStep 1 Feed: add that cycle's ration to each chamber. No trimming at this step.\nStep 2 Overflow: one pass from chamber 1 to chamber 6. Any mass above a chamber's limit is moved into the next chamber before that chamber is checked, so overflow cascades. Chamber 6's excess goes to the loss tally.\nStep 3 Stage check, on post-overflow mass, one check per chamber: LARVAL with mass >= pupation mark becomes PUPAL. PUPAL with mass <= fallback mark becomes LARVAL. Otherwise the stage holds. Every change is logged as (cycle, chamber, before, after).\nStep 4 Metabolism, worked from a snapshot of masses taken before anything moves: a LARVAL chamber loses floor(m/4) to the loss tally. A PUPAL chamber sends floor(m/2) to chamber i-1, except chamber 1, whose half goes to the loss tally. Mass a chamber receives from reabsorption is not burned or reabsorbed again in the same cycle. Nothing is trimmed.\nStep 5 Moult: total the line. If the total is strictly above 38, each chamber sheds floor(m/2) to the loss tally and keeps the rest. At 38 or below, nothing happens.\nLoss tally = tail overflow + burn-off + chamber 1's reabsorbed half + moult sheddings. Balance check: start + all feed = chamber mass + tally.\nI used a short Python script for the arithmetic and checked cycle 1 by hand.",
+  "openPoints": [
+   {
+    "point": "Rounding of the LARVAL burn-off (a quarter of the mass)",
+    "assumption": "The amount burned is floor(m/4) and the chamber keeps m - floor(m/4). This follows 'any split rounds down', applied to the part that is split off."
+   },
+   {
+    "point": "Rounding of the PUPAL reabsorption (half)",
+    "assumption": "The amount moved (or, for chamber 1, discarded) is floor(m/2), and the chamber keeps the larger remainder."
+   },
+   {
+    "point": "Rounding of the moult halving",
+    "assumption": "Each chamber sheds floor(m/2) and keeps ceil(m/2), the same rule as reabsorption. If chambers kept floor(m/2) instead, the figures from cycle 1 onward would differ. The balance line holds either way."
+   },
+   {
+    "point": "Whether metabolism amounts come from the pre-metabolism mass",
+    "assumption": "Yes. 'Weigh all six first, then act' means every burn and every half is taken from the snapshot. Mass a LARVAL chamber receives from the chamber behind it is not burned that cycle."
+   },
+   {
+    "point": "What 'the chamber ahead' means",
+    "assumption": "Chamber i-1 (one number lower, toward the head), as the write-up states. Chamber 1 has no chamber ahead, so its half goes to the loss tally."
+   },
+   {
+    "point": "Which mass the stage check uses, and whether a chamber can change twice",
+    "assumption": "The check uses mass after overflow and before metabolism. Each chamber is checked once per cycle, so a chamber that changes is not checked again in the same cycle."
+   },
+   {
+    "point": "Moult boundary at exactly 38",
+    "assumption": "A total of 38 does not trigger a moult ('above 38' means strictly greater). This case occurred in cycle 3 (total 38), so no moult fired."
+   },
+   {
+    "point": "Overflow cascade order",
+    "assumption": "A single head-to-tail pass. Overflow is added to the next chamber before that chamber is checked against its limit. Nothing flows back toward the head during overflow."
+   },
+   {
+    "point": "Over-limit mass after metabolism",
+    "assumption": "It is left in place, per 'No trimming'. It is cleared by the next cycle's overflow, or stays after cycle 5 (here chamber 2 ends at 5, within its limit)."
+   }
+  ],
+  "cycleFigures": "Start: [3,6,6,2,2,1], all LARVAL, tally 0.\nCycle 1: feed [3,12,9,7,5,4] | overflow [3,8,12,6,7,4] (tail loss 0) | stage [3,8,12,6,7,4] L,P,P,P,P,L | metabolism [7,10,9,6,4,3] (tally 1) | moult: total 39 > 38, fires -> [4,5,5,3,2,2] (shed 18, tally 19)\nCycle 2: feed [8,7,5,4,3,9] | overflow [8,7,5,4,3,7] (tail loss 2, tally 21) | stage [8,7,5,4,3,7] P,P,P,P,L,P | metabolism [7,6,5,2,6,4] (tally 25) | moult: total 30, none -> [7,6,5,2,6,4]\nCycle 3: feed [11,10,8,2,6,10] | overflow [10,8,11,2,6,7] (tail loss 3, tally 28) | stage [10,8,11,2,6,7] P,P,P,L,L,P | metabolism [9,9,6,2,8,4] (tally 34) | moult: total 38, none -> [9,9,6,2,8,4]\nCycle 4: feed [16,15,13,3,11,4] | overflow [10,8,12,6,9,7] (tail loss 10, tally 44) | stage [10,8,12,6,9,7] all P | metabolism [9,10,9,7,8,4] (tally 49) | moult: total 47 > 38, fires -> [5,5,5,4,4,2] (shed 22, tally 71)\nCycle 5: feed [5,11,11,7,7,2] | overflow [5,8,12,6,9,3] (tail loss 0, tally 71) | stage [5,8,12,6,9,3] all P | metabolism [7,10,9,7,6,2] (tally 73) | moult: total 41 > 38, fires -> [4,5,5,4,3,1] (shed 19, tally 92)",
+  "finalQuantities": [
+   4,
+   5,
+   5,
+   4,
+   3,
+   1
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4,
+   5
+  ],
+  "lossTotal": 92,
+  "balanceCheck": "Start mass 20 + all feed 94 = 114, against end mass in chambers 22 + loss tally 92 = 114. Balanced. Feed by cycle: 20, 15, 17, 24, 18. The tally of 92 breaks down as tail overflow 15 (2+3+10), burn-off 13, chamber 1's reabsorbed halves 5, and moult sheddings 59 (18+22+19).",
+  "usedScript": true,
+  "preReadNotes": "Mode: filter mode (the default).\n\nStep 1, plain statement. Six compartments, numbered 1 (head) to 6 (tail), each hold a whole-number quantity, and every split rounds down. Each compartment has a cap (10,8,12,6,9,7), an upper switch threshold (7,6,9,5,7,5) and a lower switch threshold (3,2,4,2,3,2). Starting quantities are 3,6,6,2,2,1, and every compartment starts in state A (word: LARVAL). The run has five cycles. Each step is done for all compartments before the next step starts.\n(1) Add the cycle's input vector.\n(2) In one pass from 1 to 6, move any excess over the cap into the next compartment. The excess from compartment 6 is removed.\n(3) A state-A compartment at or above its upper threshold switches to state B (word: PUPAL). A state-B compartment at or below its lower threshold switches back to A, which is routine. Otherwise the state holds. Log every switch.\n(4) From a snapshot: state-A compartments lose a quarter. State-B compartments pass half to the next lower-numbered compartment; compartment 1's half is removed. Nothing is trimmed.\n(5) If the total is above 38, halve every compartment and remove the halves. Otherwise leave it.\nAll removed amounts go into one tally. Report the end quantities, the states, the switch log, the cycles with a halving, the tally, and the balance (start + inputs = end + tally).\nThe source states no guesses or confidence levels. The write-up contains no instructions aimed at me. The plain statement fixes the rules but leaves some rounding and timing details open (listed in openPoints). It does not compute the figures, so the procedure continues.\nEmbedded comparison pulled out: the insect metamorphosis vocabulary (chambers, nutrient mass, feed, larval/pupal, pupation, burn-off, reabsorb, moult). It is the first picture tested and does not count against the limit of three.\n\nStep 2, pictures. P1: insect metamorphosis (embedded). P2: a thermostat with a deadband (hysteresis). P3: a cascade of spill-over water tanks.\n\nStep 3, mapping. P1: chamber = compartment; nutrient mass = quantity; larval/pupal = state A/B; pupation mark = upper threshold; moult = global halving. Question it makes easier to ask: can a chamber go back from PUPAL? P2: the on and off setpoints match the upper and lower thresholds, and the deadband matches 'in between holds its stage'. Question: what happens to a chamber that sits exactly on a threshold? P3: tanks spilling downhill match overflow from 1 toward 6. Question: can spill-over cascade through several tanks in one pass?\n\nStep 4, break points. P1: real pupation is one-way, and real pupae do not pass half their mass to a neighbour. Real moults are not triggered by a line total, and they do not discard half the body mass. Taken as a guide to how the line behaves, the picture brings in irreversibility, which contradicts the stated rule that PUPAL to LARVAL is routine. MISLEADING: discard, entry 'implies one-way pupation; the write-up makes reversion routine'. P2: a thermostat has no mass flows. It carries only the switching rule. P3: tanks do not pump half their contents back uphill, and they do not halve themselves. It carries only step 2.\n\nStep 5, what survives. P2: a compartment switches only when it crosses the upper threshold going up or the lower threshold going down, with each threshold inclusive. Between the two, it keeps its state. P3: overflow is a single head-to-tail pass in which excess can move through several compartments. Mass moves toward the head only during step 4.\n\nStep 6, graded as a stranger. P2 adds nothing: the sentence restates step 3. P3 adds nothing: 'walk from 1 to 6 ... can cascade' already says this. Adds nothing: 2 of 3. Misleading: 1. Not run: 0.\n\nStep 7, piles. Keep exploring: empty. Hold: empty. Discard: P1, insect metamorphosis. Break point: it implies pupation is one-way and moults are biological, but the write-up makes PUPAL to LARVAL reversion routine and makes the moult a threshold-triggered halving of the whole line. Consequence for this run: the vocabulary is treated as labels only, and every rule is applied exactly as written (for example, chamber 5 reverted in cycle 2 and chamber 4 in cycle 3). The topic has no proposed mechanism, so the mechanism section is skipped."
+ },
+ "grade": {
+  "available": true,
+  "exact": false,
+  "finalOk": false,
+  "modesOk": false,
+  "changesOk": false,
+  "purgesOk": false,
+  "lostOk": false,
+  "got": {
+   "final": [
+    4,
+    5,
+    5,
+    4,
+    3,
+    1
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED"
+   ],
+   "resetPeriods": [
+    1,
+    4,
+    5
+   ],
+   "loss": 92
+  },
+  "missingChanges": [
+   "2|3|ELEVATED|NORMAL",
+   "3|3|NORMAL|ELEVATED",
+   "5|6|ELEVATED|NORMAL"
+  ],
+  "extraChanges": [],
+  "usedScript": true,
+  "openPoints": 9,
+  "preReadLength": 4240
+ }
+}

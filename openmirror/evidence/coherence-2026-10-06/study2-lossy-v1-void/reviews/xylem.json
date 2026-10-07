@@ -1,0 +1,113 @@
+{
+ "documentLosses": [
+  {
+   "rule": "Levels are whole numbers and never negative",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "absent",
+   "explanation": "Only 'Sap is counted in whole units' appears. Non-negativity is never stated, and the writer says it was left to domain sense. It never came into play in this run."
+  },
+  {
+   "rule": "Invariant D < U <= C",
+   "kind": "missing",
+   "documentQuote": "absent",
+   "explanation": "Never stated. It only shows up in the data rows. It has no effect on the computation here."
+  },
+  {
+   "rule": "A cell changes mode at most once per period",
+   "kind": "missing",
+   "documentQuote": "absent",
+   "explanation": "It follows from the single 'Marks' move per cycle, but it is never said."
+  },
+  {
+   "rule": "STEP 4: apply all releases at once. Each cell loses its own release, and an ELEVATED cell's release goes to cell n-1, in the same move",
+   "kind": "ambiguous",
+   "documentQuote": "Work out every amount from the sap in place before anything moves.",
+   "explanation": "This settles that the amounts are computed first. It does not say that the subtractions and additions are then applied together. The writer admits this was not spelled out."
+  },
+  {
+   "rule": "STEP 5: new level = floor(level/2), removed amount = level - floor(level/2) goes to LOST",
+   "kind": "ambiguous",
+   "documentQuote": "halve every segment, rounding down. What comes off is transpired.",
+   "explanation": "The likeliest reading is that the kept amount is floor(L/2). The text does not say whether 'rounding down' applies to what is kept or to what is removed. The ambiguity is weak but real."
+  },
+  {
+   "rule": "Balance check: sum of start levels + sum of intake = sum of final levels + LOST",
+   "kind": "ambiguous",
+   "documentQuote": "Balance: 20 at start + 94 fed = 114 = 38 standing + 76 on the tally.",
+   "explanation": "It appears only as worked numbers, never as a general rule."
+  },
+  {
+   "rule": "The process runs for exactly 5 periods",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "absent",
+   "explanation": "This can only be inferred from the five feed rows and 'Report, end of cycle 5'."
+  },
+  {
+   "rule": "Intake table row k is period k",
+   "kind": "ambiguous",
+   "documentQuote": "Feed by cycle, segments 1 to 6:\n1: 0 6 3 5 3 3",
+   "explanation": "The rows are labeled with bare numbers. Reading them as cycle numbers depends on the header."
+  },
+  {
+   "rule": "Record each reset period, and the required output list (final levels, final modes, change list, reset periods, LOST, balance)",
+   "kind": "missing",
+   "documentQuote": "absent",
+   "explanation": "Only 'Log every flip' is stated as an instruction. Recording reset periods and the output contents appear only as an example in the Report paragraph."
+  },
+  {
+   "rule": "No end-state answer is part of the process description",
+   "kind": "added",
+   "documentQuote": "Report, end of cycle 5. Sap, 1 to 6: 6 10 9 7 4 2. ... Leaf-drop: cycles 1 and 4. Loss tally: 76.",
+   "explanation": "The write-up includes the complete true answer: final levels, modes, every flip, reset periods and LOST. Any operator can check against it or copy it, which undermines the test of whether the rules were carried over."
+  }
+ ],
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": false,
+   "errorTypes": [
+    "reporting-format"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Deliver an end-of-cycle report",
+     "explanation": "'Report and working: null' and the comparison is '{\"available\":false}'. No report, rules or working were produced, so no rule-level break can be found from this operator's text."
+    }
+   ],
+   "gapsCorrectlyFlagged": 0,
+   "gapsSilentlyAssumed": 0,
+   "gapHandling": "This cannot be assessed. The operator produced no output, so it neither flagged nor assumed anything."
+  },
+  {
+   "arm": "B",
+   "exactlyRight": false,
+   "errorTypes": [
+    "reporting-format"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Deliver an end-of-cycle report",
+     "explanation": "'Report and working: null' and the comparison is '{\"available\":false}'. No report or working exists to locate a break in."
+    }
+   ],
+   "gapsCorrectlyFlagged": 0,
+   "gapsSilentlyAssumed": 0,
+   "gapHandling": "This cannot be assessed. No output was produced."
+  },
+  {
+   "arm": "C",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 1,
+   "gapsSilentlyAssumed": 5,
+   "gapHandling": "Of the real losses, C flagged only leaf-drop rounding ('the amount removed is therefore the larger half, ceil(sap/2)'), and it resolved that the way the engineer intended. It silently resolved simultaneous draw-down ('All moves happen at once'), the 5-cycle length, the row-to-cycle mapping, recording reset periods and the balance formula, each in the engineer's sense. Its other three flags (leaf-drop total basis, marks timing, overfull at cycle end) cover points the write-up already settles. C also noted that 'The results match the figures in the write-up's Report paragraph exactly', so the embedded answer was available to it. Its cycle-by-cycle hand working nonetheless checks out independently; cycle 1 was re-verified: 3 12 9 7 5 4 -> 3 8 12 6 7 4 -> 7 10 9 6 4 3 = 39 -> 3 5 4 3 2 1."
+  }
+ ],
+ "domainPull": "The strongest pull is the label 'SINK-ACTIVE'. In plant physiology a sink draws phloem sap in, but in this process the ELEVATED cell gives away half its level to cell n-1 ('SINK-ACTIVE sends half down the phloem to the segment below'). The domain sense of the word points the transfer the wrong way, and only the explicit sentence overrides it. Smaller pulls: the global reset loss is called 'transpired' ('What comes off is transpired'), which is odd for a 'leaf-drop', and 'off our books' needs the tally line to confirm it means LOST. No operator was pulled: C followed the stated direction exactly, and A and B produced nothing.",
+ "preReadNamedTheBreak": "n/a: nobody fell. A and B returned null reports rather than wrong ones, and C did not run the pre-read at all ('I did not run the pre-read ... did not open ... desk-preread.md').",
+ "preReadEffect": "No difference that can be attributed. C explicitly skipped the pre-read, so its exact result and its four flags (only one of which matches a real document loss, while five real losses were assumed silently) come from reading the write-up alone. A and B produced no output to compare against. The write-up also contained the full answer, which would mask any effect on the final numbers even if the pre-read had run.",
+ "summary": "The write-up keeps every operative rule, including the counter-intuitive 'SINK-ACTIVE sends half down', but it compresses several points: simultaneous draw-down, 5-cycle length, output/reset recording, balance formula, and weakly the leaf-drop rounding. It also embeds the complete true answer in its Report paragraph. C was exactly right by hand working, flagged only one real loss and assumed five others in the engineer's sense, while A and B returned null reports. The pre-read was never run, so its effect cannot be judged, and the leaked answer compromises this case as a test in any event."
+}

@@ -1,0 +1,165 @@
+{
+ "run": {
+  "preReadNotes": "I did not run the pre-read. An earlier attempt in this session was stopped by a safety check, and a later tool call was blocked because of that earlier content. To be safe, I did not open C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\coherence\\desk-preread.md and did not follow anything in it. The task calls the pre-read a reading aid and says the deliverable does not change, so the report below rests only on the write-up.",
+  "rulesInOwnWords": "Starting position: six segments, numbered 1 (bottom) to 6 (top), all QUIET. Capacities are 10 8 12 6 9 7, upper marks 7 6 9 5 7 5, lower marks 3 2 4 2 3 2. Starting sap is 3 6 6 2 2 1 (total 20). Each cycle runs five steps in a fixed order, and each step is applied to all six segments before the next step begins.\nStep 1, Feed: add that cycle's feed row to each segment. Do not check capacity.\nStep 2, Push: go through segments 1 to 6 in order. If a segment holds more than its capacity, cut it back to capacity and add the excess to the next segment up before checking that one. So a surge can carry through several segments. Any excess from segment 6 is lost (transpired).\nStep 3, Marks: a QUIET segment whose sap is at or above its upper mark becomes SINK-ACTIVE. A SINK-ACTIVE segment at or below its lower mark becomes QUIET. Otherwise the state stays the same. Every flip is logged.\nStep 4, Draw down: first work out every amount from the sap each segment holds after step 3. A QUIET segment loses floor(sap/4), which is lost (respired). A SINK-ACTIVE segment sends floor(sap/2) to the segment below. Segment 1's send leaves the books and counts as loss. All moves happen at once. Capacity is not checked.\nStep 5, Leaf-drop (the global reset): if the stem total is strictly more than 38, every segment becomes floor(sap/2). The amount removed (sap minus floor(sap/2)) is lost (transpired).\nLoss tally = transpired + respired + sent past segment 1, starting from 0. Balance check: start + total fed = amount standing at the end + loss tally.",
+  "gapsFlagged": [
+   {
+    "rule": "Leaf-drop rounding",
+    "whatYouAssumed": "'Halve, rounding down' means the amount kept is floor(sap/2). The amount removed is therefore the larger half, ceil(sap/2), and it is transpired."
+   },
+   {
+    "rule": "Leaf-drop total basis",
+    "whatYouAssumed": "The total checked against 38 is the stem total after the step 4 draw-down in that same cycle."
+   },
+   {
+    "rule": "Marks timing vs draw-down",
+    "whatYouAssumed": "Draw-down uses the states as they stand after step 3 of the same cycle, including any flips just made."
+   },
+   {
+    "rule": "Overfull at cycle end",
+    "whatYouAssumed": "Draw-down can leave a segment over capacity. It stays that way into the next cycle's feed and push, and stays that way at the final report. This case never came up in this run."
+   }
+  ],
+  "working": "Cycle 1: after feed 3 12 9 7 5 4 | after push 3 8 12 6 7 4 (nothing over the top) | marks: segments 2,3,4,5 go to SINK-ACTIVE; 1 and 6 stay QUIET | draw-down amounts: 1 respires 0, 2 sends 4 down, 3 sends 6, 4 sends 3, 5 sends 3, 6 respires 1 -> 7 10 9 6 4 3 = 39, loss 1 | leaf-drop fires (39>38) -> 3 5 4 3 2 1 = 18, 21 removed, loss 22.\nCycle 2: after feed 7 7 4 4 3 8 | after push 7 7 4 4 3 7 (1 over the top), loss 23 | marks: 1 Q->SA, 3 SA->Q, 5 SA->Q, 6 Q->SA; states SA SA Q SA Q SA | draw-down: 1 sends 3 off the books, 2 sends 3 to 1, 3 respires 1, 4 sends 2 to 3, 5 respires 0, 6 sends 3 to 5 -> 7 4 5 2 6 4 = 28, loss 27 | no leaf-drop.\nCycle 3: after feed 11 8 8 2 6 10 | after push 10 8 9 2 6 7 (1 from 1 to 2, 1 from 2 to 3, 3 over the top), loss 30 | marks: 3 Q->SA, 4 SA->Q; states SA SA SA Q Q SA | draw-down: 1 sends 5 off, 2 sends 4, 3 sends 4, 4 respires 0, 5 respires 1, 6 sends 3 -> 9 8 5 2 8 4 = 36, loss 36 | no leaf-drop.\nCycle 4: after feed 16 14 12 3 11 4 | after push 10 8 12 6 9 7 (surge carries 6, 12, 12, 9 and 11 up the stem; 8 over the top), loss 44 | marks: 4 Q->SA, 5 Q->SA; all SA | draw-down sends 5 4 6 3 4 3 (segment 1's 5 goes off the books) -> 9 10 9 7 8 4 = 47, loss 49 | leaf-drop fires -> 4 5 4 3 4 2 = 22, 25 removed, loss 74.\nCycle 5: after feed 4 11 10 6 7 2 | after push 4 8 12 6 8 2 (3, 1 and 1 carry up; nothing over the top), loss 74 | marks: 6 SA->Q; states SA SA SA SA SA Q | draw-down: 1 sends 2 off, 2 sends 4, 3 sends 6, 4 sends 3, 5 sends 4, 6 respires 0 -> 6 10 9 7 4 2 = 38, loss 76 | no leaf-drop (38 is not over 38).",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "QUIET"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "20 at start + 94 fed (17+15+17+24+18... per cycle: 20, 15, 17, 24, 18 = 94) = 114 = 38 standing (6+10+9+7+4+2) + 76 on the tally. It balances.",
+  "usedScript": false,
+  "notes": "I worked every figure out by hand. A script was attempted but blocked, so none ran. The results match the figures in the write-up's Report paragraph exactly. The pre-read file was not read (see preReadNotes)."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": false,
+  "gapsFlagged": 4
+ }
+}

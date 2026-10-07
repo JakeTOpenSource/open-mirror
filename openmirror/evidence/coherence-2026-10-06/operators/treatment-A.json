@@ -1,0 +1,146 @@
+{
+ "run": {
+  "rulesInOwnWords": "Six tanks in series, 1 at inlet, 6 at outfall. Volumes 10,8,12,6,9,7. Upper marks 7,6,9,5,7,5. Lower marks 3,2,4,2,3,2. Start 3,6,6,2,2,1, all STEADY, outfall total 0. Train limit 38. Quarters and halves rounded down. Each cycle: Step 1 inflow, no volume limit. Step 2 weir overflow, tanks 1 to 6 in order, excess to next tank, tank set to volume, tank 6 excess to outfall; cascades; only step where volume is enforced. Step 3 state check on post-step-2 contents: STEADY at or above upper mark becomes OVERLOADED; OVERLOADED at or below lower mark becomes STEADY; otherwise unchanged. Step 4: compute all six amounts first from start-of-step contents and post-step-3 states (STEADY floor/4, OVERLOADED floor/2), then apply at once; STEADY amount to outfall; OVERLOADED amount to tank n-1; tank 1 OVERLOADED to outfall; volume not enforced; cycle-5 excess stays. Step 5 storm bypass if sum strictly more than 38: halve all (floor), removed to outfall, log cycle. Exactly 38 does not trigger.",
+  "working": "Start [3,6,6,2,2,1] OUT 0. C1: S1 [3,12,9,7,5,4]; S2 [3,8,12,6,7,4]; S3 S,O,O,O,O,S; S4 amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3] OUT 1; S5 39>38 BYPASS -> [3,5,4,3,2,1] OUT 22. C2: S1 [7,7,4,4,3,8]; S2 [7,7,4,4,3,7] OUT 23; S3 O,O,S,O,S,O; S4 [3,3,1,2,0,3] -> [7,4,5,2,6,4] OUT 27; S5 28 no. C3: S1 [11,8,8,2,6,10]; S2 [10,8,9,2,6,7] OUT 30; S3 O,O,O,S,S,O; S4 [5,4,4,0,1,3] -> [9,8,5,2,8,4] OUT 36; S5 36 no. C4: S1 [16,14,12,3,11,4]; S2 [10,8,12,6,9,7] OUT 44; S3 all O; S4 [5,4,6,3,4,3] -> [9,10,9,7,8,4] OUT 49; S5 47>38 BYPASS -> [4,5,4,3,4,2] OUT 74. C5: S1 [4,11,10,6,7,2]; S2 [4,8,12,6,8,2]; S3 O,O,O,O,O,S; S4 [2,4,6,3,4,0] -> [6,10,9,7,4,2] OUT 76; S5 38 not more than 38, no bypass.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "OVERLOADED",
+   "OVERLOADED",
+   "OVERLOADED",
+   "OVERLOADED",
+   "OVERLOADED",
+   "STEADY"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "OVERLOADED",
+    "to": "STEADY"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "OVERLOADED",
+    "to": "STEADY"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "OVERLOADED",
+    "to": "STEADY"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "OVERLOADED",
+    "to": "STEADY"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "20 + 94 = 114 = 38 + 76. Holds.",
+  "usedScript": true,
+  "notes": "Wrote and ran a short Python script (sim.py), then re-derived every step by hand; agreed. Read only the named document. Final sum exactly 38, not more than 38, so no bypass in cycle 5. Tanks 2 (10 vs 8) and 4 (7 vs 6) end over volume, left unclipped per Step 4 rule. Tank 1 OVERLOADED discharge went to outfall in cycles 2 to 5."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true
+ },
+ "source": "fallback-sonnet-docfile"
+}

@@ -1,0 +1,178 @@
+{
+ "run": {
+  "procedureSummary": "Start: water 3,6,6,2,2,1 (total 20), all pumps LAMINAR, overboard tally 0. Each cycle runs steps 1-5 in order, each step completed across all six compartments before the next.\nStep 1 Flood: add that cycle's schedule to each compartment. No volume cap.\nStep 2 Scuppers: go 1 to 6 in order. Any water above volume moves into the next compartment aft, leaving this one exactly at volume. Water carried in this way counts toward that compartment's own check, so a surge can cascade. Excess off compartment 6 goes overboard and into the tally.\nStep 3 Read pumps (post-scupper water): a LAMINAR pump with water >= inception mark becomes CAVITATING. A CAVITATING pump with water <= desinence mark becomes LAMINAR. Otherwise the state holds. Each pump is tested once per cycle against its state at the start of the step. Every change is logged.\nStep 4 Pump: work out every discharge from the post-scupper water first: LAMINAR floor(w/4), CAVITATING floor(w/2). Then apply them all at once. LAMINAR discharge goes overboard (tallied). CAVITATING discharge from compartment k goes to k-1; from compartment 1 it goes overboard (tallied). Volume is not checked, so overfill carries over.\nStep 5 Blow: add up all six. If the total is strictly over 38, every compartment goes to floor(w/2), the removed water goes overboard (tallied) and the cycle is recorded. At 38 or under nothing happens.\nTally = overflow off 6 + LAMINAR discharge + backflow out of 1 + blown water.",
+  "openPoints": [
+   {
+    "point": "Which reading the pump-state check (step 3) and discharge sizing (step 4) use",
+    "assumption": "Both use the water after step 2 scuppers in the same cycle. Step 4 uses the states just set in step 3."
+   },
+   {
+    "point": "Whether a pump can change state twice within one read",
+    "assumption": "No. Each pump is evaluated once per cycle against its pre-read state. A pump that just became CAVITATING is not re-tested for desinence in the same read, and the reverse also holds."
+   },
+   {
+    "point": "Inception/desinence boundary equality",
+    "assumption": "Applied as written: equal to inception triggers CAVITATING (at or above), equal to desinence triggers LAMINAR (at or below). Examples: compartment 5 at 7 in cycle 1 went CAVITATING; compartments 3 (4) and 5 (3) in cycle 2 settled to LAMINAR."
+   },
+   {
+    "point": "Blow threshold boundary",
+    "assumption": "Strictly over 38. In cycle 5 the hull total was exactly 38, so no blow fired."
+   },
+   {
+    "point": "Rounding",
+    "assumption": "All quarters and halves are floor division on whole units. The remainder stays in the compartment."
+   },
+   {
+    "point": "Scupper cascade",
+    "assumption": "Water received from the compartment forward of it counts toward a compartment's own overflow check in the same bow-to-stern pass."
+   },
+   {
+    "point": "Overfill after pumping",
+    "assumption": "Backflow can leave a compartment above volume (e.g. cycle 5 end: compartment 2 at 10 > 8, compartment 4 at 7 > 6). Per the write-up this is left as is at cycle 5 end and is reported as is."
+   }
+  ],
+  "cycleFigures": "C1: flood 3,12,9,7,5,4 | scuppers 3,8,12,6,7,4 (ob 0) | read states L,C,C,C,C,L | pump discharges 0,4,6,3,3,1 -> 7,10,9,6,4,3 (ob 1) | blow sum 39>38 -> 3,5,4,3,2,1 (ob 22)\nC2: flood 7,7,4,4,3,8 | scuppers 7,7,4,4,3,7 (ob 23) | read C,C,L,C,L,C | pump 3,3,1,2,0,3 -> 7,4,5,2,6,4 (ob 27) | blow sum 28, none -> 7,4,5,2,6,4 (ob 27)\nC3: flood 11,8,8,2,6,10 | scuppers 10,8,9,2,6,7 (ob 30) | read C,C,C,L,L,C | pump 5,4,4,0,1,3 -> 9,8,5,2,8,4 (ob 36) | blow sum 36, none -> 9,8,5,2,8,4 (ob 36)\nC4: flood 16,14,12,3,11,4 | scuppers 10,8,12,6,9,7 (ob 44) | read C,C,C,C,C,C | pump 5,4,6,3,4,3 -> 9,10,9,7,8,4 (ob 49) | blow sum 47>38 -> 4,5,4,3,4,2 (ob 74)\nC5: flood 4,11,10,6,7,2 | scuppers 4,8,12,6,8,2 (ob 74) | read C,C,C,C,C,L | pump 2,4,6,3,4,0 -> 6,10,9,7,4,2 (ob 76) | blow sum 38, not over, none -> 6,10,9,7,4,2 (ob 76)",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "CAVITATING",
+   "CAVITATING",
+   "CAVITATING",
+   "CAVITATING",
+   "CAVITATING",
+   "LAMINAR"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Water at start 20 + flooded in 94 (cycle totals 20+15+17+24+18) = 114; water aboard 38 + overboard 76 = 114. Balanced.\nOverboard breakdown: overflow off 6 = 5 (C2 1, C3 3, C4 1); LAMINAR discharge = 6 (C1 1, C2 1, C3 1, C5 0... per-cycle: C1 1, C2 1, C3 1, C4 0, C5 0 plus C2 compartment 3's 1 is included in its cycle's 1 total; see note); backflow out of 1 = 12 (C2 3, C3 5, C4 5... see note); blown = 46 (C1 21, C4 25). Per-cycle tally increments: C1 +22 (1 LAMINAR from 6, 21 blown); C2 +5 (1 overflow off 6, 1 LAMINAR from 3, 3 backflow out of 1); C3 +9 (3 overflow off 6, 1 LAMINAR from 5, 5 backflow out of 1); C4 +38 (8 overflow off 6, 5 backflow out of 1, 25 blown); C5 +2 (2 backflow out of 1). Total 76.",
+  "usedScript": true,
+  "notes": "I used a short Python script for the arithmetic (C:/Users/Jaket/AppData/Local/Temp/claude/scr/b.py) and checked cycle 1 by hand. The breakdown is authoritative in the per-cycle increments line: overflow off 6 = 12 (C2 1, C3 3, C4 8); LAMINAR discharge = 3 (C1 1, C2 1, C3 1); backflow out of 1 = 15 (C2 3, C3 5, C4 5, C5 2); blown = 46 (C1 21, C4 25). 12+3+15+46 = 76. The rough running figures in the first breakdown sentence of balanceCheck are wrong; use the per-cycle line and this note.",
+  "preReadNotes": "I read the write-up in full and applied it literally as the authoritative rules, not real buoyancy or cavitation physics. The cycle 5 blow check lands exactly on the 38 threshold, so no blow fires there."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "openPoints": 7,
+  "preReadLength": 203
+ }
+}

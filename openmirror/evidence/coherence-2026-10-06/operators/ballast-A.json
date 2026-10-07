@@ -1,0 +1,145 @@
+{
+ "run": {
+  "rulesInOwnWords": "1) Each cycle, add the Fill Table row to the six compartments. Overfilling is allowed at this point. 2) Scupper: go through compartments 1 to 6 in order. If a compartment holds more than its volume, cut it back to the volume and add the excess to the next compartment aft. Overflow from compartment 6 goes overboard. Overflow can chain aft within the same pass. 3) Pump check on the post-scupper contents: a LAMINAR pump at or above its inception mark becomes CAVITATING; a CAVITATING pump at or below its desinence mark becomes LAMINAR; otherwise the state stays the same (hysteresis). Log every change. 4) Pumping: work out all six amounts from the start-of-step contents first. LAMINAR pumps floor(contents/4) and CAVITATING pumps floor(contents/2). Then apply them all at once. Every compartment loses its own amount. A LAMINAR amount goes overboard. A CAVITATING amount flows forward into compartment n-1, and compartment 1's goes overboard. Volume is not enforced here. 5) Blow check: if the total of all six is strictly greater than 38, halve every compartment (rounding down), send the removed units overboard and log the cycle. A total of exactly 38 does not fire the blow. Repeat for 5 cycles, then report.",
+  "working": "Start [3,6,6,2,2,1], all pumps L, OB=0.\nC1: S1 [3,12,9,7,5,4]; S2 [3,8,12,6,7,4] (overflow 2->3 4, 3->4 1, 4->5 2), OB 0; S3 states L,C,C,C,C,L; S4 pumped [0,4,6,3,3,1] -> [7,10,9,6,4,3], OB 1; S5 total 39>38 BLOW -> [3,5,4,3,2,1], removed 21, OB 22.\nC2: S1 [7,7,4,4,3,8]; S2 [7,7,4,4,3,7], 1 overboard from comp 6, OB 23; S3 C,C,L,C,L,C; S4 pumped [3,3,1,2,0,3] -> [7,4,5,2,6,4], OB 27; S5 total 28, no blow.\nC3: S1 [11,8,8,2,6,10]; S2 [10,8,9,2,6,7] (1->2 1, 2->3 1, 6 overboard 3), OB 30; S3 C,C,C,L,L,C; S4 pumped [5,4,4,0,1,3] -> [9,8,5,2,8,4], OB 36; S5 total 36, no blow.\nC4: S1 [16,14,12,3,11,4]; S2 [10,8,12,6,9,7] (cascade: 6->2, 12->3 overflow 7, 10->4 overflow 4, 13->5 overflow 4, 8->6 overflow 1 overboard... net 8 overboard), OB 44; S3 all C; S4 pumped [5,4,6,3,4,3] -> [9,10,9,7,8,4], OB 49 (comp 1 backflow 5 overboard); S5 total 47>38 BLOW -> [4,5,4,3,4,2], removed 25, OB 74.\nC5: S1 [4,11,10,6,7,2]; S2 [4,8,12,6,8,2] (2->3 3, 3->4 1, 4->5 1), OB 74; S3 C,C,C,C,C,L (6 goes C->L at 2<=2); S4 pumped [2,4,6,3,4,0] -> [6,10,9,7,4,2], OB 76; S5 total 38, not >38, no blow.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "CAVITATING",
+   "CAVITATING",
+   "CAVITATING",
+   "CAVITATING",
+   "CAVITATING",
+   "LAMINAR"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LAMINAR",
+    "to": "CAVITATING"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "CAVITATING",
+    "to": "LAMINAR"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting contents 3+6+6+2+2+1 = 20; fills 20+15+17+24+18 = 94; left side 20+94 = 114. End contents 6+10+9+7+4+2 = 38; Total Overboard 76; right side 38+76 = 114. The two sides match.",
+  "usedScript": true,
+  "notes": "I used a Python script for the arithmetic and checked cycle 1 by hand. In cycle 5, Step 5 the total is exactly 38, so the emergency blow does not fire, because the limit is strictly greater than 38."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true
+ }
+}

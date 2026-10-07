@@ -1,0 +1,145 @@
+{
+ "run": {
+  "rulesInOwnWords": "1) Input: add the cycle's row of inputs to each stage; no cap here. 2) Shunt: go stage 1 to 6 in order; if a stage is above its rated charge, cut it to rated and push the excess into the next stage (stage 6 excess goes to ground). Because it is sequential, pushed excess can cascade down within the same step. 3) Comparator (hysteresis): CLEAR becomes ASSERTED if charge >= upper mark; ASSERTED becomes CLEAR if charge <= lower mark; anything else keeps its state. Log each change. 4) Discharge: from the post-step-2 charges and post-step-3 states, compute all amounts first (CLEAR = floor(charge/4), ASSERTED = floor(charge/2)), then apply simultaneously: subtract from each stage; CLEAR amounts go to ground; ASSERTED amounts go back to stage n-1 (stage 1 ASSERTED goes to ground). No cap, so a stage can sit above rated until the next cycle's shunt. 5) Breaker: if total charge strictly > 38, every stage becomes floor(charge/2) and the removed charge goes to ground; log the trip. Exactly 38 does not trip. Repeat for cycles 1 to 5 and stop after step 5 of cycle 5.",
+  "working": "Start [3,6,6,2,2,1], all CLEAR, ground 0.\nC1: S1 [3,12,9,7,5,4]; S2 [3,8,12,6,7,4] (2->3 +4, 3->4 +1, 4->5 +2), g0; S3 states C,A,A,A,A,C; S4 amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3], g1; S5 sum 39 >38 TRIP -> [3,5,4,3,2,1], g22.\nC2: S1 [7,7,4,4,3,8]; S2 [7,7,4,4,3,7], g23; S3 A,A,C,A,C,A; S4 amounts [3,3,1,2,0,3] -> [7,4,5,2,6,4], g27; S5 sum 28 no trip.\nC3: S1 [11,8,8,2,6,10]; S2 [10,8,9,2,6,7] (1->2 +1, 6->ground 3), g30; S3 A,A,A,C,C,A; S4 amounts [5,4,4,0,1,3] -> [9,8,5,2,8,4], g36; S5 sum 36 no trip.\nC4: S1 [16,14,12,3,11,4]; S2 [10,8,12,6,9,7] (cascade 6->2, 6->3, 6->4, 3->5, 2->6, 8 excess? stage6 4+2... final 6 excess to ground totaling 8 this step), g44; S3 all ASSERTED; S4 amounts [5,4,6,3,4,3] -> [9,10,9,7,8,4], g49; S5 sum 47 >38 TRIP -> [4,5,4,3,4,2], g74.\nC5: S1 [4,11,10,6,7,2]; S2 [4,8,12,6,8,2], g74; S3 A,A,A,A,A,C; S4 amounts [2,4,6,3,4,0] -> [6,10,9,7,4,2], g76; S5 sum 38 (not >38) no trip.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "ASSERTED",
+   "ASSERTED",
+   "ASSERTED",
+   "ASSERTED",
+   "ASSERTED",
+   "CLEAR"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting charges 20 + inputs 94 = 114; end charges 38 + ground total 76 = 114. The two sides are equal.",
+  "usedScript": true,
+  "notes": "I used a Python script for the arithmetic and checked cycle 1 by hand. In cycle 5 the total is exactly 38, so the breaker does not trip (it trips only above 38). The cycle 5 return-diode feedback leaves stage 2 at 10 (rated 8) and stage 4 at 7 (rated 6). The procedure says to leave that excess in the end figures, so it is not shunted."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true
+ }
+}

@@ -1,0 +1,174 @@
+{
+ "run": {
+  "procedureSummary": "Script used: a short Python script (sim.py in the scratchpad) did the arithmetic. Setup: positions 1 to 6, capacity 10,8,12,6,9,7; upper mark 7,6,9,5,7,5; lower mark 3,2,4,2,3,2; start 3,6,6,2,2,1; every form starts GREEN; waste starts at 0.\nStep 1, Charge: add that cycle's charge-sheet amount to each form. Nothing is trimmed, so a form can sit over capacity.\nStep 2, Overtop: go through forms 1 to 6 in order. If a form is over capacity, it drops to capacity and the excess goes into the next form before that form is checked, so one overflow can carry down the whole line. Form 6's excess goes to waste.\nStep 3, Marks: use the quantities after overtop. A GREEN form at or above its upper mark becomes HOT. A HOT form at or below its lower mark becomes GREEN. Any other form keeps its state. Every change is logged.\nStep 4, Bleed: take a snapshot of all six quantities and states first. Each GREEN form loses floor(q/4) to waste. Each HOT form loses floor(q/2) to the form above it (position i-1), and form 1's HOT bleed goes to waste. All moves use the snapshot values and are applied together. No trim follows.\nStep 5, Washout: add up the line. If the total is over 38, every form becomes floor(q/2) and the amount removed, q - floor(q/2), goes to waste. At 38 or under, nothing changes.\nBalance check: start plus all charges should equal the end forms plus waste.",
+  "openPoints": [
+   {
+    "point": "Washout 'halve every form, rounded down': it can be read as rounding the amount left in the form or rounding the amount removed. The two give different figures when a form holds an odd quantity.",
+    "assumption": "The phrase describes the form, so the form keeps floor(q/2) and ceil(q/2) goes to waste. (Bleed says 'loses ... rounded down', which is about the amount lost, so I read the two phrases differently.) The other reading would change the results from cycle 1 onward."
+   },
+   {
+    "point": "Order of operations inside Bleed when a form both bleeds and receives bleed.",
+    "assumption": "Both the bleed amount and the state come from the snapshot taken before any mix moves, as the write-up says ('Read all six first, then move mix'). Bleed a form receives in this step does not change what it bleeds."
+   },
+   {
+    "point": "Marks boundaries.",
+    "assumption": "Both comparisons include equality, so at or above the upper mark means >= and at or below the lower mark means <=. Marks use the quantities after overtop and before bleed."
+   },
+   {
+    "point": "Washout threshold equality (cycle 5 total is exactly 38).",
+    "assumption": "38 or under means no washout, so cycle 5 does not fire."
+   },
+   {
+    "point": "Whether bleed is counted in the waste tally.",
+    "assumption": "GREEN evaporation, form 1's HOT bleed, form 6's overtop and washout removals all count as waste. HOT bleed into form i-1 stays in the line."
+   },
+   {
+    "point": "Over-capacity carry after bleed.",
+    "assumption": "No trim after bleed or washout, as written. In cycle 5, forms 2 and 4 end above capacity (10 against 8, 7 against 6) and are reported as they stand."
+   }
+  ],
+  "cycleFigures": "Positions 1-6. W = cumulative waste.\nCycle 1: Charge [3,12,9,7,5,4]; Overtop [3,8,12,6,7,4] (+0 waste); Marks [3,8,12,6,7,4] states G,H,H,H,H,G; Bleed [7,10,9,6,4,3] (+1 waste); Washout total 39>38 fires [3,5,4,3,2,1] (+21 waste). W=22, line=18.\nCycle 2: Charge [7,7,4,4,3,8]; Overtop [7,7,4,4,3,7] (+1); Marks [7,7,4,4,3,7] states H,H,G,H,G,H; Bleed [7,4,5,2,6,4] (+4); Washout total 28, no. W=27, line=28.\nCycle 3: Charge [11,8,8,2,6,10]; Overtop [10,8,9,2,6,7] (+3); Marks [10,8,9,2,6,7] states H,H,H,G,G,H; Bleed [9,8,5,2,8,4] (+6); Washout total 36, no. W=36, line=36.\nCycle 4: Charge [16,14,12,3,11,4]; Overtop [10,8,12,6,9,7] (+8); Marks [10,8,12,6,9,7] states H,H,H,H,H,H; Bleed [9,10,9,7,8,4] (+5); Washout total 47>38 fires [4,5,4,3,4,2] (+25). W=74, line=22.\nCycle 5: Charge [4,11,10,6,7,2]; Overtop [4,8,12,6,8,2] (+0); Marks [4,8,12,6,8,2] states H,H,H,H,H,G; Bleed [6,10,9,7,4,2] (+2); Washout total 38, not over 38, no. W=76, line=38.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "HOT",
+   "HOT",
+   "HOT",
+   "HOT",
+   "HOT",
+   "GREEN"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "HOT",
+    "to": "GREEN"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "HOT",
+    "to": "GREEN"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "HOT",
+    "to": "GREEN"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "HOT",
+    "to": "GREEN"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting mix 20 + charges 94 (20+15+17+24+18) = 114 against end forms 38 (6+10+9+7+4+2) + waste 76 = 114. It balances. Waste by source: overtop from form 6 = 12 (0+1+3+8+0); bleed to waste (GREEN evaporation plus form 1 HOT bleed) = 18 (1+4+6+5+2); washout = 46 (21 in cycle 1, 25 in cycle 4). 12+18+46 = 76.",
+  "usedScript": true,
+  "notes": "Script path: C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py. The rule with the most effect on the result is the washout rounding: the form keeps floor(q/2). The other reading, where only floor(q/2) is removed, changes every figure from cycle 1 onward. Cycle 5 lands exactly on the threshold (total 38), so washout does not fire. Forms 2 and 4 finish above capacity, which the write-up allows. No real-concrete behaviour was used anywhere. Bleed runs upstream and HOT can return to GREEN, both as the write-up says.",
+  "preReadNotes": "Mode: filter mode (the default). This is Open Mirror (desk-preread.md, v1.4.3) run on concrete.md. The topic is the operating rules and the comparison is the concrete language.\n\nStep 1, Say it plainly. Six positions in a row, 1 to 6, each with a capacity, an upper threshold and a lower threshold. Each position is in one of two states, GREEN or HOT, and all start GREEN. A cycle has five steps, and each step covers all six positions before the next begins. (1) Inflow: add the scheduled amount to each position, and it may exceed capacity. (2) Overflow: going 1 to 6 in order, any excess over capacity moves to the next position before that one is checked, so it can cascade; excess from position 6 leaves the system as loss. (3) State update with hysteresis: GREEN at or above the upper threshold becomes HOT, HOT at or below the lower threshold becomes GREEN, otherwise the state is unchanged, and every change is logged. (4) Decay or transfer, worked out from a snapshot: GREEN loses floor(q/4) as loss; HOT moves floor(q/2) to the previous position, and position 1's goes to loss. Nothing is trimmed afterwards, so a position can stay over capacity. (5) Global reset: if the line total is over 38, halve every position, rounded down, and the removed amount is loss; at 38 or under, nothing happens. Report: end quantities, end states, every state change, the cycles where the reset fired, total loss, and a conservation line. The source states the rules with certainty and no guesses. Embedded comparison: the whole concrete vocabulary (forms, hopper, chute, charge, overtop, waste pit, GREEN or HOT, bleed, evaporation, washout). Following step 1, I pulled it out as picture 1, and it does not count against the three. Instructions in the material, recorded as content and not followed: the desk lead's note says not to replace the write-up with real concrete behaviour, and the write-up's Report paragraph lists what to hand in. The handover task assigned these deliverables, so I produce them as that task, not because the file says so. The plain restatement fully specifies how the line operates, so it already answers the operating question. Under step 1 that means stop. I ran the embedded comparison anyway, because it has to be tested and is exempt from the stop, and I picked no further pictures.\n\nStep 3, Map picture 1 (concrete pour line). Forms map to positions, the hopper to the inflow end, the chute to adjacency, charge to inflow, overtop to cascading overflow, the waste pit to the loss sink, GREEN or HOT to the two states, bleed to decay or back-transfer, evaporation to GREEN loss, and washout to the global halving. A question it makes easier to ask: does material only ever move downhill?\n\nStep 4, Find where it breaks. Real concrete brings in three facts the write-up does not supply: (a) material flows down a chute and not back up, but the stated rule sends HOT bleed upstream to position i-1; (b) curing or heating does not reverse, but the stated rule returns HOT to GREEN at the lower mark; (c) 'green' concrete is fresh and 'bleed' is water rising to the surface, and neither matches the stated fractions or directions. If you use the picture to predict behaviour, it reaches conclusions only by contradicting stated rules (a) and (b). It is marked misleading here, skips steps 5 and 6, and goes to Discard. If you use it only as a set of labels, it carries no mechanism and would add nothing.\n\nCount: Adds nothing: 0 of 1. Misleading: 1. Not run: 0.\nKeep exploring: empty.\nHold: empty.\nDiscard: concrete pour-line picture. Break point: it implies flow only downstream and irreversible curing, but the stated rules move HOT bleed upstream and return HOT to GREEN. Use the words as labels only.\nOpen Mirror ends here. It checks no facts and recommends nothing. The simulation used only the plain-statement rules."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "openPoints": 6,
+  "preReadLength": 3846
+ }
+}

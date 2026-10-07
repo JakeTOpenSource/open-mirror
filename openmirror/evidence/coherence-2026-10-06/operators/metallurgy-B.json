@@ -1,0 +1,146 @@
+{
+ "run": {
+  "rulesInOwnWords": "Setup: six crucibles in a line, 1 = charging end, 6 = tapping end. 'Next' = number+1, 'previous' = number-1. Working volumes 10,8,12,6,9,7; upper marks 7,6,9,5,7,5; lower marks 3,2,4,2,3,2; starting melt 3,6,6,2,2,1; all start BASE; slag total starts 0; cascade limit 38 (used only in Step 5). Every 'quarter' or 'half' is rounded down. Five cycles, each with five steps in order, each step finished for all six crucibles before the next step. STEP 1 Charge: add this cycle's charge-table row to each crucible; capacity is not enforced here. STEP 2 Overflow: go through crucibles 1 to 6 in order; if a crucible holds more than its working volume, set it to exactly its working volume and push the excess into the next crucible (so the pushed-in amount can make the next one overflow when its turn comes); if it is at or under volume, nothing happens; excess from crucible 6 goes to slag. STEP 3 State check, using melt after Step 2: BASE and melt >= upper mark becomes SUPERHEATED; SUPERHEATED and melt <= lower mark becomes BASE; anything else keeps its state (the comparisons are inclusive: 'at least' / 'at most'). Log each change as (cycle, crucible, before, after). STEP 4 Draw-off: first compute all six amounts from the melt at the start of this step and the state after Step 3 (BASE takes floor(melt/4), SUPERHEATED takes floor(melt/2)); only then apply all at once: every crucible loses its own amount; a BASE crucible's amount goes to slag; a SUPERHEATED crucible's amount goes up to the previous crucible (crucible 1's goes to slag). Capacity is not enforced here, so a crucible can end the step over its volume and that is only dealt with by the next cycle's Step 2 (never, if it happens in cycle 5). Because amounts are computed first, a crucible's draw-off is sized before it receives anything from the return launder, and what it receives is not itself drawn off in the same step. STEP 5 Emergency tap: sum all six melts; if the sum is strictly greater than 38, every crucible is halved (rounded down), all removed melt goes to slag, and that cycle is logged as an emergency tap (the document's 'global reset'); if the sum is 38 or less, nothing happens. After cycle 5 Step 5 stop and report: end melts, end states, all state changes, emergency tap cycles, slag total, balance check (start melt + all charges = end melt + slag).",
+  "working": "START [3,6,6,2,2,1] all BASE, slag 0. CYCLE 1: S1 -> [3,12,9,7,5,4]. S2 -> [3,8,12,6,7,4], slag 0. S3: c2,c3,c4,c5 -> SUPERHEATED. S4 draws [0,4,6,3,3,1] -> [7,10,9,6,4,3], slag 1. S5: 39 > 38 TAP -> [3,5,4,3,2,1], slag 22. CYCLE 2: S1 -> [7,7,4,4,3,8]. S2 -> [7,7,4,4,3,7], slag 23. S3: c1 B->S, c3 S->B, c5 S->B, c6 B->S. S4 draws [3,3,1,2,0,3] -> [7,4,5,2,6,4], slag 27. S5: 28 no tap. CYCLE 3: S1 -> [11,8,8,2,6,10]. S2 -> [10,8,9,2,6,7], slag 30. S3: c3 B->S, c4 S->B. S4 draws [5,4,4,0,1,3] -> [9,8,5,2,8,4], slag 36. S5: 36 no tap. CYCLE 4: S1 -> [16,14,12,3,11,4]. S2 -> [10,8,12,6,9,7], slag 44. S3: c4 B->S, c5 B->S. S4 draws [5,4,6,3,4,3] -> [9,10,9,7,8,4], slag 49. S5: 47 > 38 TAP -> [4,5,4,3,4,2], slag 74. CYCLE 5: S1 -> [4,11,10,6,7,2]. S2 -> [4,8,12,6,8,2]. S3: c6 S->B. S4 draws [2,4,6,3,4,0] -> [6,10,9,7,4,2], slag 76. S5: 38 not > 38, no tap.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "BASE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "20 + 94 = 114; 38 + 76 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "Used a short Python script and re-derived every cycle by hand; matched. Cycle 5 total exactly 38, no tap. Crucible 2 ends at 10 over volume 8 and crucible 4 at 7 over 6; never dealt with. All threshold tests inclusive. Draw-off sized before return-launder receipt. Did not read other files."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true
+ },
+ "source": "fallback-sonnet-docfile"
+}

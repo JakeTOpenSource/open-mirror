@@ -1,0 +1,133 @@
+{
+ "documentLosses": [
+  {
+   "rule": "A cell's mode changes at most once per period.",
+   "kind": "missing",
+   "documentQuote": "absent",
+   "explanation": "Step 3 says only \"Log every flip\". The single-pass reading is implied, never stated. The writer lists this as compressed."
+  },
+  {
+   "rule": "Levels are never negative.",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "The state is x, six nonnegative integer components",
+   "explanation": "This is stated as a property of the state but never argued from floor division. It does not affect execution."
+  },
+  {
+   "rule": "Threshold ordering D < U <= C.",
+   "kind": "missing",
+   "documentQuote": "absent",
+   "explanation": "The reader can only see it in the data. It does not affect execution."
+  },
+  {
+   "rule": "Spill-over excess = level minus capacity, and only when level > capacity.",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "Clip x_i to c_i and push the violation into x_{i+1} before you visit it",
+   "explanation": "'Violation' is defined only through 'clip'. The excess amount and the no-op case are left to the reader."
+  },
+  {
+   "rule": "In the release step each cell's own release is subtracted from it at the same moment as the transfers.",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "An INACTIVE component sheds floor(x_i/4) to s. An ACTIVE component moves floor(x_i/2) up to x_{i-1}",
+   "explanation": "The words 'sheds' and 'moves' carry the self-decrement. It is never stated."
+  },
+  {
+   "rule": "Which mode a cell uses for its release: the mode after this period's mode check.",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "Compute all six amounts from the same x before anything moves.",
+   "explanation": "The x is pinned down, but which flag applies is left to step order."
+  },
+  {
+   "rule": "Global reset: the amount removed is level - floor(level/2), and nothing happens at a total of exactly G.",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "If the 1-norm is strictly above 38, halve every component with floor and book what came off to s.",
+   "explanation": "'What came off' is not defined for odd levels. The equality case is only implied by 'strictly above'."
+  },
+  {
+   "rule": "An ELEVATED release goes to the upstream cell (n-1), against the spill direction.",
+   "kind": "ambiguous",
+   "documentQuote": "An ACTIVE component moves floor(x_i/2) up to x_{i-1}",
+   "explanation": "The index x_{i-1} settles it, but 'up' is a directional word that could be read as up-index. The writer lists this as left to the reader."
+  },
+  {
+   "rule": "The intake table's rows are periods and its columns are cells 1 to 6.",
+   "kind": "ambiguous",
+   "documentQuote": "Add the cycle's row of b to x. ... Rows, cycles 1 to 5: (0,6,3,5,3,3), ...",
+   "explanation": "The table is called 'b', and the column-to-position mapping is inferred."
+  },
+  {
+   "rule": "LOST is a single running tally of everything removed: spill from cell 6, NORMAL releases, cell-1 ELEVATED release, and reset halvings.",
+   "kind": "ambiguous",
+   "documentQuote": "Slack s starts at 0",
+   "explanation": "The tally is renamed 'slack', a word that in optimisation means a constraint residual, not a one-way loss sink. The write-up never says s is the loss to report."
+  },
+  {
+   "rule": "The reset event is a 'global reset' and its periods are recorded.",
+   "kind": "ambiguous",
+   "documentQuote": "5. Penalty. ... Note the cycle.",
+   "explanation": "It is called 'Penalty' rather than a reset. Mapping it to the required reset-period output is left to the reader."
+  },
+  {
+   "rule": "The balance check as the general identity start + intake = final + LOST.",
+   "kind": "ambiguous",
+   "documentQuote": "Balance: 20 start plus 94 loaded is 114, and 38 in x plus 76 in s is 114.",
+   "explanation": "It is given only as worked totals, not as a general rule."
+  },
+  {
+   "rule": "The mode-change list is chronological, and by cell within a period.",
+   "kind": "missing",
+   "documentQuote": "absent",
+   "explanation": "The required ordering of the change list is never stated."
+  },
+  {
+   "rule": "The output is computed, not given.",
+   "kind": "added",
+   "documentQuote": "Report. At the end of cycle 5 hand in: x = (6, 10, 9, 7, 4, 2), ... slack s = 76.",
+   "explanation": "The write-up adds the full expected answer, including 'positions 2 and 4 over bound, which is expected'. The abstract process gives no results. This lets an operator copy the answer instead of executing the rules."
+  }
+ ],
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": false,
+   "errorTypes": [
+    "reporting-format"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Produce the end-of-cycle report",
+     "explanation": "There was no report to compare. The deterministic comparison is unavailable and 'Report and working' is null, so no rule-level cause can be located from the operator's own text.",
+     "operatorQuote": "null"
+    }
+   ],
+   "gapsCorrectlyFlagged": 0,
+   "gapsSilentlyAssumed": 0,
+   "gapHandling": "Not assessable. Operator A produced no report and flagged no gaps."
+  },
+  {
+   "arm": "B",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 4,
+   "gapsSilentlyAssumed": 8,
+   "gapHandling": "B flagged four real losses: the undefined loss tally, which flag and x the shed uses, one flip check per cycle, and the supplied Report figures (\"I did not take those figures as given\"). It silently resolved eight others in the engineer's direction, e.g. \"add the excess to x_{i+1}\", \"floor(x_i/2) leaves x_i and goes to x_{i-1}\", \"put the total removed into s\" and \"Penalty (global reset)\". It never reached for the optimisation meanings. Its other two flags, the penalty measurement point and position 1's destination, are settled by the text and are not real losses."
+  },
+  {
+   "arm": "C",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 6,
+   "gapsSilentlyAssumed": 6,
+   "gapHandling": "C flagged the loss tally, the reset-versus-penalty naming, the definition of violation (\"Violation = x_i - c_i when x_i > c_i, otherwise 0\"), the penalty's 'came off' and equality cases, and which flag governs the shed. Its pre-read also noted the supplied Report figures. It silently assumed the at-most-once flip rule, self-subtraction in the shed, the 'up' direction (\"passes half to its left neighbour\"), the b-table layout, the balance identity and the flip ordering. Every one of those was resolved in the engineer's direction. Two of its eight flags, the threshold equality and the received shares not being re-shed, are stated in the write-up and are not real losses."
+  }
+ ],
+ "domainPull": "The pull was hardest at the projection sweep and the penalty/budget/slack trio. A true projection discards the excess, but here it is pushed into x_{i+1} (\"push the violation into x_{i+1} ... so overflow cascades\"). A 'budget on the 1-norm: 38' and a 'penalty' suggest the budget is enforced and add a cost term, but here the state is floor-halved after the shed and the final 1-norm sits exactly at 38 with \"positions 2 and 4 over bound\". 'Slack' names what is really a one-way loss sink. 'Active set' carries a two-threshold hysteresis that real active sets lack, and \"up to x_{i-1}\" runs against the sweep direction. Nobody fell for any of it.",
+ "preReadNamedTheBreak": "n/a: nobody fell. B was exact and A produced no report. C's pre-read did name the traps in advance anyway: \"a real projection throws the excess away, but here it is pushed to the next counter ... A real penalty adds a cost term and does not halve the state\".",
+ "preReadEffect": "It made no difference to the numbers: B and C were both exact, and both used scripts and checked against the supplied Report. It helped modestly with gap flagging. C caught three real losses that B silently assumed: the violation definition, the meaning of 'what came off' plus the equality case, and the reset/penalty naming. But C missed the at-most-once flip rule that B flagged, and it padded its list with two non-gaps. The net effect is a slight help.",
+ "summary": "The write-up compresses about a dozen rules into optimisation vocabulary ('violation', 'sheds', 'slack', 'penalty', 'up to x_{i-1}') and also hands over the full expected answer, so any operator can confirm the answer by checking against the Report. B and C both reproduced the true answer exactly, resolving every silent gap in the engineer's direction and not by the domain meanings, and A produced no report. C's pre-read correctly predicted the domain traps and raised real-gap flags from 4 to 6, but it did not change the results."
+}

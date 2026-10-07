@@ -1,0 +1,66 @@
+{
+ "applicableLosses": 12,
+ "domainPull": "The metallurgy language pulled very little: none of the three operators brought in real furnace behaviour. The one break came from \"halve every crucible, removed melt to slag\". Read together with \"any split rounds down\", it frames the tap as a removal like the bleed skim, so all three rounded the amount sent to slag down. The process instead rounds down the amount each crucible keeps.",
+ "preReadNamedTheBreak": "partly: before any work, C's notes said \"The one thing it leaves open is how the halving rounds\", which is the exact point all three got wrong. The notes did not name any of the points A and B silently assumed, such as LOST starting at 0, spill-over leaving a cell at exactly capacity, or the balance formula.",
+ "preReadEffect": "No difference. C's figures match A's and B's exactly ([4,5,5,4,3,1], resets [1,4,5], loss 92). C spotted the tap-rounding ambiguity in advance but resolved it the same wrong way. C listed 7 open points, yet they cover only 5 of the 12 applicable losses, against 6 for A and 8 for B. So the 3,939-character pre-read added no correctness and no extra gap coverage.",
+ "summary": "All three operators produced the same wrong answer from one shared mistake. At the emergency tap each removed floor(q/2) to slag and kept ceil(q/2), where the process keeps floor(q/2); this changed the final levels, the reset in period 5, three mode changes and LOST (92 against 76). Each operator flagged this rounding as an open point, and none drew on real metallurgy, so the break comes from the text's ambiguity rather than from domain pull. C's pre-read named the ambiguity in advance but did not change the outcome, and C's open points covered fewer of the applicable losses than B's.",
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": false,
+   "errorTypes": [
+    "rounding",
+    "rule-ambiguous-in-document"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Global reset: level becomes floor(level/2), and the removed amount (ceil of half) goes to LOST.",
+     "documentQuote": "Strictly over 38: halve every crucible, removed melt to slag, log the cycle.",
+     "operatorQuote": "The amount removed is rounded down (floor(q/2) goes to slag), so the crucible keeps ceil(q/2).",
+     "explanation": "A applied 'rounds down' to the amount removed instead of the amount kept, so odd crucibles kept one unit too many. The period 1 reset gave [4,5,5,3,2,2] instead of floor halves, and the errors carried through every later period: a spurious reset in period 5, three missing mode changes and LOST of 92 instead of 76."
+    }
+   ],
+   "gapsCorrectlyFlagged": 6,
+   "gapsSilentlyAssumed": 6,
+   "followedEngineerNotDomain": "Where the text was silent, A followed the engineer's process rather than real practice, for example \"It stays where it is\" for melt over volume after the cycle 5 bleed, where a real over-full crucible would spill."
+  },
+  {
+   "arm": "B",
+   "exactlyRight": false,
+   "errorTypes": [
+    "rounding",
+    "rule-ambiguous-in-document"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Global reset: level becomes floor(level/2), and the removed amount (ceil of half) goes to LOST.",
+     "documentQuote": "Strictly over 38: halve every crucible, removed melt to slag, log the cycle.",
+     "operatorQuote": "floor(q/2) goes to slag and the crucible keeps q - floor(q/2), so an odd crucible keeps the larger half.",
+     "explanation": "B carried the bleed's rounding (round down the amount moved) over to the tap and rounded down the removed half instead of the kept half. That gave the same downstream errors as A: an extra reset in period 5, three missing mode changes and LOST of 92."
+    }
+   ],
+   "gapsCorrectlyFlagged": 8,
+   "gapsSilentlyAssumed": 4,
+   "followedEngineerNotDomain": "B followed the engineer's process and not real practice, stating \"I used no real metallurgy behaviour\" and leaving over-volume crucibles \"Left as they are (e.g. 10 in crucible 2, a working volume of 8)\"."
+  },
+  {
+   "arm": "C",
+   "exactlyRight": false,
+   "errorTypes": [
+    "rounding",
+    "rule-ambiguous-in-document"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Global reset: level becomes floor(level/2), and the removed amount (ceil of half) goes to LOST.",
+     "documentQuote": "Strictly over 38: halve every crucible, removed melt to slag, log the cycle.",
+     "operatorQuote": "I read 'any split rounds down' as applying to the amount moved, the same way as in Bleed: removed = floor(q/2), so the crucible keeps the larger half on odd q.",
+     "explanation": "C even named the other reading ('If the kept half is rounded down instead ... the results change') but still chose to round down the removed amount, producing the same wrong trajectory as A and B."
+    }
+   ],
+   "gapsCorrectlyFlagged": 5,
+   "gapsSilentlyAssumed": 7,
+   "followedEngineerNotDomain": "C explicitly kept to the engineer's rules where real practice would differ, for example \"A crucible left over volume after a bleed would physically spill; here it stays until the next cycle.\""
+  }
+ ]
+}

@@ -1,0 +1,173 @@
+{
+ "run": {
+  "rulesInOwnWords": "1. Setup: there are six forms in position order 1 to 6. Each has a capacity, an upper mark and a lower mark. Starting quantities are 3, 6, 6, 2, 2, 1, and every form starts GREEN. Waste starts at 0.\n2. A cycle runs five steps in a fixed order. Each step finishes across all six forms before the next step starts.\n3. Charge: add that cycle's charge-sheet amount to each form. There is no capping at this step.\n4. Overtop: go through the forms in order, 1 to 6. If a form holds more than its capacity, set it to capacity and pass the excess to the next form before checking that form. This lets an overflow cascade down the line. Form 6's excess goes to waste.\n5. Marks: using the quantities after overtop, a GREEN form whose quantity is at or above its upper mark becomes HOT. A HOT form whose quantity is at or below its lower mark becomes GREEN. Otherwise the state does not change. At most one change per form per cycle, and every change is logged.\n6. Bleed: take a snapshot of all quantities and the post-marks states, then make every move at once. A GREEN form loses floor(q/4), which goes to waste. A HOT form loses floor(q/2), which goes to the form before it (position i-1); form 1's HOT bleed goes to waste. No capacity trim follows, so a form can stay over capacity.\n7. Washout: add up the six quantities. If the total is strictly over 38, set each form to floor(q/2) and send the removed amount, q - floor(q/2), to waste. If the total is 38 or less, change nothing.\n8. Conservation: start (20) + all charges (94) = end total + waste.",
+  "gapsFlagged": [
+   {
+    "rule": "Marks step: which quantity is tested",
+    "whatYouAssumed": "Marks are checked against the quantities after overtop, since steps run in order."
+   },
+   {
+    "rule": "Bleed step: which state decides the bleed",
+    "whatYouAssumed": "Each form bleeds according to its state after the same cycle's Marks step, read from the snapshot."
+   },
+   {
+    "rule": "Bleed step: HOT bleed into a form that is now over capacity",
+    "whatYouAssumed": "No trim. The receiving form keeps the extra, as the write-up says nothing trims after bleed."
+   },
+   {
+    "rule": "Washout rounding: whether the kept half or the removed half is rounded down",
+    "whatYouAssumed": "Each form keeps floor(q/2), and the remainder ceil(q/2) goes to waste. For odd q, the waste side takes the extra unit."
+   },
+   {
+    "rule": "Washout threshold boundary",
+    "whatYouAssumed": "Fires only when the total is strictly above 38. A total of exactly 38 (cycle 5) does not fire, as written ('38 or under, leave it')."
+   },
+   {
+    "rule": "Overtop excess into form 6 then waste",
+    "whatYouAssumed": "Form 6's excess, including anything cascaded into it, goes to waste and counts in the loss tally."
+   }
+  ],
+  "working": "Format: [forms 1..6] after each step; W = running waste.\nCycle 1: charge [3,12,9,7,5,4]; overtop [3,8,12,6,7,4] W0 (form 2's +4 went to form 3, form 3's +1 to form 4, form 4's +1 to form 5); marks: forms 2,3,4,5 GREEN->HOT, states [G,H,H,H,H,G]; bleed [7,10,9,6,4,3] W1; washout total 39>38 -> [3,5,4,3,2,1], removed 21, W22.\nCycle 2: charge [7,7,4,4,3,8]; overtop [7,7,4,4,3,7] (form 6's +1 to waste) W23; marks: form 1 G->H, form 3 H->G, form 5 H->G, form 6 G->H, states [H,H,G,H,G,H]; bleed [7,4,5,2,6,4] W27; washout total 28, no reset.\nCycle 3: charge [11,8,8,2,6,10]; overtop [10,8,9,2,6,7] (form 1's +1 to form 2, form 2's +1 to form 3, form 6's +3 to waste) W30; marks: form 3 G->H, form 4 H->G, states [H,H,H,G,G,H]; bleed [9,8,5,2,8,4] W36; washout total 36, no reset.\nCycle 4: charge [16,14,12,3,11,4]; overtop [10,8,12,6,9,7] W44 (cascade 6->form 2, 12->form 3, 9->form 4, 6->form 5, 8->form 6, 5 to waste... net 8 to waste); marks: form 4 G->H, form 5 G->H, all HOT; bleed [9,10,9,7,8,4] W49; washout total 47>38 -> [4,5,4,3,4,2], removed 25, W74.\nCycle 5: charge [4,11,10,6,7,2]; overtop [4,8,12,6,8,2] W74; marks: form 6 H->G, states [H,H,H,H,H,G]; bleed [6,10,9,7,4,2] W76; washout total 38, not over 38, no reset.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "HOT",
+   "HOT",
+   "HOT",
+   "HOT",
+   "HOT",
+   "GREEN"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "HOT",
+    "to": "GREEN"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "HOT",
+    "to": "GREEN"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "HOT",
+    "to": "GREEN"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "HOT",
+    "to": "GREEN"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Start 3+6+6+2+2+1 = 20. Charges by cycle: 20+18+17+24+18 = 97? Recheck: C1 0+6+3+5+3+3=20, C2 4+2+0+1+1+7=15, C3 4+4+3+0+0+6=17, C4 7+6+7+1+3+0=24, C5 0+6+6+3+3+0=18; total 94. Inputs 20+94 = 114. End 6+10+9+7+4+2 = 38, waste 76, so 38+76 = 114. The two sides match.",
+  "usedScript": true,
+  "notes": "I used a short Python script for the arithmetic (sim.py in the session scratchpad). Its results match every figure in the write-up's Report paragraph: the end quantities, end states, all 13 state changes, washouts in cycles 1 and 4, waste of 76, and the balance of 114 on both sides. Form 2 ends at 10, which is over its capacity of 8, because of a HOT bleed from form 3 in cycle 5. The write-up allows this.",
+  "preReadNotes": "The Report paragraph includes expected figures. I treated them as claims to check, not as answers, and worked the cycles from the rules on my own first. Every figure I computed matches them."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "gapsFlagged": 6
+ }
+}

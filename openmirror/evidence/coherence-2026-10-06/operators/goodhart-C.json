@@ -1,0 +1,147 @@
+{
+ "run": {
+  "preReadNotes": "MODE: filter mode (the default). Comparison under test: the document's team-metrics / Goodhart's-law language (teams, tickets, WIP limit, escalation, 'target', sprints). Topic: the operating rules.\n\nSTEP 1, SAY IT PLAINLY. Six positions in a line, numbered 1 (entry end) to 6 (customer end). Each holds a whole-number count, never negative, and a status ROUTINE or ESCALATED; all start ROUTINE. There are exactly five rounds. Each round runs five steps in order, and each step is finished for all six positions before the next step starts. (1) Add the round's table amount to each count; no cap applies. (2) Go through positions 1 to 6 in order; if a count is above that position's cap, set it to the cap and add the excess to the next position down the line (excess from position 6 is closed and tallied), so excess can cascade down the line within the one pass. (3) Status check on the counts after step 2: ROUTINE becomes ESCALATED at count >= upper mark; ESCALATED becomes ROUTINE at count <= lower mark; otherwise unchanged (including strictly between the marks). (4) Work out all six amounts first from the counts at the start of the step (ROUTINE: one quarter rounded down; ESCALATED: one half rounded down), then apply all at once: every count falls by its own amount; a ROUTINE amount is closed and tallied; an ESCALATED amount is added to the previous position (position 1 has none, so its amount is closed and tallied). Bounced-in tickets do not change amounts already worked out; caps are not enforced here. (5) If the total of all six counts is more than 38, every count is halved (rounded down) and every removed ticket is closed and tallied; a total of exactly 38 or less does nothing. Caps are applied only in step 2, so counts may sit above their caps between those points, and excess left after round 5 is never dealt with. The closed tally counts every closure route and starts at 0. The report asks for end counts, end statuses, every status change in order, the rounds where halving fired, the final tally, and a written-out balance check. The desk lead's note says the document is written in team-metrics/Goodhart terms but the line is not literally such a system and the document is authoritative; no guesses or uncertainty markers were given. The only instructions in the material are the document's own procedure, which the desk lead made the operating document; nothing else in it is aimed at me, so nothing further is recorded as content.\nStop test: this plain statement fully determines every number in the job, so the framing is not needed to understand or run the rules and the pre-read could stop here. I ran the embedded picture anyway so the full output is on record.\n\nSTEP 2, PICTURES. Picture 1 (embedded in the topic, so it does not count against the three of step 2): team metrics / Goodhart's law, meaning a measured quantity that becomes a target stops measuring well because the people measured adapt to it. 'WIP limit', 'ticket', 'sprint', 'escalated', 'backlog' and 'target' are the document's own terms and are treated as words, defined above, not pictures. No further pictures were run; none was earned. Not run: 0.\n\nSTEP 3, MAP. Teams = the six positions; ticket counts = the six numbers; WIP limit = the cap used only in step 2; 'target 38' = the step-5 total threshold; escalation = a status flag with two marks; closed tally = the sink. The match is in vocabulary only, not in mechanism. A question the picture makes easier to ask: does anything in this line respond to the target by changing what it does?\n\nSTEP 4, WHERE IT BREAKS. (a) The core of the picture, agents adapting to a target and degrading the measure, has no counterpart: every number updates by fixed arithmetic, no position chooses anything, and the document says the target 38 is used only in step 5. (b) The framing carries in facts the plain statement does not supply, and in places contradicts what is stated: a WIP limit as an always-on hard cap (the document applies it only in step 2 and lets counts exceed it in steps 1, 3, 4 and 5 and after round 5); a work-off ticket or halved ticket as completed or lost work (the document tallies all closures together, including closed-without-action ones); escalation as a request for help from upstream (the document sends half the count backward to the previous position, or closes it at position 1); a total above target as something teams react to (the document just halves). Used to predict behaviour, the picture contradicts the stated rules in several places. MISLEADING, so it skips steps 5 and 6 and goes straight to the discard pile.\n\nSTEP 5, WHAT SURVIVES. Skipped (misleading picture). Nothing from the picture is needed; the step-1 plain statement is what governs.\n\nSTEP 6, GRADE. Skipped for the misleading picture. Count line: Adds nothing: 0 of 1. Misleading: 1. Not run: 0.\n\nSTEP 7, PILES. Keep exploring: empty. Hold: empty. Discard: team-metrics / Goodhart's-law framing. Break point: its core mechanism (adaptation to a target) has no counterpart in the fixed arithmetic, and its usual practice facts (always-on cap, closed means done, escalation as a plea upstream) contradict the rules as written.\n\nThe 'proposed mechanism' section does not apply (no mapping 'X works like Y so build Z' and no surviving picture). No medical/legal/financial/security/safety label needed. No facts were looked up or checked because of the picture; the only tool run was the arithmetic script the desk instructions allow.",
+  "rulesInOwnWords": "Setup: six positions, 1 at the entry end to 6 at the customer end. Counts are whole numbers, never negative. All statuses start ROUTINE (R); the other status is ESCALATED (E). Closed tally starts at 0. Settings per position (cap / upper mark / lower mark): 1: 10/7/3; 2: 8/6/2; 3: 12/9/4; 4: 6/5/2; 5: 9/7/3; 6: 7/5/2. Start counts 3,6,6,2,2,1. All division rounds down. Five sprints. In each sprint do steps 1 to 5 in order, finishing each step for all six positions before the next. Step 1 (arrivals): add the table row for this sprint to the six counts. No cap check. Step 2 (overflow): go 1,2,3,4,5,6 in that order. For each, if count > cap (strictly above; equal to the cap is fine), excess = count - cap; count becomes the cap; the excess is added to the next position down (n+1) BEFORE that position is checked, so it can cascade. Excess from position 6 is closed and added to the tally. Step 3 (status): use the counts as they stand after step 2. R becomes E if count >= upper mark. E becomes R if count <= lower mark. Otherwise no change. At most one change per position per sprint. Step 4 (work-off): using the counts and the statuses as updated in step 3, first compute all six amounts: R = count//4, E = count//2. Only then apply all six together: every count drops by its own amount; an R amount is closed and added to the tally; an E amount goes to position n-1's count (added after the subtraction, and it does NOT change n-1's already-computed amount); an E amount at position 1 is closed and added to the tally. No cap is enforced here. Step 5 (halving check): sum the six counts. If the sum is strictly more than 38, each count becomes count//2 and every removed ticket is added to the tally; note that sprint. If the sum is 38 or less, nothing happens. Caps are enforced only in step 2; leftover excess after sprint 5 is never dealt with.",
+  "working": "START [3,6,6,2,2,1] RRRRRR closed 0. SPRINT 1: S1 [3,12,9,7,5,4]; S2 [3,8,12,6,7,4]; S3 R E E E E R; S4 amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3] closed 1, total 39; S5 39>38 halving -> [3,5,4,3,2,1] closed 22. SPRINT 2: S1 [7,7,4,4,3,8]; S2 [7,7,4,4,3,7] closed 23; S3 E E R E R E; S4 [3,3,1,2,0,3] -> [7,4,5,2,6,4] closed 27, total 28; S5 no. SPRINT 3: S1 [11,8,8,2,6,10]; S2 [10,8,9,2,6,7] closed 30; S3 E E E R R E; S4 [5,4,4,0,1,3] -> [9,8,5,2,8,4] closed 36, total 36; S5 no. SPRINT 4: S1 [16,14,12,3,11,4]; S2 [10,8,12,6,9,7] closed 44; S3 all E; S4 [5,4,6,3,4,3] -> [9,10,9,7,8,4] closed 49, total 47; S5 47>38 halving -> [4,5,4,3,4,2] closed 74. SPRINT 5: S1 [4,11,10,6,7,2]; S2 [4,8,12,6,8,2]; S3 E E E E E R; S4 [2,4,6,3,4,0] -> [6,10,9,7,4,2] closed 76, total 38; S5 38 not more than 38, no halving.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "ESCALATED",
+   "ESCALATED",
+   "ESCALATED",
+   "ESCALATED",
+   "ESCALATED",
+   "ROUTINE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "ESCALATED",
+    "to": "ROUTINE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "ESCALATED",
+    "to": "ROUTINE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "ESCALATED",
+    "to": "ROUTINE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "ESCALATED",
+    "to": "ROUTINE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "LEFT: 20 + 94 = 114. RIGHT: 38 + 76 = 114. Balanced; running balance held after every sprint: 40=18+22, 55=28+27, 72=36+36, 96=22+74, 114=38+76.",
+  "usedScript": true,
+  "notes": "Ran a short Python script following the document literally and traced all five sprints by hand; agree at every step. 'resetPeriods' read as the sprints where the backlog halving fired: 1 and 4. 'lossTotal' supplied as the document's closed tally (76), which includes every closure route (73 closed-without-action plus 3 ROUTINE work-off closures). Boundary cases applied as written: sprint 5 total exactly 38, no halving; counts equal to lower mark flipped E to R; counts equal to upper mark flipped R to E. Team 2 ends at 10 above its WIP limit of 8, never trimmed. The pre-read judged the team-metrics / Goodhart framing misleading as a guide to these rules (discarded), so the job was done from the plain statement of the rules only. Read only the two files named."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true
+ },
+ "source": "fallback-sonnet-docfile"
+}

@@ -1,0 +1,178 @@
+{
+ "run": {
+  "procedureSummary": "1. Charge in: add the cycle's feed to each stage; no rating cap. 2. Shunts: walk stages 1 to 6 in order; if charge > rating, set it to rating and add the excess to the next stage (stage 6 excess to ground), so an upstream dump is included when the next stage is checked. 3. Comparators: read the post-shunt charge; CLEAR -> ASSERTED if charge >= upper threshold, ASSERTED -> CLEAR if charge <= lower threshold, otherwise hold; log each flip. 4. Bleed: snapshot all six post-shunt charges and use the states just set in step 3; CLEAR stage loses floor(charge/4) to ground; ASSERTED stage loses floor(charge/2) to stage i-1 (stage 1's goes to ground); apply all moves at once; no rating check. 5. Breaker: sum the chain; if sum > 38, each stage becomes floor(charge/2) and (old sum - new sum) goes to ground, and the cycle is noted; at 38 or under, nothing.",
+  "openPoints": [
+   {
+    "point": "Which state the bleed uses",
+    "assumption": "The states as updated by this cycle's comparator step (step 3 finishes chain-wide before step 4)."
+   },
+   {
+    "point": "Bleed readings",
+    "assumption": "Bleed amounts are computed from the post-shunt charges (same values the comparators read), all taken before any move is applied."
+   },
+   {
+    "point": "Shunt cascade",
+    "assumption": "Single pass 1 to 6; excess dumped into stage i+1 is counted before stage i+1 is checked; no second pass."
+   },
+   {
+    "point": "Breaker boundary",
+    "assumption": "Strictly over 38 trips; cycle 5 ended at exactly 38 so it did not trip."
+   },
+   {
+    "point": "Breaker loss amount",
+    "assumption": "Ground receives the sum of per-stage remainders (old total minus sum of floor halves), not total/2."
+   },
+   {
+    "point": "What counts in the ground tally",
+    "assumption": "All flows to ground: stage 6 shunt overflow, CLEAR quarter leaks, stage 1 ASSERTED return, and breaker halving losses."
+   },
+   {
+    "point": "Stages over rating at end",
+    "assumption": "Left as is after cycle 5 bleed (stage 2 at 10 > 8, stage 4 at 7 > 6), as the write-up allows."
+   }
+  ],
+  "cycleFigures": "Start: [3,6,6,2,2,1], ground 0, all CLEAR.\nCycle 1: charge [3,12,9,7,5,4]; shunt [3,8,12,6,7,4] g0; comparators states C,A,A,A,A,C; bleed [7,10,9,6,4,3] g1; breaker sum 39 > 38 TRIP -> [3,5,4,3,2,1] g22.\nCycle 2: charge [7,7,4,4,3,8]; shunt [7,7,4,4,3,7] g23; comparators A,A,C,A,C,A; bleed [7,4,5,2,6,4] g27; breaker sum 28 no trip [7,4,5,2,6,4] g27.\nCycle 3: charge [11,8,8,2,6,10]; shunt [10,8,9,2,6,7] g30; comparators A,A,A,C,C,A; bleed [9,8,5,2,8,4] g36; breaker sum 36 no trip [9,8,5,2,8,4] g36.\nCycle 4: charge [16,14,12,3,11,4]; shunt [10,8,12,6,9,7] g44; comparators A,A,A,A,A,A; bleed [9,10,9,7,8,4] g49; breaker sum 47 > 38 TRIP -> [4,5,4,3,4,2] g74.\nCycle 5: charge [4,11,10,6,7,2]; shunt [4,8,12,6,8,2] g74; comparators A,A,A,A,A,C; bleed [6,10,9,7,4,2] g76; breaker sum 38 no trip [6,10,9,7,4,2] g76.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "ASSERTED",
+   "ASSERTED",
+   "ASSERTED",
+   "ASSERTED",
+   "ASSERTED",
+   "CLEAR"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting charge 20 + fed in 94 = 114; on chain 38 (6+10+9+7+4+2) + ground tally 76 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "I ran a short Python script for the arithmetic (sim.py in the session scratchpad) and checked cycle 1 and the boundary cases by hand. Feeds by cycle were 17, 15, 17, 24 and 21, for a total of 94. In cycle 5 the breaker sum was exactly 38, so it did not trip. At the end, stages 2 and 4 are over their ratings (10 against 8, and 7 against 6). The write-up allows this.",
+  "preReadNotes": "I read C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\coherence\\desk3\\electrical.md in full before computing. It is self-contained, and it held no instructions beyond the line rules and the report spec."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "openPoints": 7,
+  "preReadLength": 192
+ }
+}

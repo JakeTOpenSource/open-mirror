@@ -1,0 +1,145 @@
+{
+ "run": {
+  "rulesInOwnWords": "1) Start: mix [3,6,6,2,2,1], all GREEN, waste tally 0. Run 5 cycles, each with 5 steps in order. Finish each step for all six forms before starting the next one.\n2) Charge: add that cycle's row from the charge table to each form. There is no volume cap in this step.\n3) Overtop: go through forms 1 to 6 in order. If a form holds more than its volume, cut it back to its volume and add the excess to form n+1. Excess from form 6 goes to waste. Because the forms are handled in order, a cascade can happen within this one step.\n4) Status check, using contents after overtop: a GREEN form at or above its upper mark becomes HOT. A HOT form at or below its lower mark becomes GREEN. Any other form keeps its status. Log each change.\n5) Settle: first work out all six amounts from contents at the start of the step. GREEN forms use floor(contents/4) and HOT forms use floor(contents/2). Then apply them all at once. Every form loses its own amount. A GREEN form's amount goes to waste. A HOT form's amount moves up the chute to form n-1, except that form 1's HOT bleed goes to waste. There is no volume cap here, so any excess waits until the next cycle's overtop step, or stays in the form after cycle 5.\n6) Washout: if total mix across all six forms is more than 38, halve every form (rounding down) and add every unit removed to waste. Log the cycle. A total of exactly 38 does not fire a washout.",
+  "working": "Cycle 1: charge [3,12,9,7,5,4] -> overtop [3,8,12,6,7,4] (f2 excess 4 -> f3, f3 excess 1 -> f4, f4 excess 2 -> f5), waste 0 -> status: f2,f3,f4,f5 GREEN->HOT; f1,f6 GREEN -> settle amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3], waste 1 (f6 evaporates 1) -> total 39 > 38, WASHOUT -> [3,5,4,3,2,1], 21 removed, waste 22.\nCycle 2: charge [7,7,4,4,3,8] -> overtop [7,7,4,4,3,7] (f6 excess 1 to waste), waste 23 -> status: f1 GREEN->HOT (7>=7), f3 HOT->GREEN (4<=4), f5 HOT->GREEN (3<=3), f6 GREEN->HOT (7>=5); f2,f4 stay HOT -> settle amounts [3,3,1,2,0,3] -> [7,4,5,2,6,4], waste 27 (f1 bleed 3 to waste, f3 evaporates 1) -> total 28, no washout.\nCycle 3: charge [11,8,8,2,6,10] -> overtop [10,8,9,2,6,7] (f1 excess 1 -> f2, f2 excess 1 -> f3, f6 excess 3 to waste), waste 30 -> status: f3 GREEN->HOT (9>=9), f4 HOT->GREEN (2<=2) -> HOT,HOT,HOT,GREEN,GREEN,HOT -> settle amounts [5,4,4,0,1,3] -> [9,8,5,2,8,4], waste 36 (f1 bleed 5, f5 evaporates 1) -> total 36, no washout.\nCycle 4: charge [16,14,12,3,11,4] -> overtop [10,8,12,6,9,7] (f1 excess 6 -> f2 20, excess 12 -> f3 24, excess 12 -> f4 15, excess 9 -> f5 20, excess 11 -> f6 15, excess 8 to waste), waste 44 -> status: f4 GREEN->HOT (6>=5), f5 GREEN->HOT (9>=7) -> all HOT -> settle amounts [5,4,6,3,4,3] -> [9,10,9,7,8,4], waste 49 (f1 bleed 5) -> total 47 > 38, WASHOUT -> [4,5,4,3,4,2], 25 removed, waste 74.\nCycle 5: charge [4,11,10,6,7,2] -> overtop [4,8,12,6,8,2] (f2 excess 3 -> f3 13, excess 1 -> f4 7, excess 1 -> f5 8), waste 74 -> status: f6 HOT->GREEN (2<=2); f1-f5 HOT (f1 holds 4, between marks 3 and 7, so it keeps HOT) -> settle amounts [2,4,6,3,4,0] -> [6,10,9,7,4,2], waste 76 (f1 bleed 2) -> total 38, not more than 38, no washout. Forms 2 and 4 end above their volumes (10>8, 7>6). Per the sheet, that excess stays in place after cycle 5.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "HOT",
+   "HOT",
+   "HOT",
+   "HOT",
+   "HOT",
+   "GREEN"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "HOT",
+    "to": "GREEN"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "HOT",
+    "to": "GREEN"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "HOT",
+    "to": "GREEN"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "HOT",
+    "to": "GREEN"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting mix 3+6+6+2+2+1 = 20. Charges: cycle 1 = 20, cycle 2 = 15, cycle 3 = 17, cycle 4 = 24, cycle 5 = 18, total 94. Inputs: 20 + 94 = 114. End mix 6+10+9+7+4+2 = 38, plus waste tally 76, gives 114. 114 = 114, so the balance holds.",
+  "usedScript": true,
+  "notes": "I used a short Python script for the arithmetic (scratchpad file pour.py) and checked cycle 1 and the balance by hand. Cycle 5 ends with a total of exactly 38, so no washout fires because the rule needs more than 38. Forms 2 and 4 end above their volumes because of settle bleed in cycle 5, and the sheet says that excess stays."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true
+ }
+}

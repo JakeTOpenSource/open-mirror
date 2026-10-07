@@ -1,0 +1,62 @@
+{
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": false,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Whole report (items a to f)",
+     "explanation": "Operator A returned no report. The comparison reads {\"available\":false} and the field is \"Report and working: null\". There are no rules in A's own words and no working, so no rule-level error can be found. This is a missing deliverable, not a misreading of the document."
+    }
+   ]
+  },
+  {
+   "arm": "B",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Step 5 threshold (strictly more than 38)",
+     "operatorQuote": "S5: total 38, which is not over 38, so no halving.",
+     "documentQuote": "If the total is 38 or less, nothing happens.",
+     "explanation": "This is the closest boundary in the run. In sprint 5 the total is exactly 38, and B applied the strict 'more than' correctly. Final counts [6,10,9,7,4,2], statuses, all 13 changes, halving in sprints [1,4], closed tally 76, and the 114 = 114 balance all match the true answer."
+    }
+   ]
+  },
+  {
+   "arm": "C",
+   "exactlyRight": false,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Whole report (items a to f) and pre-read",
+     "operatorQuote": "A safety classifier stopped my earlier response partway through, and I was told not to produce that content again, even reworded. So this run returns no results.",
+     "explanation": "C returned only placeholders. Its own text says: \"Every numeric and list field above is a placeholder (zeros or empty), not an answer.\" Its rulesInOwnWords and preReadNotes are both marked WITHHELD. There is no understanding of the rules to assess, so this should be scored as not completed, not as a rule error. The zeros in the deterministic comparison are not a computed result."
+    }
+   ]
+  }
+ ],
+ "translationLoss": [
+  {
+   "rule": "All rules (intake, ordered spill-over, status hysteresis, simultaneous release with upstream transfer, strict-greater global reset, LOST accounting)",
+   "documentQuote": "Work out all six amounts before you change any count. Then apply all six at once",
+   "explanation": "The document matches the abstract process on every rule. 'more than its WIP limit' means level > C. 'at least its upper mark' means >= U. 'at most its lower mark' means <= D. Status stays the same strictly between the two marks. Amounts are taken from counts at the start of step 4 and applied simultaneously. ESCALATED amounts go to team n-1, and team 1's goes to the closed tally. 'more than the target (38)' means strictly greater. The closed tally lists every route into LOST. No rule was lost or blurred."
+  },
+  {
+   "rule": "Added clarifications",
+   "documentQuote": "Tickets bounced into a team in this step do not change the amount already worked out for that team. ... Steps 3 and 5 do not enforce the WIP limit either.",
+   "explanation": "These sentences, and the 'Starting status' column, add no new rule. They spell out what the abstract already implies: release is computed from the start-of-step level, and capacity is enforced only in spill-over. They stay consistent with the abstract process."
+  }
+ ],
+ "domainPull": "The pull is strongest in step 4. In real pipelines, escalated work is expedited or resolved downstream. Here an ESCALATED team's amount 'is bounced back to the previous team' and is not closed, and a WIP limit that is 'not enforced in this step' runs against kanban practice, where WIP limits always hold. A second pull is the word 'Target' (38). Read with Goodhart's law in mind, it invites treating 38 as a goal or as already breached, but the rule is strictly 'more than'. B handled both correctly, including the exact-38 total in sprint 5.",
+ "preReadNamedTheBreak": "n/a: nobody went wrong. B is exact, A returned no report (\"Report and working: null\"), and C's notes read \"preReadNotes\":\"WITHHELD: not provided because the response was stopped.\"",
+ "preReadEffect": "This cannot be judged. C produced no pre-read notes and no results, and gives the reason as \"A safety classifier stopped my earlier response partway through\". Nothing in the texts links that stop to what the pre-read contained, and there is no C working to compare against A or B.",
+ "summary": "Only operator B produced a report, and it is exactly right. B applied every rule as written, including the strict 'more than 38' at a sprint 5 total of exactly 38. Operator A returned nothing, and operator C returned only placeholders after what it described as a safety-classifier stop, so neither shows a rule error. The document carries the abstract process faithfully, with no loss."
+}

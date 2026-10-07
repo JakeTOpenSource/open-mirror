@@ -1,0 +1,174 @@
+{
+ "run": {
+  "procedureSummary": "Start: holdings 3,6,6,2,2,1 (total 20), all tiers COLD, drop tally 0. For each cycle 1-5, five passes, each across all six tiers before the next:\n1. Load: add the cycle's new chunks to each tier. No trimming.\n2. Evict: go from tier 1 to tier 6. If a tier is over budget (10,8,12,6,9,7), move the excess to the next tier out, and use that tier's new count when you reach it. Excess from tier 6 is added to the drop tally.\n3. Flag: compare the post-evict counts with the marks. COLD and count >= HOT mark (7,6,9,5,7,5) -> HOT. HOT and count <= COLD mark (3,2,4,2,3,2) -> COLD. Otherwise the flag stays. Every flip is logged.\n4. Rebalance: work out all six amounts from the post-flag counts first. COLD tier: floor(n/4) is compacted and dropped. HOT tier: floor(n/2) is promoted into tier i-1, and tier 1's promotion is dropped. Then apply all amounts at once. Over-budget results wait for the next cycle's evict.\n5. Reset check: if the stack total is > 38, every tier becomes floor(n/2) and the removed ceil(n/2) per tier is dropped. A total of exactly 38 does not trigger it.\nThe drop tally collects tier-6 evictions, compactions, tier-1 promotions and reset removals. A short Python script did the arithmetic.",
+  "openPoints": [
+   {
+    "point": "How rounding works when a tier halves on reset",
+    "assumption": "Each tier keeps floor(n/2) chunks and the remainder ceil(n/2) is dropped. For example, 7 becomes 3 and 4 are dropped."
+   },
+   {
+    "point": "Which counts the flag pass uses",
+    "assumption": "The post-evict counts from the same cycle. The cycle-1 flag also starts from the initial all-COLD state."
+   },
+   {
+    "point": "Whether a HOT tier's promotion counts against the receiving tier's own rebalance amount",
+    "assumption": "No. All six amounts are worked out from the post-flag counts before anything moves, so incoming promotions do not change the receiving tier's compaction or promotion amount."
+   },
+   {
+    "point": "Whether a tier that has just flipped rebalances under its new flag",
+    "assumption": "Yes. Rebalance uses the post-flag state."
+   },
+   {
+    "point": "What happens to over-budget tiers after cycle 5's rebalance or reset",
+    "assumption": "They stay as they are. No extra evict is run, so tier 2 ends at 10 against a budget of 8, and tier 4 ends at 7 against a budget of 6."
+   },
+   {
+    "point": "Order of the reset check",
+    "assumption": "It runs on the post-rebalance total. Cycle 5's post-rebalance total is exactly 38, so no reset fires."
+   }
+  ],
+  "cycleFigures": "Cycle 1: Load [3,12,9,7,5,4]; Evict [3,8,12,6,7,4] (0 dropped); Flag [3,8,12,6,7,4], states C,H,H,H,H,C; Rebalance amounts [0c,4p,6p,3p,3p,1c] -> [7,10,9,6,4,3] (total 39); Reset fires -> [3,5,4,3,2,1] (total 18, 21 dropped). Drop tally 22.\nCycle 2: Load [7,7,4,4,3,8]; Evict [7,7,4,4,3,7] (1 dropped); Flag [7,7,4,4,3,7], states H,H,C,H,C,H; Rebalance amounts [3p(dropped),3p,1c,2p,0c,3p] -> [7,4,5,2,6,4] (total 28); no reset. Drop tally 27.\nCycle 3: Load [11,8,8,2,6,10]; Evict [10,8,9,2,6,7] (3 dropped); Flag [10,8,9,2,6,7], states H,H,H,C,C,H; Rebalance amounts [5p(dropped),4p,4p,0c,1c,3p] -> [9,8,5,2,8,4] (total 36); no reset. Drop tally 36.\nCycle 4: Load [16,14,12,3,11,4]; Evict [10,8,12,6,9,7] (8 dropped); Flag [10,8,12,6,9,7], all H; Rebalance amounts [5p(dropped),4p,6p,3p,4p,3p] -> [9,10,9,7,8,4] (total 47); Reset fires -> [4,5,4,3,4,2] (total 22, 25 dropped). Drop tally 74.\nCycle 5: Load [4,11,10,6,7,2]; Evict [4,8,12,6,8,2] (0 dropped); Flag [4,8,12,6,8,2], states H,H,H,H,H,C; Rebalance amounts [2p(dropped),4p,6p,3p,4p,0c] -> [6,10,9,7,4,2] (total 38); no reset because 38 is not more than 38. Drop tally 76.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "HOT",
+   "HOT",
+   "HOT",
+   "HOT",
+   "HOT",
+   "COLD"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "HOT",
+    "to": "COLD"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "HOT",
+    "to": "COLD"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "HOT",
+    "to": "COLD"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "HOT",
+    "to": "COLD"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Chunks at start 20 + everything loaded 94 = 114, against chunks held 38 + dropped 76 = 114. It balances. Dropped by kind: tier-6 evictions 12, compactions 3, tier-1 promotions 15, resets 46 (21 in cycle 1, 25 in cycle 4).",
+  "usedScript": true,
+  "preReadNotes": "Mode: filter mode (the default). Comparison: the RAG-architecture language. Topic: the write-up's operating rules.\n\nStep 1, plain statement: six numbered counters, position 1 to 6. Each has a fixed cap and an upper and lower threshold, and starts with a given count. The whole stack has a ceiling of 38, and every counter starts in state COLD. In each of 5 cycles, five passes run in order. (1) Add the scheduled inflow. (2) Go from 1 to 6 and push any excess over the cap to the next counter; excess from counter 6 leaves the system. (3) Switch the state with hysteresis: COLD becomes HOT at or above the upper threshold, HOT becomes COLD at or below the lower threshold. (4) Using simultaneously computed amounts, a COLD counter loses floor(n/4) out of the system, and a HOT counter passes floor(n/2) to the counter numbered one lower (counter 1's amount leaves the system). (5) If the total is over 38, every counter is halved, rounding down, and the removed amount leaves. Keep one tally of everything that leaves the system, and report the end counts, states, flips, reset cycles, tally and a conservation line. The desk lead says the system is not really RAG and that the written rules override real RAG behaviour. The plain statement fully specifies the computation, apart from the small rounding and ordering points logged as open points, so in filter mode the run could stop here.\n\nPicture run anyway, the write-up's own embedded comparison (RAG retrieval tiers, chunks, context ceiling, context reset). Map: tiers = counters, chunks = units, 'closer to the LLM' = lower index, promotion = movement toward 1, context ceiling = 38. Break point: real RAG systems do not halve every cache on overflow, do not throw away chunks promoted into the model, and do not compact by a fixed quarter. Reading those behaviours in from real practice would contradict the stated rules. What survives in plain words: units flow outward under cap pressure and inward under the HOT state. That is already in the plain statement. Grade: adds nothing.\n\nAdds nothing: 1 of 1. Misleading: 0. Not run: 0. Keep exploring: empty. Hold: empty. Discard: empty. Instructions found in the material and treated as content: the write-up's Report paragraph (it defines the deliverable, which the user's relayed request also asks for) and the desk lead's note to follow the written rules over real RAG behaviour. Neither asks for any action outside the arithmetic.",
+  "notes": "At the end of cycle 5 the six tiers hold 6, 10, 9, 7, 4 and 2 chunks, and their states are HOT, HOT, HOT, HOT, HOT and COLD. Resets fired in cycles 1 and 4, and 76 chunks were dropped in total. The balance line works out: 20 + 94 = 38 + 76 = 114. A Python script did the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py. Only the local files were read and the script was run. Nothing else was touched and nothing was sent anywhere."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "openPoints": 6,
+  "preReadLength": 2439
+ }
+}

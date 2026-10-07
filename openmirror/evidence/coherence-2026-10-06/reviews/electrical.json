@@ -1,0 +1,53 @@
+{
+ "operators": [
+  {
+   "arm": "A (no note)",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Step 2 breakdown shunt cascade (working notes only; not an error in the report)",
+     "documentQuote": "One stage's excess can therefore push the next stage over its rated charge within this same step, and that can continue down the chain.",
+     "operatorQuote": "cascade 6->2, 6->3, 6->4, 3->5, 2->6, 8 excess? stage6 4+2... final 6 excess to ground totaling 8 this step",
+     "explanation": "The cycle 4 notes are garbled. The real transfers are 6 to stage 2, 12 to stage 3, 12 to stage 4, 9 to stage 5, 11 to stage 6, and 8 to ground. The post-shunt vector [10,8,12,6,9,7] and the ground total of 44 are still correct. The rules are stated correctly in A's own words, including '>= upper mark', '<= lower mark', 'strictly > 38', 'compute all amounts first', and 'stage 1 ASSERTED goes to ground'. All reported outputs match the true answer."
+    }
+   ]
+  },
+  {
+   "arm": "B (told domain terms, rules apply as written)",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Step 2 breakdown shunt cascade (working notes only; not an error in the report)",
+     "documentQuote": "Excess from stage 6 goes to ground. Add it to the ground total.",
+     "operatorQuote": "cascade 6,12,12,9,11; 7 to ground... ground +8 total",
+     "explanation": "'7 to ground' is a slip in the notes: stage 6 is left at 7 and 8 goes to ground. B corrects itself in the same line ('ground +8 total'), and g44 is right. B's rule statement matches the document on every point, and all outputs match the true answer."
+    }
+   ]
+  },
+  {
+   "arm": "C (told, plus pre-read)",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": []
+  }
+ ],
+ "translationLoss": [
+  {
+   "rule": "none lost, blurred, or added",
+   "documentQuote": "Work out all six amounts before you change any stage's charge. Then apply all six together",
+   "explanation": "Every abstract rule appears in the document with the same meaning. These include intake with no cap; the ordered 1-to-6 spill with cascade and stage 6 to ground; hysteresis using >= U and <= D with the state held in between, and at most one change per cycle; the snapshot release using floor(/4) for CLEAR and floor(/2) for ASSERTED, sent to n-1, with stage 1 to ground and no cap; over-capacity persisting into the next spill or into the end figures in cycle 5; the strictly-greater-than-38 halving with the removed charge to ground; and the balance check. The added electrical labels ('Schmitt trigger', 'return diode', 'breaker') come with explicit operational definitions and add no rule. The document even goes beyond the abstract with redundant safeguards, such as 'If the total is more than 38 (strictly greater)' and 'If it happens in cycle 5, it is never handled and stays in the end figures.'"
+  }
+ ],
+ "domainPull": "The pull was strongest at the 'return diode' and the 'breaker'. A real diode conducts only toward lower potential, yet the document sends ASSERTED discharge to stage n-1 unconditionally, even into a stage already over its rating. A real breaker opens the circuit instead of halving every charge. A further pull was letting a stage sit above its rated charge after feedback, which a real breakdown shunt would clamp continuously. Nobody fell for any of these, and all three operators explicitly kept the cycle 5 over-rated stages 2 (10>8) and 4 (7>6).",
+ "preReadNamedTheBreak": "n/a: nobody went wrong. C's notes did name in advance the main domain hazards, for example \"a real diode conducts toward lower potential, not always toward n-1\" and \"Real overvoltage would not persist past the shunt step\", but A and B made no error for those notes to have anticipated.",
+ "preReadEffect": "It made no measurable difference to correctness: A and B, with no pre-read, reached the same exact answer. The pre-read named the right hazards (diode direction, breaker semantics, overcharge persisting, continuous versus floored discharge) and graded every picture as adding nothing beyond the document. Its visible effect was a more careful, fully hand-checked working with explicit edge-case notes, not a different result.",
+ "summary": "All three operators matched the true answer exactly on final charges, states, the 13 state changes, trips in cycles 1 and 4, and a ground total of 76. Their only flaws are cosmetic slips in A's and B's cycle 4 cascade notes, which do not affect any reported figure. The electrical document carried the abstract process with no loss, and its explicit wording (strictly over 38, unconditional n-1 feedback, over-rated charge staying in the end figures) neutralized the domain pull before it could act, so the coherence held in this case."
+}

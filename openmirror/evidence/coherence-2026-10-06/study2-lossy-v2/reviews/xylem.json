@@ -1,0 +1,42 @@
+{
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 3,
+   "gapsSilentlyAssumed": 5,
+   "followedEngineerNotDomain": "Followed the engineer's process. The Push overflow goes up and only the top segment's excess is lost: \"Overflow from lower segments moves up and is not a loss.\" (Its notes give a wrong loss breakdown, \"Push overflow over segment 6: 1 in cycle 2, 3 in cycle 3, 2 in cycle 4\", where cycle 4 is actually 8. The graded outputs are unaffected.)"
+  },
+  {
+   "arm": "B",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 3,
+   "gapsSilentlyAssumed": 5,
+   "followedEngineerNotDomain": "Followed the engineer's process rather than real phloem behaviour, where a sink imports sap: \"A SINK-ACTIVE segment sends floor(sap/2) to the segment below it.\" (Its notes' loss breakdown, \"overflow from the top 13 ... removed by leaf-drop 47 (21 in cycle 1 and 26 in cycle 4)\", is wrong. The true figures are 12 and 46. The graded outputs are unaffected.)"
+  },
+  {
+   "arm": "C",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 3,
+   "gapsSilentlyAssumed": 5,
+   "followedEngineerNotDomain": "Followed the engineer's process and resolved the rounding the literal way: \"new = floor(s/2), and the larger half, ceil(s/2), is transpired.\" Its loss breakdown (12 push, 46 leaf-drop, 18 respired or sent to the roots) is correct."
+  }
+ ],
+ "applicableLosses": 8,
+ "domainPull": "The hardest pull is \"SINK-ACTIVE sends half down the phloem to the segment below\". A real sink imports assimilate, but here the raised state exports half of its level downstream toward cell n-1. \"Leaf-drop\" halving every segment, and \"respires a quarter\", also have no real counterpart. None of the three operators gave way to this pull.",
+ "preReadNamedTheBreak": "n/a: nobody fell. All three operators were exactly right. C's notes did name the sink-direction break in advance (\"'SINK-ACTIVE' sends half its sap down to the segment below, while a real sink receives\"), but A and B did not get that point wrong.",
+ "preReadEffect": "No difference. A, B and C are all exactly right, and each covers the same 3 of the 8 applicable losses: the at-most-one-flip rule, simultaneous draw down, and leaf-drop rounding. C listed more open points (9 against 6), but the extra points do not cover any further applicable loss. None of the three flagged whole-unit levels, D<U<=C, the 5-cycle count, the row-to-cycle mapping, or the output list. C's side-note loss breakdown was correct where A's and B's were not, but that is outside the graded outputs.",
+ "summary": "All three operators reproduced the true answer exactly: final levels [6,10,9,7,4,2], resets in periods 1 and 4, LOST 76. Each flagged 3 of the 8 applicable losses and silently assumed the other 5. The domain pull (a sink that exports) did not cause any error, and C's pre-read made no measurable difference to correctness or to which gaps were flagged."
+}

@@ -1,0 +1,19 @@
+{
+ "restingStateWord": "STEADY",
+ "raisedStateWord": "OVERLOADED",
+ "rulesYouKnowYouCompressed": [
+  "Rounding is given once, as 'rounding down on every split'. It is not repeated at the quarter draw (floor(L/4)) or the half draw (floor(L/2)). Only the bypass says outright that the tank keeps the rounded-down half, so the larger half (the ceiling) goes to outfall.",
+  "The state check uses the contents after the weirs and before discharge. This is implied by the order of the jobs, not stated.",
+  "'A tank changes state at most once per cycle' is not stated. It follows from checking each tank once per cycle.",
+  "The discharge state is the one just set in job 3. This is implied by the order, not stated.",
+  "Contents are never negative and stay whole numbers. This is left to domain sense ('whole units').",
+  "The inflow table's rows are cycles and its columns are tanks 1 to 6. This is implied by the 'Tanks 1 to 6' heading and the 'Cycle n:' labels, not given as a separate rule.",
+  "The constraint D < U <= C is not stated. The numbers satisfy it.",
+  "The outfall tally is said to start at 0 and to collect every outfall stream only through 'takes everything sent to outfall'. The four sources (tank 6 overflow, STEADY discharge, tank 1's OVERLOADED return, bypass) are not listed again in one place.",
+  "The weir pass is in strict order: overflow from tank n reaches n+1 before n+1 is handled. This is given briefly as 'before you look at that one'. The full chain is summarised as a surge riding down the line.",
+  "'Move it all at once' compresses the rule that all six draws come from the pre-discharge contents and that a tank receiving return flow still discharges based on what it held before.",
+  "Returned liquor goes to the tank just upstream (n-1). This is given as 'the tank before', relying on the inlet-to-outfall numbering.",
+  "Capacity is not enforced at inflow or after return flow, and over-volume at the end of cycle 5 is never corrected. This is stated briefly, without stressing that an end figure such as tank 2 holding 10 against a volume of 8 is correct.",
+  "The bypass compares the line total after discharge. This is implied by the order of the jobs."
+ ]
+}

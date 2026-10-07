@@ -1,0 +1,18 @@
+{
+ "restingStateWord": "QUIET",
+ "raisedStateWord": "SINK-ACTIVE",
+ "positionNoun": "segment",
+ "quantityNoun": "sap",
+ "cycleNoun": "cycle",
+ "resetNoun": "leaf-drop event",
+ "lossNoun": "sap-loss tally",
+ "checks": [
+  {
+   "pass": true,
+   "recoveredRules": "PASS 1 (from DOC only). Objects: six segments numbered 1 to 6 along a line. Segment 1 is the root collar and segment 6 is the crown. Moving toward the crown means n to n+1, and moving toward the root means n to n-1. Each segment holds a whole-number amount of sap that is never negative. Each segment has a fixed capacity (holding volume), an upper threshold and a lower threshold, with lower < upper <= capacity. Each segment has a binary state, QUIET or SINK-ACTIVE, and all start QUIET. The global limit is 38. A running loss tally starts at 0. The run has exactly 5 cycles of 5 steps each, always in order, and each step finishes for all segments before the next begins. All divisions round down.\n\nStep 1 (uptake): add that cycle's table row to each segment. Capacity is not enforced, so a segment may exceed it.\n\nStep 2 (sequential, positions handled one at a time in order 1 to 6): if sap > capacity (strictly), move the excess (sap minus capacity) to segment n+1 and set sap to exactly capacity. If sap <= capacity, do nothing. Excess from segment 6 goes to the loss tally. Excess pushed in earlier in the step is already counted when the next segment is handled, so the overflow can cascade.\n\nStep 3 (state check on post-step-2 sap): QUIET with sap >= upper becomes SINK-ACTIVE. SINK-ACTIVE with sap <= lower becomes QUIET. Otherwise no change, and a segment between the marks keeps its state. At most one change per segment per cycle. Each change is logged as (cycle, segment, before, after).\n\nStep 4 (all amounts computed first from sap at the start of the step, then applied together): a QUIET segment's amount is floor(sap/4) and a SINK-ACTIVE segment's amount is floor(sap/2). Every segment loses its own amount. A QUIET segment's amount goes to the tally. A SINK-ACTIVE segment's amount goes to segment n-1, except that segment 1's amount goes to the tally. Capacity is not enforced; any excess is corrected only in the next cycle's step 2, and never if it arises in cycle 5.\n\nStep 5: if the total sap is > 38 (strictly), every segment becomes floor(sap/2), all removed sap goes to the tally, and the cycle is logged. If the total is <= 38, nothing happens.\n\nNumbers: capacity 10,8,12,6,9,7. Upper 7,6,9,5,7,5. Lower 3,2,4,2,3,2. Start 3,6,6,2,2,1. Uptake rows by cycle: 1: 0,6,3,5,3,3. 2: 4,2,0,1,1,7. 3: 4,4,3,0,0,6. 4: 7,6,7,1,3,0. 5: 0,6,6,3,3,0.\n\nReport: final sap amounts 1 to 6; final states 1 to 6; all state changes in order; the cycles with a global reset, or 'none'; the final tally; and a balance check (start total + all uptake = end total + tally) with both sides shown.\n\nPASS 2 (comparison with SPEC): every rule matches. That covers the direction (n+1 downstream for overflow, n-1 for the step-4 transfer, segment 1's transfer to the tally), the strict 'more than' in step 2 and step 5, the >= upper and <= lower comparisons with keep-state between the marks, the sequential step 2 versus the compute-then-apply step 4, the floor divisors 4 and 2, capacity enforced only in step 2 (including the cycle-5 note), the log formats, the report items, and all numeric data, which match exactly. No missing, ambiguous, reordered, softened, contradicted or added rules were found. No banned words appear, and no sentence hints that the document is anything other than a literal stem-run procedure.",
+   "problems": [],
+   "leaks": []
+  }
+ ],
+ "checkPassed": true
+}

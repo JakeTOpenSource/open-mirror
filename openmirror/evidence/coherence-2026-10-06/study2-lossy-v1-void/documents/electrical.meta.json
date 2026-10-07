@@ -1,0 +1,17 @@
+{
+ "restingStateWord": "CLEAR",
+ "raisedStateWord": "ASSERTED",
+ "rulesYouKnowYouCompressed": [
+  "Charge is counted in whole units and never goes negative; this is never said outright and is left to the reader's sense of counting stored charge.",
+  "Every threshold pair keeps lower below upper, and upper at or below rating. This is only visible in the numbers and is never stated.",
+  "Step 3 says to 'read each stage now' but does not spell out that the reading is taken after the shunt pass. The order of the steps implies it.",
+  "A stage flips at most once per cycle. The hysteresis wording ('in between it holds') implies this, but it is never stated.",
+  "Every bleed amount comes from the readings taken before anything moves, with no new readings in between. This is compressed to 'take all six readings first, then move everything at once'.",
+  "The bleed uses each stage's state after this cycle's comparator check. The step order implies this; it is not stated.",
+  "The ground tally collects four things: stage 6 shunt excess, CLEAR leakage, stage 1's ASSERTED return, and the charge the breaker removes. Each is mentioned where it happens, with no single list of them.",
+  "The breaker halving rounds each stage down on its own. 'Every stage halves, rounded down' covers this without saying it is done stage by stage.",
+  "For the shunt walk, 'next stage down' means toward the load (n+1), and the return diode goes to 'the stage before' (n-1). Direction is left to the source-to-load picture.",
+  "Rounding down applies separately to each stage's quarter or half. This is said once per clause, not as a general rule.",
+  "Starting charge (20) and total feed (94) are given as totals in the balance line. The reader is expected to sum the tables to check them."
+ ]
+}

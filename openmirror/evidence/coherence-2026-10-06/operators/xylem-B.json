@@ -1,0 +1,145 @@
+{
+ "run": {
+  "rulesInOwnWords": "1) Start: sap = [3,6,6,2,2,1], every segment QUIET, loss tally 0. Each cycle runs steps 1-5 in order, and each step is finished for all six segments before the next step starts. Every division rounds down.\nStep 1 (Uptake): add that cycle's row of the uptake table to each segment. There is no cap in this step.\nStep 2 (Xylem push): go through segments 1 to 6 in order. If a segment's sap is above its holding volume (10,8,12,6,9,7), move the excess into the next segment up and set this segment to exactly its holding volume. Excess from segment 6 leaves the stem and goes on the loss tally. Because the segments are handled in order, one push can set off the next one up.\nStep 3 (State check), using sap after step 2: a QUIET segment with sap >= its upper mark (7,6,9,5,7,5) becomes SINK-ACTIVE. A SINK-ACTIVE segment with sap <= its lower mark (3,2,4,2,3,2) becomes QUIET. Otherwise the state stays the same. Each segment changes at most once per cycle, and every change is logged.\nStep 4 (Phloem/respiration): work out every amount from the sap at the start of the step: QUIET = sap/4, SINK-ACTIVE = sap/2, both rounded down. Then apply them all at once. Each segment loses its amount. A QUIET segment's amount goes to the loss tally. A SINK-ACTIVE segment's amount goes to segment n-1, except segment 1, whose amount goes to the loss tally. There is no cap, so overfill waits for the next cycle's step 2.\nStep 5 (Leaf-drop): if total sap > 38 (strictly), halve every segment (rounded down), add the amount removed to the loss tally, and log the cycle. If the total is 38 or less, nothing happens.",
+  "working": "Cycle 1: S1 [3,12,9,7,5,4]; S2 [3,8,12,6,7,4] (seg2 pushed 4 into seg3, which then pushed 1 into seg4, which then pushed 2 into seg5), loss 0; S3: segs 2,3,4,5 go QUIET->SINK-ACTIVE; S4 amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3], loss 1; S5 total 39 > 38, LEAF-DROP -> [3,5,4,3,2,1], removed 21, loss 22.\nCycle 2: S1 [7,7,4,4,3,8]; S2 [7,7,4,4,3,7] (seg6 transpired 1), loss 23; S3: seg1 Q->SA, seg3 SA->Q, seg5 SA->Q, seg6 Q->SA; states [SA,SA,Q,SA,Q,SA]; S4 amounts [3,3,1,2,0,3] -> [7,4,5,2,6,4], loss 27 (seg1 sent 3 out at the root, seg3 respired 1); S5 total 28, no drop.\nCycle 3: S1 [11,8,8,2,6,10]; S2 [10,8,9,2,6,7] (seg1 pushed 1 into seg2 and seg6 transpired 3), loss 30; S3: seg3 Q->SA, seg4 SA->Q; states [SA,SA,SA,Q,Q,SA]; S4 amounts [5,4,4,0,1,3] -> [9,8,5,2,8,4], loss 36; S5 total 36, no drop.\nCycle 4: S1 [16,14,12,3,11,4]; S2 [10,8,12,6,9,7] (excess was pushed up the whole chain and seg6 transpired 8), loss 44; S3: seg4 Q->SA, seg5 Q->SA; all six SA; S4 amounts [5,4,6,3,4,3] -> [9,10,9,7,8,4], loss 49; S5 total 47 > 38, LEAF-DROP -> [4,5,4,3,4,2], removed 25, loss 74.\nCycle 5: S1 [4,11,10,6,7,2]; S2 [4,8,12,6,8,2] (seg2 pushed 3 into seg3, then seg3 pushed 1 into seg4, then seg4 pushed 1 into seg5), loss 74; S3: seg6 SA->Q (2 <= 2); states [SA,SA,SA,SA,SA,Q]; S4 amounts [2,4,6,3,4,0] -> [6,10,9,7,4,2], loss 76; S5 total 38, not > 38, no drop. Segments 2 and 4 end above their holding volumes, which the document allows after cycle 5.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "QUIET"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting sap 3+6+6+2+2+1 = 20; uptake total 20+15+17+24+18 = 94; left side 20+94 = 114. End sap 6+10+9+7+4+2 = 38; loss tally 76; right side 38+76 = 114. The two sides match.",
+  "usedScript": true,
+  "notes": "I used a short Python script for the arithmetic and checked cycle 1 by hand. In cycle 5 the total is exactly 38, so the leaf-drop does not fire because the rule needs strictly more than 38. The script is at C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\stem.py"
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true
+ }
+}

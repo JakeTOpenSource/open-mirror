@@ -1,0 +1,182 @@
+{
+ "run": {
+  "procedureSummary": "Read in full: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\coherence\\desk3\\concrete.md. Rules as applied, one line per step:\nStep 1, Charge: add the cycle's charge-sheet row to forms 1 to 6. No trimming, so a form can sit over capacity.\nStep 2, Overtop: walk forms 1 to 6 in order. Any amount above capacity moves into the next form before that form is checked, and the form is left at capacity. Form 6's excess goes to waste.\nStep 3, Marks: use the quantities after overtop. A GREEN form goes HOT when quantity >= upper mark. A HOT form goes GREEN when quantity <= lower mark. Otherwise the state stays the same. Each change is logged.\nStep 4, Bleed: take a snapshot of all six quantities and states first, then apply every move together. A GREEN form loses floor(q/4) to waste. A HOT form loses floor(q/2) to the form before it, and form 1's HOT bleed goes to waste. No trimming afterwards.\nStep 5, Washout: add up the six forms. If the total is over 38 (strictly), each form becomes floor(q/2) and the difference goes to waste. If it is 38 or less, nothing changes. States are not changed here.\nWaste tally = form 6 overtop + GREEN evaporation + form 1 HOT bleed + washout removals.",
+  "openPoints": [
+   {
+    "point": "What 'halve every form, rounded down' leaves in the form: floor(q/2) kept, or floor(q/2) removed",
+    "assumption": "The form keeps floor(q/2) and the rest, ceil(q/2), goes to waste. Example: 7 becomes 3 and 4 goes to waste."
+   },
+   {
+    "point": "Which quantities the Marks step reads",
+    "assumption": "The quantities after overtop in the same cycle, so states are set before bleed and washout."
+   },
+   {
+    "point": "Which state the Bleed step uses",
+    "assumption": "The state just set by this cycle's Marks step. Amounts come from one snapshot taken before any mix moves, so mix bled into a form in this step does not bleed again in the same step."
+   },
+   {
+    "point": "Washout at exactly 38",
+    "assumption": "Over 38 means strictly greater. In cycle 5 the total after bleed was exactly 38, so washout did not fire."
+   },
+   {
+    "point": "Marks boundaries",
+    "assumption": "Both are inclusive: 'at or above' the upper mark and 'at or below' the lower mark. For example, form 5 at 7 against an upper mark of 7 went HOT in cycle 1."
+   },
+   {
+    "point": "Whether washout changes states",
+    "assumption": "No. States change only in the Marks step."
+   },
+   {
+    "point": "Overtop excess",
+    "assumption": "Only the amount strictly above capacity moves, and the form is left at exactly capacity."
+   },
+   {
+    "point": "Where the waste comes from",
+    "assumption": "Form 6 overtop 12 (1 in cycle 2, 3 in cycle 3, 8 in cycle 4). GREEN evaporation plus form 1 HOT bleed 18 (1, 4, 6, 5 and 2 in cycles 1 to 5). Washout 46 (21 in cycle 1, 25 in cycle 4). Total 76."
+   }
+  ],
+  "cycleFigures": "Start: [3,6,6,2,2,1], all GREEN.\nC1: charge [3,12,9,7,5,4] | overtop [3,8,12,6,7,4] | marks [3,8,12,6,7,4] G,H,H,H,H,G | bleed [7,10,9,6,4,3] (total 39) | washout FIRED [3,5,4,3,2,1] | waste after cycle 22\nC2: charge [7,7,4,4,3,8] | overtop [7,7,4,4,3,7] | marks [7,7,4,4,3,7] H,H,G,H,G,H | bleed [7,4,5,2,6,4] (total 28) | washout no change [7,4,5,2,6,4] | waste after cycle 27\nC3: charge [11,8,8,2,6,10] | overtop [10,8,9,2,6,7] | marks [10,8,9,2,6,7] H,H,H,G,G,H | bleed [9,8,5,2,8,4] (total 36) | washout no change [9,8,5,2,8,4] | waste after cycle 36\nC4: charge [16,14,12,3,11,4] | overtop [10,8,12,6,9,7] | marks [10,8,12,6,9,7] H,H,H,H,H,H | bleed [9,10,9,7,8,4] (total 47) | washout FIRED [4,5,4,3,4,2] | waste after cycle 74\nC5: charge [4,11,10,6,7,2] | overtop [4,8,12,6,8,2] | marks [4,8,12,6,8,2] H,H,H,H,H,G | bleed [6,10,9,7,4,2] (total 38) | washout no change [6,10,9,7,4,2] | waste after cycle 76",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "HOT",
+   "HOT",
+   "HOT",
+   "HOT",
+   "HOT",
+   "GREEN"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "HOT",
+    "to": "GREEN"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "HOT",
+    "to": "GREEN"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "HOT",
+    "to": "GREEN"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "GREEN",
+    "to": "HOT"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "HOT",
+    "to": "GREEN"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting mix 20 + all charges 94 (cycles 1 to 5: 20 + 15 + 17 + 24 + 18) = 114. In the forms 38 (6 + 10 + 9 + 7 + 4 + 2) + waste 76 = 114. The two sides match.",
+  "usedScript": true,
+  "notes": "I used a short Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py. I also checked the cycle 1 bleed and the waste breakdown by hand. The result is sensitive to one rule: if washout instead removed floor(q/2) and the form kept ceil(q/2), the figures after cycle 1 would be different. Cycle 5 ended at exactly 38, so washout did not fire there.",
+  "preReadNotes": "The write-up contains no instructions aimed at the agent. It is only the line rules, the figures and the report request. Nothing outside reading the file and running a local script was needed."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "openPoints": 8,
+  "preReadLength": 192
+ }
+}

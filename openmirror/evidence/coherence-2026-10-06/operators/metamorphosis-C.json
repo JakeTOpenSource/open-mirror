@@ -1,0 +1,146 @@
+{
+ "run": {
+  "preReadNotes": "Open Mirror pre-read, FILTER MODE (default).\n\nStep 1, plain statement (topic = the operating rules; comparison = the insect-metamorphosis wording). Six ordered slots (1..6), each holding a non-negative whole-number count, each with a fixed cap, an upper threshold and a lower threshold (lower < upper <= cap). Each slot has a two-valued flag (call them A = \"LARVAL\" and B = \"PUPAL\"), all starting A. Starting counts 3,6,6,2,2,1; a loss counter starts at 0. Each of 5 rounds: (1) add a scheduled amount to every slot, no cap check; (2) walk slots 1 to 6 in order; anything over cap is moved into the next slot (slot 6's overflow goes to the loss counter), so overflow can cascade within the same pass; (3) flag check with hysteresis: A flips to B if count >= upper threshold, B flips to A if count <= lower threshold, otherwise the flag is unchanged; (4) compute for every slot, from the current counts, floor(count/4) if A or floor(count/2) if B; then simultaneously subtract it; A amounts go to loss; B amounts go to the previous slot (slot 1's B amount goes to loss); no cap check, so a slot may sit above cap until the next round's step 2; (5) if the total of all six exceeds 38, every slot is floored to half and the removed amount goes to loss. Report end counts, end flags, every flag change, the rounds where halving fired, the loss total, and a conservation check (start + all inputs = end total + loss). No guesses or certainty markers were supplied; the document states everything as rules. Instructions aimed at the reader found in the material: only the job itself (run five cycles, deliver the report); recorded as content.\n\nThe plain restatement fully specifies the procedure, so the question \"does the metamorphosis comparison add anything needed to do the job?\" is answered at step 1: no. Stop.\n\nFor the record, the embedded comparison (insect metamorphosis, pulled out per step 1; it does not count toward the three-picture ceiling) was checked at step 4 only. Break points: (a) PUPAL returning to LARVAL is ordinary here but irreversible in real insects; (b) a pupal chamber passes half its mass BACKWARD to the previous chamber, which has no metamorphosis counterpart; (c) \"moult\" halves the whole line at once and is triggered by a line-wide total, not by an individual's development; (d) mass may exceed the holding limit after step 1 and step 4, and stays over limit at the end of cycle 5. A reader who imported real biology (e.g. treating pupation as one-way, or capping mass at all times) would compute wrong numbers, so the picture only works by contradicting stated rules: misleading, Discard.\n\nAdds nothing: 0 of 1. Misleading: 1. Not run: 0.\nKeep exploring: (empty). Hold: (empty). Discard: insect-metamorphosis wording, break point = stage reversal and backward reabsorption contradict the biology the words evoke; the rules as written govern.",
+  "rulesInOwnWords": "State at start: masses [3,6,6,2,2,1], all LARVAL, waste 0. Limits/pupation/return marks: ch1 10/7/3, ch2 8/6/2, ch3 12/9/4, ch4 6/5/2, ch5 9/7/3, ch6 7/5/2. Each cycle, every step finished for all chambers before the next:\n1. Feeding: add the cycle's feed charge to each chamber. No cap.\n2. Carry-forward: go 1 to 6 in order. If mass > holding limit, move the excess into the next chamber (chamber 6's excess goes to waste) and set the chamber to its limit. Excess received earlier in the pass counts, so overflow cascades.\n3. Stage check on post-step-2 mass: LARVAL with mass >= pupation mark becomes PUPAL; PUPAL with mass <= return mark becomes LARVAL; otherwise unchanged (hysteresis). At most one change per chamber per cycle; record each as (cycle, chamber, from, to).\n4. Metabolism/reabsorption: compute all six amounts first from current mass and post-step-3 stage: LARVAL = floor(mass/4), PUPAL = floor(mass/2). Then apply simultaneously: subtract each chamber's own amount; LARVAL amount goes to waste; PUPAL amount is added to chamber n-1 (chamber 1's PUPAL amount goes to waste). No cap.\n5. Moult: if the sum of all six masses > 38, every mass becomes floor(mass/2) and the removed total goes to waste; record the cycle. If sum <= 38, nothing.\nReport end masses, end stages, all stage changes, moult cycles, final waste, and the balance check start total + total feed = end total + waste.",
+  "working": "Cycle 1: feed [0,6,3,5,3,3]. S1 [3,12,9,7,5,4]. S2: ch2 excess 4 to ch3 (13), ch3 excess 1 to ch4 (8), ch4 excess 2 to ch5 (7) -> [3,8,12,6,7,4], waste 0. S3: ch2 8>=6 P, ch3 12>=9 P, ch4 6>=5 P, ch5 7>=7 P; ch1 3, ch6 4 stay L. Stages [L,P,P,P,P,L]. S4 amounts [0,4,6,3,3,1]: ch1 3+4=7, ch2 8-4+6=10, ch3 12-6+3=9, ch4 6-3+3=6, ch5 7-3=4, ch6 4-1=3 (1 to waste) -> [7,10,9,6,4,3], waste 1. S5 total 39 > 38 MOULT -> [3,5,4,3,2,1], removed 21, waste 22.\nCycle 2: feed [4,2,0,1,1,7]. S1 [7,7,4,4,3,8]. S2: ch6 excess 1 to waste -> [7,7,4,4,3,7], waste 23. S3: ch1 L 7>=7 -> P; ch2 P stays; ch3 P 4<=4 -> L; ch4 P 4 stays; ch5 P 3<=3 -> L; ch6 L 7>=5 -> P. Stages [P,P,L,P,L,P]. S4 amounts [3,3,1,2,0,3]: ch1 7-3+3=7 (3 waste), ch2 7-3=4, ch3 4-1+2=5 (1 waste), ch4 4-2=2, ch5 3-0+3=6, ch6 7-3=4 -> [7,4,5,2,6,4], waste 27. S5 total 28, no moult.\nCycle 3: feed [4,4,3,0,0,6]. S1 [11,8,8,2,6,10]. S2: ch1 excess 1 to ch2 (9), ch2 excess 1 to ch3 (9), ch6 excess 3 to waste -> [10,8,9,2,6,7], waste 30. S3: ch3 L 9>=9 -> P; ch4 P 2<=2 -> L; ch5 L 6<7 stays L; ch1, ch2, ch6 stay P. Stages [P,P,P,L,L,P]. S4 amounts [5,4,4,0,1,3]: ch1 10-5+4=9 (5 waste), ch2 8-4+4=8, ch3 9-4=5, ch4 2, ch5 6-1+3=8 (1 waste), ch6 7-3=4 -> [9,8,5,2,8,4], waste 36. S5 total 36, no moult.\nCycle 4: feed [7,6,7,1,3,0]. S1 [16,14,12,3,11,4]. S2: ch1 excess 6 (ch2 20), ch2 excess 12 (ch3 24), ch3 excess 12 (ch4 15), ch4 excess 9 (ch5 20), ch5 excess 11 (ch6 15), ch6 excess 8 to waste -> [10,8,12,6,9,7], waste 44. S3: ch4 L 6>=5 -> P; ch5 L 9>=7 -> P; others stay P. Stages all P. S4 amounts [5,4,6,3,4,3]: ch1 10-5+4=9 (5 waste), ch2 8-4+6=10, ch3 12-6+3=9, ch4 6-3+4=7, ch5 9-4+3=8, ch6 7-3=4 -> [9,10,9,7,8,4], waste 49. S5 total 47 > 38 MOULT -> [4,5,4,3,4,2], removed 25, waste 74.\nCycle 5: feed [0,6,6,3,3,0]. S1 [4,11,10,6,7,2]. S2: ch2 excess 3 (ch3 13), ch3 excess 1 (ch4 7), ch4 excess 1 (ch5 8) -> [4,8,12,6,8,2], waste 74. S3: ch6 P 2<=2 -> L; others stay P (ch1 4>3). Stages [P,P,P,P,P,L]. S4 amounts [2,4,6,3,4,0]: ch1 4-2+4=6 (2 waste), ch2 8-4+6=10, ch3 12-6+3=9, ch4 6-3+4=7, ch5 8-4+0=4, ch6 2 -> [6,10,9,7,4,2], waste 76. S5 total 38, not > 38, no moult. End: [6,10,9,7,4,2] (ch2 10 > limit 8 and ch4 7 > limit 6 stay uncorrected, per the sheet).",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "LARVAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting total 3+6+6+2+2+1 = 20. Feed totals by cycle: 20, 15, 17, 24, 18 = 94. Input total 20 + 94 = 114. End total 6+10+9+7+4+2 = 38. Final waste 76. Output total 38 + 76 = 114. Balanced (114 = 114). Waste by source: carry-forward overflow from chamber 6 = 1 + 3 + 8 = 12; larval metabolism = 1 + 1 + 0 + 1 + 0 + 0 = 3 (cycle 1: 1; cycle 2: 1; cycle 3: 1); chamber 1 pupal discards = 3 + 5 + 5 + 2 = 15; moults = 21 + 25 = 46. Total 12 + 3 + 15 + 46 = 76.",
+  "usedScript": true,
+  "notes": "I ran a short Python script for the arithmetic (scratchpad sim.py), then checked every cycle by hand; the hand check matches the script. The moult in cycle 1 fires at a total of 39 (just over 38). The cycle 5 total is exactly 38, so no moult. After the cycle 5 reabsorption, chambers 2 and 4 end above their holding limits (10 against 8, 7 against 6). The sheet says this is left uncorrected. I read \"moult\" as the document's global reset, and the moult cycles go in resetPeriods."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true
+ }
+}

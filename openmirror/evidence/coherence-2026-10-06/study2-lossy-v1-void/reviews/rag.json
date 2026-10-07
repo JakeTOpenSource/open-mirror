@@ -1,0 +1,144 @@
+{
+ "documentLosses": [
+  {
+   "rule": "Levels are whole numbers and never negative",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "absent",
+   "explanation": "Never stated. Chunk counts being non-negative integers is left to domain sense."
+  },
+  {
+   "rule": "Spill-over sets an over-capacity cell to exactly its capacity",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "Anything over budget moves out to the next tier, so it can push that tier over before you reach it.",
+   "explanation": "The sentence implies the tier is cut to budget but never says the level becomes exactly C."
+  },
+  {
+   "rule": "Mode check reads the level after spill-over in the same period",
+   "kind": "ambiguous",
+   "documentQuote": "Flag. A COLD tier at or above its HOT mark goes HOT; a HOT tier at or below its COLD mark goes COLD.",
+   "explanation": "The sentence names no count to compare. The post-evict timing follows only from the pass order."
+  },
+  {
+   "rule": "A cell changes mode at most once per period",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "absent",
+   "explanation": "This follows from there being a single flag pass, but it is never stated."
+  },
+  {
+   "rule": "Mode changes are recorded as (period, cell, old mode, new mode)",
+   "kind": "missing",
+   "documentQuote": "Log every flip.",
+   "explanation": "The tuple format appears only in the Report examples, not as a rule."
+  },
+  {
+   "rule": "Release amounts use each cell's mode as set by this period's mode check",
+   "kind": "ambiguous",
+   "documentQuote": "Off the post-flag counts, a COLD tier compacts a quarter of its chunks (round down)",
+   "explanation": "'Post-flag counts' names the counts but not which flag governs the rate. The current-period flag has to be inferred."
+  },
+  {
+   "rule": "All six releases are applied at once: each cell loses its own amount while it receives the amount from cell n+1",
+   "kind": "ambiguous",
+   "documentQuote": "Work out all six amounts before moving anything.",
+   "explanation": "The write-up says to compute first but does not say to apply simultaneously, or that received chunks are not re-released."
+  },
+  {
+   "rule": "Reset removes count - floor(count/2) from each cell, and that amount goes to LOST",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "every tier halves (round down), removed chunks dropped.",
+   "explanation": "For odd counts, the amount removed (the larger half) is left implicit."
+  },
+  {
+   "rule": "The reset compares the total after release with G",
+   "kind": "ambiguous",
+   "documentQuote": "If the stack totals more than 38, context reset",
+   "explanation": "Strictness is clear ('Exactly 38 is fine'). The timing after rebalance is implied only by pass order."
+  },
+  {
+   "rule": "Balance check: starting levels + all intake = final levels + LOST",
+   "kind": "missing",
+   "documentQuote": "balance: 20 at start + 94 loaded = 114 = 38 held + 76 dropped.",
+   "explanation": "Given only as worked numbers, never as a general rule."
+  },
+  {
+   "rule": "(none in abstract) The full output",
+   "kind": "added",
+   "documentQuote": "Report. At the end of cycle 5 hand in: holdings 6, 10, 9, 7, 4, 2; states HOT, HOT, HOT, HOT, HOT, COLD; flips (1,2,COLD,HOT) ... dropped 76",
+   "explanation": "The write-up includes the complete true answer. Operators could anchor on it or copy it instead of deriving it, so an exact match proves less."
+  }
+ ],
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": false,
+   "errorTypes": [
+    "reporting-format"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Produce an end-of-cycle report",
+     "explanation": "No report or working was returned ('Report and working: null'; comparison 'available':false). There is no text to locate a cause in.",
+     "operatorQuote": "null"
+    }
+   ],
+   "gapsCorrectlyFlagged": 0,
+   "gapsSilentlyAssumed": 0,
+   "gapHandling": "Nothing was produced, so no gap handling can be assessed."
+  },
+  {
+   "arm": "B",
+   "exactlyRight": true,
+   "errorTypes": [
+    "arithmetic-or-execution"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Balance check breakdown",
+     "explanation": "Cycle 1 intake is 20, not 14, and 14+15+17+24+18 = 88, not 94. The total 94 is right but the breakdown is false, which suggests the total was taken from the write-up rather than summed. None of the scored outputs are affected.",
+     "operatorQuote": "20 at start + 94 loaded (14+15+17+24+18) = 114",
+     "documentQuote": "balance: 20 at start + 94 loaded = 114"
+    },
+    {
+     "rule": "Spill-over cascade narration",
+     "explanation": "In cycle 1, tier 3 was at 13 and sent 1, and tier 4 sent 2. In cycle 5, tier 3 was at 13 and sent 1. The cycle 4 transfer annotations ('8 to tier 4, 5 to tier 5, 7 to tier 6') are also wrong (actual: 12, 9, 11). The resulting arrays are correct anyway.",
+     "operatorQuote": "tier 3 0 over, tier 4 +1 to tier 5 ... 0 to tier 4 since 12=budget"
+    }
+   ],
+   "gapsCorrectlyFlagged": 4,
+   "gapsSilentlyAssumed": 7,
+   "gapHandling": "Where the write-up was silent, B guessed the engineer's intent: simultaneous rebalance, floor-halving with the larger half dropped, and the reset checked after rebalance. It also noted the embedded Report as claims to check. It silently assumed integer counts, cut-to-budget, the post-evict flag read, single flips, flip format, the current-period flag for the rebalance rate, and the balance rule. Its boundary flag ('at or above') was not a real loss."
+  },
+  {
+   "arm": "C",
+   "exactlyRight": true,
+   "errorTypes": [
+    "arithmetic-or-execution"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Balance check breakdown",
+     "explanation": "Cycle 1 intake is 20, not 17, and 17+15+17+24+18 = 91. The stated 94 matches the write-up but not C's own breakdown. The loss breakdown 12+3+15+46 is correct.",
+     "operatorQuote": "94 loaded (17+15+17+24+18)",
+     "documentQuote": "20 at start + 94 loaded = 114"
+    },
+    {
+     "rule": "Spill-over cascade in cycle 1",
+     "explanation": "Tier 3 reached 13 and passed 1 on, and tier 4 passed 2 to tier 5. C's narration and notes contradict its own correct array [3,8,12,6,7,4].",
+     "operatorQuote": "3 is now exactly at its budget of 12, 4->5 gets 1"
+    },
+    {
+     "rule": "Final over-budget tiers",
+     "explanation": "Tier 4 also ends over budget (7 vs 6). C names only tier 2.",
+     "operatorQuote": "Tier 2 ends above its budget (10 vs 8)"
+    }
+   ],
+   "gapsCorrectlyFlagged": 4,
+   "gapsSilentlyAssumed": 7,
+   "gapHandling": "C guessed the engineer's intent: the post-evict count for the flag pass, simultaneous rebalance with no re-release of received chunks, and the reset checked after rebalance. It also stated that it computed before reading the embedded Report. It silently assumed integers, cut-to-budget, single flips, flip format, the current-period flag for the rebalance rate, the reset's removed amount, and the balance rule."
+  }
+ ],
+ "domainPull": "The pull was strongest in Rebalance and Reset. In a cache or RAG stack, promotion into a tier closer to the LLM would be trimmed to budget on insert, 'compaction' suggests summarizing chunks rather than discarding them, and a 'context reset' suggests clearing everything. The write-up had to override each of these explicitly ('A promotion can leave a tier over budget; that waits for next cycle's evict', 'compacts ... dropped', 'every tier halves'). Nobody fell for any of them, and the embedded Report answer meant the pull was never really tested.",
+ "preReadNamedTheBreak": "n/a: nobody fell. Operator C also did not run the pre-read at all: \"I did not run the pre-read procedure this time ... did not open the desk-preread.md file again.\"",
+ "preReadEffect": "No difference. C skipped the pre-read and ended with the same exact scored output, and the same count of real gaps flagged (4) and silently assumed (7), as B. C aimed one flag at the post-evict count where B flagged reset rounding, and both carried the same kind of narration and balance-breakdown slips.",
+ "summary": "The write-up compressed about ten rules into pass order and domain sense, and it also embedded the full true answer in its Report paragraph. That makes B's and C's exact matches weak evidence of independent derivation, especially since both give an intake breakdown that does not sum to the 94 they report, and both narrate cycle-1 evictions that contradict their own correct arrays. A produced nothing, C skipped the required pre-read, and B and C each flagged 4 real gaps and silently assumed 7, so the treatments show no measurable difference."
+}

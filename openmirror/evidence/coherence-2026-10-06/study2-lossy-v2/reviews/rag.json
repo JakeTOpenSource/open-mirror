@@ -1,0 +1,42 @@
+{
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 6,
+   "gapsSilentlyAssumed": 3,
+   "followedEngineerNotDomain": "Engineer's process: where the write-up only says \"Anything over budget moves out to the next tier\", A assumed \"Only the excess above budget moves. The tier is left holding exactly its budget.\""
+  },
+  {
+   "arm": "B",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 4,
+   "gapsSilentlyAssumed": 5,
+   "followedEngineerNotDomain": "Engineer's process: B kept mode changes inside the one pass, \"Flags change only in the Flag pass\", and did not let a reset or promotion re-tier a buffer the way a live cache might."
+  },
+  {
+   "arm": "C",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 5,
+   "gapsSilentlyAssumed": 4,
+   "followedEngineerNotDomain": "Engineer's process: C used the simultaneous snapshot rule, \"incoming promotions do not change the receiving tier's compaction or promotion amount\", and ignored real RAG cache behaviour."
+  }
+ ],
+ "applicableLosses": 9,
+ "domainPull": "The RAG terms pull hardest at the Rebalance and Reset passes. Real stacks do not drop chunks promoted into the LLM, compact by a fixed quarter, or halve every tier on overflow, and a \"context reset\" invites reading it as a flush or a re-flag. The write-up heads this off with explicit wording (\"tier 1's promotion is dropped\", \"every tier halves (round down)\", \"Exactly 38 is fine\"), so none of the three operators was pulled off course.",
+ "preReadNamedTheBreak": "n/a: nobody fell. All three operators matched the true answer exactly. C's notes did name the domain hazards in advance (\"real RAG systems do not halve every cache on overflow, do not throw away chunks promoted into the model, and do not compact by a fixed quarter\").",
+ "preReadEffect": "No difference. All three operators were exactly right, and C flagged 5 of the 9 applicable losses, against 6 for A and 4 for B. The pre-read did lead C to flag two points the others left silent: post-flag mode (\"Whether a tier that has just flipped rebalances under its new flag\") and reset ordering. But C missed the spill-to-capacity and once-per-period points that A listed, so the pre-read did not improve correctness or coverage overall.",
+ "summary": "All three operators reproduced the true answer exactly, with no errors, and every assumption followed the engineer's process rather than real RAG behaviour. Coverage of the 9 applicable losses was A 6, C 5 and B 4. No operator flagged the whole-number/non-negative rule or the flip-record format, and only C flagged that release uses the post-flag mode. The pre-read named the domain hazards up front but made no measurable difference, because the write-up's explicit wording already blocked the domain pull."
+}

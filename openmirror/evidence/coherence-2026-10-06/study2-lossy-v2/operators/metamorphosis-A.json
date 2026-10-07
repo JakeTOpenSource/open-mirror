@@ -1,0 +1,162 @@
+{
+ "run": {
+  "procedureSummary": "1. Feed: add the cycle's ration to each chamber 1-6. No trimming. 2. Overflow: walk chambers 1 to 6 in order. If a chamber is over its limit (10,8,12,6,9,7), set it to the limit and add the excess to the next chamber before checking that one, so overflow cascades. Chamber 6's excess goes to the loss tally. 3. Stage check, using the post-overflow mass: LARVAL at or above its pupation mark (7,6,9,5,7,5) becomes PUPAL. PUPAL at or below its fallback mark (3,2,4,2,3,2) becomes LARVAL. Anything else keeps its stage. Each change is logged. 4. Metabolism: record all six masses first, then apply every change from that record at once. LARVAL burns floor(w/4), which goes to the tally. PUPAL moves floor(w/2) to the chamber one number lower; chamber 1's half goes to the tally. No trimming. 5. Moult: total the line. If the total is above 38, each chamber sheds floor(m/2), keeps the rest, and the shed mass goes to the tally. At 38 or below, nothing happens. Script: C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py",
+  "openPoints": [
+   {
+    "point": "Rounding when a chamber halves in the moult: is the shed amount or the kept amount rounded down?",
+    "assumption": "The amount that moves (the shed mass) is floor(m/2) and the chamber keeps the remainder, ceil(m/2). This matches metabolism, where the amount moved or burned is the rounded-down part. If instead the kept amount were rounded down, odd chambers would lose 1 more each time, so cycles 1, 4 and 5 would come out different."
+   },
+   {
+    "point": "Metabolism rounding",
+    "assumption": "Burn = floor(w/4) and reabsorbed half = floor(w/2), both worked out from the masses recorded before any metabolism change. A chamber can receive from the chamber behind it and give to the one ahead in the same step."
+   },
+   {
+    "point": "Which mass the stage check uses",
+    "assumption": "The mass after overflow in the same cycle, before metabolism."
+   },
+   {
+    "point": "Moult threshold boundary",
+    "assumption": "Strictly above 38 fires. The total of exactly 38 in cycle 3 did not fire."
+   },
+   {
+    "point": "Overflow cascade order",
+    "assumption": "One pass from 1 to 6, adding each excess to the next chamber before that chamber is checked."
+   },
+   {
+    "point": "Moult total",
+    "assumption": "Taken after metabolism, as the line stands at the start of step 5."
+   }
+  ],
+  "cycleFigures": "C1: feed [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] (tail loss 0); stages L,P,P,P,P,L; metabolism [7,10,9,6,4,3]; total 39 >38, moult [4,5,5,3,2,2]; tally 19. C2: feed [8,7,5,4,3,9]; overflow [8,7,5,4,3,7] (tail 2); stages P,P,P,P,L,P; metabolism [7,6,5,2,6,4]; total 30, no moult; tally 25. C3: feed [11,10,8,2,6,10]; overflow [10,8,11,2,6,7] (tail 3); stages P,P,P,L,L,P; metabolism [9,9,6,2,8,4]; total 38, no moult; tally 34. C4: feed [16,15,13,3,11,4]; overflow [10,8,12,6,9,7] (tail 10); stages all P; metabolism [9,10,9,7,8,4]; total 47 >38, moult [5,5,5,4,4,2]; tally 71. C5: feed [5,11,11,7,7,2]; overflow [5,8,12,6,9,3] (tail 0); stages all P; metabolism [7,10,9,7,6,2]; total 41 >38, moult [4,5,5,4,3,1]; tally 92.",
+  "finalQuantities": [
+   4,
+   5,
+   5,
+   4,
+   3,
+   1
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4,
+   5
+  ],
+  "lossTotal": 92,
+  "balanceCheck": "Mass at start 20 + all feed 94 = 114, against mass in chambers 22 + loss tally 92 = 114. The two sides match.",
+  "usedScript": true,
+  "notes": "I used a short Python script for the arithmetic, saved in the scratchpad as sim.py. The result depends on how the moult halves an odd chamber. I took the shed amount as floor(m/2), so the chamber keeps the larger half. The other reading would change the end figures. Cycle 3 totalled exactly 38, so the moult did not fire that cycle.",
+  "preReadNotes": "I read the write-up metamorphosis.md in full before working. It contains no instructions aimed at the agent, only the line's rules and this run's data."
+ },
+ "grade": {
+  "available": true,
+  "exact": false,
+  "finalOk": false,
+  "modesOk": false,
+  "changesOk": false,
+  "purgesOk": false,
+  "lostOk": false,
+  "got": {
+   "final": [
+    4,
+    5,
+    5,
+    4,
+    3,
+    1
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED"
+   ],
+   "resetPeriods": [
+    1,
+    4,
+    5
+   ],
+   "loss": 92
+  },
+  "missingChanges": [
+   "2|3|ELEVATED|NORMAL",
+   "3|3|NORMAL|ELEVATED",
+   "5|6|ELEVATED|NORMAL"
+  ],
+  "extraChanges": [],
+  "usedScript": true,
+  "openPoints": 6,
+  "preReadLength": 151
+ }
+}

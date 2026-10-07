@@ -1,0 +1,145 @@
+{
+ "run": {
+  "rulesInOwnWords": "Six teams (positions 1-6) each hold a whole, non-negative open-ticket count and a status (ROUTINE or ESCALATED). All start ROUTINE. The closed tally starts at 0. Each sprint (cycle) runs five steps in order, and each step is finished for all six teams before the next one starts.\n1) Arrivals: add the sprint's New Tickets amount to each team. The WIP limit is not applied here.\n2) Overflow: go through teams 1 to 6 in order. If a team's count is above its WIP limit, move the excess (count minus limit) to the next team and set the team to exactly its limit. Excess from team 6 is added to the closed tally. Because the pass runs in order, excess moved into a team counts when that team is checked, so overflow can cascade down the line.\n3) Status, based on the counts after step 2: a ROUTINE team with count >= its upper mark becomes ESCALATED. An ESCALATED team with count <= its lower mark becomes ROUTINE. Every other team keeps its status. A team changes at most once per sprint, and each change is recorded.\n4) Work-off: first work out every team's amount from its current count. ROUTINE gives floor(count/4) and ESCALATED gives floor(count/2). Then apply all six at once. Each team loses its amount. A ROUTINE amount goes to the closed tally. An ESCALATED amount goes back to the previous team (n-1); for team 1 it goes to the closed tally instead. Tickets bounced into a team do not change that team's amount, and no WIP limit is applied.\n5) Halving: add up all six counts. If the total is over 38, every count becomes floor(count/2) and the removed tickets go to the closed tally; that sprint is recorded as a reset. If the total is 38 or less, nothing happens.\nStop after step 5 of sprint 5. Balance: starting total + all arrivals = end total + closed tally.",
+  "working": "Settings (WIP/upper/lower): T1 10/7/3, T2 8/6/2, T3 12/9/4, T4 6/5/2, T5 9/7/3, T6 7/5/2. Start [3,6,6,2,2,1], closed 0.\nStatus codes: R = ROUTINE, E = ESCALATED.\n\nSPRINT 1\nS1 (+0,6,3,5,3,3): [3,12,9,7,5,4]\nS2: T2 has 4 over its limit, which goes to T3 (13). T3 has 1 over, which goes to T4 (8). T4 has 2 over, which goes to T5 (7). Result [3,8,12,6,7,4], closed 0.\nS3: T2, T3, T4 and T5 go from ROUTINE to ESCALATED. Statuses [R,E,E,E,E,R].\nS4: amounts [0,4,6,3,3,1]. T2's 4 goes to T1, T3's 6 to T2, T4's 3 to T3, T5's 3 to T4, and T6's 1 is closed. Result [7,10,9,6,4,3], closed 1.\nS5: total 39 > 38, so halving fires. Result [3,5,4,3,2,1] with 21 removed. Closed 22.\n\nSPRINT 2\nS1 (+4,2,0,1,1,7): [7,7,4,4,3,8]\nS2: T6 has 1 over, which is closed. Result [7,7,4,4,3,7], closed 23.\nS3: T1 goes R to E (7>=7). T3 goes E to R (4<=4). T5 goes E to R (3<=3). T6 goes R to E (7>=5). T2 stays E (7). T4 stays E (4). Statuses [E,E,R,E,R,E].\nS4: amounts [3,3,1,2,0,3]. T1's 3 is closed (it has no previous team). T2's 3 goes to T1. T3's 1 is closed. T4's 2 goes to T3. T6's 3 goes to T5. Result [7,4,5,2,6,4], closed 27.\nS5: total 28, no halving. Result [7,4,5,2,6,4], closed 27.\n\nSPRINT 3\nS1 (+4,4,3,0,0,6): [11,8,8,2,6,10]\nS2: T1 has 1 over, which goes to T2 (9). T2 has 1 over, which goes to T3 (9). T6 has 3 over, which are closed. Result [10,8,9,2,6,7], closed 30.\nS3: T3 goes R to E (9>=9). T4 goes E to R (2<=2). Statuses [E,E,E,R,R,E].\nS4: amounts [5,4,4,0,1,3]. T1's 5 is closed. T2's 4 goes to T1. T3's 4 goes to T2. T5's 1 is closed. T6's 3 goes to T5. Result [9,8,5,2,8,4], closed 36.\nS5: total 36, no halving.\n\nSPRINT 4\nS1 (+7,6,7,1,3,0): [16,14,12,3,11,4]\nS2: T1 has 6 over, which goes to T2 (20). T2 has 12 over, which goes to T3 (24). T3 has 12 over, which goes to T4 (15). T4 has 9 over, which goes to T5 (20). T5 has 11 over, which goes to T6 (15). T6 has 8 over, which are closed. Result [10,8,12,6,9,7], closed 44.\nS3: T4 goes R to E. T5 goes R to E. All six are now ESCALATED.\nS4: amounts [5,4,6,3,4,3]. T1's 5 is closed, and every other amount bounces back to the previous team. Result [9,10,9,7,8,4], closed 49.\nS5: total 47 > 38, so halving fires. Result [4,5,4,3,4,2] with 25 removed. Closed 74.\n\nSPRINT 5\nS1 (+0,6,6,3,3,0): [4,11,10,6,7,2]\nS2: T2 has 3 over, which goes to T3 (13). T3 has 1 over, which goes to T4 (7). T4 has 1 over, which goes to T5 (8). Result [4,8,12,6,8,2], closed 74.\nS3: T6 goes E to R (2<=2). T1 stays E (4 is between 3 and 7). Statuses [E,E,E,E,E,R].\nS4: amounts [2,4,6,3,4,0]. T1's 2 is closed, and T2 to T5 bounce back to the previous team. Result [6,10,9,7,4,2], closed 76.\nS5: total 38, which is not over 38, so no halving.\nEnd: [6,10,9,7,4,2], closed 76.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "ESCALATED",
+   "ESCALATED",
+   "ESCALATED",
+   "ESCALATED",
+   "ESCALATED",
+   "ROUTINE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "ESCALATED",
+    "to": "ROUTINE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "ESCALATED",
+    "to": "ROUTINE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "ESCALATED",
+    "to": "ROUTINE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "ESCALATED",
+    "to": "ROUTINE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Left side: starting counts 3+6+6+2+2+1 = 20, plus New Tickets by sprint 20+15+17+24+18 = 94. Total 114. Right side: end counts 6+10+9+7+4+2 = 38, plus closed tally 76. Total 114. Both sides are 114, so the balance holds.",
+  "usedScript": true,
+  "notes": "I used a short Python script for the arithmetic and checked sprints 1 and 2 by hand. In sprint 5, step 5, the total is exactly 38, which is not more than the target, so the halving did not fire."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true
+ }
+}

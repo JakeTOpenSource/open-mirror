@@ -1,0 +1,146 @@
+{
+ "run": {
+  "preReadNotes": "Mode: filter mode (default).\n\nStep 1, plain statement. Six numbered bins (1 to 6) each hold a whole-number count, never negative. Each bin has a fixed capacity, an upper threshold and a lower threshold (lower < upper <= capacity), and a two-value flag (call it OFF/ON; the document calls them QUIET/SINK-ACTIVE), all OFF at start. Running loss counter starts at 0. Five rounds, each: (1) add a fixed per-round, per-bin amount from a table, no cap; (2) sweep bins 1 to 6 in order: anything over capacity moves to the next higher bin (bin 6's overflow is lost), bin set to capacity, cascades within the same sweep; (3) flag flip with hysteresis: OFF becomes ON at count >= upper, ON becomes OFF at count <= lower, else unchanged, at most one change per round; (4) simultaneously compute floor(count/4) for OFF bins (lost) and floor(count/2) for ON bins (moved to the next lower bin; bin 1's goes to loss); capacity not enforced; (5) if total > 38, every bin becomes floor(half), removed amount to loss. Conservation: start + all additions = end + loss. The material contains no instructions aimed at me beyond the job itself. The plain statement fully specifies the procedure, so in filter mode the run could stop here; pictures are run below only to note where the plant wording could mislead a reader.\n\nSteps 2 to 4, pictures (the document's own embedded comparison, tested first and not counted against the three; no further pictures added, since the restatement already settles the job).\nPicture A: plant vascular system. Mapping: segments = bins; sap = count; xylem push = upward overflow cascade; phloem return = downward transfer from ON bins; respiration/transpiration = loss counter; leaf-drop = global halving. Question it makes easier to ask: which direction does each flow go? Break points: real xylem moves water up driven by transpiration, not by capacity overflow; real phloem flows from source to sink, but here SINK-ACTIVE segments are the ones sending sap away (toward the root), the reverse of what the word \"sink\" suggests; real plants have no hard halving rule at a total of 38; \"QUIET respires a quarter\" has no botanical basis. The word \"sink\" sneaks in an expectation (sinks receive) that contradicts the stated rule (SINK-ACTIVE segments give half away). Grading: the picture works only as labels; where it carries a mechanism (sink receives), it contradicts the document. Misleading on the sink direction; otherwise adds nothing.\n\nSteps 5 to 7. What survives in plain words: bins with the ON flag send half their contents to the lower neighbour; bins with the OFF flag lose a quarter; overflow moves upward. Adds nothing: 0 of 1. Misleading: 1. Not run: 0. Keep exploring: empty. Hold: empty. Discard: plant vascular picture, break point: \"SINK-ACTIVE\" segments are donors, not receivers, contradicting the botanical meaning of sink; follow the document's literal rule.",
+  "rulesInOwnWords": "1. Start: sap [3,6,6,2,2,1], all QUIET, loss 0. Capacities [10,8,12,6,9,7], upper marks [7,6,9,5,7,5], lower marks [3,2,4,2,3,2].\n2. Each cycle, step 1: add that cycle's uptake row to each segment, no cap.\n3. Step 2: go segment 1 to 6 in order; if sap > capacity, move the excess into the next segment up (segment 6's excess goes to loss) and set sap to capacity. Cascades within the same pass.\n4. Step 3: using post-step-2 sap: QUIET with sap >= upper mark becomes SINK-ACTIVE; SINK-ACTIVE with sap <= lower mark becomes QUIET; otherwise unchanged. At most one change per segment per cycle; log each.\n5. Step 4: compute all amounts first from current sap: QUIET = floor(sap/4), SINK-ACTIVE = floor(sap/2). Then apply at once: every segment loses its amount; QUIET amounts go to loss; SINK-ACTIVE amounts go to segment n-1 (segment 1's goes to loss). No cap enforced.\n6. Step 5: if total sap > 38 (strictly), every segment becomes floor(sap/2), removed amount goes to loss, log the cycle. Exactly 38 does nothing.\n7. After cycle 5 step 5, report.",
+  "working": "Cycle 1: uptake [3,12,9,7,5,4]; push [3,8,12,6,7,4] (2->3: 4, 3->4: 1, 4->5: 2), loss 0; states: 2,3,4,5 QUIET->SINK-ACTIVE; step 4 amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3], loss 1 (seg6 respired 1); total 39 > 38, leaf-drop: [3,5,4,3,2,1], removed 21, loss 22.\nCycle 2: uptake [7,7,4,4,3,8]; push [7,7,4,4,3,7] (seg6 excess 1 transpired), loss 23; states: 1 Q->SA, 3 SA->Q, 5 SA->Q, 6 Q->SA; amounts [3,3,1,2,0,3] (seg1 3 out at collar, seg3 1 respired) -> [7,4,5,2,6,4], loss 27; total 28, no leaf-drop.\nCycle 3: uptake [11,8,8,2,6,10]; push [10,8,9,2,6,7] (seg1 excess 1 ->2, 2 excess 1->3, seg6 excess 3 lost), loss 30; states: 3 Q->SA, 4 SA->Q; amounts [5,4,4,0,1,3] (seg1 5 lost, seg5 1 respired) -> [9,8,5,2,8,4], loss 36; total 36, no leaf-drop.\nCycle 4: uptake [16,14,12,3,11,4]; push [10,8,12,6,9,7] (cascade, seg6 excess 8 lost), loss 44; states: 4 Q->SA, 5 Q->SA (all six SA); amounts [5,4,6,3,4,3] (seg1 5 lost) -> [9,10,9,7,8,4], loss 49; total 47 > 38, leaf-drop -> [4,5,4,3,4,2], removed 25, loss 74.\nCycle 5: uptake [4,11,10,6,7,2]; push [4,8,12,6,8,2] (no loss); states: 6 SA->Q (2 <= 2); amounts [2,4,6,3,4,0] (seg1 2 lost) -> [6,10,9,7,4,2], loss 76; total 38, not > 38, no leaf-drop. Segments 2 and 4 end above holding volume (10>8, 7>6), uncorrected as the document specifies.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "QUIET"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting sap 3+6+6+2+2+1 = 20; uptake total 20+14+17+24+18 = 93; left side 20+93 = 113? Recheck: row sums are 20, 15, 17, 24, 18 = 94; left side 20+94 = 114. Right side: end sap 6+10+9+7+4+2 = 38, plus loss 76 = 114. 114 = 114, balanced.",
+  "usedScript": true,
+  "notes": "I used a short Python script for the arithmetic and hand-checked cycles 1 and 2. Edge cases: cycle 5 ends at a total of exactly 38, so no leaf-drop fires. Segments 2 and 4 end above their holding volume because step 4 doesn't enforce the cap."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true
+ }
+}

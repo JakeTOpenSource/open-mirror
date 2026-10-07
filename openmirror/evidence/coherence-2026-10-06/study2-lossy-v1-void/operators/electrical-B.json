@@ -1,0 +1,165 @@
+{
+ "run": {
+  "rulesInOwnWords": "Setup: six stages (1 = source, 6 = load). Ratings 10,8,12,6,9,7; upper thresholds 7,6,9,5,7,5; lower thresholds 3,2,4,2,3,2; starting charge 3,6,6,2,2,1; every stage starts CLEAR; the ground tally starts at 0; the breaker setting is 38. Each cycle runs five moves in order, and each move finishes across the whole chain before the next one starts.\n1) Charge in: add that cycle's feed to each stage. Ratings are not checked at this point.\n2) Shunts: go through stages 1 to 6 in order. If a stage is over its rating, set it to exactly its rating and add the excess to the next stage (i+1). Stage 6's excess goes to ground. Because you walk in order, excess passed down is included when the next stage is checked.\n3) Comparators: using the post-shunt charge, a CLEAR stage turns ASSERTED if charge >= its upper threshold. An ASSERTED stage turns CLEAR if charge <= its lower threshold. Otherwise the state stays as it is. Log every flip.\n4) Bleed: take a snapshot of all six charges first, then apply every transfer at once. A CLEAR stage loses floor(charge/4) to ground. An ASSERTED stage sends floor(charge/2) to stage i-1, and stage 1's amount goes to ground. States are the ones just set in move 3. Ratings are not checked, so a stage can end above its rating.\n5) Breaker: add up the six charges. If the total is strictly greater than 38, every stage becomes floor(charge/2), the total removed goes to ground, and the cycle is recorded as a reset. At 38 or below, nothing happens.",
+  "gapsFlagged": [
+   {
+    "rule": "Move 4 bleed: which state decides CLEAR leak vs ASSERTED return",
+    "whatYouAssumed": "The state set by this cycle's comparators (move 3) decides it. The write-up's own example of stage 2 ending at 10 on a cycle-5 diode return fits this."
+   },
+   {
+    "rule": "Move 5 breaker: what 'the difference' means",
+    "whatYouAssumed": "The chain total before halving minus the total after halving (all the floor-halving losses added together) goes to ground."
+   },
+   {
+    "rule": "Comparators when a stage is at both thresholds at once / at exactly a threshold",
+    "whatYouAssumed": "Both comparisons include equality ('at or above', 'at or below'). Only one test applies per stage, chosen by its current state, so each stage flips at most once per cycle."
+   },
+   {
+    "rule": "Shunt cascade beyond one stage",
+    "whatYouAssumed": "Excess passed down is added before the next stage is checked, so a cascade can run through several stages in a single walk."
+   }
+  ],
+  "working": "Format: [s1..s6] ground=G\nC1: in [3,12,9,7,5,4] | shunt [3,8,12,6,7,4] G0 (2 dumps 4 into 3; 3 dumps 1 into 4; 4 dumps 2 into 5) | comp: 2,3,4,5 go ASSERTED -> [C,A,A,A,A,C] | bleed [7,10,9,6,4,3] G1 (1 leaks 0; 2 sends 4 to 1; 3 sends 6 to 2; 4 sends 3 to 3; 5 sends 3 to 4; 6 leaks 1) | breaker: sum 39 > 38, halve -> [3,5,4,3,2,1], 21 to ground, G22.\nC2: in [7,7,4,4,3,8] | shunt [7,7,4,4,3,7] G23 | comp: 1 goes ASSERTED, 3 goes CLEAR, 5 goes CLEAR, 6 goes ASSERTED -> [A,A,C,A,C,A] | bleed [7,4,5,2,6,4] G27 | breaker: sum 28, no trip.\nC3: in [11,8,8,2,6,10] | shunt [10,8,9,2,6,7] G30 | comp: 3 goes ASSERTED, 4 goes CLEAR -> [A,A,A,C,C,A] | bleed [9,8,5,2,8,4] G36 | breaker: sum 36, no trip.\nC4: in [16,14,12,3,11,4] | shunt [10,8,12,6,9,7] G44 | comp: 4 goes ASSERTED, 5 goes ASSERTED -> all A | bleed [9,10,9,7,8,4] G49 | breaker: sum 47 > 38, halve -> [4,5,4,3,4,2], 25 to ground, G74.\nC5: in [4,11,10,6,7,2] | shunt [4,8,12,6,8,2] G74 | comp: 6 goes CLEAR -> [A,A,A,A,A,C] | bleed [6,10,9,7,4,2] G76 | breaker: sum 38, not strictly over, no trip.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "ASSERTED",
+   "ASSERTED",
+   "ASSERTED",
+   "ASSERTED",
+   "ASSERTED",
+   "CLEAR"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting charge 20 + total fed 94 (17+15+17+24+18) = 114. End chain 38 (6+10+9+7+4+2) + ground 76 = 114. It balances.",
+  "usedScript": true,
+  "notes": "I recomputed everything independently with a short Python script, and it agrees with the write-up's Report paragraph on every figure: end charges, states, flips, breaker cycles 1 and 4, and ground 76. Stage 2 ends at 10, above its rating of 8, because of the cycle-5 diode return. It is reported as read.",
+  "preReadNotes": "The write-up's rules are followed exactly as written, not real electrical practice."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "gapsFlagged": 4
+ }
+}

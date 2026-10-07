@@ -1,0 +1,145 @@
+{
+ "run": {
+  "rulesInOwnWords": "1) Charge input: add the cycle's input row to each stage; caps are ignored here. 2) Breakdown shunt, worked strictly from stage 1 to 6 in order: if a stage is above its rated charge, cut it back to rated and add the excess to the next stage (from stage 6 the excess goes to ground). Excess received from upstream counts when that stage's turn comes, so overflow can cascade down the chain. 3) Comparator check on post-shunt charges: a CLEAR stage at or above its upper mark becomes ASSERTED. An ASSERTED stage at or below its lower mark becomes CLEAR. Otherwise the state stays as it was (hysteresis). Log each change. 4) Discharge, computed from a snapshot of all six charges: a CLEAR stage loses floor(charge/4), which goes to ground. An ASSERTED stage loses floor(charge/2), which is fed back to stage n-1 (from stage 1 it goes to ground). Apply all six at once. No cap is applied, so a stage can end above its rated charge. 5) Breaker: if the total charge is strictly over 38, every stage becomes floor(charge/2), the removed charge goes to ground, and the trip is logged. Otherwise nothing happens. Repeat for 5 cycles.",
+  "working": "Start [3,6,6,2,2,1], all CLEAR, ground 0.\nC1: S1 [3,12,9,7,5,4]; S2 [3,8,12,6,7,4] (2->3: 4, 3->4: 1, 4->5: 2), g0; S3 stages 2,3,4,5 go ASSERTED, giving [C,A,A,A,A,C]; S4 amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3], g1; S5 total 39>38, TRIP -> [3,5,4,3,2,1], 21 removed, g22.\nC2: S1 [7,7,4,4,3,8]; S2 [7,7,4,4,3,7], g23; S3 1 C->A, 3 A->C, 5 A->C, 6 C->A, giving [A,A,C,A,C,A]; S4 amounts [3,3,1,2,0,3] -> [7,4,5,2,6,4], g27; S5 total 28, no trip.\nC3: S1 [11,8,8,2,6,10]; S2 [10,8,9,2,6,7] (1->2: 1, 2->3: 1, 6->ground: 3), g30; S3 3 C->A, 4 A->C, giving [A,A,A,C,C,A]; S4 amounts [5,4,4,0,1,3] -> [9,8,5,2,8,4], g36; S5 total 36, no trip.\nC4: S1 [16,14,12,3,11,4]; S2 [10,8,12,6,9,7] (cascade 6,12,12,9,11; 7 to ground... ground +8 total), g44; S3 4 C->A, 5 C->A, all ASSERTED; S4 amounts [5,4,6,3,4,3] -> [9,10,9,7,8,4], g49; S5 total 47>38, TRIP -> [4,5,4,3,4,2], 25 removed, g74.\nC5: S1 [4,11,10,6,7,2]; S2 [4,8,12,6,8,2] (2->3: 3, 3->4: 1, 4->5: 1), g74; S3 6 A->C, giving [A,A,A,A,A,C]; S4 amounts [2,4,6,3,4,0] -> [6,10,9,7,4,2], g76; S5 total 38, not >38, no trip.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "ASSERTED",
+   "ASSERTED",
+   "ASSERTED",
+   "ASSERTED",
+   "ASSERTED",
+   "CLEAR"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting charges 20 + inputs 94 = 114. End charges 38 + ground total 76 = 114. The two sides are equal.",
+  "usedScript": true,
+  "notes": "I ran a short Python script to simulate all five cycles, and I hand-checked cycle 1. In cycle 5 the total is exactly 38, so the breaker does not trip. Stage 2 (10 vs rated 8) and stage 4 (7 vs rated 6) end above their rated charge because of return-diode feedback in cycle 5. As the document says, this excess is never handled."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true
+ }
+}

@@ -1,0 +1,19 @@
+{
+ "restingStateWord": "COLD",
+ "raisedStateWord": "HOT",
+ "rulesYouKnowYouCompressed": [
+  "Chunk counts are whole numbers and never go negative; this is never stated and is left to domain sense.",
+  "Eviction sets an over-budget tier to exactly its budget. 'Anything over budget moves out' implies this but does not say it.",
+  "The flag check reads each tier's count after the evict pass. This is implied only by the pass order.",
+  "A tier flips at most once per cycle. This is implied by the single flag pass and not stated.",
+  "Flips are logged as (cycle, tier, before, after). The format appears only in the Report examples, not as a rule.",
+  "The rebalance amounts use each tier's flag after this cycle's flag pass. 'Off the post-flag counts' compresses this.",
+  "In rebalance, every tier loses its own amount at the same time as it receives a promotion from the tier outside it. This is compressed into 'work out all six amounts before moving anything'.",
+  "'Round down' stands in for floor(count/4) and floor(count/2), including the reset's floor halving.",
+  "The amount a reset removes is each tier's count minus the halved count. 'Removed chunks dropped' leaves this implicit.",
+  "The reset compares the stack total to 38 after rebalance. 'More than 38' covers the strict inequality, but the timing is implied by pass order.",
+  "The balance check is shown only as worked numbers (starting holdings + all loaded chunks = final holdings + drop count), not stated as a general rule.",
+  "Evicted chunks arriving at the next tier add to that tier's count before it is checked. 'Can push that tier over before you reach it' compresses this.",
+  "The global limit G is called the context ceiling, and the order of the five passes is fixed. Both are stated briefly rather than spelled out."
+ ]
+}

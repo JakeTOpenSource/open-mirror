@@ -1,0 +1,181 @@
+{
+ "run": {
+  "preReadNotes": "OPEN MIRROR, FILTER MODE (default). Comparison = the linear algebra / Lagrangian optimisation vocabulary; topic = the operating rules of the line.\n\nStep 1, plain statement. Six whole-number counters start at (3,6,6,2,2,1) with a side pot s = 0, and every counter starts off. Caps (10,8,12,6,9,7). A counter switches on when it reaches (7,6,9,5,7,5) or more and switches off when it falls to (3,2,4,2,3,2) or less. In between, it keeps its setting. Each of five rounds does this: (1) add that round's delivery row; (2) go left to right, cut each counter down to its cap and add the cut amount to the next counter before looking at that one, with counter 6's cut going to the pot; (3) update the on/off settings; (4) work out every counter's move from one snapshot: an off counter puts a quarter (rounded down) into the pot, and an on counter passes half (rounded down) to its left neighbour, with counter 1 passing to the pot. Caps are not re-checked after this step; (5) if the counters add up to more than 38, halve every counter (rounded down) and put what came off into the pot. The write-up also gives the expected end figures. Embedded comparison pulled out: the write-up describes all of this as projection, Gauss-Seidel/Jacobi sweeps, active sets, slack, a penalty and a 1-norm budget. That is the first picture to test and does not count against the three. Does the plain statement answer the question? Yes. It fully fixes the rules, apart from the gaps flagged separately. Filter mode would stop here. I ran the embedded picture anyway because step 1 says to test it. I split it into two facets because they behave differently. No other pictures were added (three is a ceiling).\n\nStep 3/4, facet A: ordering words (\"Gauss-Seidel\" for the left-to-right sweep that uses updated values, \"Jacobi\" for the move computed from one snapshot). The match holds: sequential in-place versus simultaneous from one snapshot. Question it makes easier to ask: does the order of visits change the result? (Yes for step 2, no for step 4.) Break: nothing is iterated to convergence, and each is a single pass. Survives in plain words: \"the cap step runs left to right using already-updated numbers; the move step uses one snapshot for all six.\" The write-up already says this literally (\"push ... before you visit it\", \"compute all six amounts from the same x\"). Grade: adds nothing.\n\nFacet B: constraint words (\"projection onto box bounds\", \"slack\", \"active set\", \"penalty\", \"budget on the 1-norm\", \"Lagrangian\"). Break points: a real projection throws the excess away, but here it is pushed to the next counter. Real slack belongs to a constraint and is not a one-way sink. A real active set is decided by which constraints bind and has no two-threshold memory, and here \"active\" means \"passes half to the left\". A real penalty adds a cost term and does not halve the state. A real budget would be a constraint, but here the 1-norm sits at 38 at the end and is not enforced after step 4. Caps are openly violated at the end. There are no multipliers anywhere. If you read these words with their real meanings, you get the wrong rule in each case: excess discarded, bounds held, budget held. The picture only \"works\" by contradicting what is stated. Marked MISLEADING at step 4. It skips grading.\n\nStep 6 count: Adds nothing: 1 of 2. Misleading: 1. Not run: 0.\nStep 7 piles. Keep exploring: empty. Hold: empty. Discard: facet B (constraint vocabulary). Break point: \"projection/penalty/budget/active set\" carry real meanings (excess discarded, bounds and budget held, binding-constraint activity) that contradict the stated rules (cascade overflow, halving, no enforcement after step 4, hysteresis flags). The operating rules were applied from the literal text, not from the vocabulary. The domain is not safety-critical, so no exploratory label is needed.",
+  "rulesInOwnWords": "State: six nonnegative integers x1..x6 plus a slack pot s (starts at 0). All flags start INACTIVE. Caps c=(10,8,12,6,9,7), on-thresholds u=(7,6,9,5,7,5), off-thresholds d=(3,2,4,2,3,2). Each cycle runs five steps in order, and each step finishes on all six positions before the next step starts.\n1. Load: add the cycle's row of b to x. Caps are not checked here.\n2. Cap sweep, left to right (i = 1..6): if x_i > c_i, set x_i = c_i and add the excess (x_i - c_i) to x_{i+1} before checking position i+1. Position 6's excess goes to s. Excess can cascade down several positions.\n3. Flags, from the post-sweep x: an INACTIVE position with x_i >= u_i becomes ACTIVE. An ACTIVE position with x_i <= d_i becomes INACTIVE. Otherwise the flag is unchanged. Every flip is logged as (cycle, position, before, after).\n4. Shed, simultaneous: compute every amount from the same snapshot first. INACTIVE: floor(x_i/4) leaves x_i and goes to s. ACTIVE: floor(x_i/2) leaves x_i and goes to x_{i-1}, and position 1's share goes to s. Then apply all of them together. There is no cap check afterwards, so a position may sit above its cap until the next cycle's sweep, or for good after cycle 5.\n5. Penalty: if sum(x) > 38 (strictly), replace each x_i with floor(x_i/2), add the total removed (sum of x_i - floor(x_i/2)) to s, and record the cycle.\nUnits are only moved between x and s, never created or destroyed, so start + loaded = sum(x) + s at all times.",
+  "gapsFlagged": [
+   {
+    "rule": "Loss tally (lossTotal) is requested by the task but the write-up never defines 'loss'.",
+    "whatYouAssumed": "Loss = everything that left x into the slack pot s, so lossTotal = s = 76. Breakdown: 12 overflow from position 6 in the sweep, 3 shed by INACTIVE positions, 15 passed out by ACTIVE position 1, and 46 removed by penalties."
+   },
+   {
+    "rule": "The task asks for 'cycles in which the global reset fired'; the write-up has no reset, only the step-5 penalty halving.",
+    "whatYouAssumed": "The global reset is the step-5 penalty (halve every component). resetPeriods = cycles in which the penalty fired."
+   },
+   {
+    "rule": "Amount pushed on in the projection sweep ('the violation').",
+    "whatYouAssumed": "Violation = x_i - c_i when x_i > c_i, otherwise 0. Only the upper bound is clipped, because values never go negative."
+   },
+   {
+    "rule": "Penalty boundary: 'strictly above 38' is checked on the post-shed x.",
+    "whatYouAssumed": "Checked after step 4 of the same cycle. A total of exactly 38 (cycle 5) does not fire."
+   },
+   {
+    "rule": "Penalty halving: what 'came off' means for odd components.",
+    "whatYouAssumed": "New x_i = floor(x_i/2), and x_i - floor(x_i/2) (the larger half for odd x_i) goes to s."
+   },
+   {
+    "rule": "Flag thresholds at equality.",
+    "whatYouAssumed": "Taken as written and inclusive: >= u_i activates and <= d_i deactivates. This matters in cycle 1 position 5 (7 = u5), cycle 2 positions 3 (4 = d3) and 5 (3 = d5), and cycle 5 position 6 (2 = d6)."
+   },
+   {
+    "rule": "Which flag governs the step-4 shed.",
+    "whatYouAssumed": "The flag just updated in step 3 of the same cycle."
+   },
+   {
+    "rule": "Shares received in step 4 by an ACTIVE neighbour.",
+    "whatYouAssumed": "The Jacobi snapshot means a share received this step is not re-shed in the same step, and the receiver is not re-capped."
+   }
+  ],
+  "working": "Start x=(3,6,6,2,2,1), s=0, all INACTIVE.\nC1: load (3,12,9,7,5,4). Sweep: p2 12->8, +4 to p3 = 13 -> 12, +1 to p4 = 8 -> 6, +2 to p5 = 7 (<=9), p6 = 4. Result (3,8,12,6,7,4), s=0. Flags: p2 8>=6 ON, p3 12>=9 ON, p4 6>=5 ON, p5 7>=7 ON; p1 3, p6 4 stay OFF -> I,A,A,A,A,I. Shed amounts (0,4,6,3,3,1): p1 I floor(3/4)=0; p2 A 4->p1; p3 A 6->p2; p4 A 3->p3; p5 A 3->p4; p6 I 1->s. x=(7,10,9,6,4,3), s=1, sum 39 > 38 -> penalty: x=(3,5,4,3,2,1), removed 4+5+5+3+2+2=21, s=22, sum 18.\nC2: load (7,7,4,4,3,8). Sweep: p6 8->7, 1->s. Result (7,7,4,4,3,7), s=23. Flags: p1 7>=7 ON; p3 4<=4 OFF; p5 3<=3 OFF; p6 7>=5 ON; p2, p4 stay ON -> A,A,I,A,I,A. Shed (3,3,1,2,0,3): p1 3->s; p2 3->p1; p3 I 1->s; p4 2->p3; p5 0; p6 3->p5. x=(7,4,5,2,6,4), s=27, sum 28, no penalty.\nC3: load (11,8,8,2,6,10). Sweep: p1 11->10, +1 -> p2 9 -> 8, +1 -> p3 9 (<=12), p4 2, p5 6, p6 10 -> 7, 3->s. Result (10,8,9,2,6,7), s=30. Flags: p3 9>=9 ON; p4 2<=2 OFF -> A,A,A,I,I,A. Shed (5,4,4,0,1,3): p1 5->s; p2 4->p1; p3 4->p2; p4 I 0; p5 I 1->s; p6 3->p5. x=(9,8,5,2,8,4), s=36, sum 36, no penalty.\nC4: load (16,14,12,3,11,4). Sweep: p1 16->10, +6 -> p2 20 -> 8, +12 -> p3 24 -> 12, +12 -> p4 15 -> 6, +9 -> p5 20 -> 9, +11 -> p6 15 -> 7, 8->s. Result (10,8,12,6,9,7), s=44. Flags: p4 6>=5 ON, p5 9>=7 ON -> all A. Shed (5,4,6,3,4,3): x=(9,10,9,7,8,4), s=49, sum 47 > 38 -> penalty: x=(4,5,4,3,4,2), removed 5+5+5+4+4+2=25, s=74, sum 22.\nC5: load (4,11,10,6,7,2). Sweep: p2 11->8, +3 -> p3 13 -> 12, +1 -> p4 7 -> 6, +1 -> p5 8 (<=9), p6 2. Result (4,8,12,6,8,2), s=74. Flags: p6 2<=2 OFF; p1 4 > d1=3 stays ON -> A,A,A,A,A,I. Shed (2,4,6,3,4,0): p1 2->s; p2 4->p1; p3 6->p2; p4 3->p3; p5 4->p4; p6 I floor(2/4)=0. x=(6,10,9,7,4,2), s=76, sum 38, not strictly above 38, so no penalty.\nEnd: x=(6,10,9,7,4,2). p2 (10>8) and p4 (7>6) are over their caps, as the write-up expects. s=76.\nThese figures match the write-up's Report paragraph exactly: x, flags, all 13 flips, penalty cycles 1 and 4, s=76, balance 114.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "ACTIVE",
+   "ACTIVE",
+   "ACTIVE",
+   "ACTIVE",
+   "ACTIVE",
+   "INACTIVE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Start 3+6+6+2+2+1 = 20. Loaded rows 20+15+17+24+18 = 94. Total in = 114. End x = 6+10+9+7+4+2 = 38. End s = 76 (12 from sweep overflow at p6, 3 from INACTIVE sheds, 15 from p1's ACTIVE share, 46 from penalties in cycles 1 and 4). 38 + 76 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "I used a short Python script for the arithmetic: C:/Users/Jaket/AppData/Local/Temp/claude/sim.py. I worked the figures independently, and every one matches the write-up's Report paragraph. The rules were applied from the write-up's literal text. The pre-read flagged the optimisation vocabulary (projection, penalty, budget, active set) as misleading if read with its usual meanings, so I did not apply those meanings. The pre-read file is a reading-aid procedure; it contained nothing directed at me beyond that procedure."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "gapsFlagged": 8
+ }
+}

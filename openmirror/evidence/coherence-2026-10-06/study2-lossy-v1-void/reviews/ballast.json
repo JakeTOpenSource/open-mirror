@@ -1,0 +1,115 @@
+{
+ "documentLosses": [
+  {
+   "rule": "Report contents: the write-up hands the operator the full expected output (final levels, modes, change list, reset periods, LOST, balance), which is not part of the process definition",
+   "kind": "added",
+   "documentQuote": "Report. At the end of cycle 5 hand in: end water 1 to 6: 6, 10, 9, 7, 4, 2. ... Blows: cycles 1 and 4. Overboard: 76.",
+   "explanation": "The abstract process defines only the rules and data; it does not include the result. The write-up includes a report that matches the true answer exactly. That turns the task into one an operator could copy without simulating, and it means a correct report would not show the rules were understood."
+  },
+  {
+   "rule": "Step 3: a cell changes mode at most once per period",
+   "kind": "missing",
+   "documentQuote": "absent",
+   "explanation": "It is never stated. It only follows from the single reading in 'Read the pumps' and the two conditions being exclusive."
+  },
+  {
+   "rule": "Invariant D < U <= C",
+   "kind": "missing",
+   "documentQuote": "absent",
+   "explanation": "It is never stated and can only be inferred from the numbers. The listed data does satisfy it, so it has no effect on the result."
+  },
+  {
+   "rule": "Balance check as a general rule: (sum of starting levels) + (sum of intakes) = (sum of final levels) + LOST",
+   "kind": "missing",
+   "documentQuote": "Balance: 20 at start plus 94 flooded is 114; 38 aboard plus 76 overboard is 114.",
+   "explanation": "The check appears only as a worked instance inside the embedded answer, not as a rule to apply."
+  },
+  {
+   "rule": "Step 4: each cell's level drops by its own release amount",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "LAMINAR moves a quarter, CAVITATING half, rounded down.",
+   "explanation": "The subtraction from the source compartment is implied by 'moves' and is never written out as a decrement."
+  },
+  {
+   "rule": "Step 4: release amounts are computed from levels at the start of the step, and received transfers do not change amounts already sized",
+   "kind": "ambiguous",
+   "documentQuote": "Size every discharge off current readings before touching a valve ... Then open them all together.",
+   "explanation": "'Current readings' could mean the water level or the pump state read in step 3. The simultaneity is stated through valve imagery, not as a rule that incoming backflow does not change the sized discharge."
+  },
+  {
+   "rule": "Step 4: NORMAL release is floor(L/4), as a separate floor",
+   "kind": "ambiguous",
+   "documentQuote": "LAMINAR moves a quarter, CAVITATING half, rounded down.",
+   "explanation": "One trailing 'rounded down' has to cover both fractions. The reader has to supply floor(L/4) for the quarter."
+  },
+  {
+   "rule": "Intake table orientation: rows are periods 1-5, columns are cells 1-6",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "Listed 1 to 6: ... Flooding schedule: Cycle 1: 0, 6, 3, 5, 3, 3",
+   "explanation": "The column order of the schedule is left implicit under the earlier 'Listed 1 to 6' header."
+  },
+  {
+   "rule": "Term mapping (compartment=cell, water=level, volume=capacity, inception mark=U, desinence mark=D, LAMINAR=NORMAL, CAVITATING=ELEVATED, overboard total=LOST, blow=global reset)",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "Every pump starts LAMINAR.",
+   "explanation": "The terms are used without definitions. The mode is described as a pump state, while the triggers compare the compartment's water."
+  }
+ ],
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": false,
+   "errorTypes": [
+    "reporting-format"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Deliver the end-of-cycle report",
+     "operatorQuote": "Report and working: null",
+     "explanation": "No report or working was submitted, and the deterministic comparison is {\"available\":false}. Since there is no working, no break point in the rules can be located."
+    }
+   ],
+   "gapsCorrectlyFlagged": 0,
+   "gapsSilentlyAssumed": 0,
+   "gapHandling": "Cannot be assessed. No output exists, so no gap was flagged or assumed."
+  },
+  {
+   "arm": "B",
+   "exactlyRight": false,
+   "errorTypes": [
+    "reporting-format"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Deliver the end-of-cycle report",
+     "operatorQuote": "Report and working: null",
+     "explanation": "No report or working was submitted, and the deterministic comparison is {\"available\":false}. There is nothing to trace to a rule."
+    }
+   ],
+   "gapsCorrectlyFlagged": 0,
+   "gapsSilentlyAssumed": 0,
+   "gapHandling": "Cannot be assessed. No output exists, so it is unknown whether B would have followed the engineer's intent or the domain's."
+  },
+  {
+   "arm": "C",
+   "exactlyRight": false,
+   "errorTypes": [
+    "reporting-format"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Deliver the end-of-cycle report",
+     "operatorQuote": "This submission is not valid output. A safety classifier stopped my earlier response ... The zeros and the \"NOT PROVIDED\" values are placeholders the schema requires; they are not results",
+     "explanation": "The operator declined to produce the report and filled the schema with placeholders: final [0,0,0,0,0,0], modes 'NOT PROVIDED', no changes, no resets, loss 0. Every field fails the comparison because nothing was computed, not because a rule was misapplied. The operator labelled the placeholders honestly."
+    }
+   ],
+   "gapsCorrectlyFlagged": 0,
+   "gapsSilentlyAssumed": 0,
+   "gapHandling": "No gap handling took place: 'gapsFlagged': [] and 'rulesInOwnWords': 'Not provided.' It neither guessed the engineer's intent nor fell back on the domain's."
+  }
+ ],
+ "domainPull": "The domain pulls hardest in step 4. A CAVITATING pump moves more water (half) than a LAMINAR one (a quarter), and its discharge 'backflows forward' into the bow-ward compartment instead of going overboard. Both reverse what cavitation and pumping physics would suggest, which is lost efficiency and flow out of the hull. The next strongest pulls are the 'Scuppers', which route excess aft into the next compartment rather than overboard, and the instruction that a compartment 'can sit overfull until next cycle's scuppers', which a physical hull cannot do. Nobody can be shown to have fallen for any of this, because no operator produced working.",
+ "preReadNamedTheBreak": "n/a: nobody fell. A and B returned 'Report and working: null', and C's preReadNotes read only 'Not provided. See notes.', so no trap was taken and none was named.",
+ "preReadEffect": "No difference that can be measured. C's pre-read produced no notes and its report is a stated non-submission, and A and B also produced nothing. All three arms have zero gaps flagged and zero assumed, and none has a computed result, so the pre-read's effect on gap flagging or accuracy cannot be seen.",
+ "summary": "The write-up keeps every rule of the abstract process with no wrong-direction errors. Its losses are minor implicit points (the once-per-period change, D<U<=C, the explicit decrement in step 4, the 'current readings' wording, the general balance rule, and the table orientation), plus one significant addition: it embeds the full true answer as the 'Report'. No operator produced a usable report: A and B returned null, and C submitted labelled placeholders after saying 'A safety classifier stopped my earlier response'. As a result, no break point, gap handling, or pre-read effect can be assessed from these texts."
+}

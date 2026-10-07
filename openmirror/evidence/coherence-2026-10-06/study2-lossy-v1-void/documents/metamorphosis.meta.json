@@ -1,0 +1,21 @@
+{
+ "restingStateWord": "LARVAL",
+ "raisedStateWord": "PUPAL",
+ "rulesYouKnowYouCompressed": [
+  "Rounding down is stated once ('any split rounds down') and left to cover the quarter burn-off, the half reabsorption and the moult halving, with no separate floor() stated for each.",
+  "In overflow, the chamber is set back to exactly its limit; the text says only that the excess 'moves into the next chamber'.",
+  "Overflow from chamber n reaching chamber n+1 before n+1 is handled is shown only as 'can cascade down the line'. The step-by-step sequencing within the walk is not spelled out.",
+  "'No trimming yet' after feeding stands in for the rule that capacity is not enforced at feed time. It does not say outright that a chamber may exceed its limit at that point.",
+  "The stage check is meant to be read on post-overflow mass. This follows from the step order and is not stated.",
+  "'At most one stage change per chamber per cycle' is not stated. It follows from a single check per cycle.",
+  "Mass is never negative and is held in whole numbers. Only 'whole units' is stated.",
+  "Metabolism amounts are computed from pre-step mass and applied all at once. This is compressed into 'Weigh all six first, then act.'",
+  "A PUPAL chamber loses its own half. This is implied by 'reabsorb half back into the chamber ahead' and not stated as a separate decrement.",
+  "LARVAL burn-off going to the loss tally is listed only in the tally line, not stated in the metabolism step itself.",
+  "The moult threshold is strictly greater than 38. It is given as 'Above 38' with 'At 38 or under, leave it.'",
+  "Recording which cycles had a moult is not given as a separate in-run instruction. It appears only in the Report.",
+  "The balance-check formula is shown only as the worked equation in the Report. It is not given as a general rule (starting sum + all feed = final sum + loss tally).",
+  "Head and tail stand for upstream and downstream; 'the chamber ahead (one number lower)' gives the reabsorption direction.",
+  "The fallback mark is below the pupation mark, which is at or below the limit. This ordering is not stated and is left to the numbers."
+ ]
+}

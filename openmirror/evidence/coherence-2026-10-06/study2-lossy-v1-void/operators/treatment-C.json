@@ -1,0 +1,181 @@
+{
+ "run": {
+  "preReadNotes": "OPEN MIRROR, filter mode (the default). Comparison = the water and sewage treatment language; topic = the operating rules of the line.\n\nStep 1, plain statement. Six stores in a row, numbered 1 to 6. Each has a capacity (10, 8, 12, 6, 9, 7), an upper threshold (7, 6, 9, 5, 7, 5), a lower threshold (3, 2, 4, 2, 3, 2), a starting count (3, 6, 6, 2, 2, 1) and a two-valued flag that starts at STEADY. All quantities are whole numbers, and every division rounds down. There are five periods. Each period runs five steps in order, and each step finishes across all six stores before the next one starts. (1) Add that period's six input numbers. A store may go above capacity. (2) Go from store 1 to store 6: any excess over capacity moves into the next store before that store is checked, so excess can cascade. Excess from store 6 leaves the system. (3) A STEADY store at or above its upper threshold becomes OVERLOADED. An OVERLOADED store at or below its lower threshold becomes STEADY. Otherwise the flag stays as it is. Every flip is logged. (4) Each store's draw is computed from its current count, then all draws move at the same time. STEADY: floor(count/4) leaves the system. OVERLOADED: floor(count/2) moves back to the previous store, and store 1's amount leaves the system. A store can end above capacity after this step. The excess is handled by the next period's step 2, or stays if this was period 5. (5) If the system total is strictly greater than 38, every store keeps floor(count/2) and the rest leaves the system. A running tally counts everything that leaves. The material also has a 'Report' paragraph with stated end figures. I treat those as content (claimed results to check), not as instructions or as given truth. No instructions in the material are aimed at me. The topic contains the person's own comparison (tanks, weirs, return line, storm bypass, outfall, liquor). I pull it out and test it as picture 1. It does not count toward the ceiling of three. The plain statement fully settles the arithmetic, apart from the gaps flagged separately.\n\nStep 2, pictures: P1 = water and sewage treatment works (the person's own). P2 = thermostat with hysteresis (for the two-threshold flag).\n\nStep 3, mapping. P1: tank = store, volume = capacity, weir = cascade of excess, return line = backward transfer, storm bypass = global halving, outfall = exit tally. The question it makes easier to ask: where does each unit go when it leaves a tank? P2: upper and lower marks = switch-on and switch-off points, with a dead band between them where nothing changes. The question it makes easier to ask: can a store flip twice in one period? (No, there is one evaluation per period.)\n\nStep 4, break points. P1: in real practice, return or recycle flow usually goes to the head of the works, not to the tank just upstream. A real bypass diverts incoming flow; it does not halve every tank's contents. Tanks cannot really hold more than their volume. The picture tempts the reader to assume things nobody supplied: that over-volume after the return step spills at once, that the bypass fires at exactly 38, or that the return from tank 1 goes somewhere other than the outfall. The picture only raises these as questions. The rules as written answer them, so P1 is not marked misleading. P2: it matches the stated band behaviour and sneaks in no fact, apart from the idea of continuous sensing, which the rules replace with one check per period.\n\nStep 5, what survives. P1: everything that leaves the line goes into one tally, and contents can sit above capacity between the step-4 transfers and the next period's cascade. P2: a flag changes only when a threshold is crossed in the stated direction, and between the thresholds it keeps its previous value.\n\nStep 6, grading. P1: adds nothing. Both sentences restate rules 2, 4 and 5 from the plain statement. P2: adds nothing. It restates rule 3. Adds nothing: 2 of 2. Misleading: 0. Not run: 0.\n\nStep 7, piles. Keep exploring: empty. Hold: empty. Discard: empty. The rules are applied exactly as written, not as real treatment practice would suggest.",
+  "rulesInOwnWords": "Six tanks, in whole units. Every split rounds down. Five cycles, and each cycle has five steps, each done for all tanks before the next step starts.\n1) Inflow: add the cycle's row to the tanks. Going over volume is allowed for now.\n2) Weirs: walk tank 1 to tank 6. If a tank holds more than its volume, cut it back to its volume and add the excess to the next tank before checking that tank, so an excess can cascade down the line. Tank 6's excess goes to outfall.\n3) States, judged on the contents after the weirs. STEADY with contents at or above the upper mark becomes OVERLOADED. OVERLOADED with contents at or below the lower mark becomes STEADY. Otherwise no change. Log each change.\n4) Discharge: compute every draw from the post-weir contents, then apply them all at once. STEADY: floor(contents/4) goes to outfall. OVERLOADED: floor(contents/2) goes to the tank before; for tank 1 it goes to outfall. Tanks may end over volume. The next cycle's weirs deal with that, and after cycle 5 it simply stays.\n5) Storm bypass (the global reset): add up all six tanks. Only if the total is strictly greater than 38, each tank keeps floor(contents/2) and the rest goes to outfall.\nThe outfall tally (loss) counts the tank 6 weir overflow, STEADY discharges, tank 1's OVERLOADED return, and the bypass amounts. Balance: starting contents plus total inflow equals end contents plus outfall.",
+  "gapsFlagged": [
+   {
+    "rule": "Weirs: meaning of 'over volume'",
+    "whatYouAssumed": "Strictly greater than volume. A tank exactly at its volume does not spill."
+   },
+   {
+    "rule": "States: which contents are tested",
+    "whatYouAssumed": "The contents after step 2 (post-weir). Each tank is evaluated at most once per cycle. A tank that changes state in step 3 discharges in step 4 under its new state."
+   },
+   {
+    "rule": "Discharge rounding and zero draws",
+    "whatYouAssumed": "Each tank's draw is rounded down on its own. A draw of 0 (e.g. tank 1 STEADY holding 3 in cycle 1) is allowed and moves nothing."
+   },
+   {
+    "rule": "Discharge simultaneity",
+    "whatYouAssumed": "All draws are computed from contents before any transfer. Return flow arriving in a tank does not change that tank's own draw in the same cycle."
+   },
+   {
+    "rule": "Tank 1 OVERLOADED return and tank 6 weir overflow",
+    "whatYouAssumed": "Both count in the outfall tally (the loss total)."
+   },
+   {
+    "rule": "Storm bypass boundary and timing",
+    "whatYouAssumed": "The total is taken after step 4, including any tanks that sit over volume. The bypass fires only when the total is strictly over 38, so the cycle 5 total of exactly 38 does not fire it. Kept = floor(half). The remainder (the ceiling half) goes to outfall. The bypass does not change states."
+   },
+   {
+    "rule": "Over-volume after discharge or bypass",
+    "whatYouAssumed": "No weir pass is made after step 4 or step 5 within a cycle. The excess waits for the next cycle's step 2, and after cycle 5 it stays (tank 2 ends at 10 > 8, tank 4 at 7 > 6)."
+   },
+   {
+    "rule": "Term 'global reset' in the deliverable",
+    "whatYouAssumed": "This is the storm bypass of step 5. resetPeriods lists the cycles in which it fired."
+   }
+  ],
+  "working": "Format: tanks 1-6 | outfall running tally.\nStart: 3,6,6,2,2,1 | 0, all STEADY.\nC1: Inflow 3,12,9,7,5,4. Weirs 3,8,12,6,7,4 (T2 spills 4 into T3; T3 12 is not over 12; T4 spills 1 into T5) | 0. States: T2 8>=6, T3 12>=9, T4 6>=5, T5 7>=7 go OVERLOADED; T1 and T6 stay STEADY. Draws 0,4,6,3,3,1. After discharge 7,10,9,6,4,3 | 1. Total 39 > 38, so the bypass fires: keep 3,5,4,3,2,1 (kept 18), 21 to outfall | 22.\nC2: Inflow 7,7,4,4,3,8. Weirs 7,7,4,4,3,7 (T6 spills 1 to outfall) | 23. States: T1 7>=7 goes OVERLOADED; T3 4<=4 goes STEADY; T5 3<=3 goes STEADY; T6 7>=5 goes OVERLOADED. States O,O,S,O,S,O. Draws 3(T1 to outfall),3,1(outfall),2,0,3. After 7,4,5,2,6,4 | 27. Total 28, no bypass.\nC3: Inflow 11,8,8,2,6,10. Weirs 10,8,9,2,6,7 (T1 spills 1 to T2, T2 spills 1 to T3, T6 spills 3 to outfall) | 30. States: T3 9>=9 goes OVERLOADED; T4 2<=2 goes STEADY. States O,O,O,S,S,O. Draws 5(outfall),4,4,0,1(outfall),3. After 9,8,5,2,8,4 | 36. Total 36, no bypass.\nC4: Inflow 16,14,12,3,11,4. Weirs 10,8,12,6,9,7 (cascade: T1 spills 6, T2 at 20 spills 12, T3 at 24 spills 12, T4 at 15 spills 9, T5 at 20 spills 11, T6 at 15 spills 8 to outfall) | 44. States: T4 6>=5 goes OVERLOADED; T5 9>=7 goes OVERLOADED. All OVERLOADED. Draws 5(outfall),4,6,3,4,3. After 9,10,9,7,8,4 | 49. Total 47 > 38, so the bypass fires: keep 4,5,4,3,4,2 (22), 25 to outfall | 74.\nC5: Inflow 4,11,10,6,7,2. Weirs 4,8,12,6,8,2 (T2 spills 3 into T3, T3 at 13 spills 1 into T4, T4 at 7 spills 1 into T5) | 74. States: T6 2<=2 goes STEADY. Others stay OVERLOADED (T1 4 is above lower mark 3). Draws 2(outfall),4,6,3,4,0. After 6,10,9,7,4,2 | 76. Total 38, not strictly over 38, so no bypass.\nEnd: 6,10,9,7,4,2; outfall 76. This matches the write-up's Report paragraph in every figure.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "OVERLOADED",
+   "OVERLOADED",
+   "OVERLOADED",
+   "OVERLOADED",
+   "OVERLOADED",
+   "STEADY"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "OVERLOADED",
+    "to": "STEADY"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "OVERLOADED",
+    "to": "STEADY"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "OVERLOADED",
+    "to": "STEADY"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "OVERLOADED",
+    "to": "STEADY"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Start contents 3+6+6+2+2+1 = 20. Inflow 20+15+17+24+18 = 94. Start plus inflow = 114. End contents 6+10+9+7+4+2 = 38. Outfall = 76. End plus outfall = 114. Balanced.",
+  "usedScript": true,
+  "notes": "I ran the arithmetic in a short Python script (sim.py in the session scratchpad) and checked it step by step by hand. My independent result matches every figure in the write-up's Report paragraph. Two boundary cases depend on the assumptions above. First, the cycle 5 line total is exactly 38, so the bypass does not fire because the rule says strictly over. Second, tanks 2 and 4 end above their volumes because return flow after cycle 5 stays where it is."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "gapsFlagged": 8
+ }
+}

@@ -1,0 +1,178 @@
+{
+ "run": {
+  "procedureSummary": "Start: x0=(3,6,6,2,2,1), s=0, all flags INACTIVE; c=(10,8,12,6,9,7), u=(7,6,9,5,7,5), d=(3,2,4,2,3,2), budget 38. Each cycle runs five steps in order, and each step finishes across the whole vector before the next starts.\n1. Load: add the cycle's row of b to x. Bounds are not checked here.\n2. Projection sweep (Gauss-Seidel, positions 1 to 6 in order): if x_i > c_i, set x_i = c_i and add the excess to x_{i+1} before position i+1 is checked, so overflow cascades. Excess at position 6 goes to s.\n3. Active-set update on the projected x: INACTIVE becomes ACTIVE when x_i >= u_i; ACTIVE becomes INACTIVE when x_i <= d_i; otherwise the flag stays. Every flip is logged as (cycle, position, before, after).\n4. Jacobi shed: all six amounts come from the same post-projection x. INACTIVE: floor(x_i/4) goes to s. ACTIVE: floor(x_i/2) goes to x_{i-1}, and position 1's share goes to s. All moves are applied at once. No projection afterwards.\n5. Penalty: if sum(x) > 38 (strictly), replace each x_i with floor(x_i/2), add the total removed to s, and record the cycle.\nReport: final x, flags, flips, penalty cycles, s, and the balance line (starting 1-norm + total loaded = final 1-norm + s).",
+  "openPoints": [
+   {
+    "point": "Lower bound in the projection sweep",
+    "assumption": "Only the upper bound c_i is clipped. No component ever goes negative (loads are nonnegative and sheds are floors of at most half), so a lower clip never applies."
+   },
+   {
+    "point": "Which x the flags use and which x the shed uses",
+    "assumption": "Flags are set on the vector right after projection (step 3 says 'on the projected x'). The shed amounts use that same vector and the flags just set in that cycle."
+   },
+   {
+    "point": "Whether s counts toward the 1-norm budget",
+    "assumption": "No. The 1-norm is sum(x) over the six components only. s is a separate sink."
+   },
+   {
+    "point": "Whether ACTIVE transfers can push a neighbour over its bound",
+    "assumption": "Yes, and it is left there. The write-up says no projection after the shed, so the excess waits for the next cycle's sweep. After cycle 5, component 2 stays at 10, above c2=8."
+   },
+   {
+    "point": "Boundary at exactly 38 in the penalty",
+    "assumption": "Strictly above 38 only. Cycle 5 ends at exactly 38, so the penalty does not fire."
+   },
+   {
+    "point": "What lossTotal means",
+    "assumption": "The final slack s, which holds everything that left x: projection overflow from position 6 (12), INACTIVE sheds and position-1 ACTIVE sheds (18), and penalty halving (46). Total 76."
+   },
+   {
+    "point": "Rounding",
+    "assumption": "Floor throughout, as the write-up says for shed and halving. All quantities stay whole numbers."
+   }
+  ],
+  "cycleFigures": "Format: x after step | s\nC1: load (3,12,9,7,5,4) s0 | proj (3,8,12,6,7,4) s0 | flags I,A,A,A,A,I | shed amts (0,4,6,3,3,1) -> (7,10,9,6,4,3) s1 | penalty (sum 39>38) -> (3,5,4,3,2,1) s22\nC2: load (7,7,4,4,3,8) s22 | proj (7,7,4,4,3,7) s23 | flags A,A,I,A,I,A | shed amts (3,3,1,2,0,3) -> (7,4,5,2,6,4) s27 | penalty no (sum 28) -> (7,4,5,2,6,4) s27\nC3: load (11,8,8,2,6,10) s27 | proj (10,8,9,2,6,7) s30 | flags A,A,A,I,I,A | shed amts (5,4,4,0,1,3) -> (9,8,5,2,8,4) s36 | penalty no (sum 36) -> (9,8,5,2,8,4) s36\nC4: load (16,14,12,3,11,4) s36 | proj (10,8,12,6,9,7) s44 | flags A,A,A,A,A,A | shed amts (5,4,6,3,4,3) -> (9,10,9,7,8,4) s49 | penalty (sum 47>38) -> (4,5,4,3,4,2) s74\nC5: load (4,11,10,6,7,2) s74 | proj (4,8,12,6,8,2) s74 | flags A,A,A,A,A,I | shed amts (2,4,6,3,4,0) -> (6,10,9,7,4,2) s76 | penalty no (sum 38, not >38) -> (6,10,9,7,4,2) s76",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "ACTIVE",
+   "ACTIVE",
+   "ACTIVE",
+   "ACTIVE",
+   "ACTIVE",
+   "INACTIVE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting 1-norm 20 + total loaded 94 (rows sum to 20, 15, 17, 24, 18) = 114. Final 1-norm 38 + s 76 = 114. The two sides match. s breaks down as projection overflow 12 + sheds 18 + penalty halving 46 = 76.",
+  "usedScript": true,
+  "notes": "The arithmetic was done with a short Python script (scratchpad sim.py) and checked against the balance line. One thing to flag: at the end of cycle 5, component 2 sits at 10, above its bound of 8. The write-up allows this, because nothing projects after the shed. The penalty did not fire in cycle 5 because the 1-norm is exactly 38, not strictly above it. The user's relayed message only gives approval to run the task; it adds no rules. The write-up contains no instructions aimed at the agent beyond the line's procedure.",
+  "preReadNotes": "Mode: filter mode (the default).\n\nStep 1, plain statement. The topic is the operating rules. There are six whole-number counters, each with a cap, an 'on' threshold and an 'off' threshold, plus one side bin. Every cycle: add a fixed row of amounts. Go left to right and cut each counter down to its cap, passing the excess to the next counter; excess from the last counter goes to the bin. Switch each counter's flag on when it reaches its on-threshold and off when it falls to its off-threshold; otherwise leave the flag as it is. Then, all at once using the same values, each 'off' counter gives a quarter (rounded down) to the bin, and each 'on' counter gives half (rounded down) to its left neighbour, with counter 1 giving to the bin. Finally, if the six counters total more than 38, halve each one (rounded down) and put what was removed in the bin. The report lists the counters, flags, flips, the cycles where halving happened, the bin, and a conservation line. The write-up itself is the comparison: it describes all of this in linear algebra and Lagrangian optimisation words. The desk lead says the rules apply exactly as written, even where real practice differs. The plain statement fully specifies the procedure, so by step 1 the run could stop here. The desk asks for the pre-read, so the embedded comparison is run anyway as picture 0 (it does not count against the ceiling), plus one borrowed picture.\n\nPicture 0 (embedded): constrained optimisation and linear algebra vocabulary ('projection', 'box bounds', 'Gauss-Seidel', 'Jacobi', 'active set', 'slack', 'penalty', '1-norm budget'). Mapping: projection = the cap-cutting sweep; Gauss-Seidel = in-place left-to-right order; Jacobi = simultaneous update from a snapshot; active set = the flags; slack = the bin; penalty = halving. Question it makes easier to ask: does update order matter? (Yes: the sweep is sequential, the shed is simultaneous.) Break points: a real projection onto a box throws away the violation, but here it cascades into the next counter and is conserved. A real active set marks binding constraints, but here it is a two-threshold switch with hysteresis. Real slack is a decision variable, but here it is a one-way sink. A real penalty adds a cost term, but here it halves the whole vector. The 'budget' is not a hard constraint: counters can exceed it and their caps after the shed, and they stay that way after cycle 5. If you carried real projection or real penalty behaviour into the rules, it would contradict what is stated. Taken as a label set, though, the picture does not depend on those contradictions. What survives in plain words: the sweep is sequential and the shed is simultaneous. The rules already say this explicitly ('before you visit it'; 'from the same x before anything moves'). Grade: adds nothing.\n\nPicture 1: a double-entry ledger. Every unit is either in a counter or in the bin; loads are the only inflow. Break point: none against the stated rules. What survives: the starting total plus everything loaded equals the final total plus the bin. The Report paragraph already states this as the balance line. Grade: adds nothing. (It confirmed 20+94 = 38+76 = 114.)\n\nCount: Adds nothing: 2 of 2. Misleading: 0. Not run: 0.\nKeep exploring: empty. Hold: empty. Discard: empty. Working note from picture 0's break points: do not substitute real projection, active-set, slack or penalty behaviour for the stated rules. The computation followed the plain statement only. The material contained no instructions aimed at the reader beyond the line's own procedure."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "openPoints": 7,
+  "preReadLength": 3575
+ }
+}

@@ -1,0 +1,173 @@
+{
+ "run": {
+  "rulesInOwnWords": "Starting point: x = (3,6,6,2,2,1), s = 0, every flag INACTIVE. Bounds c = (10,8,12,6,9,7). Turn-on thresholds u = (7,6,9,5,7,5). Turn-off thresholds d = (3,2,4,2,3,2). Budget is 38. Each cycle runs five steps, and each step finishes for the whole vector before the next one starts.\n1) Load: add the cycle's row of b to x. Bounds are not applied here.\n2) Projection sweep: go through positions 1 to 6 in order. If x_i > c_i, set x_i = c_i and add the excess to x_{i+1} before position i+1 is checked, so overflow can carry down the vector. Excess at position 6 goes to s.\n3) Flag update, using the x from step 2: an INACTIVE position becomes ACTIVE if x_i >= u_i. An ACTIVE position becomes INACTIVE if x_i <= d_i. Otherwise the flag stays as it is. Every flip is logged.\n4) Jacobi shed: all six amounts are worked out from the same x (after step 2) before anything moves. INACTIVE: floor(x_i/4) leaves x_i and goes to s. ACTIVE: floor(x_i/2) leaves x_i and goes to x_{i-1}, except at position 1, where it goes to s. Bounds are not applied after this step.\n5) Penalty (global reset): if sum(x) > 38 (strictly), replace every x_i with floor(x_i/2) and put the total removed into s. The cycle is recorded as a reset cycle.\nConservation: start total + total loaded = sum(x) + s.",
+  "gapsFlagged": [
+   {
+    "rule": "Loss tally (lossTotal)",
+    "whatYouAssumed": "The write-up never defines a 'loss tally'. I took it to be everything booked to slack s: position-6 overflow in the sweep (12), INACTIVE sheds plus position-1 ACTIVE sheds (18), and penalty halvings (46), for a total of 76."
+   },
+   {
+    "rule": "Which x the flag update and shed use",
+    "whatYouAssumed": "The step 3 flags are set from the projected x. Step 4 then uses those new flags, and the x after projection, to work out every amount at once."
+   },
+   {
+    "rule": "Flip evaluation per cycle",
+    "whatYouAssumed": "Each position is checked once per cycle, against its flag at the start of step 3. A position that has just flipped is not checked again in the same step."
+   },
+   {
+    "rule": "Penalty measurement point",
+    "whatYouAssumed": "The 1-norm is measured after the shed. Overbound values left by the shed count at full size. The penalty floor-halves every component, including any that are over their bound."
+   },
+   {
+    "rule": "Position 1 ACTIVE shed destination",
+    "whatYouAssumed": "Position 1's ACTIVE share (floor(x1/2)) goes to s, as the write-up says. I count it as slack and as loss."
+   },
+   {
+    "rule": "The write-up's Report paragraph gives expected end figures",
+    "whatYouAssumed": "I did not take those figures as given. I worked every cycle independently from the rules, and my results match the stated report exactly."
+   }
+  ],
+  "working": "Cycle 1: Load (3,12,9,7,5,4) s=0. Sweep: pos2 12->8, +4 to pos3 (13) -> 12, +1 to pos4 (8) -> 6, +2 to pos5 (7). Result (3,8,12,6,7,4), s=0. Flags: positions 2, 3, 4 and 5 go ACTIVE, giving I,A,A,A,A,I. Shed amounts (0,4,6,3,3,1): pos2 gives 4 to pos1, pos3 gives 6 to pos2, pos4 gives 3 to pos3, pos5 gives 3 to pos4, pos6 gives 1 to s. Result (7,10,9,6,4,3), s=1. Penalty: sum 39 > 38, so halve to (3,5,4,3,2,1), with 21 to s. s=22, sum 18. RESET.\nCycle 2: Load (7,7,4,4,3,8). Sweep: pos6 8->7, +1 to s. Result (7,7,4,4,3,7), s=23. Flags: pos1 I->A, pos3 A->I (4<=4), pos5 A->I (3<=3), pos6 I->A. Flags now A,A,I,A,I,A. Shed (3,3,1,2,0,3): pos1 gives 3 to s, pos2 gives 3 to pos1, pos3 gives 1 to s, pos4 gives 2 to pos3, pos6 gives 3 to pos5. Result (7,4,5,2,6,4), s=27. Penalty: sum 28, no reset.\nCycle 3: Load (11,8,8,2,6,10). Sweep: pos1 11->10, +1 to pos2 (9) -> 8, +1 to pos3 (9). pos6 10->7, +3 to s. Result (10,8,9,2,6,7), s=30. Flags: pos3 I->A (9>=9), pos4 A->I (2<=2). Flags now A,A,A,I,I,A. Shed (5,4,4,0,1,3): pos1 gives 5 to s, pos2 gives 4 to pos1, pos3 gives 4 to pos2, pos5 gives 1 to s, pos6 gives 3 to pos5. Result (9,8,5,2,8,4), s=36. Penalty: sum 36, no reset.\nCycle 4: Load (16,14,12,3,11,4). Sweep: pos1 ->10, +6 to pos2 (20) ->8, +12 to pos3 (24) ->12, +12 to pos4 (15) ->6, +9 to pos5 (20) ->9, +11 to pos6 (15) ->7, +8 to s. Result (10,8,12,6,9,7), s=44. Flags: pos4 I->A, pos5 I->A. All six ACTIVE. Shed (5,4,6,3,4,3): pos1 gives 5 to s, and each other position passes its share up one place. Result (9,10,9,7,8,4), s=49. Penalty: sum 47 > 38, so halve to (4,5,4,3,4,2), with 25 to s. s=74, sum 22. RESET.\nCycle 5: Load (4,11,10,6,7,2). Sweep: pos2 11->8, +3 to pos3 (13) ->12, +1 to pos4 (7) ->6, +1 to pos5 (8). Result (4,8,12,6,8,2), s=74. Flags: pos6 A->I (2<=2). Flags now A,A,A,A,A,I. Shed (2,4,6,3,4,0): pos1 gives 2 to s. Result (6,10,9,7,4,2), s=76. Penalty: sum 38, which is not strictly above 38, so no reset. Pos2 (10>8) and pos4 (7>6) end the run over their bounds.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "ACTIVE",
+   "ACTIVE",
+   "ACTIVE",
+   "ACTIVE",
+   "ACTIVE",
+   "INACTIVE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Start total is 3+6+6+2+2+1 = 20. Total loaded is 20+15+17+24+18 = 94. 20 + 94 = 114. At the end, x sums to 6+10+9+7+4+2 = 38 and s = 76. 38 + 76 = 114, so the balance holds. The 76 in s breaks down as 12 position-6 overflow, 18 sheds and 46 penalty halving.",
+  "usedScript": true,
+  "notes": "I used a short Python script for the arithmetic, at scratchpad/sim.py in the session scratchpad directory. Every result matches the write-up's Report paragraph exactly: x, flags, flips, penalty cycles 1 and 4, s = 76, and the balance of 114. Positions 2 and 4 end over their bounds, as the write-up expects.",
+  "preReadNotes": "The Report paragraph states expected results. I worked all five cycles independently from the rules instead of copying it, then compared, and the two agree."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "gapsFlagged": 6
+ }
+}

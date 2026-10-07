@@ -1,0 +1,170 @@
+{
+ "run": {
+  "procedureSummary": "Start: x0=(3,6,6,2,2,1), s=0, all flags INACTIVE. Each cycle runs these steps, each one finished across the whole vector before the next starts. 1) Load: add the cycle's row of b to x, with no bounds enforced. 2) Projection sweep, Gauss-Seidel order 1 to 6: if x_i>c_i, set x_i=c_i and add the excess to x_{i+1} before visiting it, so overflow cascades; component 6's excess goes to s. 3) Active-set update on the projected x: INACTIVE becomes ACTIVE when x_i>=u_i, ACTIVE becomes INACTIVE when x_i<=d_i, and otherwise the flag holds. Each flip is logged. 4) Jacobi shed: compute all six amounts from the same x first. An INACTIVE component sends floor(x_i/4) to s. An ACTIVE component sends floor(x_i/2) to x_{i-1}, and component 1 sends its share to s. Then apply all of them at once, with no projection afterwards. 5) Penalty: if sum(x) is strictly greater than 38, replace every x_i with floor(x_i/2), add the amount removed to s, and record the cycle.",
+  "openPoints": [
+   {
+    "point": "Order of the flag update and the shed",
+    "assumption": "Step 4 uses the flags set in step 3 of the same cycle, including flips made in that cycle."
+   },
+   {
+    "point": "Penalty test: which 1-norm",
+    "assumption": "The test uses sum(x) over the six components only, without s, measured after the shed. A total of exactly 38 does not trigger it (cycle 5 ends at 38, so no penalty fires)."
+   },
+   {
+    "point": "Cascade amounts in the projection sweep",
+    "assumption": "The overflow pushed from x_i is added before x_{i+1} is clipped. It can therefore make x_{i+1} go over its bound and cascade further."
+   },
+   {
+    "point": "Loss tally",
+    "assumption": "lossTotal is the final slack s, which collects component-6 projection overflow, INACTIVE sheds, component 1's ACTIVE share and the penalty halvings."
+   },
+   {
+    "point": "Over-bound values after the shed",
+    "assumption": "After the shed, components are left above c_i as the write-up says (for example x2=10>8 at the end of cycle 5). They are not clipped at the end of the run."
+   }
+  ],
+  "cycleFigures": "C1: load (3,12,9,7,5,4) s0 | proj (3,8,12,6,7,4) s0 | flags I,A,A,A,A,I | shed (7,10,9,6,4,3) s1 | penalty fired: (3,5,4,3,2,1) s22, norm 18. C2: load (7,7,4,4,3,8) | proj (7,7,4,4,3,7) s23 | flags A,A,I,A,I,A | shed (7,4,5,2,6,4) s27 | penalty not fired (28), x unchanged. C3: load (11,8,8,2,6,10) | proj (10,8,9,2,6,7) s30 | flags A,A,A,I,I,A | shed (9,8,5,2,8,4) s36 | penalty not fired (36). C4: load (16,14,12,3,11,4) | proj (10,8,12,6,9,7) s44 | flags all A | shed (9,10,9,7,8,4) s49 | penalty fired: (4,5,4,3,4,2) s74, norm 22. C5: load (4,11,10,6,7,2) | proj (4,8,12,6,8,2) s74 | flags A,A,A,A,A,I | shed (6,10,9,7,4,2) s76 | penalty not fired (38, not above 38), x unchanged.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "ACTIVE",
+   "ACTIVE",
+   "ACTIVE",
+   "ACTIVE",
+   "ACTIVE",
+   "INACTIVE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting 1-norm 20 + loaded 94 = 114, against final 1-norm 38 + s 76 = 114. It balances.",
+  "usedScript": true,
+  "notes": "I used a short Python script for the arithmetic (/tmp/x.py, run through Bash). The only input was the write-up at C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\coherence\\desk3\\lagrangian.md.",
+  "preReadNotes": "The write-up is self-contained and has no embedded instructions beyond the line rules. I applied its rules exactly as written."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "openPoints": 5,
+  "preReadLength": 126
+ }
+}

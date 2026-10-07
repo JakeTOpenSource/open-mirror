@@ -1,0 +1,146 @@
+{
+ "run": {
+  "rulesInOwnWords": "1. Ingest: add each tier's scheduled chunks for the cycle to its count. Counts may go over budget here.\n2. Eviction: go through tiers 1 to 6 in order. If a tier holds more than its budget, cut it back to the budget and pass the excess to the next tier out (n+1). This happens in sequence, so a tier sees what was evicted into it before its own turn. Excess from tier 6 goes to the drop count.\n3. Temperature check, using the counts after eviction: a COLD tier at or above its heat mark turns HOT. A HOT tier at or below its cool mark turns COLD. Otherwise the state stays the same (hysteresis). A tier changes state at most once per cycle, and every change is logged.\n4. Compaction and promotion: using the counts at the start of the step and the states after step 3, each tier's amount is floor(count/4) if COLD and floor(count/2) if HOT. All six amounts are worked out first and then applied at the same time. Every tier loses its amount. COLD amounts go to the drop count. HOT amounts move into tier n-1, except tier 1's HOT amount, which is dropped. The budget is not enforced here.\n5. Context reset: if the six counts add up to more than 38, every count becomes floor(count/2), the removed chunks are added to the drop count, and the cycle is logged. A total of exactly 38 does not trigger it.\nAll divisions round down.",
+  "working": "Start: [3,6,6,2,2,1], all COLD, drop 0.\nCYCLE 1: Ingest [3,12,9,7,5,4]. Eviction: T2 sends 4 to T3 (13), T3 sends 1 to T4 (8), T4 sends 2 to T5 (7), giving [3,8,12,6,7,4], drop 0. Temp: T2, T3, T4 and T5 go COLD to HOT. States C,H,H,H,H,C. Amounts [0,4,6,3,3,1]. After step 4: [7,10,9,6,4,3], drop 1 (T6 COLD 1). Total 39 > 38, so the reset fires: [3,5,4,3,2,1], removed 21, drop 22.\nCYCLE 2: Ingest [7,7,4,4,3,8]. Eviction: T6 drops 1, giving [7,7,4,4,3,7], drop 23. Temp: T1 COLD to HOT (7>=7), T3 HOT to COLD (4<=4), T5 HOT to COLD (3<=3), T6 COLD to HOT (7>=5). T2 (7) and T4 (4) stay HOT. States H,H,C,H,C,H. Amounts [3,3,1,2,0,3]. After step 4: [7,4,5,2,6,4]. Drops: T1 promoted out 3, T3 COLD 1, so drop 27. Total 28, no reset.\nCYCLE 3: Ingest [11,8,8,2,6,10]. Eviction: T1 sends 1 to T2 (9), T2 sends 1 to T3 (9), T6 drops 3, giving [10,8,9,2,6,7], drop 30. Temp: T3 COLD to HOT (9>=9), T4 HOT to COLD (2<=2). T5 stays COLD (6<7). States H,H,H,C,C,H. Amounts [5,4,4,0,1,3]. After step 4: [9,8,5,2,8,4]. Drops: T1 5, T5 COLD 1, so drop 36. Total 36, no reset.\nCYCLE 4: Ingest [16,14,12,3,11,4]. Eviction: T1 sends 6 to T2 (20), T2 sends 12 to T3 (24), T3 sends 12 to T4 (15), T4 sends 9 to T5 (20), T5 sends 11 to T6 (15), T6 drops 8. Result [10,8,12,6,9,7], drop 44. Temp: T4 COLD to HOT, T5 COLD to HOT. All HOT. Amounts [5,4,6,3,4,3]. After step 4: [9,10,9,7,8,4], drop 49 (T1 5). Total 47 > 38, so the reset fires: [4,5,4,3,4,2], removed 25, drop 74.\nCYCLE 5: Ingest [4,11,10,6,7,2]. Eviction: T2 sends 3 to T3 (13), T3 sends 1 to T4 (7), T4 sends 1 to T5 (8), giving [4,8,12,6,8,2], drop 74. Temp: T6 HOT to COLD (2<=2). T1 (4, between cool 3 and heat 7) stays HOT. States H,H,H,H,H,C. Amounts [2,4,6,3,4,0]. After step 4: [6,10,9,7,4,2], drop 76 (T1 2). Total 38, which is not more than 38, so no reset.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "HOT",
+   "HOT",
+   "HOT",
+   "HOT",
+   "HOT",
+   "COLD"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "HOT",
+    "to": "COLD"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "HOT",
+    "to": "COLD"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "HOT",
+    "to": "COLD"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "COLD",
+    "to": "HOT"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "HOT",
+    "to": "COLD"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Left side: starting counts 3+6+6+2+2+1 = 20, plus ingest total (cycle 1: 20, cycle 2: 15, cycle 3: 17, cycle 4: 24, cycle 5: 18) = 94, which gives 114. Right side: end counts 6+10+9+7+4+2 = 38, plus drop count 76, which gives 114. Both sides are 114, so the check balances.",
+  "usedScript": true,
+  "notes": "I used a short Python script for the arithmetic and checked cycle 1 by hand. The cycle 5 total is exactly 38, so no reset fires there. In cycle 4 tier tier 2 ends above its budget (10 against 8) after promotion. Under the rules that is never corrected in cycle 5, but it was not an issue in cycle 4 either, because the next cycle's eviction handles it.",
+  "preReadNotes": "Script: C:/Users/Jaket/AppData/Local/Temp/claude/scr/sim.py"
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true
+ }
+}

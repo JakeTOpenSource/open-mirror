@@ -1,0 +1,178 @@
+{
+ "run": {
+  "procedureSummary": "Applied in this order each cycle (1 to 5), each step finished for the whole line before the next one starts. Whole units, rounding down on every split.\n1. Inflow: add the cycle's row to tanks 1-6. A tank may go over volume at this point.\n2. Weirs: walk tanks 1 to 6 in order. If a tank holds more than its volume, the excess goes to the next tank before that tank is checked, so a surge can carry down the line. Tank 6's excess goes to outfall and is counted in the tally.\n3. States: one pass over the contents after the weirs. A STEADY tank at or above its upper mark becomes OVERLOADED. An OVERLOADED tank at or below its lower mark becomes STEADY. Otherwise the state stays the same. Each change is logged.\n4. Discharge: work out every draw from the contents after the weirs and states, using the state just set, then move everything at once. STEADY: floor(c/4) goes to outfall. OVERLOADED: floor(c/2) goes back to tank i-1, and tank 1's return goes to outfall. A tank left over volume stays that way until the next cycle's weirs, or permanently after cycle 5.\n5. Storm bypass: total the six tanks. Only if the total is strictly above 38, each tank keeps floor(c/2) and the rest goes to outfall.\nThe outfall tally adds up tank 6 weir overflow, STEADY discharge, tank 1's OVERLOADED return, and bypass spill.",
+  "openPoints": [
+   {
+    "point": "Which state sets the discharge rule: the state before step 3 or after it",
+    "assumption": "The state set in step 3 of the same cycle. Steps run in sequence, so step 4 sees the updated state."
+   },
+   {
+    "point": "State check is a single pass",
+    "assumption": "Each tank is evaluated once per cycle against its contents after the weirs. A tank that changes state is not re-checked in the same cycle, and the check is not repeated after discharge or bypass."
+   },
+   {
+    "point": "Rounding of discharge draws",
+    "assumption": "STEADY draw = floor(contents/4). OVERLOADED draw = floor(contents/2). Each is computed from the contents at the start of step 4, before any return flow arrives (simultaneous move)."
+   },
+   {
+    "point": "Bypass rounding and boundary",
+    "assumption": "Each tank keeps floor(c/2) and the remainder (ceil) goes to outfall. The bypass fires only when the total is strictly above 38. Cycle 5 ended at exactly 38, so it did not fire."
+   },
+   {
+    "point": "Where tank 6 weir overflow goes",
+    "assumption": "To outfall, counted in the outfall tally (lossTotal)."
+   },
+   {
+    "point": "Tanks over volume at the end of the run",
+    "assumption": "Left as they are after cycle 5 discharge. Tank 4 (7 against volume 6) and tank 2 (10 against volume 8) are reported over volume, with no extra weir pass."
+   },
+   {
+    "point": "Storm bypass changes state",
+    "assumption": "No. A state changes only in step 3. Bypass and discharge move liquor without changing state."
+   }
+  ],
+  "cycleFigures": "Tanks 1-6 after each step. Outfall tally (O) is cumulative.\nC1: inflow [3,12,9,7,5,4]; weirs [3,8,12,6,7,4] O=0; states [S,OV,OV,OV,OV,S]; discharge [7,10,9,6,4,3] O=1; bypass total 39>38 FIRED -> [3,5,4,3,2,1] O=22\nC2: inflow [7,7,4,4,3,8]; weirs [7,7,4,4,3,7] O=23; states [OV,OV,S,OV,S,OV]; discharge [7,4,5,2,6,4] O=27; bypass total 28, no -> [7,4,5,2,6,4] O=27\nC3: inflow [11,8,8,2,6,10]; weirs [10,8,9,2,6,7] O=30; states [OV,OV,OV,S,S,OV]; discharge [9,8,5,2,8,4] O=36; bypass total 36, no -> [9,8,5,2,8,4] O=36\nC4: inflow [16,14,12,3,11,4]; weirs [10,8,12,6,9,7] O=44; states all OV; discharge [9,10,9,7,8,4] O=49; bypass total 47>38 FIRED -> [4,5,4,3,4,2] O=74\nC5: inflow [4,11,10,6,7,2]; weirs [4,8,12,6,8,2] O=74; states [OV,OV,OV,OV,OV,S]; discharge [6,10,9,7,4,2] O=76; bypass total 38, not strictly over, no -> [6,10,9,7,4,2] O=76",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "OVERLOADED",
+   "OVERLOADED",
+   "OVERLOADED",
+   "OVERLOADED",
+   "OVERLOADED",
+   "STEADY"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "OVERLOADED",
+    "to": "STEADY"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "OVERLOADED",
+    "to": "STEADY"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "OVERLOADED",
+    "to": "STEADY"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "OVERLOADED",
+    "to": "STEADY"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting contents 20 + all inflow 94 = 114; in tanks 38 (6+10+9+7+4+2) + outfall 76 = 114. Balanced.",
+  "usedScript": true,
+  "preReadNotes": "I read treatment.md in full before starting. It contains only the line description, the figures and the report request. It has no instructions aimed at the agent.",
+  "notes": "I did the arithmetic with a short Python script in the scratch directory (C:/Users/Jaket/AppData/Local/Temp/claude/scr/t.py) and hand-checked cycle 1. The run did nothing beyond reading the write-up and computing locally: no messages, no publishing, no outside actions. Two tanks end over volume after cycle 5, as the write-up allows: tank 2 at 10/8 and tank 4 at 7/6."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "openPoints": 7,
+  "preReadLength": 162
+ }
+}

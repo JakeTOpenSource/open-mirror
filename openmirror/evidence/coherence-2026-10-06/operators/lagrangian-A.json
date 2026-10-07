@@ -1,0 +1,146 @@
+{
+ "run": {
+  "rulesInOwnWords": "Setup: six components, index 1 to 6, whole non-negative values. Each has a box bound c (10,8,12,6,9,7), an upper threshold u (7,6,9,5,7,5), a lower threshold d (3,2,4,2,3,2). Every flag starts INACTIVE. Budget B=38. Slack s starts at 0 and collects every amount that leaves the vector. Start x=(3,6,6,2,2,1). Five iterations, each runs Steps 1-5 in order, and each step is finished for all six components before the next step starts. Every division rounds down. STEP 1 (load): add row k of the input table to x, component by component. No bound is enforced here. STEP 2 (Gauss-Seidel sweep, the only place the box bound c is enforced): go 1,2,3,4,5,6 in order, using values already updated in this sweep. If x_i > c_i: v = x_i - c_i, set x_i = c_i, add v to x_(i+1). For component 6 add v to s instead. A violation passed down can push the next component over its own bound, which is then handled when the sweep reaches it. If x_i <= c_i, do nothing. STEP 3 (active-set update), using the post-Step-2 values: an INACTIVE flag becomes ACTIVE if x_i >= u_i. An ACTIVE flag becomes INACTIVE if x_i <= d_i. Otherwise the flag is unchanged, including when d_i < x_i < u_i. A flag changes at most once per iteration. Record each change as (iteration, component, before, after). STEP 4 (Jacobi transfer): first compute all six t_i from the values at the start of the step and the Step 3 flags. INACTIVE gives t_i = floor(x_i/4). ACTIVE gives t_i = floor(x_i/2). Then apply all six at once: every x_i falls by its own t_i. An INACTIVE component sends t_i to s. An ACTIVE component i (2 to 6) sends t_i to component i-1. ACTIVE component 1 sends t_1 to s. The box bound is not enforced here. Any excess is only fixed by Step 2 of the next iteration, and never if it arises in iteration 5. STEP 5 (penalty): sum x. If the sum is strictly more than 38, every x_i becomes floor(x_i/2), each removed amount goes to s, and the iteration is recorded as a reset. If the sum is 38 or less, nothing happens.",
+  "working": "START x=(3,6,6,2,2,1) s=0. IT1: S1 (3,12,9,7,5,4); S2 (3,8,12,6,7,4); S3 flags (I,A,A,A,A,I); S4 t=(0,4,6,3,3,1) -> (7,10,9,6,4,3) s=1; S5 39>38 -> (3,5,4,3,2,1) s=22. IT2: S1 (7,7,4,4,3,8); S2 (7,7,4,4,3,7) s=23; S3 (A,A,I,A,I,A); S4 t=(3,3,1,2,0,3) -> (7,4,5,2,6,4) s=27; S5 28 no. IT3: S1 (11,8,8,2,6,10); S2 (10,8,9,2,6,7) s=30; S3 (A,A,A,I,I,A); S4 t=(5,4,4,0,1,3) -> (9,8,5,2,8,4) s=36; S5 36 no. IT4: S1 (16,14,12,3,11,4); S2 (10,8,12,6,9,7) s=44; S3 all A; S4 t=(5,4,6,3,4,3) -> (9,10,9,7,8,4) s=49; S5 47>38 -> (4,5,4,3,4,2) s=74. IT5: S1 (4,11,10,6,7,2); S2 (4,8,12,6,8,2); S3 (A,A,A,A,A,I); S4 t=(2,4,6,3,4,0) -> (6,10,9,7,4,2) s=76; S5 38 not >38, no reset.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "ACTIVE",
+   "ACTIVE",
+   "ACTIVE",
+   "ACTIVE",
+   "ACTIVE",
+   "INACTIVE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "INACTIVE",
+    "to": "ACTIVE"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "ACTIVE",
+    "to": "INACTIVE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "20 + 94 = 114; 38 + 76 = 114. Balance holds.",
+  "usedScript": true,
+  "notes": "Used a short Python script (solver.py) following the document literally: Gauss-Seidel sweep with cascading violations, Jacobi transfers from pre-transfer values, strict greater-than for the penalty. Re-derived iteration 1 and all Step 4 results by hand; matched. Penalty fired in iterations 1 (39) and 4 (47); iteration 5 sum exactly 38, no fire. End vector has x_2=10 (c_2=8) and x_4=7 (c_4=6) left uncorrected as the document specifies. Only the document was read."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true
+ },
+ "source": "fallback-sonnet-docfile"
+}

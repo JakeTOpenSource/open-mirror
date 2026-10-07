@@ -1,0 +1,162 @@
+{
+ "run": {
+  "procedureSummary": "Each cycle runs five moves in order. Each move is finished across all six crucibles before the next one starts.\n1. Charge: add that cycle's charge row to crucibles 1-6. No volume check at this step.\n2. Overflow: walk crucibles 1 to 6. Any melt over a crucible's working volume (10,8,12,6,9,7) is moved into the next crucible before that one is judged, so overflow can chain. Overflow off crucible 6 goes to slag.\n3. Temperature, on the post-overflow quantities: a BASE crucible at or above its upper mark (7,6,9,5,7,5) becomes SUPERHEATED. A SUPERHEATED crucible at or below its lower mark (3,2,4,2,3,2) becomes BASE. Anything else holds. Every change is logged.\n4. Bleed: read all six quantities and states first, then apply every transfer from that reading. A BASE crucible skims floor(q/4) to slag. A SUPERHEATED crucible sends floor(q/2) to the crucible before it (crucible 1's half goes to slag). A crucible may end over volume; it is not corrected until the next cycle's overflow.\n5. Emergency tap: total the line. If the total is strictly over 38, each crucible loses floor(q/2) to slag and keeps q - floor(q/2), and the cycle is logged.\nSlag tally = overflow off 6 + BASE skims + crucible 1's superheated half + tap removals.",
+  "openPoints": [
+   {
+    "point": "How to round when halving in the emergency tap",
+    "assumption": "'Any split rounds down' is applied to the amount removed: floor(q/2) goes to slag and the crucible keeps q - floor(q/2), so an odd crucible keeps the larger half. This matches how I rounded the bleed, where the amount moved is rounded down."
+   },
+   {
+    "point": "How to round the bleed amounts",
+    "assumption": "BASE skim = floor(q/4). SUPERHEATED return = floor(q/2). The remainder stays in the crucible."
+   },
+   {
+    "point": "Which quantities temperature is judged on",
+    "assumption": "The quantities after overflow in the same cycle. States are not re-judged after the bleed or the tap; that happens only at the next cycle's temperature step."
+   },
+   {
+    "point": "Which states and quantities the bleed uses",
+    "assumption": "The states just set by the temperature step and the quantities before any bleed transfer. All transfers are applied at once, so melt returned into a crucible is not bled again in that cycle."
+   },
+   {
+    "point": "Whether the tap test uses the total before or after slag removal",
+    "assumption": "The total of the six crucibles after the bleed. Slag is not counted. Exactly 38 does not fire the tap (as in cycle 3)."
+   },
+   {
+    "point": "Over-volume crucibles after the bleed",
+    "assumption": "Left as they are (e.g. 10 in crucible 2, a working volume of 8). They are corrected at the next cycle's overflow, or stay that way after cycle 5. The tap halving is applied to them like any other crucible."
+   }
+  ],
+  "cycleFigures": "Start: [3,6,6,2,2,1], all BASE, slag 0\nC1: charge [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] (slag 0); temp states B,S,S,S,S,B; bleed [7,10,9,6,4,3] (slag 1); tap: total 39 > 38, FIRED -> [4,5,5,3,2,2] (slag 19)\nC2: charge [8,7,5,4,3,9]; overflow [8,7,5,4,3,7] (slag 21); temp states S,S,S,S,B,S; bleed [7,6,5,2,6,4] (slag 25); tap: total 30, no -> [7,6,5,2,6,4] (slag 25)\nC3: charge [11,10,8,2,6,10]; overflow [10,8,11,2,6,7] (slag 28); temp states S,S,S,B,B,S; bleed [9,9,6,2,8,4] (slag 34); tap: total 38, not strictly over, no -> [9,9,6,2,8,4] (slag 34)\nC4: charge [16,15,13,3,11,4]; overflow [10,8,12,6,9,7] (slag 44); temp states all S; bleed [9,10,9,7,8,4] (slag 49); tap: total 47, FIRED -> [5,5,5,4,4,2] (slag 71)\nC5: charge [5,11,11,7,7,2]; overflow [5,8,12,6,9,3] (slag 71); temp states all S; bleed [7,10,9,7,6,2] (slag 73); tap: total 41, FIRED -> [4,5,5,4,3,1] (slag 92)\n(S = SUPERHEATED, B = BASE)",
+  "finalQuantities": [
+   4,
+   5,
+   5,
+   4,
+   3,
+   1
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4,
+   5
+  ],
+  "lossTotal": 92,
+  "balanceCheck": "Starting melt 20 + all charges 94 (17+15+17+24+18) = 114; in crucibles 22 (4+5+5+4+3+1) + slag 92 = 114. The two sides match.",
+  "usedScript": true,
+  "notes": "The arithmetic was done with a short Python script fed to python on stdin. I checked cycle 1 by hand and it matched. A file named sim.py that I wrote to the scratchpad was overwritten by another process sharing that directory: it held a different model with GREEN/HOT states and a different tap rounding. A second file I wrote there did not persist. I left the other files alone and ran the script from stdin instead; no other files are relevant.",
+  "preReadNotes": "I read the write-up at C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\coherence\\desk3\\metallurgy.md first and applied its rules as written. I used no real metallurgy behaviour."
+ },
+ "grade": {
+  "available": true,
+  "exact": false,
+  "finalOk": false,
+  "modesOk": false,
+  "changesOk": false,
+  "purgesOk": false,
+  "lostOk": false,
+  "got": {
+   "final": [
+    4,
+    5,
+    5,
+    4,
+    3,
+    1
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED"
+   ],
+   "resetPeriods": [
+    1,
+    4,
+    5
+   ],
+   "loss": 92
+  },
+  "missingChanges": [
+   "2|3|ELEVATED|NORMAL",
+   "3|3|NORMAL|ELEVATED",
+   "5|6|ELEVATED|NORMAL"
+  ],
+  "extraChanges": [],
+  "usedScript": true,
+  "openPoints": 6,
+  "preReadLength": 166
+ }
+}

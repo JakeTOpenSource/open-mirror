@@ -1,0 +1,178 @@
+{
+ "run": {
+  "procedureSummary": "Start: charges 3,6,6,2,2,1; all stages CLEAR; ground tally 0. Each cycle runs five steps in order, and each step finishes across the whole chain before the next one starts.\nStep 1, charge in: add that cycle's feed to each stage. Ratings are not enforced here.\nStep 2, shunts: walk stages 1 to 6 in order, using the updated values as you go. If a stage is over its rating (10,8,12,6,9,7), set it to its rating and add the excess to stage i+1. Stage 6's excess goes to ground.\nStep 3, comparators: read each stage after the shunts. A CLEAR stage turns ASSERTED if charge >= its upper threshold (7,6,9,5,7,5). An ASSERTED stage turns CLEAR if charge <= its lower threshold (3,2,4,2,3,2). Otherwise it holds. Log every flip. A stage is tested at most once per cycle, against the state it started the step in.\nStep 4, bleed: snapshot all six charges and use the post-comparator states, then apply every move at once. A CLEAR stage loses floor(charge/4) to ground. An ASSERTED stage loses floor(charge/2), which goes to stage i-1 (for stage 1 it goes to ground). Ratings are not checked.\nStep 5, breaker: sum the chain. If the sum is strictly greater than 38, set every stage to floor(charge/2), add the removed amount to ground and record the cycle. At 38 or below, do nothing.\nReport after cycle 5. I used a short Python script for the arithmetic and hand-checked cycle 1 and the cycle 2 comparator boundaries.",
+  "openPoints": [
+   {
+    "point": "Which way 'next stage down' points in the shunt step",
+    "assumption": "Toward the load (stage i to i+1). The write-up's note that 1's excess can tip 2 supports this, and stage 6's excess goes to ground."
+   },
+   {
+    "point": "Breaker 'every stage halves, rounded down': whether the rounding applies to what the stage keeps or to what it loses",
+    "assumption": "The stage keeps floor(charge/2) and the remainder (ceil of half) goes to ground. For example, 7 keeps 3 and sends 4 to ground."
+   },
+   {
+    "point": "Breaker boundary: a sum of exactly 38",
+    "assumption": "No trip. The threshold is strictly over 38. This mattered in cycle 5, where the sum after bleed was exactly 38."
+   },
+   {
+    "point": "Which state the bleed step uses",
+    "assumption": "The states as they stand after this cycle's comparator step, including flips made earlier in the same cycle."
+   },
+   {
+    "point": "Comparator flipping more than once in one read",
+    "assumption": "Each stage is evaluated once per cycle from its pre-step state. A stage that has just flipped is not re-tested in the same step."
+   },
+   {
+    "point": "Where the stage 1 bleed and the breaker differences go",
+    "assumption": "Both go to the ground tally. The ground tally counts every amount that leaves the chain: stage 6 shunt excess, CLEAR leaks, stage 1's return, and breaker halving."
+   },
+   {
+    "point": "Whether bleed-in can push a stage over its rating",
+    "assumption": "Allowed, as written. Over-rating values carry into the next cycle (or stay, after cycle 5). For example, stage 2 ends at 10 against a rating of 8."
+   }
+  ],
+  "cycleFigures": "Order stages 1-6; G = ground tally after step.\nCycle 1: charge [3,12,9,7,5,4] G0 | shunt [3,8,12,6,7,4] G0 | comparators [3,8,12,6,7,4] states C,A,A,A,A,C | bleed [7,10,9,6,4,3] G1 | breaker sum 39>38 TRIP -> [3,5,4,3,2,1] G22 (sum 18)\nCycle 2: charge [7,7,4,4,3,8] G22 | shunt [7,7,4,4,3,7] G23 | comparators [7,7,4,4,3,7] states A,A,C,A,C,A | bleed [7,4,5,2,6,4] G27 | breaker sum 28, no trip -> [7,4,5,2,6,4] G27\nCycle 3: charge [11,8,8,2,6,10] G27 | shunt [10,8,9,2,6,7] G30 | comparators [10,8,9,2,6,7] states A,A,A,C,C,A | bleed [9,8,5,2,8,4] G36 | breaker sum 36, no trip -> [9,8,5,2,8,4] G36\nCycle 4: charge [16,14,12,3,11,4] G36 | shunt [10,8,12,6,9,7] G44 | comparators [10,8,12,6,9,7] states A,A,A,A,A,A | bleed [9,10,9,7,8,4] G49 | breaker sum 47>38 TRIP -> [4,5,4,3,4,2] G74 (sum 22)\nCycle 5: charge [4,11,10,6,7,2] G74 | shunt [4,8,12,6,8,2] G74 | comparators [4,8,12,6,8,2] states A,A,A,A,A,C | bleed [6,10,9,7,4,2] G76 | breaker sum 38 (not strictly over), no trip -> [6,10,9,7,4,2] G76",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "ASSERTED",
+   "ASSERTED",
+   "ASSERTED",
+   "ASSERTED",
+   "ASSERTED",
+   "CLEAR"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting charge 20 + total fed in 94 (cycle feeds 20+15+17+24+18) = 114. On the chain 38 (6+10+9+7+4+2) + ground tally 76 = 114. It balances.",
+  "usedScript": true,
+  "preReadNotes": "Mode: filter mode (default). This is the Open Mirror pre-read, run on the electrical write-up. The comparison is the electrical language; the topic is the operating rules.\n\nStep 1, plain statement: Six integer counters in a row, numbered 1 to 6. Each has a cap (10,8,12,6,9,7), a high mark (7,6,9,5,7,5) and a low mark (3,2,4,2,3,2). Starting values are 3,6,6,2,2,1. Each counter has a two-valued flag, starting at its 'off' value. A discard tally starts at 0. Each of five rounds does the following in order. (a) Add the round's given amounts. (b) Going 1 to 6, cut any counter above its cap down to the cap and pass the surplus to the next-numbered counter; counter 6's surplus goes to the discard tally. (c) An 'off' flag turns 'on' at or above the high mark; an 'on' flag turns 'off' at or below the low mark; otherwise it stays. (d) Using simultaneous readings, an 'off' counter loses a quarter (rounded down) to discard, and an 'on' counter passes half (rounded down) to the previous counter, with counter 1's going to discard. Caps are not checked. (e) If the total exceeds 38, every counter is halved (rounded down) and the shortfall goes to discard. At the end, report the counters, flags, flips, halving rounds, discard tally and a conservation line. The desk lead states that the rules apply exactly as written and real electrical behaviour must not be substituted. The plain statement fully specifies the procedure apart from the small open points listed separately, so the question of how the line works is already answered at step 1. The embedded electrical comparison is still pulled out and tested as the person's own picture, as the procedure requires. The write-up contains no instructions aimed at me beyond the operating rules themselves.\n\nStep 2, pictures: one picture, the write-up's own electrical framing (charge, rating, shunt, comparator with upper and lower thresholds, return diode, ground, breaker). No further pictures were picked; none would earn a place against a fully specified rule set.\n\nStep 3, map: charge = counter value; rating = cap; shunt = overflow passed downstream; comparator thresholds = hysteresis flag (this maps closely to a Schmitt trigger); ground = discard tally; return diode = the backward transfer from an ASSERTED stage; breaker = the over-total halving. The question it makes easier to ask: is the total conserved? The ground tally makes the conservation check natural.\n\nStep 4, breaks: Real behaviour would sneak in facts that were never supplied. A real breaker opens the circuit; it does not halve each stage and keep running. A real diode's direction is fixed by the device, not by a state flag. Real shunts usually go to ground, not to the next stage. Real charge is not integer-floored. Real ratings would be enforced at all times, but here they are skipped in the bleed. Treating any of these real behaviours as given would contradict the write-up, which explicitly says not to. The picture only labels the rules and does not need those facts to work, so it is not marked misleading as a whole; the break points are recorded as warnings.\n\nStep 5, what survives: the counters' total plus the discard tally always equals the starting total plus everything added.\n\nStep 6, grade: Adds nothing. Conservation follows directly from the plain rules (every removal goes either to another counter or to the discard tally), and the run would be computed identically without the electrical words. Adds nothing: 1 of 1. Misleading: 0. Not run: 0.\n\nStep 7, sort: Keep exploring is empty. Hold is empty. Discard is empty. The electrical picture appears in the count only. Practical consequence for the desk: compute strictly from the plain rules, and do not import real breaker, diode or rating behaviour.",
+  "notes": "I used a Python script (C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\scr\\sim.py) for the arithmetic, and hand-checked cycle 1 and the cycle 2 comparator boundary cases. The breaker tripped in cycles 1 (sum 39) and 4 (sum 47). In cycle 5 the post-bleed sum was exactly 38, so there was no trip. Stage 2 ends at 10 and stage 4 at 7, both above their ratings, which the write-up allows after cycle 5. The balance line checks: 114 = 114."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "openPoints": 7,
+  "preReadLength": 3755
+ }
+}

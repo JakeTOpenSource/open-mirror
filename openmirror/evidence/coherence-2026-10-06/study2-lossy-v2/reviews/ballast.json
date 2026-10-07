@@ -1,0 +1,42 @@
+{
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 2,
+   "gapsSilentlyAssumed": 5,
+   "followedEngineerNotDomain": "Where the write-up left things open, A followed the engineer's process, not real ballast practice. For example, it kept post-pump overfill in place: \"They are left overfull. The next cycle's scuppers deal with them\"."
+  },
+  {
+   "arm": "B",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 4,
+   "gapsSilentlyAssumed": 3,
+   "followedEngineerNotDomain": "B followed the engineer's process and treated the marks as literal thresholds, not physical hysteresis: \"Applied as written: equal to inception triggers CAVITATING (at or above), equal to desinence triggers LAMINAR (at or below)\"."
+  },
+  {
+   "arm": "C",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 3,
+   "gapsSilentlyAssumed": 4,
+   "followedEngineerNotDomain": "C followed the engineer's process and sized discharges before any transfer, against how real flow behaves: \"All discharges are worked out before any water moves, so backflow arriving in a compartment does not change that compartment's own discharge.\""
+  }
+ ],
+ "applicableLosses": 7,
+ "domainPull": "The ballast language pulls hardest in three places. Scuppers send water aft into the next compartment instead of overboard. A CAVITATING pump \"backflows forward\" toward the bow, where a real cavitating pump would lose suction. The emergency blow only halves each compartment, where a real blow would empty the tanks. C's pre-read named all three, and none of them misled any operator.",
+ "preReadNamedTheBreak": "n/a: nobody fell. A, B and C all match the true answer exactly. C's notes still named the domain-versus-rule conflicts in advance, for example that real scuppers \"drain overboard, not aft into the next compartment\".",
+ "preReadEffect": "No difference. All three were exactly right, and each listed 7 open points. On the applicable losses, A covered 2, C covered 3 and B covered 4. The pre-read did not make C more correct, and C did not flag more of the losses than the operators without it.",
+ "summary": "The write-up held all the rules the computation needed, and all three operators reproduced the true answer exactly (LOST 76, blows in cycles 1 and 4, 13 mode changes). None of them flagged the missing D < U <= C invariant, the intake-table orientation or the term mapping in their open points. B covered the most applicable losses, mainly through its rounding and remainder point. C's pre-read correctly predicted where the domain pictures conflict with the rules, but with no failures in A or B it changed nothing measurable."
+}

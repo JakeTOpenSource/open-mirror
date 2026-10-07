@@ -1,0 +1,182 @@
+{
+ "run": {
+  "procedureSummary": "Start: open tickets [3,6,6,2,2,1] (total 20), all teams ROUTINE, closed tally 0. Each cycle runs these steps in order, and each step finishes for the whole board before the next one starts.\nStep 1 (arrivals): add that cycle's new tickets to each team. WIP limits are not enforced at this step.\nStep 2 (walk): go from team 1 to team 6 in order. If a team is over its WIP limit, including anything it just received from upstream, set it to the limit and pass the excess to the next team. Excess from team 6 is closed-without-action and added to the closed tally.\nStep 3 (status check, on post-walk counts): a ROUTINE team with count >= its escalation mark becomes ESCALATED. An ESCALATED team with count <= its stand-down mark becomes ROUTINE. Otherwise status stays the same. Every flip is logged.\nStep 4 (work queues, all from one snapshot of the step-3 counts): a ROUTINE team closes floor(n/4), which goes to the closed tally. An ESCALATED team sends floor(n/2) to the team above it. Team 1's bounce is closed and goes to the tally. Bounced tickets may leave a team over its limit.\nStep 5 (backlog cut): if the board total is strictly greater than 38, every team keeps floor(n/2) and the rest go to the closed tally. At 38 or below, nothing happens.\nEnd-of-cycle-5 figures are taken after step 5 of cycle 5. Over-limit counts are left as they are. A Python script did the arithmetic.",
+  "openPoints": [
+   {
+    "point": "Walk order: are amounts received from upstream counted before a team is checked against its limit?",
+    "assumption": "Yes. The walk runs strictly in order and each team is checked after any inflow, as in 'counting when you reach them'."
+   },
+   {
+    "point": "Which counts does the status check use?",
+    "assumption": "The counts after step 2 (the walk) of the same cycle. Status is checked only at step 3 and is not rechecked after bounces or the cut."
+   },
+   {
+    "point": "Snapshot in step 4: does a team's closures or bounce include tickets it receives in the same step?",
+    "assumption": "No. Every team's closures and bounce are calculated from the step-3 counts. Bounced tickets are added on top of that."
+   },
+   {
+    "point": "Rounding",
+    "assumption": "Round down per team for the quarter (closures), the half (bounce) and the kept half (cut). The remainder of the cut is closed."
+   },
+   {
+    "point": "Where team 6 overflow, team 1 bounce and backlog-cut removals are recorded",
+    "assumption": "All three go into the single closed tally, as 'every closure, by any route' requires."
+   },
+   {
+    "point": "Backlog cut boundary",
+    "assumption": "Strictly over 38 triggers the cut. A total of exactly 38 (cycle 5) does not."
+   },
+   {
+    "point": "Over-limit counts after the final cycle",
+    "assumption": "Reported as they stand (team 2 = 10 > 8, team 4 = 7 > 6), as the write-up says they stay after cycle 5."
+   },
+   {
+    "point": "Meaning of 'halving event' in the report",
+    "assumption": "It means the step-5 backlog cut, where every team keeps half."
+   }
+  ],
+  "cycleFigures": "Start: [3,6,6,2,2,1] total 20, closed 0\nC1 step 1 arrivals [3,12,9,7,5,4] | step 2 walk [3,8,12,6,7,4] closed 0 | step 3 status: teams 2,3,4,5 ESCALATED | step 4 work [7,10,9,6,4,3] closed 1 | step 5 cut fired (total 39>38) [3,5,4,3,2,1] closed 22, total 18\nC2 step 1 [7,7,4,4,3,8] | step 2 [7,7,4,4,3,7] closed 23 | step 3: team 1 ESC, team 3 ROUT, team 5 ROUT, team 6 ESC | step 4 [7,4,5,2,6,4] closed 27 | step 5 no cut (28) [7,4,5,2,6,4] closed 27\nC3 step 1 [11,8,8,2,6,10] | step 2 [10,8,9,2,6,7] closed 30 | step 3: team 3 ESC, team 4 ROUT | step 4 [9,8,5,2,8,4] closed 36 | step 5 no cut (36) [9,8,5,2,8,4] closed 36\nC4 step 1 [16,14,12,3,11,4] | step 2 [10,8,12,6,9,7] closed 44 | step 3: team 4 ESC, team 5 ESC (all six ESCALATED) | step 4 [9,10,9,7,8,4] closed 49 | step 5 cut fired (47>38) [4,5,4,3,4,2] closed 74, total 22\nC5 step 1 [4,11,10,6,7,2] | step 2 [4,8,12,6,8,2] closed 74 | step 3: team 6 ROUT | step 4 [6,10,9,7,4,2] closed 76 | step 5 no cut (exactly 38) [6,10,9,7,4,2] closed 76",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "ESCALATED",
+   "ESCALATED",
+   "ESCALATED",
+   "ESCALATED",
+   "ESCALATED",
+   "ROUTINE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "ESCALATED",
+    "to": "ROUTINE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "ESCALATED",
+    "to": "ROUTINE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "ESCALATED",
+    "to": "ROUTINE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "ROUTINE",
+    "to": "ESCALATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "ESCALATED",
+    "to": "ROUTINE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "20 tickets at start + 94 that arrived = 114, against 38 open + 76 closed = 114. Balanced.",
+  "usedScript": true,
+  "notes": "Write-up: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\coherence\\desk3\\goodhart.md. Pre-read procedure: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\coherence\\desk-preread.md (Open Mirror v1.4.3). A short Python script did the arithmetic, and the balance closes at 114 = 114. Arrivals by cycle: 20, 15, 17, 24, 18, total 94. Closed-tally build-up: C1 +22 (1 team-1 bounce, 21 cut), C2 +5 (1 team-6 overflow, 1 team-1 bounce, 3 routine closures), C3 +9 (3 team-6 overflow, 5 team-1 bounce, 1 routine closure), C4 +38 (8 team-6 overflow, 5 team-1 bounce, 25 cut), C5 +2 (2 team-1 bounce). Two teams end over their WIP limits because of the cycle-5 bounces: team 2 (10/8) and team 4 (7/6). The write-up says these stay. Neither file contained instructions aimed at the operator.",
+  "preReadNotes": "Mode: filter mode (the default). Procedure: Open Mirror v1.4.3, run on goodhart.md. The comparison is the team-metrics / Goodhart's-law wording, and the topic is the operating rules.\n\nStep 1, plain statement: Six queues numbered 1 to 6. Each has a capacity (10,8,12,6,9,7), an upper threshold (7,6,9,5,7,5), a lower threshold (3,2,4,2,3,2) and a starting count (3,6,6,2,2,1, total 20). Every queue starts in state A (ROUTINE). Each of five cycles runs:\n(1) add fixed arrivals per queue, with no capacity enforcement;\n(2) a sequential pass from 1 to 6, where any amount over capacity moves to the next queue and queue 6's excess is removed;\n(3) a state change with hysteresis: A becomes B (ESCALATED) at or above the upper threshold, B becomes A at or below the lower threshold, otherwise the state holds, and every change is logged;\n(4) from one snapshot, an A queue removes floor(n/4) and a B queue moves floor(n/2) to the queue before it, with queue 1's share removed; over-capacity counts can persist;\n(5) if the grand total is strictly greater than 38, every queue keeps floor(n/2) and the rest is removed.\nAll removals go into one counter that starts at zero. The report lists the end counts, end states, the change log, the cycles where step 5 fired, the counter, and the conservation line (start + arrivals = open + removed). This restatement fully specifies the computation, so by the skill's own rule the run could stop here. The embedded comparison is still split out and tested so it cannot slip assumptions in.\n\nEmbedded comparison pulled out: 'team metrics and Goodhart's law' (teams, tickets, WIP limit, escalation, board target, closed-without-action). It is the first picture tested and does not count toward the three-picture ceiling.\n\nPictures:\nP0 (embedded): Goodhart's law, where a measure that becomes a target stops being a good measure. Mapping: the 'board target 38' is a metric, and the backlog cut closes tickets without action to meet it. Question it raises: should closures-without-action be counted apart from real work? Break: Goodhart's law assumes agents change their behaviour to game the metric. The rules contain no such adaptation, because every step is fixed and mechanical. The picture also brings in a value judgement that cut closures are 'not real', which the write-up never states. Used to split the tally, it contradicts the stated rule 'Every closure, by any route, goes on one closed tally', so it is marked misleading. It skips steps 5 and 6 and goes to Discard.\nP1: ticket-board / kanban picture (WIP limits, escalations). Mapping: queues are team backlogs, capacity is the WIP limit, state B is escalation. Break: real kanban does not push overflow downstream to the customer-facing team, does not bounce half of an escalated queue upstream, and does not mass-close half the board. Applying real practice would contradict the rules. Survives in plain words: each queue has a capacity, and overflow moves to the next queue in order. That only restates step 2, so it adds nothing.\nP2: cascading water tanks (spill downhill, pumped back uphill). Mapping: step 2 is a spill to the next tank, and step 4's bounce for state B is backflow to the previous tank. Question: can backflow leave a tank over its rim? Break: tanks have no rounding, no hysteresis state, no single-snapshot timing and no global halving. Survives in plain words: tickets moved upstream in step 4 can leave a queue over capacity until the next step 2. The write-up already says this, so it adds nothing.\n\nStep 6 count: Adds nothing: 2 of 3. Misleading: 1. Not run: 0.\nStep 7 piles: Keep exploring is empty. Hold is empty. Discard: P0, Goodhart's law. Break point: it implies agent gaming and separate treatment of closures-without-action, which contradicts the one-tally rule.\nResult for the desk: compute exactly as the plain statement says, and do not let real team-metrics or Goodhart's-law practice override any rule. The material contains no instructions aimed at the operator."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "openPoints": 8,
+  "preReadLength": 3996
+ }
+}

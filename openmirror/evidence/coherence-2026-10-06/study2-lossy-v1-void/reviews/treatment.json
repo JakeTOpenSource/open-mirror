@@ -1,0 +1,144 @@
+{
+ "documentLosses": [
+  {
+   "rule": "Release rounding: NORMAL release is floor(L/4) and ELEVATED release is floor(L/2)",
+   "kind": "ambiguous",
+   "documentQuote": "We count whole units of liquor, rounding down on every split. ... STEADY: a quarter to outfall. OVERLOADED: half back up the return line",
+   "explanation": "Floor is stated once, globally, and not repeated where the quarter and half draws are defined. Only the bypass restates it ('every tank keeps half, rounded down'), which settles that the ceiling half goes to outfall."
+  },
+  {
+   "rule": "Mode check uses the level after spill-over and before release",
+   "kind": "ambiguous",
+   "documentQuote": "Each cycle, five jobs in order, each finished down the whole line before the next",
+   "explanation": "This follows only from the job order. The 'States' job never says which contents are tested."
+  },
+  {
+   "rule": "A cell changes mode at most once per period",
+   "kind": "missing",
+   "documentQuote": "absent",
+   "explanation": "This is never stated. It follows only from there being one States job per cycle."
+  },
+  {
+   "rule": "Release uses the mode just set in step 3",
+   "kind": "ambiguous",
+   "documentQuote": "4. Discharge. Work out every tank's draw from what it holds now",
+   "explanation": "The write-up says which contents the draw uses ('what it holds now') but not which state. The new state follows only from the order of the jobs."
+  },
+  {
+   "rule": "Levels are whole numbers and never negative",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "We count whole units of liquor",
+   "explanation": "Wholeness rests on 'whole units'. Non-negativity is left to the physical sense that a tank cannot hold less than nothing."
+  },
+  {
+   "rule": "Intake table rows are periods and columns are cells 1 to 6",
+   "kind": "ambiguous",
+   "documentQuote": "Inflow:\nCycle 1: 0, 6, 3, 5, 3, 3",
+   "explanation": "The orientation is implied by the 'Cycle n:' labels and the 'Tanks 1 to 6' heading. It is not given as a rule."
+  },
+  {
+   "rule": "D < U <= C",
+   "kind": "missing",
+   "documentQuote": "absent",
+   "explanation": "The constraint is never stated. The data satisfy it, so it has no effect on this run."
+  },
+  {
+   "rule": "LOST starts at 0 and collects exactly four streams: cell-6 spill, NORMAL release, cell-1 ELEVATED release, reset removals",
+   "kind": "ambiguous",
+   "documentQuote": "The outfall tally takes everything sent to outfall.",
+   "explanation": "The starting value of 0 is never given. The four sources are scattered across jobs 2, 4 and 5 and only gathered under the word 'outfall'."
+  },
+  {
+   "rule": "Spill-over runs in strict order 1 to 6, so excess reaches n+1 before n+1 is handled and cascades; the cell is set to exactly C",
+   "kind": "ambiguous",
+   "documentQuote": "Anything over volume goes over the weir into the next tank before you look at that one, so a surge can ride down the line.",
+   "explanation": "The ordering is stated in compressed form. The full chain ('a surge can ride down the line') and the reset of the spilling tank to exactly its volume are left to the reader's sense of how a weir works."
+  },
+  {
+   "rule": "All six releases are computed from pre-release levels and applied at once; a receiving cell's own release is not recomputed",
+   "kind": "ambiguous",
+   "documentQuote": "Work out every tank's draw from what it holds now, then move it all at once.",
+   "explanation": "'All at once' compresses the simultaneity rule. It is not spelled out that a tank receiving return flow still draws on its pre-discharge contents."
+  },
+  {
+   "rule": "ELEVATED release goes to cell n-1",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "OVERLOADED: half back up the return line to the tank before; tank 1's return goes to outfall.",
+   "explanation": "'The tank before' depends on the inlet-to-outfall numbering. In real treatment practice a return or recycle line usually goes to the head of the works, not to the tank just upstream."
+  },
+  {
+   "rule": "Capacity is not enforced after intake or release, and over-volume at the end of period 5 is never corrected",
+   "kind": "ambiguous",
+   "documentQuote": "Return flow can leave a tank over volume; the weirs take it next cycle, and after cycle 5 it stays.",
+   "explanation": "The rule is stated, but briefly, against strong domain intuition that a tank cannot hold more than its volume. Nothing stresses that a final 10 in a tank of volume 8 is correct."
+  },
+  {
+   "rule": "Global reset compares the total after release",
+   "kind": "ambiguous",
+   "documentQuote": "5. Storm bypass. Total the line. Strictly over 38, every tank keeps half, rounded down; the rest goes to outfall.",
+   "explanation": "The timing follows only from the job order. The domain term 'storm bypass' suggests diverting incoming flow, which is a different mechanism from halving every tank after discharge."
+  },
+  {
+   "rule": "Output specification: record reset periods, log mode changes, perform the balance check",
+   "kind": "ambiguous",
+   "documentQuote": "Log every change. ... Report. End of cycle 5 ...",
+   "explanation": "Recording which cycles the bypass fired in, and the balance identity, appear only by example in the Report paragraph. They are not stated as rules."
+  },
+  {
+   "rule": "No abstract rule: the write-up includes the full final answer",
+   "kind": "added",
+   "documentQuote": "Report. End of cycle 5, tanks 1 to 6: 6, 10, 9, 7, 4, 2. ... Bypass fired in cycles 1 and 4. Outfall tally: 76.",
+   "explanation": "The write-up gives every output figure (levels, states, all 13 changes, bypass cycles, outfall 76, balance). An operator could match the true answer without running the process, so an exact match is weak evidence of comprehension. The writer's compression list does not mention this."
+  }
+ ],
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": false,
+   "errorTypes": [
+    "reporting-format"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Produce an end-of-cycle report",
+     "explanation": "No report or working exists ('Report and working: null'; comparison 'available':false). Nothing in the texts shows why, so no rule-level cause can be located."
+    }
+   ],
+   "gapsCorrectlyFlagged": 0,
+   "gapsSilentlyAssumed": 0,
+   "gapHandling": "Cannot be assessed. Operator A produced no output, so there is no evidence of either engineer-intent or domain-intent guessing."
+  },
+  {
+   "arm": "B",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Balance check arithmetic (does not affect the result)",
+     "explanation": "The first inflow row was summed wrongly in the balance line. B caught and corrected this in its own notes, and the reported balance of 114 = 114 is correct.",
+     "operatorQuote": "Inflow 17+15+17+24+18 = 91 by row ... The figure of 91 written there is a slip."
+    }
+   ],
+   "gapsCorrectlyFlagged": 4,
+   "gapsSilentlyAssumed": 7,
+   "gapHandling": "B flagged four real losses: rounding, the discharge state, the weir cascade, and the Report figures as claims to check. Where the write-up was silent, B followed the engineer's intent. It silently read the state check as post-weir ('States, using the contents after the weirs'), the return as going to 'the previous tank', the draws as computed from pre-transfer contents, and the outfall sources, plus bypass timing, whole/non-negative units and table orientation, without flagging any of them. Its two other flags (bypass boundary, bypass not changing states) cover points the write-up settles."
+  },
+  {
+   "arm": "C",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 10,
+   "gapsSilentlyAssumed": 3,
+   "gapHandling": "C followed the engineer's intent throughout. Its gap list covers post-weir testing and at most one change per cycle, the discharge state, rounding, simultaneity, outfall sources, bypass timing and over-volume persistence. Its pre-read named the domain traps for the return line ('return or recycle flow usually goes to the head of the works, not to the tank just upstream') and the Report paragraph ('I treat those as content (claimed results to check)'). It silently assumed only whole/non-negative units, table orientation and the cascade mechanics (L9)."
+  }
+ ],
+ "domainPull": "The pull was strongest at the storm bypass and the return line. A real bypass diverts incoming flow, but here 'every tank keeps half, rounded down; the rest goes to outfall' is a global halving after discharge. A real return line feeds the head of the works, but here it goes to 'the tank before'. A third pull is the physical intuition that a tank cannot sit over volume, which the end state violates (tank 2 at 10 against a volume of 8). C's pre-read named all three; nobody fell for them.",
+ "preReadNamedTheBreak": "n/a: nobody fell. B and C both match the true answer and A produced no report, although C's pre-read did name in advance the domain traps (return to head of works, bypass diverting inflow, 'Tanks cannot really hold more than their volume', 'the bypass fires at exactly 38').",
+ "preReadEffect": "It made no difference to the final numbers: B and C both matched exactly, and the write-up printed the answer in its Report paragraph, so exactness says little. It helped gap flagging. C surfaced about 10 of the real losses against B's 4, including the domain-sensitive ones (the n-1 return, over-volume persisting after cycle 5, bypass timing, at most one change per cycle) that B resolved silently.",
+ "summary": "The write-up's main defect is an addition: its Report paragraph gives every output figure, so B's and C's exact matches cannot separate comprehension from verification, although both say they recomputed independently with a script. Its other losses are order-implied compressions (state-check contents, discharge state, bypass timing) and domain-leaning terms ('the tank before', 'storm bypass', over-volume tanks), and nobody was misled by them. C's pre-read did not change the result but roughly doubled the real gaps flagged; A produced no report."
+}

@@ -1,0 +1,65 @@
+{
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Step 2 scupper cascade, cycle 4 (working narration only)",
+     "documentQuote": "Because you work in order, overflow from compartment 1 arrives in compartment 2 before compartment 2 is checked, so one compartment's overflow can push the next one over its volume in this same step",
+     "operatorQuote": "cascade: 6->2, 12->3 overflow 7, 10->4 overflow 4, 13->5 overflow 4, 8->6 overflow 1 overboard... net 8 overboard",
+     "explanation": "The hand narration of the cycle 4 cascade is muddled. The actual transfers were 6, 12, 12, 9, 11 and 8 overboard, as B and C show. The post-scupper state A states ([10,8,12,6,9,7]) and its TO of 44 are still correct, and so is every deliverable. The script output was right and only the prose recap is garbled. This has no effect on (a) to (f), so it is not an error of understanding. A's rule statement matches the abstract process on every point, including strictly greater than 38, at-least/at-most hysteresis, the simultaneous release, forward backflow, and no capping in Step 4."
+    }
+   ]
+  },
+  {
+   "arm": "B",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [
+    {
+     "rule": "All rules",
+     "documentQuote": "Volume is not enforced in this step. A compartment may hold more than its volume after receiving backflow. That excess is dealt with only at the next cycle's Step 2, and never if this is cycle 5.",
+     "operatorQuote": "At the end, compartment 2 holds 10 against a volume of 8, which is allowed because there is no scupper step after cycle 5.",
+     "explanation": "No break. B's stated rules match the abstract process. It also explicitly handled the two edge cases that domain intuition would most likely override: the final over-volume and the exact-38 non-firing of the blow in cycle 5."
+    }
+   ]
+  },
+  {
+   "arm": "C",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [
+    {
+     "rule": "All rules",
+     "documentQuote": "a CAVITATING compartment's pumped amount backflows forward and is added to the contents of the compartment immediately forward (compartment n-1).",
+     "operatorQuote": "I applied the document's rules as written, including that cavitating pumps drain half and send it forward, and I did not substitute real-world cavitation behaviour.",
+     "explanation": "No break. C's rules and its cycle-by-cycle working match the abstract process and the true answer exactly. There is one small inaccuracy in the pre-read: it attributes the phrase \"entirely in buoyancy and cavitation terms\" to the document itself, but that phrase does not appear in the document, which never uses the word buoyancy. This had no effect on the result."
+    }
+   ]
+  }
+ ],
+ "translationLoss": [
+  {
+   "rule": "Hysteresis thresholds (Step 3)",
+   "documentQuote": "Cavitation begins at the inception mark and ends only at the desinence mark.",
+   "explanation": "This sentence in Definitions is domain-flavoured, and on its own \"ends only at\" could be read as an exact-equality trigger. Step 3 then states the rule unambiguously (\"at least its inception mark\", \"at most its desinence mark\", and \"keeps whatever state it had\" in between), so nothing is lost. The blur is minor and self-corrected."
+  },
+  {
+   "rule": "All other rules",
+   "documentQuote": "If the total is more than 38 (the blow limit), fire the emergency blow ... If the total is equal to 38 or less, nothing happens.",
+   "explanation": "There is no rule loss or addition. Every abstract rule is carried over faithfully: no cap at intake, the sequential cascading spill, the hysteresis mode check with at most one change per cycle, the snapshot-then-simultaneous release with floor(/4) and floor(/2), forward transfer with compartment 1's going to LOST, no cap after release (including cycle 5), the strict >38 reset with halving to LOST, and the balance check. The data table matches C, U, D, the starting levels, G and the intake table exactly."
+  }
+ ],
+ "domainPull": "The hardest pull was in Step 4. In real cavitation, pump output falls and nothing flows backward, but the document says a CAVITATING pump moves twice the LAMINAR fraction (half) and \"backflows forward\" into compartment n-1. A second pull is that real tanks cannot exceed their volume, while the document lets contents exceed volume after backflow and leaves them that way after cycle 5 (compartment 2 ends at 10 against a volume of 8). Nobody fell for either one.",
+ "preReadNamedTheBreak": "n/a: nobody went wrong. A, B and C all match the true answer exactly. The pre-read did flag ahead of time the two likeliest traps: \"real cavitation reduces pump output\" and \"real tanks cannot exceed volume\".",
+ "preReadEffect": "No difference. A and B, who had no pre-read, produced the identical correct report. The pre-read's restatement and its warnings (\"do not let the cavitation picture suggest reduced pumping or the tank picture suggest volume caps outside Step 2\") were accurate, but they guarded against errors that the other two arms did not make. Its one slip was attributing \"entirely in buoyancy and cavitation terms\" to the document, and that was harmless.",
+ "summary": "All three operators reproduced the true answer exactly: final [6,10,9,7,4,2], modes all CAVITATING except compartment 6, all 13 state changes, blows in cycles 1 and 4, and Total Overboard 76. All three stated the rules correctly, including the edge cases of exactly 38 not firing the blow and over-volume left in place after cycle 5. The document carried the abstract process faithfully apart from a domain-flavoured definition sentence that Step 3 makes precise, so the strong domain pull of the cavitation backflow rule broke no one, and the pre-read made no measurable difference."
+}

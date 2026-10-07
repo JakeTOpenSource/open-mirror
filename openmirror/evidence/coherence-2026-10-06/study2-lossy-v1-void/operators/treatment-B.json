@@ -1,0 +1,173 @@
+{
+ "run": {
+  "rulesInOwnWords": "There are six tanks in a line, with tank 1 at the inlet and tank 6 at the outfall. Every quantity is a whole number, and every split rounds down. Each cycle runs five jobs in order, and each job is finished for all six tanks before the next one starts.\n(1) Inflow: add that cycle's inflow row to each tank. A tank may go over its volume for now.\n(2) Weirs: walk from tank 1 to tank 6. If a tank holds more than its volume, the excess goes into the next tank before that tank is checked, so excess can pass down several tanks in one walk. Excess from tank 6 goes to outfall.\n(3) States, using the contents after the weirs: a STEADY tank at or above its upper mark becomes OVERLOADED. An OVERLOADED tank at or below its lower mark becomes STEADY. Otherwise the state stays the same. Every change is logged.\n(4) Discharge: work out every tank's draw from its contents after the weirs and its state after step 3, then move all draws at once. A STEADY tank sends floor(contents/4) to outfall. An OVERLOADED tank sends floor(contents/2) back up to the previous tank. Tank 1's return goes to outfall instead. Return flow can leave a tank over volume. That is allowed and is handled by the next cycle's weirs, or simply left in place after cycle 5.\n(5) Storm bypass: add up all six tanks. If the total is strictly greater than 38, each tank keeps floor(contents/2) and the rest goes to outfall. A total of exactly 38 does not trigger it.\nThe outfall tally collects everything sent to outfall: tank 6 weir overflow, STEADY quarter draws, tank 1's OVERLOADED return and storm bypass releases.",
+  "gapsFlagged": [
+   {
+    "rule": "Which state the discharge draw uses",
+    "whatYouAssumed": "The state set in step 3 of the same cycle, applied to the contents after the weirs."
+   },
+   {
+    "rule": "Rounding of the quarter and half draws and of the bypass",
+    "whatYouAssumed": "All of them round down (floor). For the bypass, the tank keeps floor(contents/2) and the remainder, which is the larger half when contents are odd, goes to outfall."
+   },
+   {
+    "rule": "Bypass threshold boundary",
+    "whatYouAssumed": "Strictly over 38 means a total of 39 or more. In cycle 5 the total was exactly 38, so the bypass did not fire."
+   },
+   {
+    "rule": "Whether the bypass changes states",
+    "whatYouAssumed": "It does not. States are only re-evaluated in step 3 of the next cycle."
+   },
+   {
+    "rule": "Weir excess passed into a tank that is already full",
+    "whatYouAssumed": "The excess is added first, then that tank is checked against its own volume in the same walk, as the write-up's 'before you look at that one' suggests."
+   },
+   {
+    "rule": "Report figures in the write-up",
+    "whatYouAssumed": "I treated the figures in the Report paragraph as claims to check, not as given values. I recomputed everything from the rules, and my results match them exactly."
+   }
+  ],
+  "working": "Start: [3,6,6,2,2,1], all STEADY, outfall 0.\nC1: after inflow [3,12,9,7,5,4]. After weirs [3,8,12,6,7,4]: tank 2 sends 4 to tank 3, tank 3 sends 4 to tank 4, tank 4 sends 1 to tank 5. Outfall 0. States: tanks 2, 3, 4 and 5 go STEADY to OVERLOADED. Draws [0(S),4(O),6(O),3(O),3(O),1(S)]. After discharge [7,10,9,6,4,3], outfall 1. Total 39, which is over 38, so the bypass fires: [3,5,4,3,2,1], outfall 22.\nC2: after inflow [7,7,4,4,3,8]. After weirs [7,7,4,4,3,7]: tank 6 sends 1 to outfall, outfall 23. States: tank 1 STEADY to OVERLOADED (7 is at or above 7); tank 3 OVERLOADED to STEADY (4 is at or below 4); tank 5 OVERLOADED to STEADY (3 is at or below 3); tank 6 STEADY to OVERLOADED (7 is at or above 5). Draws [3(O, to outfall),3(O),1(S),2(O),0(S),3(O)]. After discharge [7,4,5,2,6,4], outfall 27. Total 28, no bypass.\nC3: after inflow [11,8,8,2,6,10]. After weirs [10,8,9,2,6,7]: tank 1 sends 1 to tank 2, tank 2 sends 1 to tank 3, tank 6 sends 3 to outfall. Outfall 30. States: tank 3 STEADY to OVERLOADED (9 is at or above 9); tank 4 OVERLOADED to STEADY (2 is at or below 2). Draws [5(O, to outfall),4(O),4(O),0(S),1(S),3(O)]. After discharge [9,8,5,2,8,4], outfall 36. Total 36, no bypass.\nC4: after inflow [16,14,12,3,11,4]. After weirs [10,8,12,6,9,7]: tank 1 sends 6, tank 2 sends 12, tank 3 sends 12, tank 4 sends 9, tank 5 sends 11, and tank 6 sends 8 to outfall. Outfall 44. States: tank 4 STEADY to OVERLOADED; tank 5 STEADY to OVERLOADED. All six are now OVERLOADED. Draws [5(to outfall),4,6,3,4,3]. After discharge [9,10,9,7,8,4], outfall 49. Total 47, which is over 38, so the bypass fires: [4,5,4,3,4,2], outfall 74.\nC5: after inflow [4,11,10,6,7,2]. After weirs [4,8,12,6,8,2]: tank 2 sends 3 to tank 3, tank 3 sends 1 to tank 4, tank 4 sends 1 to tank 5. Outfall 74. States: tank 6 OVERLOADED to STEADY (2 is at or below 2). Tank 1 at 4 is above its lower mark of 3, so it stays OVERLOADED. Draws [2(O, to outfall),4(O),6(O),3(O),4(O),0(S, floor(2/4))]. After discharge [6,10,9,7,4,2], outfall 76. Total 38, which is not strictly over 38, so no bypass. Tanks 2 and 4 end over volume from return flow and stay that way, as the write-up allows.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "OVERLOADED",
+   "OVERLOADED",
+   "OVERLOADED",
+   "OVERLOADED",
+   "OVERLOADED",
+   "STEADY"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "OVERLOADED",
+    "to": "STEADY"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "OVERLOADED",
+    "to": "STEADY"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "OVERLOADED",
+    "to": "STEADY"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "OVERLOADED",
+    "to": "STEADY"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Start 3+6+6+2+2+1 = 20. Inflow 17+15+17+24+18 = 91 by row; checked by column it is 15+24+19+10+10+16 = 94 (rows: 20,15,17,24,18 = 94). Start plus inflow is 20+94 = 114. End tanks are 6+10+9+7+4+2 = 38, and outfall is 76, so the end side is 38+76 = 114. The two sides balance.",
+  "usedScript": true,
+  "notes": "I used a short Python script for the arithmetic, saved in the scratchpad as sim.py. The recomputed results match every figure in the write-up's Report paragraph: end quantities, end states, all 13 state changes, bypass in cycles 1 and 4, outfall 76, and the balance of 114 = 114. Correction to the inflow arithmetic in balanceCheck: the cycle row sums are 20, 15, 17, 24 and 18, which total 94. The figure of 91 written there is a slip.",
+  "preReadNotes": "The write-up's Report paragraph already contains end figures. I treated them as claims to verify rather than inputs, and recomputed everything independently."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "gapsFlagged": 6
+ }
+}

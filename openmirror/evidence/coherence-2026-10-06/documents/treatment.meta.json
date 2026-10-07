@@ -1,0 +1,18 @@
+{
+ "restingStateWord": "STEADY",
+ "raisedStateWord": "OVERLOADED",
+ "positionNoun": "tank",
+ "quantityNoun": "liquor",
+ "cycleNoun": "cycle",
+ "resetNoun": "storm bypass",
+ "lossNoun": "outfall total",
+ "checks": [
+  {
+   "pass": true,
+   "recoveredRules": "OBJECTS: six tanks in series, numbered 1 to 6. Tank 1 is at the inlet (upstream) and tank 6 at the outfall (downstream). The next tank of n is n+1 and the previous tank is n-1. QUANTITIES: each tank's contents are a whole number and never negative. Each tank has a fixed volume (its maximum), an upper mark and a lower mark, with lower < upper <= volume. Each tank is STEADY or OVERLOADED, and all start STEADY. There is a train limit of 38 on the combined contents, and an outfall total that starts at 0 and only increases. ROUNDING: any quarter or half of a tank's contents is rounded down. CYCLES: run cycles 1 to 5. Each cycle runs five steps in fixed order, and each step finishes for all six tanks before the next step starts. STEP 1 (all tanks together, independent): add that cycle's inflow to each tank. Volume is not enforced, so contents may exceed volume. STEP 2 (one tank at a time, in order 1 to 6): if contents > volume, the excess (contents - volume) goes to tank n+1 and the tank is set to exactly its volume. Excess from tank 6 is added to the outfall total. If contents <= volume, nothing happens. Overflow can cascade down the train within the step. This is the only step that enforces volume. STEP 3 (per tank, using contents after Step 2): a STEADY tank with contents >= upper mark becomes OVERLOADED. An OVERLOADED tank with contents <= lower mark becomes STEADY. Otherwise the state is unchanged, so a tank strictly between the marks keeps its state. Each change is logged as (cycle, tank, before, after), and a tank changes at most once per cycle. STEP 4 (compute all six first, then apply together): each amount comes from the contents at the start of the step. STEADY gives floor(contents/4) and OVERLOADED gives floor(contents/2). Each tank decreases by its own amount. A STEADY amount goes to outfall. An OVERLOADED amount goes to tank n-1, and for tank 1 it goes to outfall. Volume is not enforced: any excess waits for Step 2 of the next cycle, and if it arises in cycle 5 it stays in the tank. STEP 5: sum all contents. If the sum is strictly > 38, every tank becomes floor(contents/2), all removed liquor goes to outfall, and the cycle is logged. If the sum is <= 38, nothing happens. The limit is checked only in this step. DATA: volumes 10,8,12,6,9,7. Upper marks 7,6,9,5,7,5. Lower marks 3,2,4,2,3,2. Starting contents 3,6,6,2,2,1. Limit 38. Inflows by cycle: C1 0,6,3,5,3,3; C2 4,2,0,1,1,7; C3 4,4,3,0,0,6; C4 7,6,7,1,3,0; C5 0,6,6,3,3,0. REPORT after Step 5 of cycle 5: (a) end contents for tanks 1 to 6, (b) end states for tanks 1 to 6, (c) all logged state changes, (d) the cycles in which the bypass operated, (e) the outfall total, and (f) the balance check (start sum + inflow sum = end sum + outfall total), with both sides shown.",
+   "problems": [],
+   "leaks": []
+  }
+ ],
+ "checkPassed": true
+}

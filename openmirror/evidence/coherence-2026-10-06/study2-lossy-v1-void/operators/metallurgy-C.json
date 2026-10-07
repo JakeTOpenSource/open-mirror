@@ -1,0 +1,173 @@
+{
+ "run": {
+  "preReadNotes": "OPEN MIRROR, filter mode (the default). Topic: the operating rules of the six-position line. Comparison under test: the metallurgy language the write-up uses.\n\n1. PLAIN STATEMENT. There are six containers in a row, numbered 1 to 6. Each has a capacity (10, 8, 12, 6, 9, 7), an upper threshold (7, 6, 9, 5, 7, 5) and a lower threshold (3, 2, 4, 2, 3, 2). They start holding 3, 6, 6, 2, 2, 1 whole units, and all start in state BASE. Amounts are whole units and any split rounds down. Each of the five cycles runs five steps in order, and each step finishes across all six containers before the next step starts. (a) Add that cycle's input row, ignoring capacity. (b) Walk from 1 to 6. Any amount above capacity moves to the next container before that container is checked, so the moves can chain. Excess from container 6 goes to a loss sink. (c) A BASE container at or above its upper threshold becomes SUPERHEATED. A SUPERHEATED container at or below its lower threshold becomes BASE. Otherwise the state stays the same. Every change is logged. (d) Read all six amounts first, then act. A BASE container sends a quarter of its amount to the loss sink. A SUPERHEATED container sends half of its amount to the container before it, and container 1 sends its half to the loss sink. A container can end this step above capacity; that excess waits for the next cycle's step (b), and after cycle 5 it stays. (e) If the line total is strictly above 38, halve every container, send the removed amount to the loss sink, and log the cycle. The loss tally is everything that reached the sink. The write-up ends with a Report paragraph that already gives end figures (6, 10, 9, 7, 4, 2; taps in cycles 1 and 4; slag 76). I treated those figures as content to check against, not as given. The material contains no instructions aimed at the reader beyond the report format. The plain statement does not settle the question on its own, because the rounding of 'halve every crucible' is open (see gaps). Proceed.\n\n2. PICTURES. P0 (embedded, the write-up's own): metallurgy, with crucibles, melt, launder, superheat, slag and emergency tap. It is pulled out as the first picture and does not count against the three. P1 (borrowed): a cascade of water tanks with float-switch hysteresis. No third picture; one would only pad the run.\n\n3. MAP. P0: crucible = container; working volume = capacity; melt = units; launder overflow = forward spill; return launder = backward transfer; SUPERHEATED/BASE = a two-state flag with hysteresis between the upper and lower marks; slag pit = loss sink; emergency tap = global halving when the total exceeds 38. Question it makes easier to ask: where does every removed unit go? It goes to the single slag sink or moves to a neighbour, which makes a balance check possible. P1: tanks = containers; spillway = forward overflow; float switch with on and off levels = the state flag; drain = sink. Question: is the state judged before or after the backward transfer? The order of the steps answers it: before.\n\n4. BREAKS. P0: real metallurgy would make 'temperature' depend on heat input. Here the state depends only on quantity compared with the marks. Real practice would not let a crucible sit above its volume, but the write-up explicitly allows it after bleed. Real practice would not send melt 'back up' the line, and here half goes backward. 'Halve' in practice carries no rounding convention. The picture brings in no fact that the rules need, and nothing in it contradicts the rules as long as the rules are applied as written. Not misleading. P1: float switches act continuously, but here the state is judged once per cycle at one point. Tanks do not pump half their contents backward. It does not contradict any stated rule. Not misleading.\n\n5. WHAT SURVIVES. P0: each unit either stays in a container, moves to a neighbour, or goes to the single loss sink, so start plus inputs must equal end plus losses. P1: the state is a hysteresis flag on the amount, checked once per cycle after overflow and before the transfers.\n\n6. GRADE. P0: adds nothing. The conservation sentence restates the stated rules (every removal names its destination). P1: adds nothing. The written step order already fixes when the flag is judged. Adds nothing: 2 of 2. Misleading: 0. Not run: 0.\n\n7. PILES. Keep exploring: empty. Hold: empty. Discard: empty. The open rounding question about 'halve every crucible' comes from the rules themselves, not from either picture. It is handled in gapsFlagged.",
+  "rulesInOwnWords": "Each cycle runs five moves in this order, and each move is finished for all six crucibles before the next one starts.\n1) Charge: add the cycle's charge row to each crucible. Volume is not checked at this point.\n2) Overflow: go through crucibles 1 to 6 in order. If a crucible holds more than its working volume, cut it back to the volume and add the excess to the next crucible before checking that one, so overflow can chain down the line. Excess from crucible 6 goes to slag. This walk happens once per cycle.\n3) Temperature: using the amounts after overflow, a BASE crucible with melt >= its upper mark becomes SUPERHEATED, and a SUPERHEATED crucible with melt <= its lower mark becomes BASE. Otherwise the state stays the same. Each change is logged as (cycle, position, from, to).\n4) Bleed: take all six readings first (after overflow). Using the state just set in move 3, a BASE crucible loses floor(melt/4) to slag. A SUPERHEATED crucible loses floor(melt/2), which is added to the crucible before it; for crucible 1 it goes to slag. All transfers are applied at once from those readings. Amounts left above volume stay until the next cycle's overflow, and after cycle 5 they stay for good.\n5) Emergency tap: add up the line. If the total is strictly greater than 38, every crucible is halved: it keeps floor(melt/2), the rest goes to slag, and the cycle is logged as a reset. A total of exactly 38 does not trigger a tap. The tap does not change states.\nSlag tally = overflow off crucible 6 + BASE skims + crucible 1's half when SUPERHEATED + tap removals. Balance: start total + all charges = end total + slag.",
+  "gapsFlagged": [
+   {
+    "rule": "Emergency tap rounding: 'halve every crucible' with 'any split rounds down'",
+    "whatYouAssumed": "The halved crucible keeps floor(melt/2), and the removed amount (ceil of half) goes to slag. This reads the rounded-down quantity as the crucible's new content, and it is the reading that reproduces the write-up's own Report figures. The other reading (remove floor(melt/2), keep the ceiling) changes the result: the cycle 5 total would be 41, a tap would also fire in cycle 5, and the end would be 4,5,5,4,3,1, all SUPERHEATED, with slag 92, resets 1,4,5, and no (2,3), (3,3) or (5,6) changes."
+   },
+   {
+    "rule": "Bleed rounding",
+    "whatYouAssumed": "The amount moved is rounded down: a quarter skimmed = floor(melt/4), half sent = floor(melt/2). The remainder stays in the crucible."
+   },
+   {
+    "rule": "Which state governs the bleed",
+    "whatYouAssumed": "The state set by the same cycle's temperature move, which happens immediately before the bleed."
+   },
+   {
+    "rule": "Bleed amounts when melt is also arriving by the return launder",
+    "whatYouAssumed": "Each crucible's skim or send is computed from its reading taken before any bleed transfer (simultaneous update). Melt arriving from the next crucible does not change what a crucible sends."
+   },
+   {
+    "rule": "Tap effect on states / re-check",
+    "whatYouAssumed": "The tap changes amounts only. States are not re-evaluated until the next cycle's temperature move."
+   },
+   {
+    "rule": "Overflow pass count",
+    "whatYouAssumed": "There is one walk from 1 to 6 per cycle. Melt pushed back over volume by the return launder waits for the next cycle's walk, and this is stated for the bleed."
+   }
+  ],
+  "working": "Volumes 10,8,12,6,9,7; upper 7,6,9,5,7,5; lower 3,2,4,2,3,2. Start 3,6,6,2,2,1, all BASE, slag 0.\n\nCYCLE 1. Charge +[0,6,3,5,3,3] -> [3,12,9,7,5,4]. Overflow: c2 12>8, 4 to c3 -> 13>12, 1 to c4 -> 8>6, 2 to c5 -> 7 -> [3,8,12,6,7,4], slag 0. Temperature: c2 8>=6, c3 12>=9, c4 6>=5, c5 7>=7 go SUPERHEATED; c1 3<7 and c6 4<5 stay BASE. Bleed: c1 BASE skim 0; c2 sends 4 to c1; c3 sends 6 to c2; c4 sends 3 to c3; c5 sends 3 to c4; c6 BASE skim 1 -> [7,10,9,6,4,3], slag 1. Tap: total 39 > 38 -> keep [3,5,4,3,2,1], removed 21, slag 22. RESET.\n\nCYCLE 2. Charge +[4,2,0,1,1,7] -> [7,7,4,4,3,8]. Overflow: c6 8>7, 1 to slag -> [7,7,4,4,3,7], slag 23. Temperature: c1 BASE 7>=7 -> SH; c2 SH 7 holds; c3 SH 4<=4 -> BASE; c4 SH 4 holds; c5 SH 3<=3 -> BASE; c6 BASE 7>=5 -> SH. Bleed: c1 sends 3 to slag; c2 sends 3 to c1; c3 BASE skim 1; c4 sends 2 to c3; c5 BASE skim 0; c6 sends 3 to c5 -> [7,4,5,2,6,4], slag 27. Tap: total 28, none.\n\nCYCLE 3. Charge +[4,4,3,0,0,6] -> [11,8,8,2,6,10]. Overflow: c1 1 to c2 -> 9>8, 1 to c3 -> 9; c6 10>7, 3 to slag -> [10,8,9,2,6,7], slag 30. Temperature: c3 BASE 9>=9 -> SH; c4 SH 2<=2 -> BASE; c1, c2, c6 SH hold; c5 BASE 6<7 holds. Bleed: c1 sends 5 to slag; c2 sends 4 to c1; c3 sends 4 to c2; c4 skim 0; c5 skim 1; c6 sends 3 to c5 -> [9,8,5,2,8,4], slag 36. Tap: total 36, none.\n\nCYCLE 4. Charge +[7,6,7,1,3,0] -> [16,14,12,3,11,4]. Overflow chain: c1 6 -> c2 20, 12 -> c3 24, 12 -> c4 15, 9 -> c5 20, 11 -> c6 15, 8 to slag -> [10,8,12,6,9,7], slag 44. Temperature: c4 BASE 6>=5 -> SH; c5 BASE 9>=7 -> SH; c1, c2, c3, c6 SH hold. Bleed (all SH): c1 5 to slag; c2 4 to c1; c3 6 to c2; c4 3 to c3; c5 4 to c4; c6 3 to c5 -> [9,10,9,7,8,4], slag 49. Tap: total 47 > 38 -> keep [4,5,4,3,4,2], removed 25, slag 74. RESET.\n\nCYCLE 5. Charge +[0,6,6,3,3,0] -> [4,11,10,6,7,2]. Overflow: c2 3 -> c3 13>12, 1 -> c4 7>6, 1 -> c5 8 -> [4,8,12,6,8,2], slag 74. Temperature: c6 SH 2<=2 -> BASE; c1 4>3, c2 8, c3 12, c4 6, c5 8 SH hold. Bleed: c1 2 to slag; c2 4 to c1; c3 6 to c2; c4 3 to c3; c5 4 to c4; c6 BASE skim 0 -> [6,10,9,7,4,2], slag 76. Tap: total 38, not strictly over 38, no tap. c2 (10>8) and c4 (7>6) end over volume and stay that way, as the write-up provides after cycle 5.\n\nSlag by source: overflow off c6 0+1+3+8+0=12; BASE skims 1+1+1+0+0=3; c1 SUPERHEATED halves 0+3+5+5+2=15; taps 21+25=46; total 76.\n\nResult matches the write-up's Report paragraph under the floor-kept tap reading.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "BASE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Start 3+6+6+2+2+1 = 20. Charges: cycle 1 20, cycle 2 15, cycle 3 17, cycle 4 24, cycle 5 18, total 94. In: 20 + 94 = 114. End 6+10+9+7+4+2 = 38. Slag 76 (overflow off crucible 6: 12, BASE skims: 3, crucible 1 returns: 15, emergency taps: 21 + 25 = 46). Out: 38 + 76 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "I used a short Python script (scratchpad sim.py) to run the cycles, then checked each cycle by hand in the working. My results match the write-up's Report paragraph only if an emergency tap leaves each crucible with half its melt rounded down. Under the other reading of 'halve' (the amount removed is rounded down), cycle 5 also taps. That gives an end of 4,5,5,4,3,1, all SUPERHEATED, slag 92 and resets in cycles 1, 4 and 5. Someone should confirm the tap rounding convention with the desk lead. The pre-read was run in filter mode. Both pictures added nothing and none were misleading."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "gapsFlagged": 6
+ }
+}

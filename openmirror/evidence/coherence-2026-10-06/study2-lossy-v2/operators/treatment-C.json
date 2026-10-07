@@ -1,0 +1,182 @@
+{
+ "run": {
+  "procedureSummary": "Script used (Python, integer arithmetic) for every figure. Per cycle, five jobs in order, each finished over all six tanks before the next:\n1. Inflow: add the cycle's row to tanks 1-6. Contents may exceed volume for now.\n2. Weirs: walk tank 1 to 6. If contents > volume, the excess (contents - volume) moves into the next tank before that tank is checked, so a surge can run down the line. Tank 6's excess goes to outfall.\n3. States: STEADY with contents >= upper mark becomes OVERLOADED; OVERLOADED with contents <= lower mark becomes STEADY; otherwise no change. Every change is logged.\n4. Discharge: compute every draw from post-weir contents first, then apply all at once. STEADY draws floor(contents/4) to outfall. OVERLOADED draws floor(contents/2) up the return line to tank i-1; tank 1's OVERLOADED draw goes to outfall. No weir pass after this step.\n5. Storm bypass: total the six tanks. If total > 38 (strictly), each tank keeps floor(contents/2) and the rest goes to outfall.\nOutfall tally = tank 6 weir overflow + STEADY draws + tank 1 return draws + bypass removals.",
+  "openPoints": [
+   {
+    "point": "Rounding of 'a quarter' and 'half' in discharge",
+    "assumption": "Rounded down (floor), per the write-up's 'rounding down on every split'. The draw is floor(contents/4) or floor(contents/2), and the remainder stays in the tank."
+   },
+   {
+    "point": "Rounding in storm bypass",
+    "assumption": "Each tank keeps floor(contents/2). The odd unit, if any, goes to outfall along with the other half."
+   },
+   {
+    "point": "Weir threshold",
+    "assumption": "Spill only when contents are strictly greater than volume. A tank exactly at volume does not spill."
+   },
+   {
+    "point": "Which contents drive the state check",
+    "assumption": "Contents after the weir pass of the same cycle. States are evaluated only in step 3, not after discharge or bypass."
+   },
+   {
+    "point": "Discharge base when a tank receives return flow",
+    "assumption": "Draws are computed from pre-discharge contents for all tanks at once. Return flow arriving in a tank does not change that tank's own draw in the same cycle."
+   },
+   {
+    "point": "Over-volume tanks after discharge and at end of run",
+    "assumption": "Left over volume until the next cycle's weir step. After cycle 5 they stay over volume, so tank 2 ends at 10 against a volume of 8 and tank 4 ends at 7 against 6."
+   },
+   {
+    "point": "Bypass test value",
+    "assumption": "Line total taken after step 4 of the same cycle. Cycle 5 total is exactly 38, which is not strictly over, so the bypass did not fire."
+   },
+   {
+    "point": "Where tank 1's OVERLOADED return goes",
+    "assumption": "To outfall, counted in the tally, as the write-up states."
+   }
+  ],
+  "cycleFigures": "Tanks 1-6 after each step; outfall tally (running) in brackets.\nStart: 3,6,6,2,2,1 (0)\nC1 inflow: 3,12,9,7,5,4 (0) | weirs: 3,8,12,6,7,4 (0) | states: 3,8,12,6,7,4 [S,O,O,O,O,S] | discharge (draws 0,4,6,3,3,1): 7,10,9,6,4,3 (1) | bypass (total 39>38, fired): 3,5,4,3,2,1 (22)\nC2 inflow: 7,7,4,4,3,8 (22) | weirs: 7,7,4,4,3,7 (23) | states: 7,7,4,4,3,7 [O,O,S,O,S,O] | discharge (draws 3,3,1,2,0,3): 7,4,5,2,6,4 (27) | bypass (total 28, no): 7,4,5,2,6,4 (27)\nC3 inflow: 11,8,8,2,6,10 (27) | weirs: 10,8,9,2,6,7 (30) | states: 10,8,9,2,6,7 [O,O,O,S,S,O] | discharge (draws 5,4,4,0,1,3): 9,8,5,2,8,4 (36) | bypass (total 36, no): 9,8,5,2,8,4 (36)\nC4 inflow: 16,14,12,3,11,4 (36) | weirs: 10,8,12,6,9,7 (44) | states: 10,8,12,6,9,7 [O,O,O,O,O,O] | discharge (draws 5,4,6,3,4,3): 9,10,9,7,8,4 (49) | bypass (total 47>38, fired): 4,5,4,3,4,2 (74)\nC5 inflow: 4,11,10,6,7,2 (74) | weirs: 4,8,12,6,8,2 (74) | states: 4,8,12,6,8,2 [O,O,O,O,O,S] | discharge (draws 2,4,6,3,4,0): 6,10,9,7,4,2 (76) | bypass (total 38, not strictly over): 6,10,9,7,4,2 (76)",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "OVERLOADED",
+   "OVERLOADED",
+   "OVERLOADED",
+   "OVERLOADED",
+   "OVERLOADED",
+   "STEADY"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "OVERLOADED",
+    "to": "STEADY"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "OVERLOADED",
+    "to": "STEADY"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "OVERLOADED",
+    "to": "STEADY"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "STEADY",
+    "to": "OVERLOADED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "OVERLOADED",
+    "to": "STEADY"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting contents 20 + all inflow 94 = 114; tanks at end 38 (6+10+9+7+4+2) + outfall 76 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "Arithmetic was done with a short Python script (scratchpad sim.py). The pre-read is a filter-mode run of desk-preread.md (Open Mirror). It found that the water-treatment wording adds nothing beyond the literal rules, and it flagged where real treatment practice would differ. In every case the write-up's rules were applied as written. At the end, tank 2 (10 against volume 8) and tank 4 (7 against volume 6) are over volume, which the write-up allows after cycle 5. The bypass came close to firing in cycle 5: the total was exactly 38, which is not strictly over the limit.",
+  "preReadNotes": "Mode: filter mode (default).\n\nStep 1, plain statement: There are six integer counters in a fixed order, 1 to 6. Each has a capacity (10,8,12,6,9,7), an upper threshold (7,6,9,5,7,5), a lower threshold (3,2,4,2,3,2), a starting value (3,6,6,2,2,1) and a two-value flag that starts at A (STEADY). There is a sink tally that starts at 0, and a global limit of 38. All splits round down, and a run is 5 rounds. Each round runs five steps in order, each step over all counters. (1) Add the round's row; values may exceed capacity. (2) Go left to right: any amount above capacity moves to the next counter before that one is checked, and counter 6's excess goes to the sink. (3) Flag A with value >= upper becomes B (OVERLOADED); flag B with value <= lower becomes A; log every change. (4) Compute every transfer from the current values, then apply them together. Flag A sends floor(v/4) to the sink. Flag B sends floor(v/2) to the previous counter, or to the sink for counter 1. Values may then exceed capacity and are not corrected until the next round's step 2, or ever after round 5. (5) If the total is strictly above 38, each counter keeps floor(v/2) and the rest goes to the sink. The report lists the end values, flags, flag changes, the rounds in which step 5 fired, the sink tally, and a conservation line (start + inflow = end + sink). The write-up contains no instructions aimed at the reader beyond these operating rules. The desk lead's note (rules apply as written, not real practice) is framing, not part of the topic.\n\nEmbedded comparison: the water and sewage treatment vocabulary (tanks, liquor, weirs, return line, outfall, storm bypass, STEADY/OVERLOADED). It is pulled out as picture 1 and does not count toward the three. No further pictures were run, because the plain statement already fully specifies the procedure.\n\nStep 3, map: tank = counter; volume = capacity; weir overflow = left-to-right cascade of excess; outfall = sink; return line = backward transfer from an OVERLOADED counter to its predecessor; storm bypass = global halving above 38; upper/lower marks = hysteresis thresholds. The question the picture makes easier to ask is where each unit of liquor ends up, which is the balance-line check.\n\nStep 4, where it breaks: (a) In real plants, return sludge is pumped from the clarifiers back to the head of the works, not from each tank to the one before it. (b) A real storm bypass diverts excess incoming flow; it does not drain half of every tank after treatment. (c) Real tanks cannot hold more than their volume, but here they can, both after inflow and permanently after cycle 5. (d) A real overloaded tank would normally push more flow downstream, not send it back upstream. (e) Real flows are continuous, while here they are whole units with floor rounding. If the picture were used to fill gaps, these points would contradict the stated rules. But the write-up states each rule explicitly, so the picture is only labels and is not used to reach any conclusion. It is not marked misleading. Its risk is a reader substituting real practice, and that substitution was not made.\n\nStep 5, what survives: transfers between counters and to the sink conserve the total, so start + inflow = end contents + sink.\n\nStep 6, grade: adds nothing. The conservation fact follows directly from the plain rules.\n\nCount: Adds nothing: 1 of 1. Misleading: 0. Not run: 0.\nKeep exploring: empty. Hold: empty. Discard: empty."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "openPoints": 8,
+  "preReadLength": 3442
+ }
+}

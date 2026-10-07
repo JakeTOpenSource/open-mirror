@@ -1,0 +1,166 @@
+{
+ "run": {
+  "procedureSummary": "Each cycle runs five moves in order, each finished across all six crucibles before the next starts.\n1. Charge: add the cycle's charge row to crucibles 1 to 6. Volume is not checked during charging.\n2. Overflow: go through crucibles 1 to 6 in order. Anything above a crucible's working volume moves into the next crucible before that one is checked, so overflow can chain. Overflow from crucible 6 goes to slag.\n3. Temperature: a BASE crucible with melt at or above its upper mark becomes SUPERHEATED. A SUPERHEATED crucible at or below its lower mark becomes BASE. Anything else keeps its state. Every change is logged with cycle, crucible, before and after.\n4. Bleed: take a snapshot of all six quantities and states (after the temperature step), then apply every move at once from that snapshot. BASE: floor(q/4) goes to slag. SUPERHEATED: floor(q/2) goes back to crucible i-1, except crucible 1, whose half goes to slag. A crucible can end the step over its working volume. That is left for the next cycle's overflow, and after cycle 5 it stays.\n5. Emergency tap: add up the line. Only if the total is strictly over 38, remove floor(q/2) from every crucible to slag (each keeps q - floor(q/2)) and log the cycle.\nSlag tally = overflow off crucible 6 + BASE skims + crucible 1's SUPERHEATED half + emergency-tap removals. The arithmetic was done with a short Python script at C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\scr\\sim.py.",
+  "openPoints": [
+   {
+    "point": "How the emergency-tap halving rounds for odd quantities (the amount removed or the amount kept).",
+    "assumption": "I read 'any split rounds down' as applying to the amount moved, the same way as in Bleed: removed = floor(q/2), so the crucible keeps the larger half on odd q. If the kept half is rounded down instead, the tap removes ceil(q/2) and the results change."
+   },
+   {
+    "point": "Which state Bleed uses.",
+    "assumption": "Bleed uses the states as set in this cycle's Temperature step, because Temperature comes before Bleed."
+   },
+   {
+    "point": "Whether Bleed returns are applied in order or all at once.",
+    "assumption": "All at once. 'Read all six before touching any' means every skim and every return amount is worked out from the pre-bleed snapshot. Melt a crucible receives during Bleed is not bled again in the same cycle."
+   },
+   {
+    "point": "Whether temperature is re-checked after Bleed or the tap.",
+    "assumption": "No. Temperature is checked only in step 3 of each cycle, so the end states are the ones set in cycle 5's Temperature step."
+   },
+   {
+    "point": "Boundary on the tap limit.",
+    "assumption": "A total of exactly 38 does not trigger the tap ('strictly over'). Cycle 3 ended at exactly 38 and did not fire."
+   },
+   {
+    "point": "Melt over volume after a bleed.",
+    "assumption": "It stays in place until the next cycle's Overflow step, and is not spilled at the end of cycle 5. This is as written; none was over volume at the end anyway."
+   },
+   {
+    "point": "Where emergency-tap and crucible-1 return amounts go.",
+    "assumption": "Both go to slag and are counted in the slag tally."
+   }
+  ],
+  "cycleFigures": "Start: [3,6,6,2,2,1], all BASE, slag 0.\nCycle 1: charge [3,12,9,7,5,4] -> overflow [3,8,12,6,7,4] (slag 0) -> temperature [3,8,12,6,7,4], states B,S,S,S,S,B -> bleed [7,10,9,6,4,3] (slag 1) -> tap: total 39 > 38, fires: [4,5,5,3,2,2] (slag 19).\nCycle 2: charge [8,7,5,4,3,9] -> overflow [8,7,5,4,3,7] (slag 21) -> temperature [8,7,5,4,3,7], states S,S,S,S,B,S -> bleed [7,6,5,2,6,4] (slag 25) -> tap: total 30, does not fire: [7,6,5,2,6,4] (slag 25).\nCycle 3: charge [11,10,8,2,6,10] -> overflow [10,8,11,2,6,7] (slag 28) -> temperature [10,8,11,2,6,7], states S,S,S,B,B,S -> bleed [9,9,6,2,8,4] (slag 34) -> tap: total 38, not strictly over, does not fire: [9,9,6,2,8,4] (slag 34).\nCycle 4: charge [16,15,13,3,11,4] -> overflow [10,8,12,6,9,7] (slag 44) -> temperature [10,8,12,6,9,7], all S -> bleed [9,10,9,7,8,4] (slag 49) -> tap: total 47, fires: [5,5,5,4,4,2] (slag 71).\nCycle 5: charge [5,11,11,7,7,2] -> overflow [5,8,12,6,9,3] (slag 71) -> temperature [5,8,12,6,9,3], all S -> bleed [7,10,9,7,6,2] (slag 73) -> tap: total 41, fires: [4,5,5,4,3,1] (slag 92).",
+  "finalQuantities": [
+   4,
+   5,
+   5,
+   4,
+   3,
+   1
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4,
+   5
+  ],
+  "lossTotal": 92,
+  "balanceCheck": "Starting melt 20 + all charges 94 (cycle 1: 20, cycle 2: 15, cycle 3: 17, cycle 4: 24, cycle 5: 18) = 114. Crucibles 22 (4+5+5+4+3+1) + slag 92 = 114. It balances.",
+  "usedScript": true,
+  "preReadNotes": "Mode: filter mode (the default).\n\nStep 1, say it plainly: there are six bins in a row, numbered 1 to 6, holding whole-number quantities. Each bin has a capacity (10,8,12,6,9,7), an upper threshold (7,6,9,5,7,5), a lower threshold (3,2,4,2,3,2) and a starting amount (3,6,6,2,2,1). Each bin has a two-value flag, and all start in the first value (BASE). There is a global limit of 38. For five cycles, in order: add the cycle's input row; push any excess over capacity forward bin by bin (chaining), with excess off bin 6 going to a loss sink; flip flags with hysteresis (BASE to SUPERHEATED at or above the upper threshold, back at or below the lower threshold, otherwise hold) and log each flip; then, from a simultaneous snapshot, BASE bins lose floor(q/4) to the sink and SUPERHEATED bins pass floor(q/2) to the previous bin (bin 1's goes to the sink), with no capacity check at that point; then if the total is strictly above 38, halve every bin into the sink and log the cycle. The sink tally is everything that reached it. The report is end amounts, end flags, the flip log, the tap cycles, the sink total and a conservation line. All splits round down. The desk lead states that the rules apply exactly as written, even where real metallurgy would differ. The comparison (metallurgy language) is the write-up's own embedded picture and is pulled out as picture 1. The material contains no instructions aimed at me apart from the report request, which is the task itself. The plain restatement already settles almost all of the operation. The one thing it leaves open is how the halving rounds, which is a gap in the text, not something the picture raises.\n\nStep 2, pictures: one, the embedded metallurgy picture (crucibles, melt, launder, superheat, slag, emergency tap). No others were run, because the plain statement is already complete.\n\nStep 3, mapping: crucible = bin; melt = integer quantity; working volume = capacity; launder = forward transfer of excess; return launder = backward transfer during bleed; upper/lower mark = hysteresis thresholds; BASE/SUPERHEATED = two-state flag; skim = proportional loss to the sink; slag pit = loss sink; emergency tap = global halving when over the limit. The question it makes easier to ask: where does every unit end up? (The conservation check.)\n\nStep 4, where it breaks: in real metallurgy, temperature depends on heat input, not on how full a crucible is; here the 'temperature' state is purely a function of quantity thresholds. Real superheated melt would not be ladled back upstream. Charging without watching volume would cause a real spill at once, but here overflow waits for the next step. A crucible left over volume after a bleed would physically spill; here it stays until the next cycle. Halving every crucible in an emergency is not real practice. Real melt is continuous, not whole units. If someone filled in real-world behaviour, the picture would bring in facts not supplied (cooling on return, spill at charge, continuous quantities). Used only as labels it contradicts nothing, so it is not marked misleading. I applied the write-up's rules and did not substitute any real behaviour.\n\nStep 5, what survives in plain words: the line is a set of bins with capacity limits, forward excess transfer, a per-bin two-state flag with hysteresis on quantity, a simultaneous proportional bleed whose direction depends on the flag, and a global halving when over the limit, with all losses counted in one sink.\n\nStep 6, graded like a stranger: picture 1, adds nothing. Taking out the picture words leaves the plain statement, and every calculation decision would be the same without it. Adds nothing: 1 of 1. Misleading: 0. Not run: 0.\n\nStep 7, sorting: Keep exploring is empty. Hold is empty. Discard is empty. The picture that added nothing appears only in the count. The halving rounding ambiguity is a gap in the text itself and is recorded under open points, not here.",
+  "notes": "At the end of cycle 5 the crucibles hold [4,5,5,4,3,1] and all six are SUPERHEATED. The emergency tap fired in cycles 1, 4 and 5. Slag totals 92, and 20 + 94 = 22 + 92 = 114, so the line balances. All figures depend on removing floor(q/2) at the tap. If the kept half is rounded down instead, the results differ. I used a short Python script at C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\scr\\sim.py."
+ },
+ "grade": {
+  "available": true,
+  "exact": false,
+  "finalOk": false,
+  "modesOk": false,
+  "changesOk": false,
+  "purgesOk": false,
+  "lostOk": false,
+  "got": {
+   "final": [
+    4,
+    5,
+    5,
+    4,
+    3,
+    1
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED"
+   ],
+   "resetPeriods": [
+    1,
+    4,
+    5
+   ],
+   "loss": 92
+  },
+  "missingChanges": [
+   "2|3|ELEVATED|NORMAL",
+   "3|3|NORMAL|ELEVATED",
+   "5|6|ELEVATED|NORMAL"
+  ],
+  "extraChanges": [],
+  "usedScript": true,
+  "openPoints": 7,
+  "preReadLength": 3939
+ }
+}

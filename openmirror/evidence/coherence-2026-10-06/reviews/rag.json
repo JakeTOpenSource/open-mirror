@@ -1,0 +1,44 @@
+{
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": []
+  },
+  {
+   "arm": "B",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Balance check (f)",
+     "explanation": "A slip in the presentation only. The ingest sum is first written wrong and then corrected in the same field: \"plus ingest 17+15+17+24+18 = 91... recomputed by row: C1 20, C2 15, C3 17, C4 24, C5 18, total 94.\" The final figures (114 = 114, drop count 76) are right, and the notes repeat the correction: \"the ingest total is 94, not 91.\" No rule was misunderstood and no reported number is wrong, so I have not classed it as an error."
+    }
+   ]
+  },
+  {
+   "arm": "C",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": []
+  }
+ ],
+ "translationLoss": [
+  {
+   "rule": "No rule lost, blurred, or added",
+   "documentQuote": "If its chunk count is at or below its budget, do nothing.",
+   "explanation": "Every rule in the abstract process appears in the document with the same meaning. Spill-over uses \"more than its chunk budget\" (strictly above). The triggers are \"at least its heat mark\" (>= U) and \"at most its cool mark\" (<= D). Release is floor(/4) when COLD and floor(/2) when HOT, using \"the state it has after step 3\". Amounts are computed first and applied at once. HOT amounts go to n-1, and a HOT tier 1's amount is dropped. Capacity is not enforced in steps 1 and 4. The reset fires on \"more than 38\" and halves with rounding down. The document also adds \"Tier 1 is closest to the generator\" and the line \"Every division in this procedure is rounded down to a whole number.\" The first is a label with no effect on the procedure. The second states the floor rule from the abstract text more broadly, and every division in the process is a floor, so nothing changes. The data tables match exactly."
+  }
+ ],
+ "domainPull": "The hardest pull is at promotion. In real RAG, chunks promoted toward the generator get used, but here \"If tier 1 is HOT, its amount has no tier to go to and is dropped: add it to the drop count,\" so the hottest content counts as lost. \"Compaction\" also means discarding content here, and budgets that are \"not enforced in this step\" go against the intuition that a cache always stays within its size.",
+ "preReadNamedTheBreak": "n/a: nobody went wrong. Even so, C's notes flagged the most likely trap in advance: \"a HOT tier 1's promoted amount is simply dropped, and that drop counts as loss\" and \"invites the reader to assume budgets are enforced at all times.\"",
+ "preReadEffect": "It made no visible difference to the result. A and B had no pre-read and still matched the true answer exactly, as C did. C's own grading of the analogy says the same: \"Picture 1 adds nothing... its only effect is a warning not to import real-RAG behaviour.\" All three operators also checked their arithmetic with a script, which probably mattered more for exactness than any framing did.",
+ "summary": "All three operators matched the true answer exactly on final levels, modes, all 13 mode changes, reset cycles [1,4] and LOST = 76. The only flaw was B's mid-text slip on the ingest sum (91, corrected to 94), which changed no reported number. The RAG document carried every rule without loss, and the pull of real RAG behaviour (dropping tier 1's promoted chunks, budgets not enforced in steps 1 and 4) was resisted by everyone, with or without the pre-read."
+}

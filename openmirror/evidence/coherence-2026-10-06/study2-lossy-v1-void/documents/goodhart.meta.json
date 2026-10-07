@@ -1,0 +1,19 @@
+{
+ "restingStateWord": "ROUTINE",
+ "raisedStateWord": "ESCALATED",
+ "rulesYouKnowYouCompressed": [
+  "Ticket counts are whole numbers and never negative: left to domain sense, not stated.",
+  "'Limits don't bite yet' is a short way of saying capacity is not enforced when new tickets land, so a team can sit over its WIP limit after arrivals.",
+  "When the walk reaches a team, its count is cut to exactly its WIP limit. This is implied by 'excess goes to the next team down', not stated outright.",
+  "Cascading overflow in the same walk (team 1's excess can push team 2 over before team 2 is handled) is only implied by 'counting when you reach them'.",
+  "The status check uses the counts after the walk. This is implied by step order, not restated.",
+  "A team flips status at most once per cycle. Not stated; it follows from a single check per cycle.",
+  "In the work step every amount is worked out from the counts before any change and then applied together. This is compressed to 'off one snapshot'.",
+  "ROUTINE closures go on the closed tally. This is implied by 'closes' together with the 'every closure, by any route' line, not stated per step.",
+  "The backlog cut's 'keeps half, rounded down' means the removed share is the count minus that floor (the extra ticket on odd counts is closed). This is left to arithmetic.",
+  "The backlog cut fires every cycle when the condition holds; the picture's word 'quarterly' was dropped, and 'per cycle' is implied by its place as step 5.",
+  "Status thresholds hold the relation stand-down < escalate <= WIP limit. Not stated; it can be seen in the numbers.",
+  "The run lasts exactly 5 cycles. This is implied by the 5-row arrival table and 'end of cycle 5', not stated as a rule.",
+  "Balance check formula: (starting open + all arrivals) = (final open + closed tally). It is shown only as filled-in numbers in the Report."
+ ]
+}

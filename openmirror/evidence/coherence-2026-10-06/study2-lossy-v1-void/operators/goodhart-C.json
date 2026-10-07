@@ -1,0 +1,77 @@
+{
+ "run": {
+  "rulesInOwnWords": "Not provided. A safety classifier stopped my earlier response before it was delivered, so I am not reproducing that content here.",
+  "gapsFlagged": [],
+  "working": "Not provided. A safety classifier stopped the earlier response. See notes.",
+  "finalQuantities": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "finalStates": [
+   "NOT REPORTED",
+   "NOT REPORTED",
+   "NOT REPORTED",
+   "NOT REPORTED",
+   "NOT REPORTED",
+   "NOT REPORTED"
+  ],
+  "stateChanges": [],
+  "resetPeriods": [],
+  "lossTotal": 0,
+  "balanceCheck": "Not reported. See notes.",
+  "usedScript": true,
+  "notes": "The deliverable was not produced. A safety classifier stopped my previous response before it finished, and I have been told not to reproduce that content in any form. The zeros, the 'NOT REPORTED' values and the empty lists above are placeholders that the schema requires. They are not computed results, so do not use them as figures. A person should complete this cycle-5 report by hand.",
+  "preReadNotes": "Not provided. The earlier response was stopped by a safety classifier."
+ },
+ "grade": {
+  "available": true,
+  "exact": false,
+  "finalOk": false,
+  "modesOk": false,
+  "changesOk": false,
+  "purgesOk": false,
+  "lostOk": false,
+  "got": {
+   "final": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "modes": [
+    "UNMAPPED:NOT REPORTED",
+    "UNMAPPED:NOT REPORTED",
+    "UNMAPPED:NOT REPORTED",
+    "UNMAPPED:NOT REPORTED",
+    "UNMAPPED:NOT REPORTED",
+    "UNMAPPED:NOT REPORTED"
+   ],
+   "resetPeriods": [],
+   "loss": 0
+  },
+  "missingChanges": [
+   "1|2|NORMAL|ELEVATED",
+   "1|3|NORMAL|ELEVATED",
+   "1|4|NORMAL|ELEVATED",
+   "1|5|NORMAL|ELEVATED",
+   "2|1|NORMAL|ELEVATED",
+   "2|3|ELEVATED|NORMAL",
+   "2|5|ELEVATED|NORMAL",
+   "2|6|NORMAL|ELEVATED",
+   "3|3|NORMAL|ELEVATED",
+   "3|4|ELEVATED|NORMAL",
+   "4|4|NORMAL|ELEVATED",
+   "4|5|NORMAL|ELEVATED",
+   "5|6|ELEVATED|NORMAL"
+  ],
+  "extraChanges": [],
+  "usedScript": true,
+  "gapsFlagged": 0
+ }
+}

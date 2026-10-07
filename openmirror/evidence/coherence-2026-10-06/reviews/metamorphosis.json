@@ -1,0 +1,52 @@
+{
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": false,
+   "errorTypes": [],
+   "breakPoints": [
+    {
+     "rule": "No report delivered",
+     "explanation": "Operator A's 'Report and working' is null and the deterministic comparison is {\"available\":false}. With no stated rules, working or numbers, no misreading of the document can be found, so no error type is assigned. The failure is that nothing was delivered, not a traceable misunderstanding. Nothing in the texts shows why the output is missing, and I do not guess at a cause."
+    }
+   ]
+  },
+  {
+   "arm": "B",
+   "exactlyRight": false,
+   "errorTypes": [],
+   "breakPoints": [
+    {
+     "rule": "No report delivered",
+     "explanation": "Operator B's 'Report and working' is null and the deterministic comparison is {\"available\":false}. As with A, there is no restatement of the rules and no working to read, so no rule-level break can be located or classified. Nothing was delivered. The texts give no cause, and I do not speculate about one."
+    }
+   ]
+  },
+  {
+   "arm": "C",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [
+    {
+     "rule": "All five steps",
+     "explanation": "C's restatement matches the abstract process point for point. It says the carry-forward runs in order and cascades: 'Excess received earlier in the pass counts, so overflow cascades'. It states both trigger tests inclusively: 'mass >= pupation mark' and 'mass <= return mark'. It describes step 4 as a two-phase simultaneous update with PUPAL amounts sent to n-1 and no cap check. It says the moult fires only on a strict excess: 'sum of all six masses > 38'. The deterministic comparison is exact on every field: final [6,10,9,7,4,2], modes, 13 changes with none missing or extra, resets [1,4], and loss 76. C correctly left cycle 5 unmoulted at a total of exactly 38. It also left chambers 2 and 4 above their limits at the end, as the sheet requires.",
+     "operatorQuote": "S5 total 38, not > 38, no moult. End: [6,10,9,7,4,2] (ch2 10 > limit 8 and ch4 7 > limit 6 stay uncorrected, per the sheet).",
+     "documentQuote": "If the total is 38 or less, nothing happens."
+    }
+   ]
+  }
+ ],
+ "translationLoss": [
+  {
+   "rule": "none",
+   "documentQuote": "Work out all six amounts before you change any mass. Then apply all six at the same time",
+   "explanation": "I checked the sheet against the abstract process step by step and found nothing lost, blurred or added. Cascading spill-over in order 1 to 6 survives ('Because you work in order, excess carried out of chamber 1 is already in chamber 2'). The inclusive triggers survive ('at least its pupation mark' / 'at most its return mark'), and so does hysteresis ('keeps the stage it already had'). So do the two-phase simultaneous release, the transfer upstream to n-1 with chamber 1's amount discarded, and the absence of a cap in steps 1 and 4, including the case where cycle 5 excess is never corrected. The strict reset test also survives ('more than the moult limit of 38' ... '38 or less, nothing happens'). The data tables and the balance check match the abstract data exactly. The sentence 'A return from PUPAL to LARVAL is ordinary' adds no rule. It only guards against reading the stage change as one-way."
+  }
+ ],
+ "domainPull": "The pull was strongest at the stage reversal and the backward transfer. Real pupation is one-way, and a pupa does not pass mass to an earlier chamber, yet the sheet requires both 'PUPAL ... goes back to LARVAL' and 'reabsorbed into the previous chamber (chamber n-1)'. A weaker pull came from 'moult', which here means a line-wide halving triggered by the total mass rather than a development event in one individual.",
+ "preReadNamedTheBreak": "n/a: nobody went wrong in a way that can be located. A and B delivered no report (null), so there is no specific error point to compare against, although C's notes did flag in advance the likeliest traps: '(a) PUPAL returning to LARVAL is ordinary here but irreversible in real insects; (b) ... BACKWARD to the previous chamber'.",
+ "preReadEffect": "Not determinable from these texts, so the pre-read shows no measurable effect. C was exactly right and its pre-read correctly flagged the reversal, the backward reabsorption, the line-wide moult and the over-limit carry. But A and B produced no output to compare against, and the document itself already states every rule clearly. C also ran a script for the arithmetic ('usedScript': true), so its correctness cannot be credited to the pre-read.",
+ "summary": "Operator C was exactly right on every field, and the operating document kept every rule of the abstract process without loss, blur or addition. Operators A and B returned null reports, so their outcome is a failure to deliver that cannot be traced to any rule. With no A/B baseline, this case cannot show whether the metamorphosis framing or the pre-read changed the outcome."
+}

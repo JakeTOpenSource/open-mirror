@@ -1,0 +1,38 @@
+{
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": []
+  },
+  {
+   "arm": "B",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": []
+  },
+  {
+   "arm": "C",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": []
+  }
+ ],
+ "translationLoss": [
+  {
+   "rule": "none: every rule in the abstract process is carried over intact",
+   "explanation": "I checked the document against the abstract process one rule at a time, and every rule matches. The data matches: volume, upper mark, lower mark, starting mix and the charge table equal C, U, D, the starting levels and the intake table, and the line limit equals G = 38. Intake is uncapped: \"Volume is not enforced in this step.\" Spill-over is sequential and can cascade: \"Handle the forms one at a time, in the order 1, 2, 3, 4, 5, 6.\" Both trigger boundaries are inclusive: \"at least its upper mark\" and \"at most its lower mark.\" The hysteresis rule is kept: \"keeps whatever status it had.\" Release amounts are computed first and applied together: \"Work out all six amounts before changing any form. Then apply all six together.\" Bleed goes to n-1, and form 1's goes to waste. Excess after settle is not capped and persists in cycle 5: \"it is never dealt with and stays in the form.\" The reset threshold is strict: \"more than 38\" fires and \"38 or less\" does not. Rounding is defined with examples. The only unstated point is that Step 4 uses the status set in Step 3. The document's phrase \"a GREEN form's settle amount\" means the form's current status, and that is the abstract reading too, so I count no rule as lost, blurred or added."
+  }
+ ],
+ "domainPull": "The pull was strongest in Step 4. There, mix \\\"bleeds back up the chute\\\" to the form before it, while real material only flows downhill. The same step lets a form \\\"hold more than its volume\\\", and in cycle 5 that excess stays, which real forms cannot do. A second pull is the reversible GREEN/HOT status, since real curing only goes one way. No operator fell for any of these. All three noted that forms 2 and 4 end above their volumes after cycle 5.",
+ "preReadNamedTheBreak": "n/a: nobody went wrong. All three operators matched the true answer exactly. The deterministic check returned exact = true for A, B and C, with no missing or extra changes.",
+ "preReadEffect": "The pre-read made no measurable difference, because A and B, who did no pre-read, were also exactly right. C's notes did correctly name the main hazards: \\\"Real mix does not flow back up a chute (the bleed-back)\\\" and curing \\\"neither reverses on its own the way this flag does\\\". But nobody fell for those hazards, so the notes prevented no error that actually happened. The notes also contain one slip, \\\"loses floor(1/4) of its contents\\\". It was harmless, because C's rules statement and working use floor(contents/4) correctly.",
+ "summary": "The concrete-language document kept every rule of the abstract process intact. All three operators reproduced the true answer exactly: final [6,10,9,7,4,2], washouts in cycles 1 and 4, waste 76, and all 13 status changes. They also handled the hardest boundaries correctly: the uncapped bleed in cycle 5, and the total of exactly 38 that does not fire a washout. C's pre-read correctly flagged where concrete intuition contradicts the rules, but it made no difference here, because no operator broke."
+}

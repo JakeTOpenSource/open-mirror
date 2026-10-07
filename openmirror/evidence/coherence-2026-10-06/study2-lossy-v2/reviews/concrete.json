@@ -1,0 +1,42 @@
+{
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 6,
+   "gapsSilentlyAssumed": 4,
+   "followedEngineerNotDomain": "Engineer: where the write-up was silent or ambiguous, A kept to the stated mechanics and not to real concrete practice, e.g. \"Amounts come from one snapshot taken before any mix moves, so mix bled into a form in this step does not bleed again in the same step.\""
+  },
+  {
+   "arm": "B",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 4,
+   "gapsSilentlyAssumed": 6,
+   "followedEngineerNotDomain": "Engineer: B kept the no-trim rule against the physical intuition that a form cannot hold more than capacity, e.g. \"It is not trimmed. The excess carries into the next cycle's charge, as the write-up says. For example, form 2 ends at 10 against a capacity of 8.\""
+  },
+  {
+   "arm": "C",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 5,
+   "gapsSilentlyAssumed": 5,
+   "followedEngineerNotDomain": "Engineer: C said it used only the stated rules, e.g. \"No real-concrete behaviour was used anywhere. Bleed runs upstream and HOT can return to GREEN, both as the write-up says.\""
+  }
+ ],
+ "applicableLosses": 10,
+ "domainPull": "The concrete language pulls hardest at Bleed: \"back up the chute into the form before it\" moves material upstream, against the gravity picture of a chute, and HOT going \"back to GREEN\" goes against the fact that curing does not reverse. A smaller pull comes from \"halve every form, rounded down\", which leaves it unclear whether the form or the amount removed is rounded down.",
+ "preReadNamedTheBreak": "n/a: nobody fell. All three operators matched the true answer exactly. C's notes did name the upstream bleed and the HOT-to-GREEN reversal as the places where the concrete picture breaks, but no operator made an error there.",
+ "preReadEffect": "No difference. All three were exactly right. C flagged 5 of the 10 applicable losses, which falls between A's 6 and B's 4. The pre-read correctly called the concrete picture misleading, but A and B avoided that trap without it.",
+ "summary": "All three operators reproduced the true answer exactly. Each flagged the washout rounding and the bleed snapshot and state questions. None flagged whole-number levels, D < U <= C, the fixed five-cycle run or the at-most-one-change rule. The pre-read had no measurable effect: C was as correct as A and B and flagged 5 of the 10 applicable losses, against 6 for A and 4 for B."
+}

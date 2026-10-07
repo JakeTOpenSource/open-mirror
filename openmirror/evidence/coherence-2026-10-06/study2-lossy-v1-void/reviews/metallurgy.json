@@ -1,0 +1,138 @@
+{
+ "documentLosses": [
+  {
+   "rule": "The write-up contains a full end-of-run Report (final levels, modes, every change, tap cycles, slag 76, balance). The abstract process has no such content, and it gives the answer to the reader.",
+   "kind": "added",
+   "documentQuote": "End of cycle 5, crucibles 1 to 6: 6, 10, 9, 7, 4, 2. ... Slag tally: 76.",
+   "explanation": "This is answer leakage. Any operator can match its numbers against the Report, and C did use it to settle the tap-rounding question. Because of it, an exact result does not prove that the write-up alone conveyed the process."
+  },
+  {
+   "rule": "Global reset: level becomes floor(level/2), and the removed amount (ceil of half) goes to LOST.",
+   "kind": "ambiguous",
+   "documentQuote": "Strictly over 38: halve every crucible, removed melt to slag, log the cycle.\" together with \"any split rounds down.",
+   "explanation": "The write-up does not say whether the rounded-down half is the part kept or the part removed. In the bleed, the rounded-down half is the amount moved, so the write-up's own convention points to removed = floor, which is the wrong reading. Under that reading cycle 5 taps and the result is 4,5,5,4,3,1, slag 92 (C's alternative)."
+  },
+  {
+   "rule": "Spill-over excess = level minus capacity, and the cell is left at exactly its capacity.",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "Anything over working volume runs down the launder into the next crucible before you judge that one, so it can chain.",
+   "explanation": "The amount moved and the level left behind are not defined. The reader fills them in from the physical picture of a launder."
+  },
+  {
+   "rule": "The mode check uses levels after spill-over.",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "Five moves per cycle, each finished down the whole line before the next.",
+   "explanation": "This follows only from the step order. The Temperature move does not say which contents it reads."
+  },
+  {
+   "rule": "The release amount is set by the mode after this period's mode check.",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "BASE crucibles skim a quarter to slag. SUPERHEATED crucibles send half back up...",
+   "explanation": "This is implied by the order of the moves and is not stated."
+  },
+  {
+   "rule": "All six release amounts are computed first and then applied together, so an incoming upstream transfer is not released in the same step.",
+   "kind": "ambiguous",
+   "documentQuote": "Read all six before touching any.",
+   "explanation": "The sentence says to read first. It does not say outright that the transfers are applied together and that incoming melt is excluded."
+  },
+  {
+   "rule": "Capacity is not enforced during intake or release.",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "Pour the row in; nobody watches volume while charging.\" / \"A crucible can finish over volume; that waits for next cycle's overflow, and after cycle 5 it stays.",
+   "explanation": "The write-up describes behaviour rather than stating that capacity is simply not applied. Physically, an over-full crucible is impossible."
+  },
+  {
+   "rule": "Floor rounding for the release amounts (floor(level/4), floor(level/2)).",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "Whole units of melt; any split rounds down.",
+   "explanation": "This is stated once for every split. For the bleed it settles the amount moved, but it is not repeated at the step."
+  },
+  {
+   "rule": "A cell changes mode at most once per period.",
+   "kind": "missing",
+   "documentQuote": "absent",
+   "explanation": "This is implied only by there being a single Temperature move per cycle."
+  },
+  {
+   "rule": "The reset compares the total after release.",
+   "kind": "left-to-domain-sense",
+   "documentQuote": "Emergency tap. Total the line.",
+   "explanation": "The timing comes from the order only."
+  },
+  {
+   "rule": "LOST starts at 0.",
+   "kind": "missing",
+   "documentQuote": "absent",
+   "explanation": "The starting value of the slag tally is never stated."
+  },
+  {
+   "rule": "The balance-check formula (start + intake = final + LOST).",
+   "kind": "missing",
+   "documentQuote": "absent",
+   "explanation": "It appears only as worked numbers in the Report, not as a general rule."
+  },
+  {
+   "rule": "The mode-change record format (period, cell, old, new).",
+   "kind": "missing",
+   "documentQuote": "absent",
+   "explanation": "The format is shown only by example in the Report."
+  }
+ ],
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": false,
+   "errorTypes": [
+    "reporting-format"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Deliver an end-of-cycle report",
+     "explanation": "Report and working are null and the comparison is {\"available\":false}. No report was produced. With no rules or working on record, the cause of the failure cannot be located."
+    }
+   ],
+   "gapsCorrectlyFlagged": 0,
+   "gapsSilentlyAssumed": 0,
+   "gapHandling": "No output exists, so there is no evidence of how A resolved any gap."
+  },
+  {
+   "arm": "B",
+   "exactlyRight": false,
+   "errorTypes": [
+    "reporting-format"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Deliver an end-of-cycle report",
+     "explanation": "Report and working are null and the comparison is {\"available\":false}. No report was produced, and nothing in the texts locates a cause."
+    }
+   ],
+   "gapsCorrectlyFlagged": 0,
+   "gapsSilentlyAssumed": 0,
+   "gapHandling": "No output exists, so there is no evidence of how B resolved any gap."
+  },
+  {
+   "arm": "C",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Global reset rounding (resolved correctly, but by leaning on the leaked Report)",
+     "operatorQuote": "it keeps floor(melt/2), the rest goes to slag ... it is the reading that reproduces the write-up's own Report figures",
+     "documentQuote": "halve every crucible, removed melt to slag",
+     "explanation": "C got the right answer and spotted the trap. The tie-break, though, came from the Report paragraph the write-up should not have contained, not from the rules. C also worked out the other outcome: \"the cycle 5 total would be 41, a tap would also fire in cycle 5\"."
+    }
+   ],
+   "gapsCorrectlyFlagged": 5,
+   "gapsSilentlyAssumed": 7,
+   "gapHandling": "C flagged tap rounding, bleed rounding, which state governs the bleed, simultaneity, and over-volume carry after the bleed. It settled the tap rounding toward the engineer's intent by matching the Report, not by domain sense. It assumed, without flagging, the overflow amount and the level left behind, the temperature check after overflow, at most one change per cycle, the tally starting at 0, the tap timing, the balance formula and the tuple format, and every one of those matched the engineer's intent. One flagged item (\"Tap effect on states\") is not a real loss."
+  }
+ ],
+ "domainPull": "The pull was strongest at the emergency tap. The ordinary sense of 'halve every crucible', combined with the bleed's own convention that the rounded-down half is the amount moved, points to removed = floor(half), which is the wrong reading and would add a cycle 5 tap. Secondary pulls: 'Temperature' and 'SUPERHEATED' are driven purely by melt quantity, melt flows 'back up the return launder' upstream, and crucibles are allowed to sit over working volume. C's pre-read named all of these, including \"'Halve' in practice carries no rounding convention\".",
+ "preReadNamedTheBreak": "n/a: nobody fell. A and B returned null reports, so there is no trap anyone visibly fell for. C's pre-read did name the tap-rounding trap (\"the rounding of 'halve every crucible' is open\") before the work began.",
+ "preReadEffect": "Help, but weak and not verifiable against a baseline, because A and B produced nothing. The pre-read named the one consequential ambiguity (tap rounding) and the embedded Report before the work began, and C then flagged that ambiguity with both outcomes worked out. However, C judged that both pictures \"add nothing\", and the correct resolution came from the leaked Report rather than from the pre-read. Seven real compressions were still resolved silently, all correctly.",
+ "summary": "The write-up contains the full answer in a Report paragraph, and it leaves the emergency-tap rounding ambiguous in a direction that the bleed's own convention would push toward the wrong result (resets in cycles 1, 4 and 5, slag 92). A and B produced no reports. C is exact: it flagged 5 of the 12 real losses, including the tap rounding, which it settled by matching the leaked Report. Its pre-read named the trap, but with no baseline from A or B its effect cannot be measured."
+}

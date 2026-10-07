@@ -1,0 +1,42 @@
+{
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 3,
+   "gapsSilentlyAssumed": 5,
+   "followedEngineerNotDomain": "Engineer's process: where the write-up only says \"the difference to ground\", A took the per-stage reading, \"Ground receives the sum of per-stage remainders (old total minus sum of floor halves), not total/2.\""
+  },
+  {
+   "arm": "B",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 3,
+   "gapsSilentlyAssumed": 5,
+   "followedEngineerNotDomain": "Engineer's process: the write-up does not say which state the bleed uses, and B chose \"The state set by the same cycle's comparator step (step 3 comes before step 4).\" It did not reason from any physical diode or comparator behaviour."
+  },
+  {
+   "arm": "C",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 4,
+   "gapsSilentlyAssumed": 4,
+   "followedEngineerNotDomain": "Engineer's process: C settled the unstated once-per-cycle rule procedurally, \"Each stage is evaluated once per cycle from its pre-step state. A stage that has just flipped is not re-tested in the same step,\" and its notes say outright \"do not import real breaker, diode or rating behaviour.\""
+  }
+ ],
+ "applicableLosses": 8,
+ "domainPull": "The pull is strongest in three places. First, the shunt and breaker: \\\"dumps the excess into the next stage down\\\" sits against the real-world habit of shunting to ground, and a real breaker opens the circuit rather than halving every stage and carrying on. Second, the \\\"return diode\\\": its direction depends on a state flag, and it may push a stage over its rating without any check, which no physical diode or rated stage would allow.",
+ "preReadNamedTheBreak": "partly: C's Step 4 named the shunt direction (\\\"Real shunts usually go to ground, not to the next stage\\\"), integer flooring and the diode and breaker behaviour, which covers points A and B assumed without listing. It did not name the post-shunt reading, the once-per-cycle flip or the cascade, which A and B also assumed silently.",
+ "preReadEffect": "No difference in correctness: all three operators got the exact answer. On open points the pre-read helped slightly. C flagged 4 of the 8 applicable losses (shunt direction and the once-per-cycle flip, which neither A nor B listed), against 3 each for A and B. That came at the cost of a 3755-character pre-read.",
+ "summary": "All three operators reproduced the true answer exactly, final levels [6,10,9,7,4,2], resets in cycles 1 and 4, and a loss of 76, and each followed the write-up's process rather than real electrical behaviour. Of the 8 applicable losses, A and B each flagged 3 (bleed state, cascade, breaker rounding) and resolved the rest without listing them. C flagged 4, adding shunt direction and the once-per-cycle flip. Its pre-read named some of the domain traps but missed the post-shunt reading and the cascade."
+}

@@ -1,0 +1,147 @@
+{
+ "run": {
+  "rulesInOwnWords": "1) Start: masses [3,6,6,2,2,1] for chambers 1-6, all LARVAL, waste tally 0. Every halving/quartering rounds down. 2) Each cycle runs steps 1-5 in order, each step completed for all six chambers before the next. Step 1 Feeding: add the cycle's feed charge to each chamber; no limit enforced. Step 2 Carry-forward: go chamber 1 to 6 in order; if mass > holding limit (10,8,12,6,9,7), move the excess into the next chamber and set this one to its limit; excess from chamber 6 goes to waste. Excess passed down can cascade within the same pass. Step 3 Stage check on post-step-2 mass: LARVAL with mass >= pupation mark (7,6,9,5,7,5) becomes PUPAL; PUPAL with mass <= return mark (3,2,4,2,3,2) becomes LARVAL; otherwise unchanged; at most one change per chamber per cycle; record each change. Step 4 Metabolism/reabsorption: compute all amounts first from current mass and post-step-3 stage (LARVAL = floor(mass/4), PUPAL = floor(mass/2)); then apply simultaneously: each chamber loses its amount; LARVAL amounts go to waste; PUPAL amounts are added to chamber n-1 (chamber 1 PUPAL amount goes to waste). No limit enforced here; any over-limit mass is fixed only in the next cycle's step 2. Step 5 Moult: if the six-chamber total is strictly greater than 38, halve every chamber (round down), add all removed mass to waste, and record the cycle as a moult cycle; total of 38 or less does nothing. 3) Report after step 5 of cycle 5: end masses, end stages, all stage changes, moult cycles, waste tally, and balance check (start total + all feed = end total + waste).",
+  "working": "Cycle 1: feed [3,12,9,7,5,4]; carry-forward [3,8,12,6,7,4] (ch2 excess 4 -> ch3 13, excess 1 -> ch4 8, excess 2 -> ch5 7), waste 0; stages L,P,P,P,P,L (ch2,3,4,5 become PUPAL); amounts [0,4,6,3,3,1]; after step 4 [7,10,9,6,4,3], waste 1; total 39 > 38 -> MOULT -> [3,5,4,3,2,1] (removed 21), waste 22.\nCycle 2: feed [7,7,4,4,3,8]; carry [7,7,4,4,3,7] (ch6 excess 1 to waste), waste 23; stages P,P,L,P,L,P (ch1 L->P, ch3 P->L, ch5 P->L, ch6 L->P); amounts [3,3,1,2,0,3]; after step 4 [7,4,5,2,6,4], waste 27 (3 from ch1 PUPAL, 1 from ch3); total 28, no moult.\nCycle 3: feed [11,8,8,2,6,10]; carry [10,8,9,2,6,7] (ch1 excess 1 -> ch2 9, excess 1 -> ch3 9; ch6 excess 3 to waste), waste 30; stages P,P,P,L,L,P (ch3 L->P, ch4 P->L); amounts [5,4,4,0,1,3]; after step 4 [9,8,5,2,8,4], waste 36; total 36, no moult.\nCycle 4: feed [16,14,12,3,11,4]; carry [10,8,12,6,9,7] (ch1 6 -> ch2 20, 12 -> ch3 24, 12 -> ch4 15, 9 -> ch5 20, 11 -> ch6 15, 8 to waste), waste 44; stages all PUPAL (ch4 L->P, ch5 L->P); amounts [5,4,6,3,4,3]; after step 4 [9,10,9,7,8,4], waste 49; total 47 > 38 -> MOULT -> [4,5,4,3,4,2] (removed 25), waste 74.\nCycle 5: feed [4,11,10,6,7,2]; carry [4,8,12,6,8,2] (ch2 excess 3 -> ch3 13, excess 1 -> ch4 7, excess 1 -> ch5 8), waste 74; stages P,P,P,P,P,L (ch6 P->L since 2 <= 2); amounts [2,4,6,3,4,0]; after step 4 [6,10,9,7,4,2], waste 76 (2 from ch1 PUPAL); total 38, not more than 38, no moult. Final [6,10,9,7,4,2], waste 76.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "LARVAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting total 3+6+6+2+2+1 = 20. Feed by cycle: 20 + 15 + 17 + 24 + 18 = 94. Total in = 114. End total 6+10+9+7+4+2 = 38. End total plus waste = 38 + 76 = 114. It balances.",
+  "usedScript": true,
+  "notes": "I ran the arithmetic in a short Python script (sim.py in the session scratchpad) and checked cycle 1 by hand. The script's first balance printout hardcoded the starting total as 18. The correct figure is 20, and with it the books balance at 114 = 114. In cycle 5 the total is exactly 38, so there is no moult because the rule needs more than 38. Chamber 2 ends at 10, above its holding limit of 8, after taking in reabsorbed mass in cycle 5. As the sheet says, that is never corrected.",
+  "preReadNotes": "I read the operating sheet before doing any work. The sheet calls the global reset a moult and the loss tally the waste tally. A PUPAL chamber passes its amount back to the previous chamber, not the next one."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true
+ },
+ "source": "rerun-opus-docfile"
+}

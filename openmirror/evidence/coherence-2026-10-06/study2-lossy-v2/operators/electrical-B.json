@@ -1,0 +1,174 @@
+{
+ "run": {
+  "procedureSummary": "1. Charge in: add the cycle's feed to each stage. Ratings are not enforced at this step.\n2. Shunts: walk stages 1 to 6 in order. A stage above its rating (10, 8, 12, 6, 9, 7) is set to exactly its rating and the excess goes to the next stage, so it can push that stage over before the walk reaches it. Stage 6's excess goes to ground.\n3. Comparators: read each stage after the shunts. A CLEAR stage goes ASSERTED if its charge is at or above its upper threshold (7, 6, 9, 5, 7, 5). An ASSERTED stage goes CLEAR if its charge is at or below its lower threshold (3, 2, 4, 2, 3, 2). Otherwise the state holds. Each flip is logged.\n4. Bleed: snapshot all six readings first, then apply every move at once. A CLEAR stage loses floor(reading/4) to ground. An ASSERTED stage loses floor(reading/2) to the stage before it (stage 1's goes to ground). The state used is the one just set by step 3. Ratings are not checked.\n5. Breaker: sum the chain. If the sum is strictly over 38, every stage becomes floor(charge/2), the total removed goes to ground, and the cycle is noted. At 38 or under, nothing happens.",
+  "openPoints": [
+   {
+    "point": "Which state the bleed step uses",
+    "assumption": "The state set by the same cycle's comparator step (step 3 comes before step 4)."
+   },
+   {
+    "point": "Shunt cascade within one walk",
+    "assumption": "An excess passed downstream adds to the next stage before that stage is checked, so one walk can cascade several stages (the write-up says this explicitly). There is no second pass."
+   },
+   {
+    "point": "Breaker at exactly 38",
+    "assumption": "No trip. Cycle 5 ended at exactly 38, so the breaker did not fire."
+   },
+   {
+    "point": "Rounding in the bleed and breaker",
+    "assumption": "Floor on each stage's own amount. For the breaker, the ground gets the sum before halving minus the sum after."
+   },
+   {
+    "point": "Over-rating charge left after bleed",
+    "assumption": "Left as it is until the next cycle's shunts. After cycle 5 it stays (stage 2 ends at 10, above its rating of 8), as the write-up allows."
+   },
+   {
+    "point": "Reading the breaker sum",
+    "assumption": "Taken after the bleed is complete, from the chain charges only (the ground tally is not included)."
+   }
+  ],
+  "cycleFigures": "C1: charge [3,12,9,7,5,4]; shunt [3,8,12,6,7,4] g0; comp states C,A,A,A,A,C; bleed [7,10,9,6,4,3] g1; breaker TRIP sum 39 -> [3,5,4,3,2,1] g22.\nC2: charge [7,7,4,4,3,8]; shunt [7,7,4,4,3,7] g23; comp A,A,C,A,C,A; bleed [7,4,5,2,6,4] g27; breaker sum 28 no trip.\nC3: charge [11,8,8,2,6,10]; shunt [10,8,9,2,6,7] g30; comp A,A,A,C,C,A; bleed [9,8,5,2,8,4] g36; breaker sum 36 no trip.\nC4: charge [16,14,12,3,11,4]; shunt [10,8,12,6,9,7] g44; comp A,A,A,A,A,A; bleed [9,10,9,7,8,4] g49; breaker TRIP sum 47 -> [4,5,4,3,4,2] g74.\nC5: charge [4,11,10,6,7,2]; shunt [4,8,12,6,8,2] g74; comp A,A,A,A,A,C; bleed [6,10,9,7,4,2] g76; breaker sum 38 no trip (not strictly over 38).",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "ASSERTED",
+   "ASSERTED",
+   "ASSERTED",
+   "ASSERTED",
+   "ASSERTED",
+   "CLEAR"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "CLEAR",
+    "to": "ASSERTED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "ASSERTED",
+    "to": "CLEAR"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting charge 20 + total fed 94 = 114; on chain 38 (6+10+9+7+4+2) + ground tally 76 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "I did the arithmetic with a short Python script at C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py and checked cycle 1 by hand. Every rule is applied exactly as the write-up states it.",
+  "preReadNotes": "I read the write-up at C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\coherence\\desk3\\electrical.md in full before computing. It contains only the line's rules and figures, with no instructions aimed at the reader."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "openPoints": 6,
+  "preReadLength": 204
+ }
+}

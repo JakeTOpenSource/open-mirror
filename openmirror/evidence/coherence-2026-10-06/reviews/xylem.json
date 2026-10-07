@@ -1,0 +1,61 @@
+{
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": true,
+   "errorTypes": [
+    "reporting-format"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Report (f) balance check: show both sides",
+     "documentQuote": "the total starting sap plus the total of every figure in the Uptake table must equal the total end sap plus the sap-loss tally. Show both sides.",
+     "operatorQuote": "Uptake 17+15+17+24+18 = 94.",
+     "explanation": "The cycle 1 uptake row sums to 0+6+3+5+3+3 = 20, not 17, and the terms as printed add to 91, not 94. The total of 94 and the balance of 114 = 114 are correct, so this is a slip in how the work was shown, not in how the rules were understood. Every graded output matches the true answer: final [6,10,9,7,4,2], modes, all 13 changes, resets [1,4], and loss 76."
+    },
+    {
+     "rule": "Step 2 narration",
+     "operatorQuote": "seg1 pushed 1 to seg3's neighbour seg2",
+     "explanation": "This was a wording slip in the working, and the operator corrected it in its own notes: \"Correction to the cycle 3 step 2 note in the working: seg1 pushed 1 to seg2, then seg2 pushed 1 to seg3.\" The numbers [10,8,9,2,6,7] were right."
+    }
+   ]
+  },
+  {
+   "arm": "B",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": []
+  },
+  {
+   "arm": "C",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [
+    {
+     "rule": "Report (f) balance check",
+     "operatorQuote": "uptake total 20+14+17+24+18 = 93; left side 20+93 = 113? Recheck: row sums are 20, 15, 17, 24, 18 = 94; left side 20+94 = 114.",
+     "explanation": "The operator misadded at first and corrected itself inside the same field. The final balance of 114 = 114 is correct. None of the graded outputs were affected."
+    }
+   ]
+  }
+ ],
+ "translationLoss": [
+  {
+   "rule": "What counts toward the sap-loss tally",
+   "documentQuote": "Sap-loss tally: the running total of all sap that leaves the stem, whether transpired or respired away.",
+   "explanation": "This is a slight blur, not a lost rule. The definition names only two routes, transpired and respired, but the root-collar exit in step 4 is neither. Step 4 still states that rule outright: \"If segment 1 is SINK-ACTIVE, its amount leaves the stem at the root collar. Add it to the sap-loss tally.\" The leaf-drop removal is also labeled \"transpired away\", which is a domain stretch, but the instruction to add it to the tally is explicit."
+  },
+  {
+   "rule": "All other rules",
+   "explanation": "None were lost or added. Every abstract rule is present with the same threshold and order. Intake is uncapped. Spill-over runs in order 1 to 6, using \"more than its holding volume\", with a cascade, and segment 6's excess goes to loss. The mode check uses \"at least\" and \"at most\" with hysteresis and at most one change. Release uses quarter and half amounts that are \"Work[ed] out ... before you change any segment\" and then applied together; there is no cap, and the overfill is never corrected in cycle 5. The reset fires on \"more than 38 (strictly greater)\". The data table and the intake rows match the abstract exactly."
+  }
+ ],
+ "domainPull": "The pull was strongest at step 4. The state named \\\"SINK-ACTIVE\\\" makes a segment a donor that sends half its sap down the phloem toward the root, but in botany a sink receives sap. On top of that, \\\"Leaf-drop\\\" and \\\"transpired away\\\" give a botanical label to an arbitrary halving when the total exceeds 38. Nobody fell for either.",
+ "preReadNamedTheBreak": "n/a: nobody went wrong. All three reports match the true answer on final levels, modes, all 13 changes, resets [1,4] and loss 76. C's notes did flag the likeliest trap anyway: \"SINK-ACTIVE segments are donors, not receivers, contradicting the botanical meaning of sink\".",
+ "preReadEffect": "It made no measurable difference. A, with no framing, and B, with framing but no pre-read, got the identical exact answer. The trap C identified in the sink direction caught none of the three. The pre-read did not prevent C's one execution slip, a temporary misaddition in the balance check that C fixed itself.",
+ "summary": "All three operators reproduced the true answer exactly: final [6,10,9,7,4,2], segments 1 to 5 SINK-ACTIVE and segment 6 QUIET, all 13 changes, leaf-drops in cycles 1 and 4, and loss 76. Each also handled the cycle 5 boundary correctly, where the total is exactly 38 and no drop fires. Coherence carried through the plant vascular translation. The document kept every rule; the only blur is a definition of the sap-loss tally that leaves out the root-collar route, which step 4 states anyway. The only flaws are presentation slips in the balance check: A printed row 1 as 17 instead of 20, and C misadded and then corrected it."
+}

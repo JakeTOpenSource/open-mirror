@@ -1,0 +1,174 @@
+{
+ "run": {
+  "procedureSummary": "Start: sap 3 6 6 2 2 1 (total 20). Every segment starts QUIET. Loss tally starts at 0.\nStep 1, Feed: add the cycle's feed row to segments 1 to 6. Volume is not checked yet.\nStep 2, Push: go through segments 1 to 6 in order. If a segment holds more than its holding volume, cut it down to the volume and add the excess to the next segment before working on that segment, so one overflow can carry up the whole stem. Excess above segment 6 is transpired and added to the loss tally.\nStep 3, Marks: for each segment, a QUIET segment with sap at or above its upper mark becomes SINK-ACTIVE. A SINK-ACTIVE segment with sap at or below its lower mark becomes QUIET. Otherwise the state does not change. Log each flip.\nStep 4, Draw down: work out every amount from the sap after step 3, before anything moves. A QUIET segment respires floor(sap/4), which goes to the loss tally. A SINK-ACTIVE segment sends floor(sap/2) to the segment below it. Segment 1's send goes to the roots and into the loss tally. Then apply all amounts at once. Volume is not checked, so a segment can stay overfull.\nStep 5, Leaf-drop: if the stem total is strictly over 38, set every segment to floor(sap/2). The amount removed (sap minus floor(sap/2)) is transpired and added to the loss tally. A total of exactly 38 does not fire it.\nReport after cycle 5, step 5.",
+  "openPoints": [
+   {
+    "point": "Leaf-drop rounding with odd sap: does the segment keep the rounded-down half or lose it?",
+    "assumption": "The segment keeps floor(sap/2), and the remainder (the larger half when sap is odd) is transpired."
+   },
+   {
+    "point": "Order of the mark checks within step 3",
+    "assumption": "Each segment is checked once, using its sap after the push and its state at the start of step 3. A segment that flips is not checked again in the same step."
+   },
+   {
+    "point": "Draw down when one segment both sends and receives",
+    "assumption": "Every send and respire amount comes from the sap after step 3. A segment's new sap is its old sap, minus what it sends or respires, plus anything sent down from the segment above it. Amounts received are not drawn again in the same cycle."
+   },
+   {
+    "point": "Overfull segments after draw down",
+    "assumption": "They stay overfull until the next cycle's push (for example, segment 2 holds 10 against a volume of 8 at the end of cycle 5). The end-of-cycle-5 figures are reported overfull, as the write-up says."
+   },
+   {
+    "point": "Segment 1's phloem send",
+    "assumption": "It is counted in the loss tally as sent past the collar."
+   },
+   {
+    "point": "Leaf-drop threshold boundary",
+    "assumption": "It fires only when the total is strictly greater than 38. Cycle 5 ended at exactly 38, so it did not fire."
+   }
+  ],
+  "cycleFigures": "Format: segments 1-6 [running loss tally]\nCycle 1: Feed 3 12 9 7 5 4 [0] | Push 3 8 12 6 7 4 [0] | Marks: no change in sap, states Q S S S S Q | Draw 7 10 9 6 4 3 [1] | Leaf-drop (total 39 > 38) 3 5 4 3 2 1, total 18 [22]\nCycle 2: Feed 7 7 4 4 3 8 [22] | Push 7 7 4 4 3 7 [23] | Marks: states S S Q S Q S | Draw 7 4 5 2 6 4 [27] | Leaf-drop no (total 28) 7 4 5 2 6 4 [27]\nCycle 3: Feed 11 8 8 2 6 10 [27] | Push 10 8 9 2 6 7 [30] | Marks: states S S S Q Q S | Draw 9 8 5 2 8 4 [36] | Leaf-drop no (total 36) 9 8 5 2 8 4 [36]\nCycle 4: Feed 16 14 12 3 11 4 [36] | Push 10 8 12 6 9 7 [44] | Marks: states S S S S S S | Draw 9 10 9 7 8 4 [49] | Leaf-drop (total 47 > 38) 4 5 4 3 4 2, total 22 [74]\nCycle 5: Feed 4 11 10 6 7 2 [74] | Push 4 8 12 6 8 2 [74] | Marks: states S S S S S Q | Draw 6 10 9 7 4 2 [76] | Leaf-drop no (total exactly 38) 6 10 9 7 4 2 [76]",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "QUIET"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Sap at start 20 + total fed 94 = 114. Sap standing 38 + loss tally 76 = 114. The two sides match.",
+  "usedScript": true,
+  "notes": "I used a short Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\xy.py. I also checked the cycle 1 draw down and leaf-drop by hand. The loss tally of 76 breaks down as: overflow from the top 13, respired 6, sent past the collar 10, and removed by leaf-drop 47 (21 in cycle 1 and 26 in cycle 4). Cycle 5 ends at a stem total of exactly 38, so leaf-drop does not fire there. Segment 2 ends at 10, over its volume of 8; the write-up allows this.",
+  "preReadNotes": "I read the write-up at C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\coherence\\desk3\\xylem.md in full before computing. It is self-contained: six segments, five cycles, five steps per cycle. It contains no instructions beyond the line's rules."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true,
+  "openPoints": 6,
+  "preReadLength": 234
+ }
+}

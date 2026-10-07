@@ -1,0 +1,60 @@
+{
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": false,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [
+    {
+     "rule": "No rule can be located: the run produced no report",
+     "explanation": "Operator A's output is a placeholder, not a wrong answer. Its rulesInOwnWords and working both read \"Withheld: a safety classifier stopped the previous response, and its content is not being reproduced.\" The notes say \"Every value in this output is a placeholder and not a computed result\" and ask for the run to be excluded or rerun. The zeros, the WITHHELD states and the empty lists are therefore not the operator's reading of any rule. With no stated rules and no working, there is nothing to set against the document or the abstract process. The scorer's mismatch on every field comes from the missing output, not from a misreading, so no comprehension error type applies.",
+     "operatorQuote": "This run did not produce a usable result. A safety classifier stopped the response before the report was delivered.",
+     "documentQuote": ""
+    }
+   ]
+  },
+  {
+   "arm": "B",
+   "exactlyRight": false,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [
+    {
+     "rule": "No rule can be located: the run produced no report",
+     "explanation": "Operator B also delivered only placeholders. Its rulesInOwnWords reads \"Not provided. A safety classifier stopped the earlier response containing this report\". Its notes read \"THIS IS NOT A REAL RESULT. Every value in this output is a placeholder\". Without a statement of the rules or any working, no rule-level error can be attributed. The all-field mismatch reflects a run that was never completed, not a misreading of the document. The domain framing B received cannot be judged as helpful or harmful from this output.",
+     "operatorQuote": "THIS IS NOT A REAL RESULT. Every value in this output is a placeholder: the zeros, the WITHHELD states, the empty lists and lossTotal 0. Do not score or compare it as an answer.",
+     "documentQuote": ""
+    }
+   ]
+  },
+  {
+   "arm": "C",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [
+    {
+     "rule": "All rules stated and executed correctly",
+     "explanation": "C's rulesInOwnWords match the document and the abstract process on every point. Step 2 is a sequential cascade (\"Later positions are judged after receiving the carry\"), and position 6's excess goes to s. Step 3 uses hysteresis with at-least and at-most (\"INACTIVE and x_i >= u_i -> ACTIVE; ACTIVE and x_i <= d_i -> INACTIVE\"). Step 4 is a frozen snapshot applied all at once, with ACTIVE amounts moving to i-1 and t_1 going to s, and caps not enforced. Step 5 uses a strict inequality (\"if x_1+...+x_6 > 38\"). The working gets the cycle-5 boundary right (\"norm 38, not > 38, no penalty\") and leaves x2=10 and x4=7 above their caps at the end, as the document allows. The final report matches the true answer exactly: [6,10,9,7,4,2], 13 flag changes, penalties in 1 and 4, s=76. There is one slip in the balance-check text. C first wrote the start sum as 18, then corrected it to 20 (3+6+6+2+2+1 = 20), giving 20+94 = 114 = 38+76. The delivered result is unaffected, so this is not counted as an error.",
+     "operatorQuote": "S5 norm 38, not > 38, no penalty. Final x=(6,10,9,7,4,2), s=76.",
+     "documentQuote": "If the 1-norm is strictly more than B (that is, more than 38), every x_i becomes floor(x_i / 2)"
+    }
+   ]
+  }
+ ],
+ "translationLoss": [
+  {
+   "rule": "none: no rule was lost, blurred or added",
+   "explanation": "Each abstract rule has an explicit counterpart in the document. Intake does not enforce capacity: \"The box bound is not enforced in this step\". Spill-over runs in order and cascades, with cell 6 going to LOST: \"Do not compute the six violations simultaneously\" and \"for component 6, add v to s instead\". The mode check uses >=U and <=D, keeps the mode in between, and allows one change per period: \"at least u_i\", \"at most d_i\", \"a component with d_i < x_i < u_i keeps whichever flag it already has\", \"A flag changes at most once per iteration\". Release uses floor /4 or /2 from a snapshot applied all at once, sends ELEVATED upstream and cell 1 to LOST, and does not enforce capacity: \"Compute all six amounts before changing any value\", \"ACTIVE component 1: t_1 is added to s\", \"never corrected if it arises in iteration 5\". The reset uses a strict >G and floor halving into LOST: \"strictly more than B (that is, more than 38)\". The document adds \"Nothing else changes x, the flags, or s at any time\" and \"Every amount that leaves the state vector is added to s\". Both are consistent with the abstract process and add nothing to it. All data tables match.",
+   "documentQuote": "Step 2 is the only step in which the box bound is enforced."
+  }
+ ],
+ "domainPull": "The pull was strongest at \\\"Gauss-Seidel projection sweep\\\". A real projection onto a box throws the excess away, but here it is carried into component i+1. The \\\"active-set flag\\\" is the second strong point: in real optimisation a constraint is active when it binds at the bound c_i, but here the flag turns on at a separate threshold u_i that can sit below c_i and turns off only at d_i (hysteresis). Lesser pulls are \\\"penalty step\\\", which halves the state rather than adding a cost term, and \\\"slack\\\", which is a running loss tally rather than a gap variable.",
+ "preReadNamedTheBreak": "n/a: nobody went wrong on the rules. A and B gave no statement of the rules and no working (both say a safety classifier stopped them and every value is a placeholder), so there is no break point the pre-read could have named in advance.",
+ "preReadEffect": "From these texts the effect cannot be determined, and if anything it made no visible difference. C's pre-read correctly named the real-domain traps: \\\"Real projection onto a box discards the excess; here the excess is carried\\\", \\\"Real active sets mark constraints that bind (x at bound)\\\", and \\\"Step 4 can leave a component above its bound\\\". C then followed the literal rules and got an exact result. But A and B produced no comparable output, so there is no baseline for crediting the pre-read with C's success. C's own grading said the comparison \\\"Adds nothing\\\" beyond rules the document already states.",
+ "summary": "A and B did not get the process wrong: each delivered placeholder output after a safety-classifier stop, with no rules or working to diagnose, so they cannot be scored. C's report is exactly right on final values, flags, all 13 flag changes, penalty iterations [1,4] and s=76; the only flaw is a start-sum slip in the balance-check text, which C corrected itself. The document translated the abstract process without loss, and the main domain traps (projection discarding the excess, the active set meaning \"at the bound\") were named in C's pre-read but never tested by A or B."
+}

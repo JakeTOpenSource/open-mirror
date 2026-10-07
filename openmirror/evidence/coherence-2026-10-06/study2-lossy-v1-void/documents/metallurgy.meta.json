@@ -1,0 +1,21 @@
+{
+ "restingStateWord": "BASE",
+ "raisedStateWord": "SUPERHEATED",
+ "rulesYouKnowYouCompressed": [
+  "Rounding down (floor) is stated once, as 'any split rounds down', and covers the quarter skim, the half return and the emergency-tap halving. It is not repeated at each step.",
+  "The overflow amount is never defined as 'contents minus working volume, crucible left exactly at working volume'. 'Anything over working volume runs down' leaves that to the reader.",
+  "The temperature check is never said to use the contents after overflow. That follows only from the order of the moves.",
+  "'In between, it holds' covers every case where the state does not change, including a BASE crucible under its upper mark and a SUPERHEATED one above its lower mark. It is not spelled out.",
+  "That a crucible changes state at most once per cycle is not stated. It follows from there being a single check per cycle.",
+  "In the bleed, the amount is fixed by the crucible's state after this cycle's temperature check, not by its state at the start of the cycle. This is implied by the order, not stated.",
+  "'Read all six before touching any' compresses the rule that all six amounts are worked out first and then applied together, so melt arriving on the return launder is not bled in the same move.",
+  "The working volume is not enforced during charging or after the bleed. Charging gets 'nobody watches volume'; the bleed gets 'can finish over volume, waits for next cycle's overflow'. Neither says that capacity is simply not applied.",
+  "The emergency tap compares the total after the bleed. This comes from the order only.",
+  "'Strictly over 38' is given. That 38 exactly does not fire is left to the word 'strictly' and to the cycle 5 note in the Report.",
+  "What goes into the slag tally is reduced to 'everything that reached the pit'. The reader has to collect the four sources (overflow off 6, BASE skims, crucible 1's return, emergency taps) from the separate moves.",
+  "The tally starting at 0 is not stated.",
+  "The balance-check formula is shown only as worked numbers in the Report, not as a general rule.",
+  "The tuple format for state changes (cycle, position, before, after) appears only as examples in the Report.",
+  "The fact that the start-of-line state check happens every cycle for every crucible, including ones with no charge, is left to the reader."
+ ]
+}

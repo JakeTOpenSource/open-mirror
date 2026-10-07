@@ -1,0 +1,42 @@
+{
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 7,
+   "gapsSilentlyAssumed": 6,
+   "followedEngineerNotDomain": "Engineer's process: where the write-up was silent A took the stated sequence rather than plant practice, e.g. \"The state set in step 3 of the same cycle. Steps run in sequence, so step 4 sees the updated state.\""
+  },
+  {
+   "arm": "B",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 6,
+   "gapsSilentlyAssumed": 7,
+   "followedEngineerNotDomain": "Engineer's process: B kept the write-up's cascade and over-volume rules instead of physical tank limits, e.g. \"The overflow is added to that tank, and the tank is then checked against its own volume and spills its full excess onward.\""
+  },
+  {
+   "arm": "C",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 8,
+   "gapsSilentlyAssumed": 5,
+   "followedEngineerNotDomain": "Engineer's process: C said outright that plant practice was set aside, e.g. \"Return flow arriving in a tank does not change that tank's own draw in the same cycle.\""
+  }
+ ],
+ "applicableLosses": 14,
+ "domainPull": "The pull is strongest at the return line and the storm bypass. In a real plant, return sludge goes back to the head of the works and a bypass diverts incoming flow, but here an OVERLOADED tank sends half its contents to the tank before it, and the bypass halves every tank after treatment. Tanks may also sit over volume, which no physical tank can do.",
+ "preReadNamedTheBreak": "Partly. Nobody got a wrong answer, but C's notes did name ahead of time some of the points A and B assumed without listing, such as \"(a) In real plants, return sludge is pumped from the clarifiers back to the head of the works, not from each tank to the one before it\" (where OVERLOADED release goes, which A and B did not list) and over-volume tanks. The notes did not name whether discharge uses the state just set or which way the inflow table reads (rows as cycles, columns as tanks).",
+ "preReadEffect": "No difference on correctness, since all three matched the true answer exactly. The pre-read helped only slightly on open points: C covered 8 of the 14 applicable losses, against 7 for A and 6 for B. C's extra coverage came from listing when the bypass total is taken (after discharge) and the weir threshold, not from the domain-mismatch list in its pre-read, which it concluded \"adds nothing.\"",
+ "summary": "All three operators matched the true answer exactly (final [6,10,9,7,4,2], bypass in cycles 1 and 4, outfall tally 76). Where the write-up was silent, each one followed the engineer's rules rather than treatment-plant practice. C's required pre-read changed nothing on correctness and added at most one or two flagged gaps over A and B. Note: 14 losses were counted because no loss quote is exactly \"(the Report paragraph, since replaced)\"; the output-specification entry was kept even though the new template Report paragraph now settles it."
+}

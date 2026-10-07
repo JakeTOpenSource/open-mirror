@@ -1,0 +1,18 @@
+{
+ "restingStateWord": "INACTIVE",
+ "raisedStateWord": "ACTIVE",
+ "positionNoun": "component",
+ "quantityNoun": "component value",
+ "cycleNoun": "iteration",
+ "resetNoun": "penalty step",
+ "lossNoun": "slack accumulator",
+ "checks": [
+  {
+   "pass": true,
+   "recoveredRules": "OBJECTS: Six positions (components) in a line, indexed 1 to 6. Position 1 comes first in handling order and 6 comes last. \"Next\" means i+1 and \"previous\" means i-1. Each position holds a non-negative whole number x_i. Each has a fixed ceiling c_i and two fixed marks, a high mark u_i and a low mark d_i, with d_i < u_i <= c_i. Each position has a two-valued flag, INACTIVE or ACTIVE, and all start INACTIVE. There is one global cap B = 38 and one accumulator s that starts at 0. Every amount that leaves the vector goes to s.\n\nNUMBERS: c = 10,8,12,6,9,7. u = 7,6,9,5,7,5. d = 3,2,4,2,3,2. Starting x = 3,6,6,2,2,1. Inputs by iteration: 1: 0,6,3,5,3,3. 2: 4,2,0,1,1,7. 3: 4,4,3,0,0,6. 4: 7,6,7,1,3,0. 5: 0,6,6,3,3,0.\n\nCYCLE: Exactly 5 iterations, run in order. Each iteration runs Steps 1 to 5 in order, and each step finishes for all six positions before the next step starts.\n- Step 1: add row k of the input table to x, element by element. The ceiling is not enforced here.\n- Step 2: SEQUENTIAL, in order 1 to 6, using values already updated within the sweep. If x_i > c_i (strictly more), the excess x_i - c_i goes to position i+1 and x_i is set to c_i. Excess from position 6 goes to s. If x_i <= c_i, nothing happens. Excess can cascade down the line. This is the only step that enforces the ceiling.\n- Step 3: uses the values after Step 2. If INACTIVE and x_i >= u_i, the flag becomes ACTIVE. If ACTIVE and x_i <= d_i, it becomes INACTIVE. Otherwise there is no change, so a value strictly between d_i and u_i keeps its flag. A flag changes at most once per iteration. Each change is logged as (iteration, component, before, after).\n- Step 4: SIMULTANEOUS. All six amounts are computed first from the values at the start of the step, using the flags from Step 3. INACTIVE gives t = floor(x/4) and ACTIVE gives t = floor(x/2). All are then applied together: each x_i drops by t_i. INACTIVE amounts go to s. ACTIVE amounts for positions 2 to 6 go to position i-1. An ACTIVE amount from position 1 goes to s. The ceiling is not enforced, so an overshoot here is corrected only in the next iteration's Step 2, and never if it happens in iteration 5.\n- Step 5: if the sum of x is strictly greater than 38, every x_i becomes floor(x_i/2), the removed amounts go to s, and the iteration is recorded as having fired. If the sum is 38 or less, nothing happens.\n\nROUNDING: always round down.\n\nNO OTHER CHANGES: nothing else changes x, the flags or s.\n\nREPORT: the final x in order 1 to 6; the final flags in order 1 to 6; all flag changes; the iterations in which Step 5 fired; the final s; and the balance check (starting sum + input sum = final sum + s).",
+   "problems": [],
+   "leaks": []
+  }
+ ],
+ "checkPassed": true
+}

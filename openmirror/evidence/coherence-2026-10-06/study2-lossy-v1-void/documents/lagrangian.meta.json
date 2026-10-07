@@ -1,0 +1,17 @@
+{
+ "restingStateWord": "INACTIVE",
+ "raisedStateWord": "ACTIVE",
+ "rulesYouKnowYouCompressed": [
+  "A component's flag changes at most once per cycle. This is implied by the single active-set pass and is never stated.",
+  "Components never go negative. This is implied by 'nonnegative integer' and by floor division, and it is not argued.",
+  "The threshold ordering d < u <= c is never stated. The reader can see it in the data.",
+  "The violation is defined only through 'clip x_i to c_i', which leaves violation = x_i - c_i when x_i > c_i, and nothing happens otherwise. The word 'clip' carries that.",
+  "In the Jacobi shed, each component's own amount is subtracted from it at the same moment as the transfers. 'Sheds' and 'moves' leave this implied.",
+  "Which rule a component uses in the shed depends on its flag after this cycle's active-set update. The step order implies this; it is not said outright.",
+  "In the penalty step, 'what came off' means x_i - floor(x_i/2) for each component, and at a 1-norm of exactly 38 nothing happens. Only 'strictly above' is stated.",
+  "'Up to x_{i-1}' means toward position 1, against the direction of the sweep. The text leaves this to the reader.",
+  "The b table is called 'b', not 'the load table'. The reader has to infer that rows are cycles and columns are positions 1 to 6.",
+  "The balance check is given as worked totals (20 + 94 = 38 + 76). It is not written as the general identity start + loaded = final + slack.",
+  "The report says nothing about the order of the flip list. It is chronological, and within a cycle by position."
+ ]
+}

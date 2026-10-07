@@ -1,0 +1,58 @@
+{
+ "operators": [
+  {
+   "arm": "A",
+   "exactlyRight": false,
+   "errorTypes": [
+    "rule-ambiguous-in-document",
+    "rounding"
+   ],
+   "breakPoints": [
+    {
+     "rule": "STEP 5: each level becomes floor(level/2); the removed amount (the ceiling half) goes to LOST",
+     "documentQuote": "Above 38, every chamber halves and the shed mass is discarded.",
+     "operatorQuote": "The amount that moves (the shed mass) is floor(m/2) and the chamber keeps the remainder, ceil(m/2).",
+     "explanation": "A applied 'any split rounds down' to the shed part rather than the kept part, so odd chambers kept one unit too many at each moult; this cascaded into an extra moult in cycle 5 (resets [1,4,5] vs [1,4]), three missing stage changes, and LOST 92 vs 76."
+    }
+   ],
+   "gapsCorrectlyFlagged": 4,
+   "gapsSilentlyAssumed": 6,
+   "followedEngineerNotDomain": "Where the write-up was silent A followed the engineer's process rather than biology, e.g. \"Strictly above 38 fires. The total of exactly 38 in cycle 3 did not fire.\""
+  },
+  {
+   "arm": "B",
+   "exactlyRight": true,
+   "errorTypes": [
+    "none"
+   ],
+   "breakPoints": [],
+   "gapsCorrectlyFlagged": 3,
+   "gapsSilentlyAssumed": 7,
+   "followedEngineerNotDomain": "B followed the engineer's process throughout, e.g. \"The chamber keeps floor(mass/2) (the chamber 'halves', rounded down) and the larger remainder is shed to the loss tally.\""
+  },
+  {
+   "arm": "C",
+   "exactlyRight": false,
+   "errorTypes": [
+    "rule-ambiguous-in-document",
+    "rounding"
+   ],
+   "breakPoints": [
+    {
+     "rule": "STEP 5: each level becomes floor(level/2); the removed amount (the ceiling half) goes to LOST",
+     "documentQuote": "Above 38, every chamber halves and the shed mass is discarded.",
+     "operatorQuote": "Each chamber sheds floor(m/2) and keeps ceil(m/2), the same rule as reabsorption.",
+     "explanation": "C carried the reabsorption rounding (amount moved is floored) over to the moult, so chambers kept the larger half, producing the same wrong trajectory as A: an extra cycle-5 moult, three missing stage changes, and LOST 92 instead of 76."
+    }
+   ],
+   "gapsCorrectlyFlagged": 5,
+   "gapsSilentlyAssumed": 5,
+   "followedEngineerNotDomain": "C explicitly discarded the metamorphosis picture and followed the stated rules, e.g. \"the vocabulary is treated as labels only, and every rule is applied exactly as written\"."
+  }
+ ],
+ "applicableLosses": 10,
+ "domainPull": "The biological picture of a moult as shedding pulls hardest at step 5. In 'every chamber halves and the shed mass is discarded', a reader can naturally take the shed part as the split that rounds down, which inverts the engineer's floor(level/2) on the kept level. The one-way-pupation intuition, by contrast, pulled nobody off course.",
+ "preReadNamedTheBreak": "partly: C's pre-read said the plain statement \"leaves some rounding and timing details open\" and wrote \"halve every compartment and remove the halves\". It never said which half of an odd chamber is kept, the point A and C got wrong. Its one named break point, one-way pupation, was not the cause of any error.",
+ "preReadEffect": "No difference on correctness. C got exactly the same wrong figures as A (final [4,5,5,4,3,1], LOST 92), while B, without the pre-read, was exactly right. The pre-read helped a little on open points: C listed 9 and covered 5 of the 10 applicable losses, against 4 for A and 3 for B. It still resolved the decisive moult-rounding ambiguity the wrong way.",
+ "summary": "The only point that decided the outcome was the rounding of the moult halving. All three operators flagged it as open, but A and C kept ceil(m/2) and got a cascade of errors (extra cycle-5 reset, LOST 92), while B kept floor(m/2) and matched the true answer exactly. C's long pre-read surfaced more open points but did not pin down which half is kept, so it brought no gain in correctness over A."
+}

@@ -1,0 +1,146 @@
+{
+ "run": {
+  "rulesInOwnWords": "1) Start: sap = [3,6,6,2,2,1], every segment QUIET, loss tally 0. Each cycle runs steps 1-5 in order, and each step is finished for all six segments before the next step starts. 2) Step 1, uptake: add that cycle's row of the Uptake table to the six segments. No cap is applied. 3) Step 2, xylem push: go through segments 1 to 6 in order. If sap is above the holding volume (10,8,12,6,9,7), move the excess into the next segment up and set this segment to its holding volume. Because the order is upward, overflow can cascade within the same step. Excess from segment 6 is transpired and added to the loss tally. 4) Step 3, state check on the sap after step 2: a QUIET segment with sap at or above its upper mark (7,6,9,5,7,5) becomes SINK-ACTIVE. A SINK-ACTIVE segment with sap at or below its lower mark (3,2,4,2,3,2) becomes QUIET. Otherwise the state stays the same, and a segment changes at most once per cycle. Every change is logged. 5) Step 4, phloem and respiration: first work out each segment's amount from its current sap. QUIET takes floor(sap/4) and SINK-ACTIVE takes floor(sap/2). Then apply all six at once. Each segment loses its amount. A QUIET amount is added to the loss tally. A SINK-ACTIVE amount goes to segment n-1, except that segment 1's goes to the loss tally. No cap is applied. 6) Step 5, leaf drop: if total sap is strictly above 38, every segment becomes floor(sap/2), the removed sap is added to the loss tally, and the cycle is logged. 7) Every division rounds down.",
+  "working": "Cycle 1: S1 [3,12,9,7,5,4]; S2 [3,8,12,6,7,4] (seg2 pushed 4 to seg3, seg3 pushed 1 to seg4, seg4 pushed 2 to seg5; no transpiration), loss 0; S3 states Q,S,S,S,S,Q (segments 2-5 became SINK-ACTIVE); S4 amounts [0,4,6,3,3,1] -> [7,10,9,6,4,3], loss 1; S5 total 39 > 38, LEAF DROP -> [3,5,4,3,2,1], 21 removed, loss 22.\nCycle 2: S1 [7,7,4,4,3,8]; S2 [7,7,4,4,3,7] (seg6 transpired 1), loss 23; S3 states S,S,Q,S,Q,S (1 Q->S, 3 S->Q, 5 S->Q, 6 Q->S); S4 amounts [3,3,1,2,0,3] -> [7,4,5,2,6,4], loss 27 (3 from seg1 at the root, 1 from seg3 respired, 0 from seg5); S5 total 28, no drop.\nCycle 3: S1 [11,8,8,2,6,10]; S2 [10,8,9,2,6,7] (seg1 pushed 1 to seg3's neighbour seg2, seg2 pushed 1 to seg3, seg6 transpired 3), loss 30; S3 states S,S,S,Q,Q,S (3 Q->S, 4 S->Q); S4 amounts [5,4,4,0,1,3] -> [9,8,5,2,8,4], loss 36; S5 total 36, no drop.\nCycle 4: S1 [16,14,12,3,11,4]; S2 [10,8,12,6,9,7] (cascade: 6 to seg2, 12 to seg3, 12 to seg4, 9 to seg5, 5 to seg6, then 8 transpired), loss 44; S3 all SINK-ACTIVE (4 Q->S, 5 Q->S); S4 amounts [5,4,6,3,4,3] -> [9,10,9,7,8,4], loss 49; S5 total 47 > 38, LEAF DROP -> [4,5,4,3,4,2], 25 removed, loss 74.\nCycle 5: S1 [4,11,10,6,7,2]; S2 [4,8,12,6,8,2] (seg2 pushed 3 to seg3, seg3 pushed 1 to seg4, seg4 pushed 1 to seg5; no transpiration), loss 74; S3 states S,S,S,S,S,Q (6 S->Q); S4 amounts [2,4,6,3,4,0] -> [6,10,9,7,4,2], loss 76; S5 total 38, which is not above 38, so no drop. Segments 2 and 4 end above their holding volumes, and that is never corrected.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "SINK-ACTIVE",
+   "QUIET"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "QUIET",
+    "to": "SINK-ACTIVE"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SINK-ACTIVE",
+    "to": "QUIET"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting sap 3+6+6+2+2+1 = 20. Uptake 17+15+17+24+18 = 94. Left side 20 + 94 = 114. End sap 6+10+9+7+4+2 = 38, loss tally 76. Right side 38 + 76 = 114. The two sides match.",
+  "usedScript": true,
+  "notes": "I used a short Python script for the arithmetic and checked cycle 1, the cycle 5 leaf-drop boundary (total exactly 38, so no drop) and the balance by hand. Correction to the cycle 3 step 2 note in the working: seg1 pushed 1 to seg2, then seg2 pushed 1 to seg3.",
+  "preReadNotes": "Edge cases: the leaf-drop test is strictly greater than 38, and cycle 5 lands exactly on 38. The phloem amount from SINK-ACTIVE segment 1 counts as loss. Segments can stay above their holding volume after step 4 in cycle 5."
+ },
+ "grade": {
+  "available": true,
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missingChanges": [],
+  "extraChanges": [],
+  "usedScript": true
+ }
+}
