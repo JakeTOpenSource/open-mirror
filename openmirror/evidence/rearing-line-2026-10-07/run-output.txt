@@ -1,0 +1,26 @@
+1 feed [3, 12, 9, 7, 5, 4]
+1 carry [3, 8, 12, 6, 7, 4] 0
+1 state [3, 8, 12, 6, 7, 4] ['LARVAL', 'PUPAL', 'PUPAL', 'PUPAL', 'PUPAL', 'LARVAL']
+1 metab [7, 10, 9, 6, 4, 3] 1
+1 moult [3, 5, 4, 3, 2, 1] 22 18
+2 feed [7, 7, 4, 4, 3, 8]
+2 carry [7, 7, 4, 4, 3, 7] 23
+2 state [7, 7, 4, 4, 3, 7] ['PUPAL', 'PUPAL', 'LARVAL', 'PUPAL', 'LARVAL', 'PUPAL']
+2 metab [7, 4, 5, 2, 6, 4] 27
+2 moult [7, 4, 5, 2, 6, 4] 27 28
+3 feed [11, 8, 8, 2, 6, 10]
+3 carry [10, 8, 9, 2, 6, 7] 30
+3 state [10, 8, 9, 2, 6, 7] ['PUPAL', 'PUPAL', 'PUPAL', 'LARVAL', 'LARVAL', 'PUPAL']
+3 metab [9, 8, 5, 2, 8, 4] 36
+3 moult [9, 8, 5, 2, 8, 4] 36 36
+4 feed [16, 14, 12, 3, 11, 4]
+4 carry [10, 8, 12, 6, 9, 7] 44
+4 state [10, 8, 12, 6, 9, 7] ['PUPAL', 'PUPAL', 'PUPAL', 'PUPAL', 'PUPAL', 'PUPAL']
+4 metab [9, 10, 9, 7, 8, 4] 49
+4 moult [4, 5, 4, 3, 4, 2] 74 22
+5 feed [4, 11, 10, 6, 7, 2]
+5 carry [4, 8, 12, 6, 8, 2] 74
+5 state [4, 8, 12, 6, 8, 2] ['PUPAL', 'PUPAL', 'PUPAL', 'PUPAL', 'PUPAL', 'LARVAL']
+5 metab [6, 10, 9, 7, 4, 2] 76
+5 moult [6, 10, 9, 7, 4, 2] 76 38
+[6, 10, 9, 7, 4, 2] ['PUPAL', 'PUPAL', 'PUPAL', 'PUPAL', 'PUPAL', 'LARVAL'] [(1, 2, 'LARVAL', 'PUPAL'), (1, 3, 'LARVAL', 'PUPAL'), (1, 4, 'LARVAL', 'PUPAL'), (1, 5, 'LARVAL', 'PUPAL'), (2, 1, 'LARVAL', 'PUPAL'), (2, 3, 'PUPAL', 'LARVAL'), (2, 5, 'PUPAL', 'LARVAL'), (2, 6, 'LARVAL', 'PUPAL'), (3, 3, 'LARVAL', 'PUPAL'), (3, 4, 'PUPAL', 'LARVAL'), (4, 4, 'LARVAL', 'PUPAL'), (4, 5, 'LARVAL', 'PUPAL'), (5, 6, 'PUPAL', 'LARVAL')] [1, 4] 76 20 94 114 114
