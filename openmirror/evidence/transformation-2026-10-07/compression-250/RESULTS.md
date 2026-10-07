@@ -1,6 +1,10 @@
 # Compression test at 250 words: results
 
-**Run:** 7 October 2026, 16 Opus 5.5 sessions, zero refusals, zero reruns, 1.14M tokens against a stated 1.0M to 1.1M. **Plan:** `PLAN.md`, committed before the run. **Grading:** engine, all five fields, every read; regraded independently by `verify.py` claims S3-14 to S3-17.
+**Run:** 7 October 2026, 16 Opus 5.5 sessions, zero refusals, zero reruns, contaminated by the harness relay (see the notice below and `AUDIT.md`), 1.14M tokens against a stated 1.0M to 1.1M. **Plan:** `PLAN.md`, committed before the run. **Grading:** engine, all five fields, every read; regraded independently by `verify.py` claims S3-14 to S3-17.
+
+## Contamination notice, added after the audit
+
+The workflow harness put Jake's triggering message, "run it then commit it to the repo", in front of every session. Fourteen of sixteen browsed the repository before answering, the skill-arm metamorphosis writer read the README sentence that names the rounding failure, and one generic-arm metamorphosis reader saw another reader's commit message containing the answer eight seconds after its own script had produced it. Two readers committed scripts to the repository. The full per-session table is in `AUDIT.md`. The skill-arm metallurgy failure is clean: that writer saw no tip and its readers saw no answer. The skill-arm metamorphosis 3 of 3 cannot be credited to the skill. The raw numbers and the pre-registered reading are reported below as planned; the run is marked contaminated, and a rerun is Jake's decision.
 
 ## Outcome
 
