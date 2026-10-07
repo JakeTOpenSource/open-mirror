@@ -491,7 +491,7 @@ Compared with the last run, which was 40 sessions and 2.66M, this is cheaper per
 - **Failure** (W1 no better than W0): the skill's discipline does not survive a word cap any better than good intent does. The README says so, and the next step is changing the skill, not more testing.
 # Transformation study (study 3): results
 
-**Date:** 7 October 2026. **Plan:** `TRANSFORMATION-STUDY-PLAN.md`, written and committed before the run. **Evidence:** `evidence/transformation-2026-10-07/`, every write-up, plain statement, self-check, read, and checklist extraction on file, graded by `grade.py` and re-graded independently by `verify.py` (claims S3-1 to S3-9). **Cost:** 44 sessions, 2.87M subagent tokens, against a plan estimate of 1.5M to 2.0M; the overrun and its cause are in the last section.
+**Date:** 7 October 2026. **Plan:** `TRANSFORMATION-STUDY-PLAN.md`, written and committed before the run. **Evidence:** `evidence/transformation-2026-10-07/`, every write-up, plain statement, self-check, read, and checklist extraction on file, graded by `grade.py` and re-graded independently by `verify.py` (claims S3-1 to S3-9 for the three phases, S3-10 to S3-25 for the control and the 250-word tests). **Cost:** 44 sessions, 2.87M subagent tokens, against a plan estimate of 1.5M to 2.0M; the overrun and its cause are in the last section.
 
 ## The result, in plain words
 
@@ -635,7 +635,7 @@ The judge prompt is a plain instruction and does not use Open Mirror. If the met
 Each session starts in its own scratch folder containing only `A.md` and `B.md`. The prompt forbids reading, listing, changing or committing anything outside it and forbids git. All transcripts are audited after the run with the same script used for the clean 250-word rerun (`audit_wf.py`): no git, no reads outside the folder, no answer strings from anything but the session's own script.
 # Function-match test: results
 
-**Run:** 7 October 2026, 32 Opus 5.5 judge sessions (16 pairs, 2 independent judges each), zero refusals, zero reruns, 2.28M tokens against a stated 2.6M to 3.2M. **Plan:** `PLAN.md`, committed before the run. **Containment:** each session confined to a folder holding only its pair's two documents; all 32 transcripts audited (`judges/audit.json`): no git command, no read outside the folder, no answer string from anything but the session's own script. **Grading:** `grade_fm.py` against `key.json`, with every judge's probe re-executed by the engine; regraded independently by `verify.py` claims FM-1 to FM-8.
+**Run:** 7 October 2026, 32 Opus 5.5 judge sessions (16 pairs, 2 independent judges each), zero refusals, zero reruns, 2.28M tokens against a stated 2.6M to 3.2M. **Plan:** `PLAN.md`, committed before the run. **Containment:** each session confined to a folder holding only its pair's two documents; all 32 transcripts audited (`judges/audit.json`): no git command, no read outside the folder, no answer string from anything but the session's own script. **Grading:** `grade_fm.py` against `key.json`, with every judge's probe re-executed by the engine; regraded independently by `verify.py` claims FM-1 to FM-9.
 
 ## Outcome
 
@@ -884,11 +884,18 @@ MIT. See [LICENSE](LICENSE). Use it, build on it, timestamp it.
 
 Newest first. Each entry says what was tested and what was not. Earlier entries are reproduced from the source documents in `evidence/` with their original wording; where that wording is inconsistent, the inconsistency is noted rather than repaired.
 
+
+## Published — 2026-10-07 — first public release, text unchanged at v1.4.3
+
+First public release of this repository at github.com/JakeTOpenSource/open-mirror, under the MIT license, with the skill text unchanged at v1.4.3. The repository was flattened for publication: the former `openmirror/` folder is now the root. Evidence, verifier, and manifest are unchanged in content; the manifest root label changed from `openmirror/` to `./`. Before the first push, local machine paths inside the evidence transcripts were redacted: the operating-system user name became `USER`, and the test-harness session and workspace identifiers became `SESSION` and `scratch-workspace`. Nothing else in any transcript was altered; the 551 replacements touched path strings only, and every JSON record still parses. The verifier and manifest were regenerated afterward.
+
+## Evidence note — 2026-10-07 — function-match test, no text change
+
+Pre-registered (`evidence/function-match-2026-10-07/PLAN.md`), 16 document pairs across unrelated fields built deterministically with single-rule variants from the engine, 2 judges per pair, plain instruction, confined and audited. 32 of 32 verdicts correct, probes engine-verified 32 of 32, hidden breaker differences caught 4 of 4, judge disagreement 0 of 16. Reading by the plan: function matching across lexicons is doable by this method on executable procedures. No skill text involved; no version bump. Candidate text change, untested: a checklist line, "for every rounding, name which quantity is rounded".
+
 ## Evidence note — 2026-10-07 — transformation study, no text change
 
 Ten writers used the skill's steps 1, 4 and 5 on their own 400-word analogies of the coherence-study process (`TRANSFORMATION-STUDY.md`). Fourteen blind readers then executed them: 14 of 14 exact by the engine, against 25 of 30 for the undisciplined write-ups the day before, and 6 of 6 against 1 of 6 on the two analogies that had drifted. A fixed 23-rule checklist found 226 of 230 rules recoverable against 219. A control the same afternoon replaced the skill with a one-sentence "review against the source and fix" instruction on the two drifting domains: 12 of 12 exact, with the writers catching the halving ambiguity unprompted. Conclusion by the pre-set rule: the active ingredient is a review pass against the source, which the skill contains but does not own. Open Mirror has not yet been shown to beat that sentence on any tested task. No version bump. A pre-registered 250-word test followed (`evidence/transformation-2026-10-07/compression-250/`): skill 3 of 6, one-sentence review 6 of 6, one writer per arm per domain; the skill-arm metallurgy writer detached the rounding from the halving rule and its self-check passed it. Pre-registered reading: the skill's text hurts at that compression. The run was contaminated by the harness relaying the triggering message into every session, which sent writers and readers browsing the repository; one skill-arm writer read the README sentence naming the rounding failure, one generic-arm reader saw the answer in another reader's commit message after computing it, and two readers committed scripts. Audit in `compression-250/AUDIT.md`. The contamination favoured the skill arm. Clean rerun the same evening (`compression-250/PLAN-RERUN.md`, `RESULTS-RERUN.md`): three writers per arm per domain, 48 sessions confined to a scratch folder and audited clean; skill 6 of 6 write-ups clean, one-sentence review 5 of 6; by the pre-registered rule, no separation. The one failure was again a halving rule with the rounding detached from the kept quantity, this time from a generic-arm writer.
-
-**Evidence note, 7 October 2026, function-match test.** Pre-registered (`evidence/function-match-2026-10-07/PLAN.md`), 16 document pairs across unrelated fields built deterministically with single-rule variants from the engine, 2 judges per pair, plain instruction, confined and audited. 32 of 32 verdicts correct, probes engine-verified 32 of 32, hidden breaker differences caught 4 of 4, judge disagreement 0 of 16. Reading by the plan: function matching across lexicons is doable by this method on executable procedures. No skill text involved; no version bump. Candidate text change, untested: a checklist line, "for every rounding, name which quantity is rounded".
 
 ## Evidence note — 2026-10-06 — coherence study, no text change
 
@@ -996,8 +1003,6 @@ From `evidence/Open-Mirror-v1.1.md`. Revised by Claude after an A/B test of v1.0
 ## v1.0 — 2026-08-14
 
 From `evidence/Open-Mirror-Skill.pdf`. Original. Concept and research direction by Jake Tiller; drafting and synthesis with OpenAI Codex. Five statuses, three lenses by default, one success example.
-
-**Published, 7 October 2026.** First public release of this repository at github.com/JakeTOpenSource/open-mirror, under the MIT license, with the skill text unchanged at v1.4.3. The repository was flattened for publication: the former `openmirror/` folder is now the root. Evidence, verifier, and manifest are unchanged in content; the manifest root label changed from `openmirror/` to `./`. Before the first push, local machine paths inside the evidence transcripts were redacted: the operating-system user name became `USER`, and the test-harness session and workspace identifiers became `SESSION` and `scratch-workspace`. Nothing else in any transcript was altered; the 551 replacements touched path strings only, and every JSON record still parses. The verifier and manifest were regenerated afterward.
 
 ## Part 6. Evidence
 

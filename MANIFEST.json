@@ -14,8 +14,8 @@
    "bytes": 10249
   },
   "CHANGELOG.md": {
-   "sha256": "d36e8e31c3f1d2dfd5e4e0660aa2b83b8eb2919ab62c4723413771894ffea2ae",
-   "bytes": 16424
+   "sha256": "f651fddbb5ecf8577d7346fce727e7b64d5444e278cc50718785ce644b2fe711",
+   "bytes": 16491
   },
   "COHERENCE-STUDY.md": {
    "sha256": "00580b07b8a266caa5b929f9038e5403b964c1a5ee8109f805b174b29f024964",
@@ -26,16 +26,16 @@
    "bytes": 1068
   },
   "NEXT.md": {
-   "sha256": "99025ca8cc057bd1fa03ef495d500886502f2f251d492e749425f614eb69c62f",
-   "bytes": 5406
+   "sha256": "aaec8ab03134fb5cd7b9a0bd34d39f41ebc5c2bb78fa3d6e29b8d9432b1a4ab7",
+   "bytes": 5427
   },
   "OPEN-MIRROR-ARCHITECTURE-2026-10-07.pdf": {
    "sha256": "ed5bfdf3dc0726a8e991d7f5e4de6219a7bc4619ee3149f6242e353fa734fb58",
    "bytes": 10861
   },
   "OPEN-MIRROR-FULL-REPORT-2026-10-06.md": {
-   "sha256": "c51a7c6e379f29b9c5ef4a431aa8afe940e1976156dd3e15ca6ddcd4d3c2b212",
-   "bytes": 617132
+   "sha256": "eed5dfe7693cf9d02519f159522980a551b0a9549c7ce516a8bdc44cf9c8c943",
+   "bytes": 617275
   },
   "OPEN-MIRROR-v1.4.3.pdf": {
    "sha256": "2d47351149f0dcddd352258697d4388e0a7fe75075148a473de5b894c8f27666",
@@ -66,8 +66,8 @@
    "bytes": 6798
   },
   "TRANSFORMATION-STUDY.md": {
-   "sha256": "a6c9bc3e0e21bd122841111f9d9bae28867acee330544a9e1e893eb3ec2c68fe",
-   "bytes": 11488
+   "sha256": "7814210cce0d428c34678f2ff5b9dfedab3c9514dd93ac560d8b349787c46282",
+   "bytes": 11564
   },
   "assets/open-mirror-infographic.jpg": {
    "sha256": "f3f9525935f2354ed253bd1e2994cee9877dc82fc04d2351a9368ff7ddd42d93",
@@ -858,7 +858,7 @@
    "bytes": 5747
   },
   "evidence/function-match-2026-10-07/RESULTS.md": {
-   "sha256": "5e22167038a1cfb904e352d0fd6bd127aec8745821d2d69884aa0b1ac23cdfa6",
+   "sha256": "e96ef25a1d39955c5df24a21414618343c0218ca833be0938b8a5b5fd95d6114",
    "bytes": 4244
   },
   "evidence/function-match-2026-10-07/build_pairs.py": {

@@ -1,6 +1,6 @@
 # Function-match test: results
 
-**Run:** 7 October 2026, 32 Opus 5.5 judge sessions (16 pairs, 2 independent judges each), zero refusals, zero reruns, 2.28M tokens against a stated 2.6M to 3.2M. **Plan:** `PLAN.md`, committed before the run. **Containment:** each session confined to a folder holding only its pair's two documents; all 32 transcripts audited (`judges/audit.json`): no git command, no read outside the folder, no answer string from anything but the session's own script. **Grading:** `grade_fm.py` against `key.json`, with every judge's probe re-executed by the engine; regraded independently by `verify.py` claims FM-1 to FM-8.
+**Run:** 7 October 2026, 32 Opus 5.5 judge sessions (16 pairs, 2 independent judges each), zero refusals, zero reruns, 2.28M tokens against a stated 2.6M to 3.2M. **Plan:** `PLAN.md`, committed before the run. **Containment:** each session confined to a folder holding only its pair's two documents; all 32 transcripts audited (`judges/audit.json`): no git command, no read outside the folder, no answer string from anything but the session's own script. **Grading:** `grade_fm.py` against `key.json`, with every judge's probe re-executed by the engine; regraded independently by `verify.py` claims FM-1 to FM-9.
 
 ## Outcome
 

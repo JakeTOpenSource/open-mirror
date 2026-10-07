@@ -1,6 +1,6 @@
 # Transformation study (study 3): results
 
-**Date:** 7 October 2026. **Plan:** `TRANSFORMATION-STUDY-PLAN.md`, written and committed before the run. **Evidence:** `evidence/transformation-2026-10-07/`, every write-up, plain statement, self-check, read, and checklist extraction on file, graded by `grade.py` and re-graded independently by `verify.py` (claims S3-1 to S3-9). **Cost:** 44 sessions, 2.87M subagent tokens, against a plan estimate of 1.5M to 2.0M; the overrun and its cause are in the last section.
+**Date:** 7 October 2026. **Plan:** `TRANSFORMATION-STUDY-PLAN.md`, written and committed before the run. **Evidence:** `evidence/transformation-2026-10-07/`, every write-up, plain statement, self-check, read, and checklist extraction on file, graded by `grade.py` and re-graded independently by `verify.py` (claims S3-1 to S3-9 for the three phases, S3-10 to S3-25 for the control and the 250-word tests). **Cost:** 44 sessions, 2.87M subagent tokens, against a plan estimate of 1.5M to 2.0M; the overrun and its cause are in the last section.
 
 ## The result, in plain words
 
