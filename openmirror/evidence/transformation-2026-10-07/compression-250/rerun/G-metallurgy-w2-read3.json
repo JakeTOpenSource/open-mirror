@@ -1,0 +1,157 @@
+{
+ "id": "G-metallurgy-w2",
+ "n": 3,
+ "run": {
+  "procedureSummary": "1. Charge: add each cycle's charge to each crucible, ignoring capacity. 2. Overflow: go through crucibles 1 to 6 in turn. Anything over capacity is cut back to capacity and the excess is added to the next crucible before that crucible's turn, so overflow can cascade. Crucible 6's excess goes to slag. 3. State: using the post-overflow quantities, a BASE crucible at or above its upper mark becomes SUPERHEATED, a SUPERHEATED crucible at or below its lower mark becomes BASE, and every other crucible keeps its state. 4. Bleed: work out every amount from the post-step-3 quantities and new states before anything moves. A BASE crucible loses floor(q/4) to slag. A SUPERHEATED crucible sends floor(q/2) to the previous crucible (i-1), and crucible 1's share goes to slag. Then apply all moves at once. Any crucible left over capacity stays that way until the next cycle's overflow, or stays over capacity after cycle 5. 5. Emergency tap: if the six-crucible total after bleed is strictly greater than 38, every crucible keeps floor(q/2) and the rest goes to slag. A total of exactly 38 does not fire the tap.",
+  "openPoints": [
+   {
+    "point": "Which quantities and states the bleed is figured on",
+    "assumption": "Bleed is figured on the quantities after overflow and the states after the step-3 update in the same cycle. All amounts are fixed before anything moves, and then all moves happen at once. A crucible that receives returned melt does not bleed that returned melt in the same cycle."
+   },
+   {
+    "point": "Overfull after the return launder",
+    "assumption": "Melt returned in step 4 can push a crucible over capacity (for example crucible 2 at 10 against capacity 8 at the end of cycle 5). Nothing overflows in step 4. The excess waits for the next cycle's step-2 overflow, and after cycle 5 it stays, so end quantities can be above capacity."
+   },
+   {
+    "point": "Overflow cascade order",
+    "assumption": "Overflow runs once from 1 to 6 in turn. Excess received from crucible i is counted in crucible i+1's own overflow check. Nothing flows backward in step 2."
+   },
+   {
+    "point": "Total used for the tap test",
+    "assumption": "The tap test uses the total after the step-4 bleed, including any overfull crucibles. The threshold is strictly greater than 38."
+   },
+   {
+    "point": "Rounding",
+    "assumption": "Every quarter and half is rounded down (floor), one crucible at a time. In the tap, the slag is total before minus the sum of the kept halves."
+   },
+   {
+    "point": "State thresholds use post-overflow quantities",
+    "assumption": "The step-3 comparison uses quantities after step 2, which are within capacity at that point. The tap and bleed do not trigger a fresh state check in the same cycle."
+   }
+  ],
+  "cycleFigures": "Start [3,6,6,2,2,1], slag 0. C1: charge [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] slag 0; state [3,8,12,6,7,4] B,S,S,S,S,B; bleed amounts [0,4,6,3,3,1] gives [7,10,9,6,4,3] slag 1; total 39 > 38 so TAP gives [3,5,4,3,2,1] slag 22. C2: charge [7,7,4,4,3,8]; overflow [7,7,4,4,3,7] slag 23; state [7,7,4,4,3,7] S,S,B,S,B,S; bleed amounts [3,3,1,2,0,3] gives [7,4,5,2,6,4] slag 27; total 28, no tap. C3: charge [11,8,8,2,6,10]; overflow [10,8,9,2,6,7] slag 30; state [10,8,9,2,6,7] S,S,S,B,B,S; bleed amounts [5,4,4,0,1,3] gives [9,8,5,2,8,4] slag 36; total 36, no tap. C4: charge [16,14,12,3,11,4]; overflow [10,8,12,6,9,7] slag 44; state [10,8,12,6,9,7] all S; bleed amounts [5,4,6,3,4,3] gives [9,10,9,7,8,4] slag 49; total 47 > 38 so TAP gives [4,5,4,3,4,2] slag 74. C5: charge [4,11,10,6,7,2]; overflow [4,8,12,6,8,2] slag 74; state [4,8,12,6,8,2] S,S,S,S,S,B; bleed amounts [2,4,6,3,4,0] gives [6,10,9,7,4,2] slag 76; total 38 is not over 38, no tap; final [6,10,9,7,4,2]. (B = BASE, S = SUPERHEATED)",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "BASE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting melt 20 + charges 94 (20+15+17+24+18) = 114; end melt 38 (6+10+9+7+4+2) + slag 76 = 114. The two sides balance.",
+  "usedScript": true,
+  "notes": "I used a short Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py. I also checked cycle 1 and the balance by hand. Crucible 2 ends at 10, over its capacity of 8, because melt came back up the return launder in the cycle 5 bleed. The write-up says overfull crucibles stay that way after cycle 5. In cycle 5 the total after bleed is exactly 38, so the tap does not fire, because the rule is over 38."
+ },
+ "grade": {
+  "available": true,
+  "exactAllFields": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  }
+ }
+}

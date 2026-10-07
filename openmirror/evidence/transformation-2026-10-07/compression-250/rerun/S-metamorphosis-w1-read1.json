@@ -1,0 +1,165 @@
+{
+ "id": "S-metamorphosis-w1",
+ "n": 1,
+ "run": {
+  "procedureSummary": "Feed: add the cycle's feed row to each chamber, PUPAL chambers included, without regard to limits. Carry forward: one pass over chambers 1 to 6 in order; if a chamber is over its limit it is set to the limit and the excess goes into the next chamber before that chamber is checked, so overflow can cascade; the excess from chamber 6 is discarded and counted as loss. State check: using the amounts after carry forward, a LARVAL chamber at or above its upper mark becomes PUPAL, a PUPAL chamber at or below its lower mark becomes LARVAL, any other chamber keeps its state, and every change is logged. Metabolise: all shares are worked out from the amounts and states after the state check, before anything moves. A LARVAL chamber's share is floor(q/4), burned off and counted as loss. A PUPAL chamber's share is floor(q/2), moved to the chamber before it; for chamber 1 that share is discarded and counted as loss. All shares are then applied at the same time. No carry forward follows, so a chamber can end the step over its limit. Moult: if the line total after metabolise is strictly over 38, each chamber keeps floor(q/2) and the rest is discarded and counted as loss; states do not change. At 38 or less nothing happens. Arithmetic was done with a short Python script, C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\run.py. I also checked cycle 1 by hand and it matches.",
+  "openPoints": [
+   {
+    "point": "Carry forward when overflow lands in a chamber that is then itself over its limit",
+    "assumption": "It cascades in the same 1-to-6 pass: the next chamber is checked after it has received the overflow, so the excess can travel several chambers in one step."
+   },
+   {
+    "point": "Which amounts the state check uses",
+    "assumption": "The amounts after carry forward in the same cycle."
+   },
+   {
+    "point": "Values exactly on a mark",
+    "assumption": "As written: equal to the upper mark counts as at or above (LARVAL goes PUPAL), and equal to the lower mark counts as at or below (PUPAL goes LARVAL)."
+   },
+   {
+    "point": "Which state and amount set the metabolise shares",
+    "assumption": "The state just after this cycle's state check (so a chamber that just changed uses its new state) and the amount after carry forward. All shares are worked out before any of them move."
+   },
+   {
+    "point": "Metabolise shares that round down to 0",
+    "assumption": "Nothing moves or burns, for example LARVAL with q of 3 or less, or PUPAL with q of 1."
+   },
+   {
+    "point": "Overfill after metabolise",
+    "assumption": "It stays until the next cycle's carry forward. The 'none' after cycle 5 is read as no extra carry forward, so the end amounts can be above their limits: chamber 2 ends at 10 (limit 8) and chamber 4 at 7 (limit 6)."
+   },
+   {
+    "point": "Moult threshold and when the total is measured",
+    "assumption": "The total is taken after metabolise, and the moult needs strictly more than 38. Cycle 5's total is exactly 38, so no moult."
+   },
+   {
+    "point": "What goes into the loss tally",
+    "assumption": "Overflow discarded from chamber 6, LARVAL burn-off, chamber 1's PUPAL share, and the portion discarded at moult."
+   }
+  ],
+  "cycleFigures": "Cycle 1: feed 3 12 9 7 5 4 | carry 3 8 12 6 7 4 (loss 0) | state 3 8 12 6 7 4 [L P P P P L] | metabolise 7 10 9 6 4 3 (shares 0 4 6 3 3 1; burned 1) | moult fires (total 39 > 38) 3 5 4 3 2 1 (discarded 21). Running loss 22.\nCycle 2: feed 7 7 4 4 3 8 | carry 7 7 4 4 3 7 (chamber 6 discards 1) | state 7 7 4 4 3 7 [P P L P L P] | metabolise 7 4 5 2 6 4 (shares 3 3 1 2 0 3; chamber 1's 3 discarded, chamber 3 burns 1) | moult no (total 28). Running loss 27.\nCycle 3: feed 11 8 8 2 6 10 | carry 10 8 9 2 6 7 (overflow 1 into chamber 2, chamber 6 discards 3) | state 10 8 9 2 6 7 [P P P L L P] | metabolise 9 8 5 2 8 4 (shares 5 4 4 0 1 3; chamber 1's 5 discarded, chamber 5 burns 1) | moult no (total 36). Running loss 36.\nCycle 4: feed 16 14 12 3 11 4 | carry 10 8 12 6 9 7 (cascade, chamber 6 discards 8) | state 10 8 12 6 9 7 [P P P P P P] | metabolise 9 10 9 7 8 4 (shares 5 4 6 3 4 3; chamber 1's 5 discarded) | moult fires (total 47 > 38) 4 5 4 3 4 2 (discarded 25). Running loss 74.\nCycle 5: feed 4 11 10 6 7 2 | carry 4 8 12 6 8 2 (cascade, nothing reaches chamber 6's discard) | state 4 8 12 6 8 2 [P P P P P L] | metabolise 6 10 9 7 4 2 (shares 2 4 6 3 4 0; chamber 1's 2 discarded) | moult no (total 38, not over 38). Running loss 76.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "LARVAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Start 20 + feed 94 (17+15+17+24+21) = 114; end 38 (6+10+9+7+4+2) + loss 76 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "The loss of 76 breaks down as 12 overflow discarded from chamber 6 (cycles 2, 3 and 4), 3 LARVAL burn-off (cycles 1, 2 and 3), 15 PUPAL shares discarded from chamber 1 (cycles 2 to 5) and 46 discarded at moult (cycles 1 and 4). Two figures depend on how boundaries were read, so state them in the report. Cycle 5's total after metabolise is exactly 38, so the moult does not fire because it needs strictly over 38. Chambers 2 and 4 end above their limits because no carry forward runs after cycle 5. The script is C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\run.py."
+ },
+ "grade": {
+  "available": true,
+  "exactAllFields": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  }
+ }
+}

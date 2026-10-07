@@ -1,0 +1,13 @@
+- Word count: the first drafts ran 323 to 306 words. I cut them to 247 whitespace-separated words, or 249 counting every numeral separately (step numbers, '1-6' style ranges and hyphen halves included). That is under the 250 cap however you count it.
+- Banned words: I checked the text against every forbidden word by substring, including 'spill', 'release', 'level', 'mode', 'cell' and 'lost'. Nothing matched. 'Spill-over' became 'Overflow', 'release step' became 'Bleed', and 'loss tally' became 'slag tally'.
+- Figures: I parsed every number back out of the text and checked it against the engineer's data. All six capacities, upper marks, lower marks and starting amounts, the 38 limit and all 30 table entries match.
+- Emergency tap boundary: the first draft said only 'over 38'. I added 'not 38 itself' so the rule is plainly strictly greater than 38. A private run showed the cycle 5 total lands exactly on that boundary, so it matters.
+- Overfull crucibles after cycle 5: the first draft said only that overfull crucibles 'wait for the next overflow'. I added 'after cycle 5, they stay' so end quantities above capacity are reported as they are. The private run showed this happens at the end.
+- Rounding: I made 'rounding down' cover both the BASE quarter and the SUPERHEATED half. For the emergency tap I said the crucible keeps half rounded down and the rest goes to slag, so the larger half is what's removed.
+- Simultaneous bleed: I added 'figured before anything moves' so all six amounts come from contents at the start of the step and are then applied together.
+- Crucible 1 when SUPERHEATED: I stated that its half goes to slag, because there is no previous crucible to receive it.
+- Overflow cascade: I kept 'before its turn', so excess that lands in the next crucible is handled when that crucible's own turn comes. 'Excess over capacity runs down' covers the crucible being left exactly at capacity.
+- Charging: I stated that capacity is ignored at charging. The step order is numbered, so the state check visibly uses contents after overflow.
+- State check: I stated that between the marks the state is unchanged. All crucibles start BASE and the slag tally starts at 0.
+- Report paragraph: it lists the six end quantities and six end states in position order 1 to 6, the state changes as (cycle, position, before, after), the cycles the tap fired, the slag tally and the balance check. It contains no figures or results, only position and cycle labels.
+- Housekeeping: other runs were writing files with the same names into the desk folder at the same moment, and one of my drafts was overwritten. I moved all my scratch work into the private subfolder desk-250\k9x. I did not read the SKILL.md or other files they left there.

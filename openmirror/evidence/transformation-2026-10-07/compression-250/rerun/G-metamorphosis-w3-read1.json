@@ -1,0 +1,165 @@
+{
+ "id": "G-metamorphosis-w3",
+ "n": 1,
+ "run": {
+  "procedureSummary": "Per cycle, each step done on all six chambers before the next starts. (1) Feed: add the cycle's row to each chamber, ignoring capacity. (2) Carry: go through chambers 1 to 6 in order. If a chamber is over capacity, cut it to capacity and add the excess to the next chamber before that chamber's own check, so overflow can cascade. Chamber 6's excess goes to the loss tally. (3) States: use the mass after carry. A LARVAL chamber with mass at or above its upper mark becomes PUPAL. A PUPAL chamber with mass at or below its lower mark becomes LARVAL. Otherwise no change. Each chamber is checked once per cycle and every change is logged. (4) Metabolise: work out every amount from the post-carry mass using the new states, then apply them all at once. A LARVAL chamber loses floor(q/4) to the tally. A PUPAL chamber passes floor(q/2) to the chamber one lower; chamber 1 sends it to the tally. There is no re-carry, so an overfull chamber stays overfull until the next cycle's carry. (5) Moult: if the six chambers total strictly more than 38, set each to floor(q/2) and add the removed mass (q - floor(q/2)) to the tally. The arithmetic was done with a Python script, C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\run.py. I also checked cycle 1 by hand and it matched.",
+  "openPoints": [
+   {
+    "point": "Carry: does excess passed on in the same sweep count when the next chamber is checked?",
+    "assumption": "Yes. It is a single cascading sweep from 1 to 6, as the write-up says ('moves into the next chamber before its turn')."
+   },
+   {
+    "point": "Which mass the state check uses",
+    "assumption": "The mass after carry in the same cycle."
+   },
+   {
+    "point": "Which state metabolise uses",
+    "assumption": "The state just set in this cycle's States step, so a chamber that turned PUPAL this cycle metabolises as PUPAL."
+   },
+   {
+    "point": "Rounding in metabolise",
+    "assumption": "Each amount moved is rounded down separately (floor(q/4) or floor(q/2)), and the chamber keeps the remainder."
+   },
+   {
+    "point": "Metabolise inflow from the chamber above",
+    "assumption": "All amounts come from pre-metabolise masses and are applied together, so mass received in this step does not change what a chamber gives away. Inflow can push a chamber over capacity (for example chamber 2 holds 10 against a capacity of 8), and it stays that way until the next carry."
+   },
+   {
+    "point": "Moult threshold",
+    "assumption": "Strictly over 38. A total of exactly 38 does not trigger it, which matters in cycle 5 where the total after metabolise is exactly 38."
+   },
+   {
+    "point": "Moult rounding",
+    "assumption": "Each chamber's new mass is floor(q/2). The removed amount, q - floor(q/2), goes to the tally, so for odd masses the tally gets the extra unit."
+   },
+   {
+    "point": "Meaning of 'routinely' in the PUPAL to LARVAL rule",
+    "assumption": "Read as an ordinary reversion that is logged like any other change. It does not trigger anything extra."
+   }
+  ],
+  "cycleFigures": "Quantities for chambers 1 to 6, with the loss tally after each step.\nCycle 1: feed [3,12,9,7,5,4] tally 0; carry [3,8,12,6,7,4] tally 0; states L,P,P,P,P,L; metabolise [7,10,9,6,4,3] tally 1; moult fired (total 39) [3,5,4,3,2,1] tally 22.\nCycle 2: feed [7,7,4,4,3,8] tally 22; carry [7,7,4,4,3,7] tally 23; states P,P,L,P,L,P; metabolise [7,4,5,2,6,4] tally 27; moult not fired (total 28) [7,4,5,2,6,4] tally 27.\nCycle 3: feed [11,8,8,2,6,10] tally 27; carry [10,8,9,2,6,7] tally 30; states P,P,P,L,L,P; metabolise [9,8,5,2,8,4] tally 36; moult not fired (total 36) [9,8,5,2,8,4] tally 36.\nCycle 4: feed [16,14,12,3,11,4] tally 36; carry [10,8,12,6,9,7] tally 44; states P,P,P,P,P,P; metabolise [9,10,9,7,8,4] tally 49; moult fired (total 47) [4,5,4,3,4,2] tally 74.\nCycle 5: feed [4,11,10,6,7,2] tally 74; carry [4,8,12,6,8,2] tally 74; states P,P,P,P,P,L; metabolise [6,10,9,7,4,2] tally 76; moult not fired (total exactly 38) [6,10,9,7,4,2] tally 76.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "LARVAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Start total 20 plus all feed 94 = 114. End total 38 plus loss tally 76 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "The arithmetic was done with a Python script, C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\run.py. I also checked cycle 1 by hand and it matched. Cycle 5 ends with exactly 38 units. Under the strictly-over-38 reading the moult does not fire. If it fired at 38 as well, the cycle 5 figures, the end quantities and the loss tally would all be different. In cycles 1 and 5, mass passed down during metabolise leaves chamber 2 above its capacity of 8 at the end of the step, with 10 units. Following the write-up, this was left for the next cycle's carry."
+ },
+ "grade": {
+  "available": true,
+  "exactAllFields": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  }
+ }
+}

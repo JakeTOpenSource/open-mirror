@@ -1,0 +1,173 @@
+{
+ "id": "G-metamorphosis-w2",
+ "n": 2,
+ "run": {
+  "procedureSummary": "Script used: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\run.py (Python). The figures were also checked by hand for cycle 1, cycle 3's carry and the balance. Each step finishes across all chambers before the next one starts. Step 1, Feed: add that cycle's feed row to each chamber. A chamber may go over its holding limit. Step 2, Carry forward: go through chambers 1 to 6 in order. If a chamber is over its holding limit (10, 8, 12, 6, 9, 7), cut it to the limit and add the excess to the next chamber, which then counts that excess when its own turn comes. Chamber 6's excess goes to the loss tally. Step 3, State check: use the masses after carry. A LARVAL chamber with mass at or above its upper mark (7, 6, 9, 5, 7, 5) becomes PUPAL. A PUPAL chamber with mass at or below its lower mark (3, 2, 4, 2, 3, 2) becomes LARVAL. Otherwise the state stays the same. A chamber changes at most once per check, and every change is logged. Step 4, Metabolism: first work out every chamber's amount from the post-carry masses and the new states, then move them all at once. A LARVAL chamber's amount is floor(m/4) and goes to the tally. A PUPAL chamber's amount is floor(m/2) and moves into the chamber before it; chamber 1's goes to the tally. A chamber can end up over its limit here and stays that way until the next cycle's carry. Cycle 5's overfull chambers stay as they are. Step 5, Moult: if the line total is strictly greater than 38, set every chamber to floor(m/2), add the removed mass (m - floor(m/2)) to the tally, and log the cycle.",
+  "openPoints": [
+   {
+    "point": "Carry-forward sequencing: does a chamber pass on the excess it receives from the chamber before it within the same step?",
+    "assumption": "Yes. The pass runs chamber 1 to 6 in turn, so a chamber's excess includes what it just received (e.g. cycle 3: chamber 1 passes 1 to chamber 2, which then passes 1 to chamber 3)."
+   },
+   {
+    "point": "Which masses the state check uses",
+    "assumption": "The masses after carry forward in the same cycle (step 3 follows step 2)."
+   },
+   {
+    "point": "Can a chamber change state twice in one check (e.g. LARVAL to PUPAL, then straight back)?",
+    "assumption": "No. Each chamber is tested once against the rule for its current state, so at most one change per cycle."
+   },
+   {
+    "point": "Which states metabolism uses",
+    "assumption": "The states just set by the same cycle's state check."
+   },
+   {
+    "point": "Order of moves within metabolism",
+    "assumption": "All amounts are worked out from the post-carry masses before anything moves. A PUPAL chamber's own reabsorbed amount is based on its mass before it receives anything from the chamber after it."
+   },
+   {
+    "point": "Rounding in metabolism",
+    "assumption": "Each moved amount is rounded down: LARVAL loses floor(m/4) and PUPAL moves floor(m/2). The chamber keeps the rest."
+   },
+   {
+    "point": "Moult threshold boundary",
+    "assumption": "'Over 38' means strictly greater than 38. Cycle 5 ends at exactly 38, so there is no moult in cycle 5."
+   },
+   {
+    "point": "Moult halving with an odd mass",
+    "assumption": "The new mass is floor(m/2), and the larger half, m - floor(m/2), goes to the tally."
+   },
+   {
+    "point": "Moult and states",
+    "assumption": "Moulting changes only masses. States are not rechecked after a moult."
+   },
+   {
+    "point": "Excess after cycle 5's metabolism (chamber 2 at 10 against a limit of 8)",
+    "assumption": "It is left in place as the write-up says ('none follows cycle 5') and is reported as part of the end mass."
+   }
+  ],
+  "cycleFigures": "Masses for chambers 1 to 6 after each step. T = loss tally after the step.\nCycle 1: Feed [3,12,9,7,5,4] T0 | Carry [3,8,12,6,7,4] T0 | State check: L,P,P,P,P,L (masses unchanged) | Metabolism [7,10,9,6,4,3] T1 (total 39) | Moult FIRED [3,5,4,3,2,1] T22 (total 18)\nCycle 2: Feed [7,7,4,4,3,8] T22 | Carry [7,7,4,4,3,7] T23 | State check: P,P,L,P,L,P | Metabolism [7,4,5,2,6,4] T27 (total 28) | Moult not fired [7,4,5,2,6,4] T27\nCycle 3: Feed [11,8,8,2,6,10] T27 | Carry [10,8,9,2,6,7] T30 | State check: P,P,P,L,L,P | Metabolism [9,8,5,2,8,4] T36 (total 36) | Moult not fired [9,8,5,2,8,4] T36\nCycle 4: Feed [16,14,12,3,11,4] T36 | Carry [10,8,12,6,9,7] T44 | State check: P,P,P,P,P,P | Metabolism [9,10,9,7,8,4] T49 (total 47) | Moult FIRED [4,5,4,3,4,2] T74 (total 22)\nCycle 5: Feed [4,11,10,6,7,2] T74 | Carry [4,8,12,6,8,2] T74 | State check: P,P,P,P,P,L | Metabolism [6,10,9,7,4,2] T76 (total 38) | Moult not fired (38 is not over 38) [6,10,9,7,4,2] T76",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "LARVAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting total 20 + all feed 94 = 114; end total 38 + loss tally 76 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "The loss tally of 76 is made up of: carry overflow from chamber 6 (cycle 2: 1, cycle 3: 3, cycle 4: 8, total 12), metabolism losses (cycles 1 to 5: 1, 4, 6, 5, 2, total 18) and moult removals (cycle 1: 21, cycle 4: 25, total 46). The open point with the most effect on the results is the moult threshold. Cycle 5 ends at exactly 38. If 'over 38' were read as 'at or above 38', cycle 5 would also moult: end masses would be [3,5,4,3,2,1], the tally 96 and the moult cycles [1,4,5]. I used the strict reading. The only file used is C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\run.py."
+ },
+ "grade": {
+  "available": true,
+  "exactAllFields": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  }
+ }
+}

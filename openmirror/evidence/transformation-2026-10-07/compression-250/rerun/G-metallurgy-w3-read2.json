@@ -1,0 +1,169 @@
+{
+ "id": "G-metallurgy-w3",
+ "n": 2,
+ "run": {
+  "procedureSummary": "Each cycle runs these five steps in order. Each step is finished on all six crucibles before the next step starts. 1) Charge: add the cycle's table row to crucibles 1-6, ignoring capacity. 2) Overflow: go through crucibles 1 to 6 in that order. If a crucible holds more than its capacity, set it to capacity and add the excess to the next crucible, which is checked when its turn comes, so the excess can cascade. Excess from crucible 6 goes to the slag pit and is added to the loss tally. 3) State check, on post-overflow contents: a BASE crucible with quantity >= its upper mark becomes SUPERHEATED. A SUPERHEATED crucible with quantity <= its lower mark becomes BASE. Anything else is unchanged. 4) Pour, with every amount computed from a snapshot of the post-state-check contents and then applied all at once: BASE loses floor(q/4) to slag (loss tally). SUPERHEATED sends floor(q/2) to crucible i-1, and crucible 1's half goes to slag (loss tally). A crucible left over capacity is not trimmed until the next cycle's overflow step. 5) Emergency tap: if the post-pour total across all six is strictly greater than 38, each crucible keeps floor(q/2) and the remainder q - floor(q/2) goes to slag (loss tally). I used a Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py. I also checked cycle 1 by hand.",
+  "openPoints": [
+   {
+    "point": "Where overflow excess goes during the cascade",
+    "assumption": "Excess moves only downstream, to crucible i+1. The pass is a single sweep from 1 to 6, so excess arriving at a crucible is checked when that crucible's turn comes. Crucible 6's excess goes to the slag pit and counts in the loss tally."
+   },
+   {
+    "point": "Which contents the state check uses",
+    "assumption": "The contents after that cycle's overflow step. No state check is made on the starting melt before cycle 1."
+   },
+   {
+    "point": "State-check boundaries",
+    "assumption": "'At or above upper mark' means q >= upper. 'At or below lower mark' means q <= lower. Each crucible changes state at most once per check."
+   },
+   {
+    "point": "Pour timing and simultaneity",
+    "assumption": "All pour amounts come from one snapshot taken after the state check. Material a crucible receives from the return launder does not change its own pour amount."
+   },
+   {
+    "point": "Whether a SUPERHEATED pour loses anything to slag",
+    "assumption": "No. Only crucible 1's returned half goes to slag. Every other SUPERHEATED half moves in full to crucible i-1."
+   },
+   {
+    "point": "Rounding",
+    "assumption": "Every amount rounds down: BASE loss floor(q/4), SUPERHEATED transfer floor(q/2), tap keeps floor(q/2). In the tap, any odd remainder goes to slag."
+   },
+   {
+    "point": "When the tap is checked and what 'over 38' means",
+    "assumption": "It is checked once per cycle, after the pour, on the total of all six crucibles, and fires only when the total is strictly greater than 38. Cycle 5 ends at exactly 38, so the tap did not fire then."
+   },
+   {
+    "point": "Overfill after pour or tap",
+    "assumption": "It is left in place until the next overflow step. The write-up says 'Overfill waits for next overflow'. Cycle 5 has no later overflow, so crucible 2 (10 against capacity 8) and crucible 4 (7 against capacity 6) are reported over capacity, as they stand."
+   },
+   {
+    "point": "Which state the report shows",
+    "assumption": "Each crucible's state after cycle 5's state check. Nothing later in a cycle changes states."
+   }
+  ],
+  "cycleFigures": "Quantities for crucibles 1-6 after each step, with the running loss tally.\nCycle 1: charge [3,12,9,7,5,4] -> overflow [3,8,12,6,7,4] (loss 0) -> state check [3,8,12,6,7,4] (B,S,S,S,S,B) -> pour [7,10,9,6,4,3] (loss 1) -> tap fired, total 39 > 38: [3,5,4,3,2,1] (loss 22).\nCycle 2: charge [7,7,4,4,3,8] -> overflow [7,7,4,4,3,7] (loss 23) -> state check [7,7,4,4,3,7] (S,S,B,S,B,S) -> pour [7,4,5,2,6,4] (loss 27) -> no tap, total 28: [7,4,5,2,6,4].\nCycle 3: charge [11,8,8,2,6,10] -> overflow [10,8,9,2,6,7] (loss 30) -> state check [10,8,9,2,6,7] (S,S,S,B,B,S) -> pour [9,8,5,2,8,4] (loss 36) -> no tap, total 36: [9,8,5,2,8,4].\nCycle 4: charge [16,14,12,3,11,4] -> overflow [10,8,12,6,9,7] (loss 44) -> state check [10,8,12,6,9,7] (all S) -> pour [9,10,9,7,8,4] (loss 49) -> tap fired, total 47 > 38: [4,5,4,3,4,2] (loss 74).\nCycle 5: charge [4,11,10,6,7,2] -> overflow [4,8,12,6,8,2] (loss 74) -> state check [4,8,12,6,8,2] (S,S,S,S,S,B) -> pour [6,10,9,7,4,2] (loss 76) -> no tap, total exactly 38: [6,10,9,7,4,2].",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "BASE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "The starting melt of 20 plus all charges of 94 (20 + 15 + 17 + 24 + 18) equals 114. End melt of 38 (6 + 10 + 9 + 7 + 4 + 2) plus the loss tally of 76 also equals 114. The balance holds.",
+  "usedScript": true,
+  "notes": "I used a Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py. I checked cycle 1 by hand and it matched. Three results depend on assumptions that are close calls and are listed under open points. The tap is read as strictly over 38, so it does not fire in cycle 5, where the total is exactly 38. Crucible 2 (10 against capacity 8) and crucible 4 (7 against capacity 6) end over capacity, because overfill waits for the next overflow step and cycle 5 has none after it. All rounding is down, and the odd remainders from the tap go to slag."
+ },
+ "grade": {
+  "available": true,
+  "exactAllFields": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  }
+ }
+}

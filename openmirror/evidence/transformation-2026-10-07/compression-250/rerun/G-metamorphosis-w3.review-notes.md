@@ -1,0 +1,11 @@
+- First full draft was 365 words (counted with wc -w, numbers included). I cut it to exactly 250 over several passes and kept every required number: 6 capacities, 6 upper marks, 6 lower marks, 6 starting amounts, the global limit 38, and the 5-by-6 feed table.
+- Checked the text for the banned words, including inside longer words (cell, level, mode, period, intake, spill, release, purge, lost, and the rest). None appear in the final text.
+- Wrote the step that moves excess as 'Carry' because 'spill-over' is banned. It runs on chambers 1 to 6 in turn, and excess arrives in the next chamber before that chamber's turn, so a cascade happens inside one pass. Chamber 6's excess goes to the loss tally.
+- Said that feed ignores capacity and that overfull chambers wait for the next cycle's carry. That matches the process: capacity is not enforced in steps 1 and 4, and an overfill left after cycle 5 stays.
+- The metabolise/reabsorb step says every amount is figured from current mass first and then all are applied together, rounding down. It also says chamber 1's PUPAL share goes to the tally, so the calculation can't be done one chamber at a time.
+- Wrote the reabsorption destination as 'the chamber numbered one lower' so it can't be confused with the carry step, which moves mass the other way.
+- State check: changes happen at or above the upper mark (LARVAL to PUPAL) or at or below the lower mark (PUPAL to LARVAL), and 'Otherwise unchanged' covers mass between the marks. The return to LARVAL is described as routine, as the task asks.
+- Moult condition reads 'over 38', meaning strictly greater, so a total of exactly 38 does not trigger it. Removed mass goes to the tally.
+- Changed the step-order sentence from 'each step finished on all chambers first' to 'each step finished on all chambers before the next', which removed an ambiguity.
+- The Report paragraph is only a template: positions 1 to 6, the state-change tuple format, moult cycles, loss tally, and the balance equation. It contains no figures or results.
+- I did not run the five cycles, so this list does not check any end results. Only the description was reviewed against the engineer's process. All scratch work stayed in C:\Users\Jaket\AppData\Local\Temp\om\desk-250 (expl.txt).

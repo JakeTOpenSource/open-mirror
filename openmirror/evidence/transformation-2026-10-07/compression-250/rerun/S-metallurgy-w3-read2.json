@@ -1,0 +1,161 @@
+{
+ "id": "S-metallurgy-w3",
+ "n": 2,
+ "run": {
+  "procedureSummary": "Step 1 (Charge): add the cycle's row of the charge table to each crucible, with no capacity limit. Step 2 (Overflow): go through crucibles 1 to 6 in order. If a crucible holds more than its capacity, cut it back to capacity and move the excess into the next crucible, which already includes any excess it received when its own turn comes. Excess from crucible 6 goes to slag. Step 3 (State check): use the post-overflow quantities and the state each crucible carries from the previous cycle. BASE with quantity >= upper mark becomes SUPERHEATED. SUPERHEATED with quantity <= lower mark becomes BASE. Anything else stays as it is. This is the only step that changes states. Step 4 (Draws): work out every draw from the post-state-check quantities and the new states first, then apply them all at once. A BASE crucible loses floor(q/4) to slag. A SUPERHEATED crucible loses floor(q/2) up the return launder to crucible i-1, and crucible 1's amount goes to slag. Quantities over capacity are left as they are until the next cycle's overflow, or for good after cycle 5. Step 5 (Global reset): add up the six quantities after the draws. If the total is strictly greater than 38, every crucible keeps floor(q/2) and the remainder (q - floor(q/2)) goes to slag. States are not touched.",
+  "openPoints": [
+   {
+    "point": "Overflow order and chaining",
+    "assumption": "Run sequentially from 1 to 6, so excess passed down from crucible i counts toward crucible i+1's own overflow check in the same pass. Crucible 6's excess goes to slag."
+   },
+   {
+    "point": "Which quantities and states the draws use",
+    "assumption": "The quantities after step 3 and the states just set in step 3. All draws are worked out from that snapshot before any are applied, so melt returned to crucible i-1 does not change i-1's own draw."
+   },
+   {
+    "point": "Rounding of draws",
+    "assumption": "BASE draw is floor(q/4) and SUPERHEATED draw is floor(q/2), working on whole units."
+   },
+   {
+    "point": "Meaning of 'over 38' in the global reset",
+    "assumption": "Strictly greater than 38. A total of exactly 38 does not trigger a reset. This matters at the end of cycle 5, where the total is exactly 38 and no reset fires."
+   },
+   {
+    "point": "Where the reset remainder goes and whether states change",
+    "assumption": "Each crucible keeps floor(q/2) and the rest goes to slag. States are not changed by the reset, because the write-up says states change only in step 3."
+   },
+   {
+    "point": "Boundary comparisons in the state check",
+    "assumption": "Inclusive, as written: BASE becomes SUPERHEATED at q >= upper mark, and SUPERHEATED becomes BASE at q <= lower mark."
+   },
+   {
+    "point": "Overfill after draws",
+    "assumption": "A crucible can sit above capacity after the return launder (e.g. crucible 2 at 10 > 8 after cycles 1, 4 and 5). It is left alone until the next cycle's step 2. After cycle 5 it stays, so the final crucible 2 = 10 and crucible 4 = 7 are over capacity."
+   }
+  ],
+  "cycleFigures": "C1: charge [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] (slag 0); state check [3,8,12,6,7,4] states B,S,S,S,S,B; draws [7,10,9,6,4,3] (slag 1, total 39); reset FIRED [3,5,4,3,2,1] (slag 22). C2: charge [7,7,4,4,3,8]; overflow [7,7,4,4,3,7] (slag 23); state check [7,7,4,4,3,7] states S,S,B,S,B,S; draws [7,4,5,2,6,4] (slag 27, total 28); reset none [7,4,5,2,6,4]. C3: charge [11,8,8,2,6,10]; overflow [10,8,9,2,6,7] (slag 30); state check [10,8,9,2,6,7] states S,S,S,B,B,S; draws [9,8,5,2,8,4] (slag 36, total 36); reset none [9,8,5,2,8,4]. C4: charge [16,14,12,3,11,4]; overflow [10,8,12,6,9,7] (slag 44); state check [10,8,12,6,9,7] states S,S,S,S,S,S; draws [9,10,9,7,8,4] (slag 49, total 47); reset FIRED [4,5,4,3,4,2] (slag 74). C5: charge [4,11,10,6,7,2]; overflow [4,8,12,6,8,2] (slag 74); state check [4,8,12,6,8,2] states S,S,S,S,S,B; draws [6,10,9,7,4,2] (slag 76, total 38); reset none (38 is not over 38) [6,10,9,7,4,2]. (B = BASE, S = SUPERHEATED.)",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "BASE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting melt 20 + charges 94 = 114; end melt 38 + slag 76 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "I used a Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\desk250_a592740d_cascade.py (md5 df63529dc0378e055a40ea504ab16d28, the same before and after the run, and run from stdin). I also checked cycles 1 and 2 by hand and they match the script. Warning: the desk-250 folder is being written to by other processes at the same time. My first scratch file, sim.py, was overwritten between my write and my run, and that run printed output from someone else's script. I ignored that output. The folder also contains files I did not create (SKILL.md, cascade.py, check.py, drafts, k9x/). I did not read them or use them, because the write-up is self-contained. Two results depend on choices rather than the write-up's wording. First, the cycle 5 total is exactly 38, so whether a reset fires depends on reading 'over 38' as strictly greater than 38. Second, crucibles 2 and 4 end above capacity (10/8 and 7/6), because overfill after the draws stays in place after cycle 5."
+ },
+ "grade": {
+  "available": true,
+  "exactAllFields": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  }
+ }
+}

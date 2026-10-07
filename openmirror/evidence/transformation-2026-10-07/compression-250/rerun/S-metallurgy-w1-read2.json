@@ -1,0 +1,169 @@
+{
+ "id": "S-metallurgy-w1",
+ "n": 2,
+ "run": {
+  "procedureSummary": "Script used: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py (Python). I checked cycle 1 by hand and got the same figures. Each cycle runs these steps in order, and each step finishes on all six crucibles before the next starts.\n1) Charge: add the cycle's charge list to each crucible. Volume can be exceeded at this step.\n2) Overflow: work through crucibles 1 to 6 in order. Any melt over volume (melt minus volume) moves into the next crucible before that crucible is handled, so overflow can cascade. Crucible 6's excess goes to slag.\n3) State check, on the melt after overflow: BASE with melt at or above the upper mark becomes SUPERHEATED. SUPERHEATED with melt at or below the lower mark becomes BASE. Otherwise the state stays the same.\n4) Return: all amounts are worked out from the melts after the state check before anything moves. A BASE crucible sends floor(melt/4) to slag. A SUPERHEATED crucible sends floor(melt/2) to the previous crucible (crucible 1's goes to slag). The state used is the one just set in step 3. A crucible may end above volume and keeps that melt until the next cycle's overflow.\n5) Emergency tap: if the six melts total strictly more than 38, each crucible keeps floor(melt/2) and the rest goes to slag.",
+  "openPoints": [
+   {
+    "point": "Which melt the state check uses",
+    "assumption": "The melt after overflow in the same cycle (step 3 runs after step 2)."
+   },
+   {
+    "point": "Which state the return step uses",
+    "assumption": "The state just set by this cycle's state check."
+   },
+   {
+    "point": "Whether the return amounts are computed before or after the inflow from the next crucible",
+    "assumption": "All amounts come from the melts after the state check, before any movement, as the write-up says. A crucible's inflow from its neighbour does not change what it sends back."
+   },
+   {
+    "point": "Overflow cascade when the receiving crucible goes over volume",
+    "assumption": "Melt that flows down is added before that crucible is handled, so it can go on down to later crucibles. Excess from crucible 6 goes to slag."
+   },
+   {
+    "point": "Emergency tap boundary",
+    "assumption": "The tap fires only when the total is strictly greater than 38. In cycle 5 the total is exactly 38, so there is no tap."
+   },
+   {
+    "point": "Tap rounding",
+    "assumption": "Each crucible keeps floor(melt/2). The ceiling half goes to slag."
+   },
+   {
+    "point": "When the tap total is measured",
+    "assumption": "After the return step, on the six melts at that point."
+   },
+   {
+    "point": "Return moves that leave a crucible above volume",
+    "assumption": "The crucible keeps the melt until the next cycle's overflow. No mid-cycle overflow."
+   },
+   {
+    "point": "State mark comparisons",
+    "assumption": "Both are inclusive: at or above the upper mark, at or below the lower mark."
+   }
+  ],
+  "cycleFigures": "C1: charge [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] (slag 0); states B,S,S,S,S,B; return [7,10,9,6,4,3] (slag 1); tap fired, total 39 > 38, giving [3,5,4,3,2,1] (slag 22).\nC2: charge [7,7,4,4,3,8]; overflow [7,7,4,4,3,7] (slag 23); states S,S,B,S,B,S; return [7,4,5,2,6,4] (slag 27); total 28, no tap.\nC3: charge [11,8,8,2,6,10]; overflow [10,8,9,2,6,7] (slag 30); states S,S,S,B,B,S; return [9,8,5,2,8,4] (slag 36); total 36, no tap.\nC4: charge [16,14,12,3,11,4]; overflow [10,8,12,6,9,7] (slag 44); states S,S,S,S,S,S; return [9,10,9,7,8,4] (slag 49); tap fired, total 47 > 38, giving [4,5,4,3,4,2] (slag 74).\nC5: charge [4,11,10,6,7,2]; overflow [4,8,12,6,8,2] (slag 74); states S,S,S,S,S,B; return [6,10,9,7,4,2] (slag 76); total 38, not over 38, no tap.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "BASE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting melt 20 + charges 94 (20+15+17+24+18) = 114. End melt 38 (6+10+9+7+4+2) + slag 76 = 114. The balance holds.",
+  "usedScript": true,
+  "notes": "Slag sources: overflow from crucible 6 (C2: 1, C3: 3, C4: 4), BASE losses and crucible 1's returns in the return step, and the two taps (C1: 21, C4: 25). The script is in C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py. Nothing outside that folder was touched. In cycle 5 the total is exactly 38, so the 'over 38' boundary matters: reading it as 'at or over' would add a third tap."
+ },
+ "grade": {
+  "available": true,
+  "exactAllFields": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  }
+ }
+}

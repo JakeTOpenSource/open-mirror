@@ -1,0 +1,173 @@
+{
+ "id": "S-metallurgy-w1",
+ "n": 1,
+ "run": {
+  "procedureSummary": "Each of the 5 cycles runs these steps in order, and each step finishes on all six crucibles before the next one starts. (1) Charge: add the cycle's charge list to the six melts, even if that takes a crucible past its volume. (2) Overflow: go through crucibles 1 to 6 in order. If a crucible holds more than its volume, the excess goes into the next crucible before that one is checked, so the excess can cascade. Excess from crucible 6 goes to slag. (3) State check on the melt after overflow: a BASE crucible with melt at or above its upper mark becomes SUPERHEATED. A SUPERHEATED crucible with melt at or below its lower mark becomes BASE. Otherwise the state stays. (4) Return: every transfer is worked out from the melts after the state check, then all are applied at once. A BASE crucible loses floor(melt/4) to slag. A SUPERHEATED crucible sends floor(melt/2) to the crucible before it (i-1); crucible 1's amount goes to slag. Melt a crucible receives here may take it over its volume, and it stays there until the next cycle's overflow. (5) Emergency tap: if the six melts after return total more than 38, each crucible keeps floor(melt/2) and the rest goes to slag. The tap does not change states. I used a Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py. I also checked cycle 1 by hand and it matched.",
+  "openPoints": [
+   {
+    "point": "Which melt the state check uses",
+    "assumption": "The melt after the charge and the full overflow pass, as the step order implies."
+   },
+   {
+    "point": "Which state the return uses",
+    "assumption": "The state just set by the same cycle's state check."
+   },
+   {
+    "point": "Order within the return step",
+    "assumption": "All amounts are worked out from the melts before any transfer, then applied at once. A crucible therefore loses or sends an amount based on its own melt before it receives anything."
+   },
+   {
+    "point": "Return melt that pushes a crucible over its volume",
+    "assumption": "It stays in that crucible, with no overflow until the next cycle's overflow step, as the write-up says."
+   },
+   {
+    "point": "Tap threshold boundary",
+    "assumption": "'Over 38' means strictly greater than 38. In cycle 5 the total after return is exactly 38, so the tap did not fire."
+   },
+   {
+    "point": "When the tap test is made",
+    "assumption": "Once per cycle, on the total after the return step."
+   },
+   {
+    "point": "Mark comparisons",
+    "assumption": "Both are inclusive: 'at or above' the upper mark and 'at or below' the lower mark."
+   },
+   {
+    "point": "Rounding",
+    "assumption": "Every quarter and half is rounded down (floor). The remainder from a tap goes to slag."
+   },
+   {
+    "point": "Whether the tap changes state",
+    "assumption": "It does not. States change only at the state-check step."
+   },
+   {
+    "point": "Where the amounts go",
+    "assumption": "Overflow from crucible 6, the BASE quarter, crucible 1's SUPERHEATED return and the tap remainder all go to slag. Slag is the loss tally."
+   }
+  ],
+  "cycleFigures": "Start: [3,6,6,2,2,1], all BASE, slag 0. C1: charge [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] (slag 0); states B,S,S,S,S,B; return [7,10,9,6,4,3] (slag 1); total 39 > 38 so the tap fires: [3,5,4,3,2,1] (slag 22). C2: charge [7,7,4,4,3,8]; overflow [7,7,4,4,3,7] (slag 23); states S,S,B,S,B,S; return [7,4,5,2,6,4] (slag 27); total 28, no tap. C3: charge [11,8,8,2,6,10]; overflow [10,8,9,2,6,7] (slag 30); states S,S,S,B,B,S; return [9,8,5,2,8,4] (slag 36); total 36, no tap. C4: charge [16,14,12,3,11,4]; overflow [10,8,12,6,9,7] (slag 44); states S,S,S,S,S,S; return [9,10,9,7,8,4] (slag 49); total 47 > 38 so the tap fires: [4,5,4,3,4,2] (slag 74). C5: charge [4,11,10,6,7,2]; overflow [4,8,12,6,8,2] (slag 74); states S,S,S,S,S,B; return [6,10,9,7,4,2] (slag 76); total 38, not over 38, so no tap. Key: B = BASE, S = SUPERHEATED.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "BASE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting melt 20 + charges 94 = 114. End melt 38 (6+10+9+7+4+2) + slag 76 = 114. The two sides match.",
+  "usedScript": true,
+  "notes": "The one figure that turns on an assumption is cycle 5's total after return, which is exactly 38. I read 'over 38' as strictly greater, so the tap did not fire. If 38 itself counted, cycle 5 would also tap: end melt would be [3,5,4,3,2,1], slag 96, and the balance would still hold. All files were kept in C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250, and git was not used."
+ },
+ "grade": {
+  "available": true,
+  "exactAllFields": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  }
+ }
+}

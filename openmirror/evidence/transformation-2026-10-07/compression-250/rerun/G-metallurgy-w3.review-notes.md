@@ -1,0 +1,13 @@
+- Over the word cap: the first full draft was 387 words. Cut it to 248 by wc -w (the regex counter gives the same) without losing any process rule or data value.
+- Rounding on the emergency tap: an early draft said 'halve every crucible', which leaves open whether the kept part or the removed part is rounded down. Changed it to 'every crucible keeps half, rounded down; rest to slag', which matches keeping floor(L/2).
+- Rounding everywhere: a blanket 'every fraction rounded down' line was ambiguous for the tap. Replaced it with rounding stated in each step: pour amounts are rounded down and the kept half on the tap is rounded down.
+- Simultaneous pour: made explicit that all pour amounts are figured from contents before anything moves.
+- Crucible 1 when SUPERHEATED: added that its half goes to slag, not upstream.
+- Capacity not enforced: stated at Charge ('ignoring capacity') and after Pour ('Overfill waits for next overflow'). There is no overflow after cycle 5, so overfill then stays.
+- Overflow order and cascade: made explicit that crucibles go 1 to 6 in turn, that the excess goes to the next crucible and leaves this one exactly at capacity, that it can cascade, and that crucible 6 overflows to the slag pit.
+- Tap threshold: 'total over 38' keeps the strict greater-than; at 38 or below nothing happens.
+- Cycle count: an earlier draft had only 'Each cycle' and left five cycles implied. Changed it to 'Five cycles, five steps each, in order'.
+- Banned words: checked the text case-insensitively against the whole banned list, including 'normal' inside phrases like 'cascades are normal'. None are left. The step names used are Charge, Overflow, State check, Pour and Emergency tap.
+- Report paragraph: it is a template only, with no figures or results. The balance check is written as starting melt plus all charges equals end melt plus loss tally.
+- Data: checked all 55 values (capacity, upper mark, lower mark, starting melt, limit 38, and the 5x6 charge table) against the engineer's data.
+- Workspace note: desk-250 is shared with other processes. My final.txt was overwritten by someone else's draft partway through, so I verified my text in a separately named file (mine_a7.txt) and did not use any other files in the folder.

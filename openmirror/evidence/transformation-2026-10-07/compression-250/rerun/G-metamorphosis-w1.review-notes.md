@@ -1,0 +1,11 @@
+- First draft was 359 words, well over the 250 cap. I cut it to 249 (whitespace token count, so every number and every list marker counts) and kept all 55 required numbers: six limits, six upper marks, six lower marks, six starting amounts, the threshold of 38, and the 5x6 feed table.
+- Added that mass comes in whole units and that every split rounds down. Without this the floor() in the quarter, half and moult steps was unstated.
+- Made explicit that each step finishes across the whole line before the next step starts. Without it, a reader could run all five steps on one chamber before moving to the next.
+- Kept the carry-forward cascade explicit: chambers are handled 1 to 6 in turn, and excess arriving in a chamber can push it over its limit in the same step.
+- Stated that limits are ignored during feed and metabolism, that overfill waits for the next cycle's carry-forward, and that overfill left after cycle 5 stays. Without this, a reader might clamp to the limit after every step.
+- Made the state check precise: 'at or above' the upper mark and 'at or below' the lower mark; a chamber between the marks keeps its state; the return to LARVAL is described as routine.
+- Stated that metabolism amounts all come from the masses before the step and are applied at once. This stops a chamber's own amount being changed by mass it receives back in the same step.
+- Stated where chamber 1's PUPAL half goes (discarded into the loss tally) and where chamber 6's carry-forward excess goes (discarded).
+- Wrote the moult as 'line total above 38', meaning strictly greater, so a total of exactly 38 does not trigger it.
+- Removed every banned word (for example cell, level, mode, period, intake, release, lost) and removed 'normal' from the phrase 'as normal'. A case-insensitive grep over the final text found none.
+- Checked that no end figures, totals or results appear anywhere, including the Report template. I ran the engineer's process in a scratch script in the desk folder only to confirm the steps are unambiguous; none of its output appears in the text.

@@ -1,0 +1,141 @@
+{
+ "id": "G-metallurgy-w1",
+ "n": 3,
+ "run": {
+  "procedureSummary": "Step 1 Charge: add the cycle's charge row to each crucible, ignoring working volume. Step 2 Overflow: go through crucibles 1 to 6 in order. If a crucible holds more than its working volume, set it to the volume and add the excess to the next crucible, which is checked next, so overflow can carry down the line. Excess from crucible 6 goes to slag. Step 3 States: use the post-overflow contents. A BASE crucible with q >= upper mark becomes SUPERHEATED. A SUPERHEATED crucible with q <= lower mark becomes BASE. All others keep their state. Each change is logged. Step 4 Moves: first work out every amount from the post-overflow contents, then apply all of them at once. BASE sends floor(q/4) to slag. SUPERHEATED sends floor(q/2) to crucible i-1, and crucible 1 sends its half to slag. Anything over volume stays in the crucible until the next cycle's Step 2, and after cycle 5 it stays where it is. Step 5 Emergency tap: after Step 4, if the line total is more than 38, every crucible sends floor(q/2) to slag and keeps q - floor(q/2). The cycle is then logged as a tap cycle. Cycles run 1 to 5, and each step is finished on all six crucibles before the next step starts. I used a short Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py. I also re-derived cycle 1 by hand and it matched.",
+  "openPoints": [
+   {
+    "point": "How the emergency tap rounds when a crucible's contents are odd: does the amount removed round down, or the amount kept?",
+    "assumption": "Amount removed = floor(q/2) and the crucible keeps the larger part, q - floor(q/2). This matches Step 4, where the rounded-down half is the amount that moves. If the opposite reading is used (keep floor(q/2) and remove the rest), the end figures change."
+   },
+   {
+    "point": "Which contents the Step 4 amounts are calculated from, and whether moves happen in order or together",
+    "assumption": "All amounts come from the contents after Step 3 (the same as after Step 2), and all moves are applied together, as the write-up says. An amount received in this step does not count toward that crucible's own outgoing amount."
+   },
+   {
+    "point": "Which line total is compared with the tap limit",
+    "assumption": "The total after Step 4 moves, including any overfill. Tap only when it is strictly more than 38, so a total of exactly 38 (cycle 3) does not tap."
+   },
+   {
+    "point": "Whether a tap affects states",
+    "assumption": "No. A tap changes quantities only. States are checked only in Step 3."
+   },
+   {
+    "point": "Whether overflow can go back up the line",
+    "assumption": "No. Overflow only goes down the line from i to i+1, in one pass from 1 to 6. A crucible that is already done is not checked again. Crucible 6 is last, so its excess goes to slag."
+   },
+   {
+    "point": "What happens to a BASE crucible's quarter and to crucible 1's SUPERHEATED half",
+    "assumption": "Both go to slag, as the write-up says."
+   }
+  ],
+  "cycleFigures": "Order is crucibles 1-6. Slag is the running total.\nC1: charge [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] slag 0; states [B,S,S,S,S,B]; move [7,10,9,6,4,3] slag 1 total 39; TAP [4,5,5,3,2,2] slag 19 total 21.\nC2: charge [8,7,5,4,3,9]; overflow [8,7,5,4,3,7] slag 21; states [S,S,S,S,B,S]; move [7,6,5,2,6,4] slag 25 total 30; no tap [7,6,5,2,6,4].\nC3: charge [11,10,8,2,6,10]; overflow [10,8,11,2,6,7] slag 28; states [S,S,S,B,B,S]; move [9,9,6,2,8,4] slag 34 total 38; no tap (38 is not more than 38) [9,9,6,2,8,4].\nC4: charge [16,15,13,3,11,4]; overflow [10,8,12,6,9,7] slag 44; states [S,S,S,S,S,S]; move [9,10,9,7,8,4] slag 49 total 47; TAP [5,5,5,4,4,2] slag 71 total 25.\nC5: charge [5,11,11,7,7,2]; overflow [5,8,12,6,9,3] slag 71; states [S,S,S,S,S,S]; move [7,10,9,7,6,2] slag 73 total 41; TAP [4,5,5,4,3,1] slag 92 total 22.\n(B = BASE, S = SUPERHEATED)",
+  "finalQuantities": [
+   4,
+   5,
+   5,
+   4,
+   3,
+   1
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4,
+   5
+  ],
+  "lossTotal": 92,
+  "balanceCheck": "Starting melt 14 + charges 94 (cycle rows: 20 + 15 + 17 + 24 + 18) = 108. End melt 22 + slag 92 = 114. These do not match: 108 is not 114. Correction: the starting melt is 3+6+6+2+2+1 = 20, not 14. With that, starting melt 20 + charges 94 = 114 = end melt 22 + slag tally 92. The balance holds.",
+  "usedScript": true,
+  "notes": "I used a Python script for the arithmetic, kept in the desk folder: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py. I also checked cycle 1 by hand and got the same figures. The one choice that affects the results is how the tap rounds an odd amount (see Open points). I removed floor(q/2) and kept the rest. In the balance line, the first sum used the wrong starting melt (14). The correct figure is 20, which gives 114 = 114, and the script's own check also gives 114 = 114."
+ },
+ "grade": {
+  "available": true,
+  "exactAllFields": false,
+  "got": {
+   "final": [
+    4,
+    5,
+    5,
+    4,
+    3,
+    1
+   ],
+   "resetPeriods": [
+    1,
+    4,
+    5
+   ],
+   "loss": 92
+  }
+ }
+}

@@ -1,0 +1,141 @@
+{
+ "id": "G-metallurgy-w1",
+ "n": 1,
+ "run": {
+  "procedureSummary": "Script used: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py (Python, run as \"python sim.py ceil\" for the reported figures). The rules as I applied them in each cycle, with each step done on all six crucibles before the next step starts: (1) Charge: add that cycle's charge row to positions 1-6, ignoring volume. (2) Overflow: go through positions 1 to 6 in order. If contents are over working volume, set the crucible to its volume and add the excess to the next position. Because the next crucible is checked afterwards, the excess can cascade down the line. Position 6's excess goes to slag. (3) State check on the post-overflow quantities: BASE with q >= upper mark becomes SUPERHEATED; SUPERHEATED with q <= lower mark becomes BASE; otherwise the state holds. Each change is logged. (4) Move: using the new states and the post-overflow quantities, compute every amount first and then apply all of them at once. BASE: floor(q/4) goes to slag. SUPERHEATED: floor(q/2) goes to position i-1, and position 1's goes to slag. Contents over volume are left as they are until the next cycle's overflow step, and after cycle 5 they stay. (5) Tap: if the line total is over 38 (strictly greater), every crucible has floor(q/2) removed to slag and keeps q - floor(q/2). The cycle is logged as a tap cycle.",
+  "openPoints": [
+   {
+    "point": "Rounding of the emergency-tap halving. The write-up says the tap 'halves every crucible' and also that 'halves round down', but not whether the rounded-down half is the part removed or the part kept. This changes the result: odd contents are present at the cycle 1 and cycle 4 taps.",
+    "assumption": "The rounded-down half is the amount removed: floor(q/2) goes to slag and the crucible keeps q - floor(q/2). This matches step 4, where every moved amount is the rounded-down fraction and the remainder stays. Under the other reading (crucible keeps floor(q/2)) the result would be: end quantities 6,10,9,7,4,2; end states SH,SH,SH,SH,SH,BASE; taps in cycles 1 and 4 only; slag 76; balance 114 = 38 + 76; 13 state changes. The two readings give different answers, so the operator should confirm which one the line uses."
+   },
+   {
+    "point": "Which quantities the state check (step 3) and the move amounts (step 4) use.",
+    "assumption": "Both use the quantities after the step 2 overflow. Step 4 uses the states as updated in step 3 of the same cycle."
+   },
+   {
+    "point": "Overflow order and cascade.",
+    "assumption": "Positions are processed sequentially from 1 to 6. Excess that arrives from upstream is included when the receiving crucible is checked. Position 6's excess goes to slag. No crucible is checked a second time in the same cycle."
+   },
+   {
+    "point": "State-mark boundaries.",
+    "assumption": "Both are inclusive, as written: 'at or above' the upper mark and 'at or below' the lower mark."
+   },
+   {
+    "point": "Tap threshold.",
+    "assumption": "The tap fires only when the total is strictly greater than 38. A total of exactly 38 does not tap. This boundary was not reached under the chosen reading; under the alternative reading, cycle 5 ends at exactly 38 and does not tap."
+   },
+   {
+    "point": "Slag tally.",
+    "assumption": "A single running tally of everything sent to slag: position 6 overflow, BASE quarter drops, position 1's superheated return, and tap removals."
+   }
+  ],
+  "cycleFigures": "Quantities are for positions 1-6. Slag is the running tally after the step.\nC1: charge 3,12,9,7,5,4 | overflow 3,8,12,6,7,4 (slag 0) | states B,SH,SH,SH,SH,B | move 7,10,9,6,4,3 (slag 1) | total 39>38, TAP -> 4,5,5,3,2,2 (slag 19)\nC2: charge 8,7,5,4,3,9 | overflow 8,7,5,4,3,7 (slag 21) | states SH,SH,SH,SH,B,SH | move 7,6,5,2,6,4 (slag 25) | total 30, no tap\nC3: charge 11,10,8,2,6,10 | overflow 10,8,11,2,6,7 (slag 28) | states SH,SH,SH,B,B,SH | move 9,9,6,2,8,4 (slag 34) | total 38, no tap\nC4: charge 16,15,13,3,11,4 | overflow 10,8,12,6,9,7 (slag 44) | states SH,SH,SH,SH,SH,SH | move 9,10,9,7,8,4 (slag 49) | total 47>38, TAP -> 5,5,5,4,4,2 (slag 71)\nC5: charge 5,11,11,7,7,2 | overflow 5,8,12,6,9,3 (slag 71) | states SH,SH,SH,SH,SH,SH | move 7,10,9,7,6,2 (slag 73) | total 41>38, TAP -> 4,5,5,4,3,1 (slag 92)",
+  "finalQuantities": [
+   4,
+   5,
+   5,
+   4,
+   3,
+   1
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4,
+   5
+  ],
+  "lossTotal": 92,
+  "balanceCheck": "Starting melt 20 + charges 94 = 114. End melt 22 + slag tally 92 = 114. The two sides match.",
+  "usedScript": true,
+  "notes": "You asked to be as close to certain as possible, and one point stops that: the write-up does not say how the emergency tap rounds. The reported figures assume the tap removes the rounded-down half. Under the other reading (the crucible keeps the rounded-down half), the end figures are 6,10,9,7,4,2, taps in cycles 1 and 4, and slag 76; details are in open points. Everything else is fixed by the write-up. I checked cycle 1 by hand against the script, and the balance check matches under both readings. The script is at C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py; \"python sim.py ceil\" gives the reported figures and \"python sim.py floor\" gives the alternative. I worked only in that folder."
+ },
+ "grade": {
+  "available": true,
+  "exactAllFields": false,
+  "got": {
+   "final": [
+    4,
+    5,
+    5,
+    4,
+    3,
+    1
+   ],
+   "resetPeriods": [
+    1,
+    4,
+    5
+   ],
+   "loss": 92
+  }
+ }
+}

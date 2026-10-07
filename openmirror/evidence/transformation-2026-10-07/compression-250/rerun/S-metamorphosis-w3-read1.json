@@ -1,0 +1,165 @@
+{
+ "id": "S-metamorphosis-w3",
+ "n": 1,
+ "run": {
+  "procedureSummary": "Script used: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py (Python). Each cycle runs these steps in order:\n1. Feed: add that cycle's feed vector to each chamber. Capacity is ignored and PUPAL chambers are fed too.\n2. Overflow: go through chambers 1 to 6 in turn. If a chamber holds more than its capacity, set it to capacity and add the excess to the next chamber before that chamber is checked. Excess from chamber 6 goes to the tally. Overflow applies to chambers in either state.\n3. Check: each chamber is judged once, against its state at the start of the step. A LARVAL chamber with quantity >= its upper mark becomes PUPAL. A PUPAL chamber with quantity <= its lower mark becomes LARVAL. Otherwise nothing changes.\n4. Metabolism: all amounts come from the quantities after the check, then everything moves at once. A LARVAL chamber loses floor(q/4) to the tally. A PUPAL chamber loses floor(q/2), which goes to the previous chamber (chamber 1's goes to the tally). Capacity is not enforced here; any excess stays until the next cycle's overflow step.\n5. Moult: if the line total after metabolism is strictly greater than 38, every chamber becomes floor(q/2) and the removed amount (q - floor(q/2)) goes to the tally.",
+  "openPoints": [
+   {
+    "point": "Halving rounding in the moult: does 'rounded down' apply to what stays or to what is removed?",
+    "assumption": "What stays is rounded down: new = floor(q/2), removed = q - floor(q/2), so an odd unit goes to the tally."
+   },
+   {
+    "point": "Moult threshold: is 'over 38' strict?",
+    "assumption": "Strictly greater than 38. Cycle 5 ends at exactly 38, so no moult fires in cycle 5."
+   },
+   {
+    "point": "When the line total for the moult is measured",
+    "assumption": "After metabolism in the same cycle, over all six chambers in both states."
+   },
+   {
+    "point": "Overflow cascade",
+    "assumption": "Sequential. Excess passed on is counted in the receiving chamber before that chamber's own overflow test, so cascades run within one pass from chamber 1 to 6."
+   },
+   {
+    "point": "Check evaluation",
+    "assumption": "Each chamber transitions at most once per check, based on its state at the start of the step. A chamber that just became PUPAL is not re-tested against its lower mark in the same step. 'Routinely' is read as no extra condition."
+   },
+   {
+    "point": "Which quantities metabolism uses, and states",
+    "assumption": "Quantities after the check, with states as updated by that check. Mass a PUPAL chamber receives from the next chamber does not change its own amount this step."
+   },
+   {
+    "point": "Overfull chambers after metabolism",
+    "assumption": "Left over capacity (for example chamber 2 at 10 against capacity 8 after cycle 1 metabolism). They are only corrected at the next overflow step. The final cycle-5 quantities therefore include chamber 2 at 10 against capacity 8, reported as it stands."
+   },
+   {
+    "point": "Rounding of a quarter and a half in metabolism",
+    "assumption": "Floor per chamber: floor(q/4) and floor(q/2)."
+   }
+  ],
+  "cycleFigures": "Start: 3 6 6 2 2 1 (tally 0)\n\nC1: feed 3 12 9 7 5 4 | overflow 3 8 12 6 7 4 (tally 0) | check L P P P P L | metabolism 7 10 9 6 4 3 (tally 1) | moult fires (total 39>38): 3 5 4 3 2 1 (tally 22)\nC2: feed 7 7 4 4 3 8 | overflow 7 7 4 4 3 7 (tally 23) | check P P L P L P | metabolism 7 4 5 2 6 4 (tally 27) | no moult (total 28): 7 4 5 2 6 4\nC3: feed 11 8 8 2 6 10 | overflow 10 8 9 2 6 7 (tally 30) | check P P P L L P | metabolism 9 8 5 2 8 4 (tally 36) | no moult (total 36): 9 8 5 2 8 4\nC4: feed 16 14 12 3 11 4 | overflow 10 8 12 6 9 7 (tally 44) | check P P P P P P | metabolism 9 10 9 7 8 4 (tally 49) | moult fires (total 47>38): 4 5 4 3 4 2 (tally 74)\nC5: feed 4 11 10 6 7 2 | overflow 4 8 12 6 8 2 (tally 74) | check P P P P P L | metabolism 6 10 9 7 4 2 (tally 76) | no moult (total 38, not over 38): 6 10 9 7 4 2",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "LARVAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Start 20 + all feed 94 = 114; end 38 + tally 76 = 114. The two sides match.",
+  "usedScript": true,
+  "notes": "I checked cycle 1 by hand against the script's output and it matches. The script is at C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py; I used only that folder and ran no git. Cycle 5 is a boundary case: the total after metabolism is exactly 38, so the moult does not fire. If 'over 38' meant 38 or more, the cycle 5 results would change. The end quantity of chamber 2 (10) is above its capacity (8). The write-up says overfull chambers wait for the next overflow, and there is none after cycle 5."
+ },
+ "grade": {
+  "available": true,
+  "exactAllFields": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  }
+ }
+}

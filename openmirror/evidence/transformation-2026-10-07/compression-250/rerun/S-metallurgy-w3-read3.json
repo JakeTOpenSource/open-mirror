@@ -1,0 +1,161 @@
+{
+ "id": "S-metallurgy-w3",
+ "n": 3,
+ "run": {
+  "procedureSummary": "Script used: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py (Python). I also hand-checked cycle 1 in full and the cycle 4 overflow cascade, and both matched the script. Each step of a cycle is finished across the whole line before the next one starts. Step 1, Charge: add that cycle's table row to each crucible, even if this takes it past capacity. Step 2, Overflow: go through crucibles 1 to 6 in order. Any amount above capacity is cut back to capacity and the excess is added to the next crucible before that crucible is checked, so overflow can cascade down the line. Crucible 6's excess goes to slag. Step 3, State check: use the quantities after overflow. A BASE crucible at or above its upper mark becomes SUPERHEATED. A SUPERHEATED crucible at or below its lower mark becomes BASE. Anything else stays the same. Step 4, Draws: use the new states and work out every draw from the quantities after overflow before moving any melt. A BASE crucible sends floor(q/4) to slag. A SUPERHEATED crucible sends floor(q/2) to crucible i-1; crucible 1's share goes to slag. All draws are then applied together. A crucible left above capacity is not corrected until the next cycle's overflow, or stays that way after cycle 5. Step 5, Reset: if the line total is strictly greater than 38, each crucible keeps floor(q/2) and the rest goes to slag.",
+  "openPoints": [
+   {
+    "point": "How overflow cascades within one pass",
+    "assumption": "One pass, crucible 1 to 6. Excess is added to the next crucible before that crucible is checked, so one pass can carry melt all the way to crucible 6 and into slag."
+   },
+   {
+    "point": "Which quantities and states the draws use",
+    "assumption": "The quantities after overflow, and the states just set in step 3 of the same cycle. All draws are worked out first and then applied together, so melt that arrives in a crucible during the draws is not drawn again."
+   },
+   {
+    "point": "Rounding",
+    "assumption": "Floor, i.e. rounded down, for the quarter, the half and the reset half. Every amount is a non-negative whole number."
+   },
+   {
+    "point": "Where a draw goes",
+    "assumption": "A BASE quarter goes to slag. A SUPERHEATED half goes back to crucible i-1, and crucible 1's half goes to slag. Melt sent back can push a crucible above capacity, and it stays above capacity until the next overflow step."
+   },
+   {
+    "point": "Reset threshold and timing",
+    "assumption": "Reset only when the total is strictly greater than 38. It is checked once per cycle, after the draws. Cycle 5 ends at exactly 38, so there is no reset in cycle 5."
+   },
+   {
+    "point": "Whether a reset changes states",
+    "assumption": "It does not. States change only in step 3."
+   },
+   {
+    "point": "Final quantities above capacity",
+    "assumption": "After cycle 5, crucible 2 holds 10 (capacity 8) and crucible 4 holds 7 (capacity 6). The write-up says overfill stays after cycle 5, so these are reported as they are."
+   }
+  ],
+  "cycleFigures": "Quantities for crucibles 1-6, then slag tally.\nC1: charge [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] slag 0; state check [3,8,12,6,7,4] states B,S,S,S,S,B; draws [7,10,9,6,4,3] slag 1; total 39 > 38, RESET [3,5,4,3,2,1] slag 22.\nC2: charge [7,7,4,4,3,8]; overflow [7,7,4,4,3,7] slag 23; state check [7,7,4,4,3,7] states S,S,B,S,B,S; draws [7,4,5,2,6,4] slag 27; total 28, no reset.\nC3: charge [11,8,8,2,6,10]; overflow [10,8,9,2,6,7] slag 30; state check [10,8,9,2,6,7] states S,S,S,B,B,S; draws [9,8,5,2,8,4] slag 36; total 36, no reset.\nC4: charge [16,14,12,3,11,4]; overflow [10,8,12,6,9,7] slag 44; state check [10,8,12,6,9,7] states S,S,S,S,S,S; draws [9,10,9,7,8,4] slag 49; total 47 > 38, RESET [4,5,4,3,4,2] slag 74.\nC5: charge [4,11,10,6,7,2]; overflow [4,8,12,6,8,2] slag 74; state check [4,8,12,6,8,2] states S,S,S,S,S,B; draws [6,10,9,7,4,2] slag 76; total 38 (not over 38), no reset.\n(B = BASE, S = SUPERHEATED)",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "BASE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting melt 20 + charges 94 = 114; end melt 38 + slag 76 = 114. The balance holds.",
+  "usedScript": true,
+  "notes": "Script and scratch work are in C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py, the only folder used. The result is sensitive to one boundary choice: cycle 5 ends with a line total of exactly 38, so there is no reset because the rule says \"over 38\". If 38 were counted as over, cycle 5 would reset as well. Slag by cycle: 22, 5, 9, 38, 2 (sum 76)."
+ },
+ "grade": {
+  "available": true,
+  "exactAllFields": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  }
+ }
+}

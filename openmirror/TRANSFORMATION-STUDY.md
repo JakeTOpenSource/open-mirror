@@ -40,6 +40,12 @@ Plan committed before the run (`evidence/transformation-2026-10-07/compression-2
 
 **This run was contaminated.** The workflow harness prepended Jake's message, "run it then commit it to the repo", to every session, and the sessions were started inside the repository. Fourteen of sixteen browsed it before answering. The skill-arm metamorphosis writer read the README sentence naming the rounding failure, so its 3 of 3 cannot be credited to the skill. One generic-arm metamorphosis reader saw another reader's commit message containing the answer, eight seconds after its own script had produced the same answer. Two readers committed their scripts to the repository. The skill-arm metallurgy failure is clean: untipped writer, unhelped readers. Clean tally: skill 0 of 3 on its one usable arm-domain, generic 5 of 5 on reads not exposed to the answer. Per-session table: `compression-250/AUDIT.md`. The earlier runs did not have this problem: no phase 2 or control session touched git or any file beyond the one it was given.
 
+## The clean rerun, three writers per arm per domain
+
+Jake asked for the rerun and then for as much certainty as the budget allows. Plan committed before the run (`compression-250/PLAN-RERUN.md`): same prompts and cap, three writers per arm per domain (12 writers, 36 readers), every session confined to a scratch folder holding only a copy of `SKILL.md`, every transcript audited afterward. Audit: 48 of 48 clean, no git command, no read outside the folder, no answer seen from anything but the session's own script. **Skill arm: 6 of 6 write-ups clean, 18 of 18 reads exact. One-sentence review: 5 of 6, 15 of 18.** The pre-registered rule says a difference of one write-up is no separation, so the reading is: 250 words does not separate the two methods on six writers each. The contaminated run's reading does not survive.
+
+The one failure is the same sentence as every failure since 6 October: generic-arm metallurgy writer 1 wrote "halves every crucible, removed melt to slag" with "Halves and quarters round down" in its first line, and all three readers kept the larger half. A second write-up used the same detached form and all three of its readers kept the smaller half, so the detached form is a coin flip, not a certain failure. All six skill-arm writers attached the rounding to the halving sentence; four of six generic-arm writers did. Full account and the sentence from every write-up: `compression-250/RESULTS-RERUN.md`.
+
 ## What this does and does not show
 
 It shows:
@@ -67,10 +73,10 @@ The readers came in under estimate. The writers ran over because they used a she
 
 ## What should change in the skill
 
-The outcome rule set before the control said: if generic review also goes six of six, the skill should be cut down to whatever did the work. What did the work, on this evidence, is one instruction: before you hand over an analogy, review it against the thing it describes and fix what it lost. That instruction is inside Open Mirror as steps 4 and 5 applied to your own text, and it is also a sentence anyone could write. At 400 words the two tied. At 250 words the one-sentence review did better, on one writer each, in a run that was contaminated by the harness in a way that helped the skill arm, not the generic arm. The honest pitch, as of today: Open Mirror has not been shown to beat a plain review instruction on any task tested, and on the hardest one it did worse. The README and changelog say so.
+The outcome rule set before the control said: if generic review also goes six of six, the skill should be cut down to whatever did the work. What did the work, on this evidence, is one instruction: before you hand over an analogy, review it against the thing it describes and fix what it lost. That instruction is inside Open Mirror as steps 4 and 5 applied to your own text, and it is also a sentence anyone could write. At 400 words the two tied. At 250 words, in the clean rerun with three writers each, the skill went 6 of 6 and the one-sentence review 5 of 6, which is inside the no-claim band fixed before the run. The honest pitch, as of today: Open Mirror has not been shown to beat a plain review instruction on any task tested, and has not been shown to do worse. The README and changelog say so.
 
-One concrete thing the record does support changing: the specific failure, four times out of four, is a halving rule whose rounding is stated away from the quantity that keeps it. A writer's checklist that says "for every rounding, name which quantity is rounded" would have caught every failure in this study. That is a sentence, not a skill.
+One concrete thing the record does support changing: the specific failure, five times out of five, is a halving rule whose rounding is stated away from the quantity that keeps it. A writer's checklist that says "for every rounding, name which quantity is rounded" would have caught every failure in this study. That is a sentence, not a skill.
 
 ## Cost
 
-Control: 16 sessions, 1.04M. 250-word test: 16 sessions, 1.14M. Study 3 total: 76 sessions, 5.05M.
+Control: 16 sessions, 1.04M. 250-word test: 16 sessions, 1.14M. Clean rerun: 48 sessions, 3.28M. Study 3 total: 124 sessions, 8.33M.

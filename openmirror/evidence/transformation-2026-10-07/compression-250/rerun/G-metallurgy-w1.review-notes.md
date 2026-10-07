@@ -1,0 +1,13 @@
+- Cut the word count from 374 in the first draft to 248 (counted with wc -w, step numerals included). Shortening the prose did not drop or change any of the 55 required figures.
+- Checked every figure against the engineer's data: the six working volumes, upper marks, lower marks and starting amounts, the limit of 38, and all 30 entries in the five-by-six charge table.
+- Step 4: stated that every amount is worked out from the current contents before anything moves, and that all six move together. An earlier wording could be read as handling the crucibles one at a time.
+- Added the edge case that a SUPERHEATED crucible 1 sends its half to slag, because it has no crucible before it.
+- Stated that working volume is not enforced when charging or when receiving from the return launder. Overfill is only corrected at the next cycle's overflow and stays after cycle 5.
+- Overflow: made it explicit that crucibles are handled in order 1 to 6, that each is left exactly at working volume, that arriving melt can push the next crucible over (cascade), and that crucible 6's excess goes to slag.
+- State check: kept 'at or above' for the upper mark and 'at or below' for the lower mark exactly, and added that a crucible between the marks keeps its state. Each crucible is checked once per cycle, so it can change at most once.
+- Emergency tap: worded as 'over 38' so a total of exactly 38 does not fire it. Stated that the tap halves round down and the removed melt goes to slag.
+- Added 'halves and quarters round down' near the top so it covers the BASE quarter, the SUPERHEATED half and the tap halving.
+- Report: kept it as a template with no figures, totals or results. It lists end quantities and states in positions 1 to 6, state changes as (cycle, position, before, after), tap cycles, slag tally and the balance equation.
+- Ran a scan for the forbidden words, including as substrings (cell, level, mode, NORMAL, ELEVATED, period, intake, spill, release, purge, LOST, abstract, metaphor, analog, comparison, represent, correspond, stands for): zero hits. Replaced 'spill' with 'overflow'.
+- Checked my reading of the process with a simulation script, C:\Users\Jaket\AppData\Local\Temp\om\desk-250\sim.py. The balance check holds. No results from it appear in the explanation.
+- Remaining risk: 'leaving this one full' means left at exactly its working volume, and 'previous crucible' means the one nearer the charging end. Both follow from the line picture, but they are compressed to stay under 250 words.

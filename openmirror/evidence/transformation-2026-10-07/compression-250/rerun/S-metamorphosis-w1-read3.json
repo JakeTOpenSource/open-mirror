@@ -1,0 +1,165 @@
+{
+ "id": "S-metamorphosis-w1",
+ "n": 3,
+ "run": {
+  "procedureSummary": "Feed: add the cycle's row to every chamber, PUPAL included, with no limit check. Carry forward: go through chambers 1 to 6 in order. If a chamber is over its limit, cap it at the limit and add the excess to the next chamber, so excess received counts when that chamber's turn comes. Excess from chamber 6 is discarded and counted as loss. State check: use the quantities after carry forward and each chamber's state as it entered the check, so each chamber is tested once per cycle. LARVAL with quantity >= upper mark becomes PUPAL. PUPAL with quantity <= lower mark becomes LARVAL. Every change is logged. Metabolise: use the states just set and work out every share from the quantities after the state check before moving anything. A LARVAL share is floor(q/4); it is burned off and counted as loss. A PUPAL share is floor(q/2); it moves to the chamber one position lower (i-1), and chamber 1's PUPAL share is discarded as loss. Limits are not applied here; any overfill waits for the next carry forward, and after cycle 5 nothing more happens to it. Moult: if the line total after metabolise is over 38 (strictly), each chamber keeps floor(q/2) and the rest is discarded as loss, with states unchanged. At 38 or under nothing happens. The arithmetic was done by a Python script at C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py.",
+  "openPoints": [
+   {
+    "point": "Carry forward order and cascading",
+    "assumption": "Chambers are processed one at a time from 1 to 6, so excess received from chamber i-1 is part of chamber i's total when chamber i is checked against its limit."
+   },
+   {
+    "point": "Which quantities and states the state check uses",
+    "assumption": "Quantities after carry forward, tested once per chamber per cycle. A chamber that changes state is not tested again in the same cycle."
+   },
+   {
+    "point": "Which state metabolise uses",
+    "assumption": "The state after this cycle's state check."
+   },
+   {
+    "point": "Rounding of shares",
+    "assumption": "Each share is rounded down on its own (floor of q/4 or q/2), and all shares are worked out from the quantities before metabolise moves anything."
+   },
+   {
+    "point": "Direction of 'back one chamber'",
+    "assumption": "Toward the lower position (chamber i to chamber i-1), which fits chamber 1's share being discarded."
+   },
+   {
+    "point": "Moult threshold",
+    "assumption": "The line total is taken after metabolise and the moult fires only if it is strictly over 38. At exactly 38 (cycle 5) it does not fire."
+   },
+   {
+    "point": "Loss tally contents",
+    "assumption": "Carry-forward excess discarded from chamber 6, LARVAL burn-off, chamber 1's PUPAL share, and the amounts removed by moults."
+   },
+   {
+    "point": "Overfill at the end of cycle 5",
+    "assumption": "No final carry forward is run. End amounts may be over their limits (chamber 2 ends at 10 against a limit of 8, chamber 4 at 7 against a limit of 6)."
+   }
+  ],
+  "cycleFigures": "C1: feed [3,12,9,7,5,4]; carry [3,8,12,6,7,4] (chamber 6 discards 0); state: chambers 2,3,4,5 go PUPAL; metabolise shares [0,4,6,3,3,1] -> [7,10,9,6,4,3] (total 39); moult fires -> [3,5,4,3,2,1]; running loss 22. C2: feed [7,7,4,4,3,8]; carry [7,7,4,4,3,7] (chamber 6 discards 1); state: chamber 1 goes PUPAL, chamber 3 back to LARVAL, chamber 5 back to LARVAL, chamber 6 goes PUPAL; metabolise shares [3,3,1,2,0,3] -> [7,4,5,2,6,4] (total 28); no moult; loss 27. C3: feed [11,8,8,2,6,10]; carry [10,8,9,2,6,7] (chamber 6 discards 3); state: chamber 3 goes PUPAL, chamber 4 back to LARVAL; metabolise shares [5,4,4,0,1,3] -> [9,8,5,2,8,4] (total 36); no moult; loss 36. C4: feed [16,14,12,3,11,4]; carry [10,8,12,6,9,7] (chamber 6 discards 11); state: chambers 4 and 5 go PUPAL, so all six are PUPAL; metabolise shares [5,4,6,3,4,3] -> [9,10,9,7,8,4] (total 47); moult fires -> [4,5,4,3,4,2]; loss 74. C5: feed [4,11,10,6,7,2]; carry [4,8,12,6,8,2] (chamber 6 discards 0); state: chamber 6 back to LARVAL; metabolise shares [2,4,6,3,4,0] -> [6,10,9,7,4,2] (total 38); no moult; loss 76.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "LARVAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Start 20 + feed 94 = 114; end 38 + loss 76 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "I used a Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py. The loss of 76 is made up of 15 discarded from chamber 6 at carry forward, 16 burned off by LARVAL chambers, 13 in chamber 1's PUPAL shares, and 32 removed by the two moults (21 in cycle 1, 11 in cycle 4). The moult did not fire in cycle 5 because the total was exactly 38, which is not over 38."
+ },
+ "grade": {
+  "available": true,
+  "exactAllFields": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  }
+ }
+}

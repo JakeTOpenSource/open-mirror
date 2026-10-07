@@ -1,0 +1,165 @@
+{
+ "id": "S-metallurgy-w2",
+ "n": 1,
+ "run": {
+  "procedureSummary": "Script used: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py (Python). I also worked cycle 1 by hand and it matched. Each cycle runs these five steps in order, each step across all six crucibles before the next step starts. (1) Charge: add the cycle's row to each crucible, ignoring working volume. (2) Overflow: go from crucible 1 to 6 in turn. If a crucible holds more than its working volume, it drops to the volume and the excess goes into the next crucible before that crucible's own turn, so excess can cascade. Excess from crucible 6 goes to slag. (3) State: judge on quantity alone, after overflow. A BASE crucible at or above its upper mark becomes SUPERHEATED. A SUPERHEATED crucible at or below its lower mark becomes BASE. Anything else keeps its state. Each crucible is judged once per cycle against its state at the start of the step. (4) Return: first work out all six amounts from the post-overflow contents, rounded down. A BASE crucible gives floor(q/4) to slag. A SUPERHEATED crucible gives floor(q/2) to the crucible one position toward the charging end (i-1), and crucible 1's share goes to slag. All transfers happen at once. A crucible can end up over its volume after this, and that is left for the next cycle's overflow step. (5) Emergency tap: if the total across all six is strictly greater than 38, each crucible keeps floor(q/2) and the rest goes to slag. States are not re-judged after return or tap.",
+  "openPoints": [
+   {
+    "point": "Which quantity the state step judges",
+    "assumption": "The post-overflow quantity in the same cycle, before return and tap. States are judged only in step 3."
+   },
+   {
+    "point": "Whether a crucible can change state twice in one step, e.g. BASE to SUPERHEATED and then straight back",
+    "assumption": "No. Each crucible gets one check per cycle, based on its state at the start of the step."
+   },
+   {
+    "point": "Which state sets the return rule",
+    "assumption": "The state just set in step 3 of the same cycle."
+   },
+   {
+    "point": "Whether an overflow cascade is fed by excess from upstream",
+    "assumption": "Yes. Excess lands in the next crucible before that crucible's turn, so its own overflow check includes it."
+   },
+   {
+    "point": "What 'exceeds 38' means at the boundary",
+    "assumption": "Strictly greater than 38. In cycle 5 the total was exactly 38, so the tap did not fire."
+   },
+   {
+    "point": "What total melt means for the tap check",
+    "assumption": "The sum of all six crucibles after the return step, including any return overfill that is above working volume."
+   },
+   {
+    "point": "Where the tap's removed melt goes, and how it rounds",
+    "assumption": "Each crucible keeps floor(q/2) and the remainder, ceil(q/2), goes to slag."
+   },
+   {
+    "point": "Return overfill above working volume after the cycle 5 return",
+    "assumption": "Left as it is. No overflow runs after cycle 5, and as it happens no crucible ends above its volume."
+   }
+  ],
+  "cycleFigures": "Each cycle shows the six quantities for crucibles 1-6, and the slag tally runs in brackets. C1: charge [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] (slag 0); state, judged on [3,8,12,6,7,4] = B,S,S,S,S,B; return amounts [0,4,6,3,3,1] give [7,10,9,6,4,3] (slag 1); total 39 > 38 so the tap fires, giving [3,5,4,3,2,1] (slag 22). C2: charge [7,7,4,4,3,8]; overflow [7,7,4,4,3,7] (slag 23); state = S,S,B,S,B,S; return amounts [3,3,1,2,0,3] give [7,4,5,2,6,4] (slag 27); total 28, no tap. C3: charge [11,8,8,2,6,10]; overflow [10,8,9,2,6,7] (slag 30); state = S,S,S,B,B,S; return amounts [5,4,4,0,1,3] give [9,8,5,2,8,4] (slag 36); total 36, no tap. C4: charge [16,14,12,3,11,4]; overflow [10,8,12,6,9,7] (slag 44); state = S,S,S,S,S,S; return amounts [5,4,6,3,4,3] give [9,10,9,7,8,4] (slag 49); total 47 > 38 so the tap fires, giving [4,5,4,3,4,2] (slag 74). C5: charge [4,11,10,6,7,2]; overflow [4,8,12,6,8,2] (slag 74); state = S,S,S,S,S,B; return amounts [2,4,6,3,4,0] give [6,10,9,7,4,2] (slag 76); total 38, not > 38, so no tap.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "BASE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting melt 20 + charges 94 = 114. End melt 38 + slag 76 = 114. The two sides match.",
+  "usedScript": true,
+  "notes": "Slag 76 comes from: crucible 6 overflow 1+3+8 = 12, BASE quarters 1+1+1 = 3, crucible 1 return share 3+5+5+2 = 15, and the taps 21+25 = 46. Cycle 5 is the tightest boundary case: the post-return total is exactly 38, so the tap does not fire under the strict 'exceeds' reading. If the rule were read as 'at or above 38', the tap would fire in cycle 5 and the end figures would change to [3,5,4,3,2,1] with slag 96. The only file created is sim.py in C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250. Nothing outside that folder was read or changed, and git was not run."
+ },
+ "grade": {
+  "available": true,
+  "exactAllFields": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  }
+ }
+}

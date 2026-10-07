@@ -1,0 +1,141 @@
+{
+ "id": "G-metallurgy-w1",
+ "n": 2,
+ "run": {
+  "procedureSummary": "I used a Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py. I also checked cycle 1 and the balance by hand, and they agree with the script.\nStep 1 (Charge): add the cycle's charge to each crucible. Volume is not checked at this step.\nStep 2 (Overflow): go through crucibles 1 to 6 in order. If a crucible holds more than its working volume, set it to its volume and add the excess to the next crucible before checking that one, so overflow can cascade. Excess from crucible 6 goes to slag.\nStep 3 (States): compare the contents after overflow with the marks. A BASE crucible at or above its upper mark becomes SUPERHEATED. A SUPERHEATED crucible at or below its lower mark becomes BASE. Anything else keeps its state. Each change is logged.\nStep 4 (Moves): work out every amount from the contents after step 2, using the states after step 3, then apply all moves at once. A BASE crucible sends floor(q/4) to slag. A SUPERHEATED crucible sends floor(q/2) to the previous crucible; crucible 1 sends its share to slag. Anything left above volume stays until the next cycle's overflow, or stays for good after cycle 5.\nStep 5 (Tap): if the line total is strictly above 38, remove floor(q/2) from every crucible to slag, so each keeps q - floor(q/2), and log the cycle.",
+  "openPoints": [
+   {
+    "point": "How an emergency tap rounds an odd quantity",
+    "assumption": "The amount removed is floor(q/2), so the crucible keeps the larger half, ceil(q/2). This matches 'half' meaning floor(q/2) moved in step 4. The other reading, keeping floor(q/2), would change the results."
+   },
+   {
+    "point": "Whether a line total of exactly 38 triggers a tap",
+    "assumption": "No. 'Over 38' means strictly greater than 38. Cycle 3 ended at exactly 38 and did not tap."
+   },
+   {
+    "point": "Which contents and states step 4 uses",
+    "assumption": "The contents after overflow and the states after step 3's changes. All amounts are fixed before any melt moves."
+   },
+   {
+    "point": "Melt that arrives back in a crucible after overflow",
+    "assumption": "Melt returned in step 4 can leave a crucible above volume, for example crucible 2 at 10 against a volume of 8 in cycle 1. It is not re-overflowed in the same cycle; the next cycle's step 2 handles it."
+   },
+   {
+    "point": "Whether a crucible can change state twice in one cycle",
+    "assumption": "No. Each crucible is checked once per cycle in step 3, against its state at the start of that step."
+   },
+   {
+    "point": "Which state step 3 compares against",
+    "assumption": "The contents after step 2 overflow."
+   }
+  ],
+  "cycleFigures": "Format: after charge | after overflow | states | after moves | after tap check (slag running total).\nC1: charge 3,12,9,7,5,4 | overflow 3,8,12,6,7,4 (slag 0) | states B,S,S,S,S,B | moves 7,10,9,6,4,3 (slag 1), total 39 | TAP 4,5,5,3,2,2 (slag 19)\nC2: charge 8,7,5,4,3,9 | overflow 8,7,5,4,3,7 (slag 21) | states S,S,S,S,B,S | moves 7,6,5,2,6,4 (slag 25), total 30 | no tap (slag 25)\nC3: charge 11,10,8,2,6,10 | overflow 10,8,11,2,6,7 (slag 28) | states S,S,S,B,B,S | moves 9,9,6,2,8,4 (slag 34), total 38 | no tap (slag 34)\nC4: charge 16,15,13,3,11,4 | overflow 10,8,12,6,9,7 (slag 44) | states S,S,S,S,S,S | moves 9,10,9,7,8,4 (slag 49), total 47 | TAP 5,5,5,4,4,2 (slag 71)\nC5: charge 5,11,11,7,7,2 | overflow 5,8,12,6,9,3 (slag 71) | states S,S,S,S,S,S | moves 7,10,9,7,6,2 (slag 73), total 41 | TAP 4,5,5,4,3,1 (slag 92)",
+  "finalQuantities": [
+   4,
+   5,
+   5,
+   4,
+   3,
+   1
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4,
+   5
+  ],
+  "lossTotal": 92,
+  "balanceCheck": "Starting melt 20 + charges 94 (20+15+17+24+18) = 114. End melt 22 (4+5+5+4+3+1) + slag tally 92 = 114. The two sides match.",
+  "usedScript": true,
+  "notes": "Script: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py. Only that folder was used, and no git commands were run. These figures are only certain under two of my readings: a tap removes floor(q/2) from each crucible, and a total of exactly 38 does not trigger a tap. The first is the bigger risk: if a tap means keeping floor(q/2) instead, every result from cycle 1 onward changes. The second only decides whether cycle 3, which ended at exactly 38, would have tapped."
+ },
+ "grade": {
+  "available": true,
+  "exactAllFields": false,
+  "got": {
+   "final": [
+    4,
+    5,
+    5,
+    4,
+    3,
+    1
+   ],
+   "resetPeriods": [
+    1,
+    4,
+    5
+   ],
+   "loss": 92
+  }
+ }
+}

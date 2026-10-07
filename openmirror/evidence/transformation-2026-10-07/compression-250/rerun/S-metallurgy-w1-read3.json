@@ -1,0 +1,161 @@
+{
+ "id": "S-metallurgy-w1",
+ "n": 3,
+ "run": {
+  "procedureSummary": "Script used: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py (Python). I also re-checked cycles 1 and 4 by hand. Each cycle runs these five steps in order, and each step covers all six crucibles before the next step starts.\n1. Charge: add that cycle's charge to each crucible. A crucible may go over its volume at this step.\n2. Overflow: go through crucibles 1 to 6 one at a time. If a crucible holds more than its volume, cut it back to volume and pour the excess into the next crucible before that one is checked. So excess can pass down several crucibles in one sweep. Crucible 6's excess goes to slag.\n3. State check, using the melt after overflow: a BASE crucible with melt at or above its upper mark becomes SUPERHEATED. A SUPERHEATED crucible with melt at or below its lower mark becomes BASE. Otherwise the state stays as it is. Each crucible changes state at most once per check.\n4. Return: work out all six amounts from the melt after overflow before moving anything, then move them together. BASE loses floor(melt/4) to slag. SUPERHEATED sends floor(melt/2) to the crucible before it (i-1); crucible 1's share goes to slag. A crucible that ends up over its volume stays that way until the next cycle's overflow step.\n5. Emergency tap: if the six crucibles hold more than 38 in total (a strict test), each keeps floor(melt/2) and the rest goes to slag. The tap does not change any state.",
+  "openPoints": [
+   {
+    "point": "Tap threshold: does exactly 38 count as 'over 38'?",
+    "assumption": "No. The test is strictly greater than 38. This decides cycle 5, which ends at exactly 38, so no tap fires there. If 'at or over 38' were meant, cycle 5 would also tap."
+   },
+   {
+    "point": "Which melt the state check uses",
+    "assumption": "The melt after overflow and before return, as the step order in the write-up gives."
+   },
+   {
+    "point": "Which melt the return amounts are based on",
+    "assumption": "Each crucible's melt after overflow, using its state after the check. Inflows from the next crucible's return do not count toward a crucible's own return in the same cycle."
+   },
+   {
+    "point": "Whether a crucible pushed over volume by the return or tap gets re-checked or re-overflowed in the same cycle",
+    "assumption": "No. The write-up says overfill stays until the next cycle's overflow, and the state check is not run again within the cycle."
+   },
+   {
+    "point": "Whether the emergency tap resets states",
+    "assumption": "No. The write-up names no state effect for the tap, so states carry through it unchanged. resetPeriods reports the cycles where the tap (the halving) fired."
+   },
+   {
+    "point": "Whether overflow runs as one cascade",
+    "assumption": "Yes. It is a single pass from 1 to 6, and excess is added to the next crucible before that crucible is checked."
+   },
+   {
+    "point": "Rounding",
+    "assumption": "Always floor, applied to the amount sent or kept for each crucible. The remainder stays in the crucible on return; on the tap, the remainder goes to slag."
+   }
+  ],
+  "cycleFigures": "Melt in crucibles 1-6, with the running slag total.\nCycle 1: charge [3,12,9,7,5,4] slag 0 | overflow [3,8,12,6,7,4] slag 0 | states B,S,S,S,S,B | return [7,10,9,6,4,3] slag 1 (moves 0,4,6,3,3,1) | total 39 > 38, so the tap fires: [3,5,4,3,2,1] slag 22.\nCycle 2: charge [7,7,4,4,3,8] slag 22 | overflow [7,7,4,4,3,7] slag 23 | states S,S,B,S,B,S | return [7,4,5,2,6,4] slag 27 (moves 3,3,1,2,0,3) | total 28, no tap.\nCycle 3: charge [11,8,8,2,6,10] slag 27 | overflow [10,8,9,2,6,7] slag 30 | states S,S,S,B,B,S | return [9,8,5,2,8,4] slag 36 (moves 5,4,4,0,1,3) | total 36, no tap.\nCycle 4: charge [16,14,12,3,11,4] slag 36 | overflow [10,8,12,6,9,7] slag 44 | states S,S,S,S,S,S | return [9,10,9,7,8,4] slag 49 (moves 5,4,6,3,4,3) | total 44 > 38, so the tap fires: [4,5,4,3,4,2] slag 74.\nCycle 5: charge [4,11,10,6,7,2] slag 74 | overflow [4,8,12,6,8,2] slag 74 | states S,S,S,S,S,B | return [6,10,9,7,4,2] slag 76 (moves 2,4,6,3,4,0) | total 38, which is not over 38, so no tap.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "BASE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting melt 20 (3+6+6+2+2+1) plus charges 94 (cycle 1: 20, cycle 2: 15, cycle 3: 17, cycle 4: 24, cycle 5: 18) = 114. End melt 38 (6+10+9+7+4+2) plus slag 76 = 114. The two sides are equal.",
+  "usedScript": true,
+  "notes": "The arithmetic came from a short Python script at C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py. I checked cycle 1 (charge, overflow cascade, states, return and tap) and cycle 4's overflow cascade by hand, and both matched the script. The one result that depends on reading the rules is the tap threshold. Cycle 5 ends at exactly 38, and 'over 38' was read as strictly greater, so no tap fires. If the tap were meant to fire at 38, cycle 5 would end at [3,5,4,3,2,1] with slag 95. I used no files outside the desk-250 folder."
+ },
+ "grade": {
+  "available": true,
+  "exactAllFields": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  }
+ }
+}

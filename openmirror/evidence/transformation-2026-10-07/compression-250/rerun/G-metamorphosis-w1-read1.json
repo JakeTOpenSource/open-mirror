@@ -1,0 +1,169 @@
+{
+ "id": "G-metamorphosis-w1",
+ "n": 1,
+ "run": {
+  "procedureSummary": "Every cycle runs these five steps in order, and each step finishes across all six chambers before the next one starts. Each amount that is split off is rounded down.\n1. Feed: add the cycle's feed row to each chamber, ignoring limits.\n2. Carry-forward: go through chambers 1 to 6 one after another. If a chamber is over its limit, set it to the limit and add the excess to the next chamber. That chamber's new total is the one checked when its turn comes. Excess from chamber 6 is discarded and goes into the loss tally.\n3. State: using the masses after carry-forward and the states as they stood before this step, a LARVAL chamber with mass at or above its upper mark becomes PUPAL. A PUPAL chamber with mass at or below its lower mark becomes LARVAL. Any other chamber keeps its state. A chamber changes state at most once per cycle, and every change is logged.\n4. Metabolism: work from a snapshot of the masses before this step and the states set in step 3, and apply all chambers at once. A LARVAL chamber loses floor(m/4), which counts as burned and goes into the loss tally. A PUPAL chamber at position i loses floor(m/2), which is added to chamber i-1. For chamber 1 that amount is discarded and goes into the loss tally. Limits are ignored here.\n5. Moult: if the line total after metabolism is strictly greater than 38, every chamber becomes floor(m/2) and the removed amount (m - floor(m/2)) goes into the loss tally. States do not change.\nA Python script did the arithmetic. Cycle 1 was also checked by hand and matches.",
+  "openPoints": [
+   {
+    "point": "Rounding in the moult halving: whether the chamber keeps the rounded-down half or loses it",
+    "assumption": "The chamber keeps floor(m/2) and the removed amount is m - floor(m/2). Results with the other reading were not computed, because a sensitivity re-run was blocked by the session's permission check."
+   },
+   {
+    "point": "Rounding of the metabolism amounts",
+    "assumption": "The burned amount is floor(m/4) and the passed amount is floor(m/2). The chamber keeps whatever is left."
+   },
+   {
+    "point": "Which masses the state step tests",
+    "assumption": "The masses after carry-forward in the same cycle."
+   },
+   {
+    "point": "Which states metabolism uses",
+    "assumption": "The states as updated in step 3 of the same cycle."
+   },
+   {
+    "point": "Moult boundary: a total of exactly 38",
+    "assumption": "No moult, because the rule says 'above 38'. This happened at the end of cycle 5, where the total was exactly 38."
+   },
+   {
+    "point": "When the moult total is measured",
+    "assumption": "After metabolism, as the line total of all six chambers."
+   },
+   {
+    "point": "Carry-forward cascade",
+    "assumption": "One pass from chamber 1 to 6. A chamber pushed over its limit by incoming excess passes its own excess on when its turn comes."
+   },
+   {
+    "point": "Overfill left after metabolism",
+    "assumption": "It waits for the next cycle's carry-forward. After cycle 5 it stays: chamber 2 ends at 10 against a limit of 8, and chamber 4 at 7 against a limit of 6."
+   },
+   {
+    "point": "What counts toward the loss tally",
+    "assumption": "Chamber 6 overflow, LARVAL burn, PUPAL mass passed back from chamber 1, and mass removed by the moult."
+   }
+  ],
+  "cycleFigures": "C1: feed [3,12,9,7,5,4] | carry [3,8,12,6,7,4] (loss 0) | state L,P,P,P,P,L | metab [7,10,9,6,4,3] (loss 1) | moult (total 39>38) [3,5,4,3,2,1] (loss 22)\nC2: feed [7,7,4,4,3,8] | carry [7,7,4,4,3,7] (loss 23) | state P,P,L,P,L,P | metab [7,4,5,2,6,4] (loss 27) | no moult (total 28) [7,4,5,2,6,4]\nC3: feed [11,8,8,2,6,10] | carry [10,8,9,2,6,7] (loss 30) | state P,P,P,L,L,P | metab [9,8,5,2,8,4] (loss 36) | no moult (total 36) [9,8,5,2,8,4]\nC4: feed [16,14,12,3,11,4] | carry [10,8,12,6,9,7] (loss 44) | state P,P,P,P,P,P | metab [9,10,9,7,8,4] (loss 49) | moult (total 47>38) [4,5,4,3,4,2] (loss 74)\nC5: feed [4,11,10,6,7,2] | carry [4,8,12,6,8,2] (loss 74) | state P,P,P,P,P,L | metab [6,10,9,7,4,2] (loss 76) | no moult (total 38, not above 38) [6,10,9,7,4,2]",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "LARVAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Start 20 + all feed 94 = 114; end 38 + loss tally 76 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "The script is C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\opus55_h7_d250_sim.py. Cycle 1 was also checked by hand and matches.\n\nTwo figures are at a boundary. In cycle 5 the moult did not fire because the total was exactly 38, not above it. Chambers 2 and 4 end over their limits (10 against 8, and 7 against 6), which the write-up allows after cycle 5.\n\nThe main unresolved point is the rounding in the moult halving. I did not get to test the other reading (chamber keeps ceil(m/2)): the variant run was blocked by the session's automatic permission check. If the desk wants that reading confirmed, the variant can be run outside auto mode.\n\nThe desk folder already held scripts and drafts from other runs. I did not read or use any of them."
+ },
+ "grade": {
+  "available": true,
+  "exactAllFields": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  }
+ }
+}

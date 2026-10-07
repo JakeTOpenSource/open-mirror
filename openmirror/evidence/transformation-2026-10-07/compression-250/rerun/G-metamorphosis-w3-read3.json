@@ -1,0 +1,161 @@
+{
+ "id": "G-metamorphosis-w3",
+ "n": 3,
+ "run": {
+  "procedureSummary": "Feed: add that cycle's row to each chamber, ignoring capacity. Carry: go through chambers 1 to 6 in order. Any amount above a chamber's capacity is cut back to capacity and added to the next chamber before that chamber's turn, so it can cascade. Chamber 6's excess goes to the tally. States: these use the mass after carry. LARVAL with mass at or above its upper mark becomes PUPAL. PUPAL with mass at or below its lower mark becomes LARVAL. Otherwise the state stays the same, and every change is logged. Metabolise: take all amounts from the post-carry masses and the new states, then apply them at the same time. LARVAL loses floor(m/4) to the tally. PUPAL loses floor(m/2) to chamber i-1, and chamber 1's PUPAL amount goes to the tally. There is no capacity check here, because overfull chambers wait for the next cycle's carry. Moult: if the six chambers total more than 38 (strictly), each chamber becomes floor(m/2) and the removed part (ceil(m/2)) goes to the tally. A short Python script did the arithmetic (C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py). I also checked cycles 1 and 2 by hand.",
+  "openPoints": [
+   {
+    "point": "Moult rounding: 'halve each, rounding down' could mean keeping floor(m/2) or removing floor(m/2).",
+    "assumption": "The kept amount is floor(m/2) and the removed amount is ceil(m/2), which goes to the tally. Under the other reading, cycle 1 would keep 4,5,5,3,2,2."
+   },
+   {
+    "point": "Moult threshold boundary: the cycle 5 total after metabolise is exactly 38.",
+    "assumption": "'Over 38' means strictly greater than 38, so no moult in cycle 5."
+   },
+   {
+    "point": "Which mass the state test uses.",
+    "assumption": "The state test uses the mass after carry, since steps run in order."
+   },
+   {
+    "point": "Which state metabolise uses.",
+    "assumption": "It uses the state just set in the States step of the same cycle."
+   },
+   {
+    "point": "Metabolise rounding.",
+    "assumption": "Each chamber's amount is rounded down on its own (floor(m/4) or floor(m/2)) before transfer."
+   },
+   {
+    "point": "A PUPAL transfer can push the receiving chamber over capacity.",
+    "assumption": "It is allowed. The extra is held until the next cycle's Carry, and nothing is carried after metabolise or moult."
+   },
+   {
+    "point": "Where chamber 1's PUPAL amount goes.",
+    "assumption": "It goes to the loss tally, as the write-up states."
+   }
+  ],
+  "cycleFigures": "Cycle 1: after Feed [3,12,9,7,5,4]; after Carry [3,8,12,6,7,4], tally 0; States L,P,P,P,P,L; after Metabolise [7,10,9,6,4,3], tally 1, total 39; after Moult [3,5,4,3,2,1], tally 22.\nCycle 2: after Feed [7,7,4,4,3,8]; after Carry [7,7,4,4,3,7], tally 23; States P,P,L,P,L,P; after Metabolise [7,4,5,2,6,4], tally 27, total 28; no moult [7,4,5,2,6,4].\nCycle 3: after Feed [11,8,8,2,6,10]; after Carry [10,8,9,2,6,7], tally 30; States P,P,P,L,L,P; after Metabolise [9,8,5,2,8,4], tally 36, total 36; no moult [9,8,5,2,8,4].\nCycle 4: after Feed [16,14,12,3,11,4]; after Carry [10,8,12,6,9,7], tally 44; States P,P,P,P,P,P; after Metabolise [9,10,9,7,8,4], tally 49, total 47; after Moult [4,5,4,3,4,2], tally 74.\nCycle 5: after Feed [4,11,10,6,7,2]; after Carry [4,8,12,6,8,2], tally 74; States P,P,P,P,P,L; after Metabolise [6,10,9,7,4,2], tally 76, total 38 (not over 38); no moult [6,10,9,7,4,2].",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "LARVAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Start total 20 + all feed 94 = 114; end total 38 + tally 76 = 114. The balance holds.",
+  "usedScript": true,
+  "notes": "The arithmetic script is at C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py, and nothing outside that folder was used. I checked cycles 1 and 2 by hand and they match the script. Two results depend on choices the write-up leaves open. First, the end figures depend on reading the moult as 'keep floor(m/2)'. Second, they depend on cycle 5's total of exactly 38 not counting as over 38."
+ },
+ "grade": {
+  "available": true,
+  "exactAllFields": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  }
+ }
+}

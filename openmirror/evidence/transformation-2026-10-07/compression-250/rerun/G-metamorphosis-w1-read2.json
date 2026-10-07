@@ -1,0 +1,173 @@
+{
+ "id": "G-metamorphosis-w1",
+ "n": 2,
+ "run": {
+  "procedureSummary": "Per cycle, each step done line-wide before the next. (1) Feed: add the cycle's feed row to each chamber, ignoring limits. (2) Carry-forward: go chamber 1 to 6 in order. If a chamber is over its limit, cut it to the limit and add the excess to the next chamber, so mass received from upstream counts before that chamber is checked. Chamber 6's excess goes to loss. (3) State: using post-carry masses, a LARVAL chamber at or above its upper mark becomes PUPAL. A PUPAL chamber at or below its lower mark becomes LARVAL. Otherwise no change. Each change is logged. (4) Metabolism: computed at once from the post-state masses. A LARVAL chamber loses floor(m/4), which goes to loss. A PUPAL chamber moves floor(m/2) to chamber i-1, and chamber 1's half goes to loss. A chamber can pass mass back and receive mass from i+1 in the same step. Limits are not enforced here. (5) Moult: if the line total after metabolism is strictly above 38, every chamber becomes floor(m/2) and the removed ceil(m/2) goes to loss. Loss tally = carry-forward discards from chamber 6 + larval burns + chamber 1's PUPAL pass-back + moult removals. The arithmetic was done with a Python script (C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py). I checked cycle 1 by hand and it matches.",
+  "openPoints": [
+   {
+    "point": "Which masses the state step compares against the marks",
+    "assumption": "The masses after carry-forward in the same cycle (step 3 follows step 2)."
+   },
+   {
+    "point": "Rounding of the larval quarter burn",
+    "assumption": "The amount burned is floor(m/4), and the chamber keeps the rest."
+   },
+   {
+    "point": "Rounding of the PUPAL half passed back",
+    "assumption": "The amount passed is floor(m/2), and the chamber keeps the rest (the ceiling)."
+   },
+   {
+    "point": "Rounding of the moult halving (which side the round-down applies to)",
+    "assumption": "The chamber keeps floor(m/2) and the removed ceil(m/2) is discarded to loss. Under the other reading (remove floor, keep ceil), the cycle 1 and cycle 4 figures and everything after them change."
+   },
+   {
+    "point": "Moult trigger boundary",
+    "assumption": "Strictly above 38, using the line total after metabolism. In cycle 5 the total is exactly 38, so the moult does not fire."
+   },
+   {
+    "point": "Carry-forward cascade",
+    "assumption": "Done in a single pass 1 to 6. Mass pushed into a chamber is included when that chamber is checked. There is no second pass, and none is needed because mass only moves forward."
+   },
+   {
+    "point": "Metabolism when a PUPAL chamber also receives mass from i+1",
+    "assumption": "All amounts come from pre-step masses and are applied at the same time. A chamber's passed-back half is based on its own pre-step mass only."
+   },
+   {
+    "point": "Overfill after metabolism",
+    "assumption": "Left in place. It is clipped at the next cycle's carry-forward, and after cycle 5 it stays (chamber 4 ends at 7 against a limit of 6, chamber 2 at 10 against a limit of 8)."
+   },
+   {
+    "point": "The word 'routinely' in the state rule",
+    "assumption": "Read as 'by the normal rule each cycle'. No extra condition."
+   },
+   {
+    "point": "What counts as loss",
+    "assumption": "Chamber 6 carry-forward discards, larval burns, chamber 1's PUPAL pass-back half, and moult removals. Mass moved between chambers is not loss."
+   }
+  ],
+  "cycleFigures": "C1: feed [3,12,9,7,5,4]; carry [3,8,12,6,7,4] (loss 0); state L,P,P,P,P,L; metab [7,10,9,6,4,3] (loss 1); moult FIRED (total 39) -> [3,5,4,3,2,1] (loss 22). C2: feed [7,7,4,4,3,8]; carry [7,7,4,4,3,7] (loss 23); state P,P,L,P,L,P; metab [7,4,5,2,6,4] (loss 27); moult no (total 28) -> [7,4,5,2,6,4]. C3: feed [11,8,8,2,6,10]; carry [10,8,9,2,6,7] (loss 30); state P,P,P,L,L,P; metab [9,8,5,2,8,4] (loss 36); moult no (total 36) -> [9,8,5,2,8,4]. C4: feed [16,14,12,3,11,4]; carry [10,8,12,6,9,7] (loss 44); state P,P,P,P,P,P; metab [9,10,9,7,8,4] (loss 49); moult FIRED (total 47) -> [4,5,4,3,4,2] (loss 74). C5: feed [4,11,10,6,7,2]; carry [4,8,12,6,8,2] (loss 74); state P,P,P,P,P,L; metab [6,10,9,7,4,2] (loss 76); moult no (total 38, not above 38) -> [6,10,9,7,4,2].",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "LARVAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Start 20 + all feed 94 = 114; end 38 (6+10+9+7+4+2) + loss tally 76 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "Script: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py. It was the only file created, and it is inside the desk folder. Cycle 1 was checked by hand step by step and matches the script. The outcome depends most on two choices. First, the moult keeps floor(m/2) rather than ceil. Second, the moult needs a total strictly above 38. Cycle 5 ends at exactly 38, so a '38 or above' reading would make cycle 5 fire too."
+ },
+ "grade": {
+  "available": true,
+  "exactAllFields": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  }
+ }
+}

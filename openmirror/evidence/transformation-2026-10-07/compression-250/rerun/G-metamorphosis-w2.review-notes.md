@@ -1,0 +1,12 @@
+- Over the word cap: the first full draft was 381 words. I cut it in several passes to 245 by wc (246 if hyphenated words are split). The draft is in C:\Users\Jaket\AppData\Local\Temp\om\desk-250\draft.txt.
+- Unclear direction for half-mass reabsorption: I said it goes into 'the chamber before it', stated at the top that carry runs toward 6, and noted that chamber 1's share goes to the tally.
+- Missing: limits are not checked after metabolism, and nothing clears an overfull chamber after cycle 5. I added 'Overfull waits for next cycle's carry forward; none follows cycle 5' so the end figures are not cut back to the limits.
+- Missing: feed can push a chamber past its limit before carry forward. I added 'overfull allowed' to the feed step.
+- Missing: chamber 6's excess and chamber 1's PUPAL reabsorption both have to go to the loss tally. Both are now stated.
+- Simultaneity was unclear: metabolism now says 'amounts figured before anything moves', so all six amounts come from contents before any change.
+- The moult test was vague, so I made it the strict 'Total mass over 38'. At exactly 38 the moult does not fire.
+- The marks were unclear: the state check now says 'at or above' the upper mark and 'at or below' the lower mark, and 'otherwise unchanged' keeps the current state between the marks.
+- I kept the state-change format (cycle, position, before, after) in the Report only, to save words. Step 3 just says 'Log each change'.
+- I removed some wording that would have spent words saying the same thing twice: the explicit cascade note in carry forward and the 'whole units, never negative' line. Rounding down and handling chambers 1 to 6 in turn already cover both.
+- Banned words checked with grep (cell, level, mode, NORMAL, ELEVATED, period, intake, spill, release, purge, LOST, abstract, metaphor, analogy, comparison, represents, corresponds, stands for). None found, including inside other words.
+- I checked that the Report paragraph has no figures or results; it only names cycle 5 and chambers 1 to 6. I did not run the five cycles, so no results exist anywhere in the text.

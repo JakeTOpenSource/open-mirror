@@ -1,0 +1,165 @@
+{
+ "id": "G-metallurgy-w2",
+ "n": 2,
+ "run": {
+  "procedureSummary": "Script used: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\opus_h2_7f3c91_sim.py (sha1 49d72010...). Each step runs on all six crucibles before the next step starts. Step 1, charge: add the cycle's charge to each crucible and ignore capacity. Step 2, overflow: go through crucibles 1 to 6 in order. If a crucible is over capacity, it drops to capacity and the excess goes to the next crucible before that crucible's turn, so the excess cascades. Crucible 6's excess goes to slag. Step 3, state: using the quantities after overflow, a BASE crucible at or above its upper mark becomes SUPERHEATED, a SUPERHEATED crucible at or below its lower mark becomes BASE, and every other crucible keeps its state. Step 4, bleed: every amount is worked out from the quantities after overflow, before anything moves, and then all moves happen at once. A BASE crucible sends floor(q/4) to slag. A SUPERHEATED crucible sends floor(q/2) to the crucible before it (i-1); crucible 1's amount goes to slag. A crucible that ends up over capacity is not overflowed again this cycle. Step 5, tap: if the six crucibles hold more than 38 in total (exactly 38 does not trigger), each crucible keeps floor(q/2) and q - floor(q/2) goes to slag.",
+  "openPoints": [
+   {
+    "point": "Which quantity the state check in step 3 uses",
+    "assumption": "The quantity after step 2 (charge, then overflow) in the same cycle."
+   },
+   {
+    "point": "Which state the bleed in step 4 uses for a crucible that changed state in step 3 of the same cycle",
+    "assumption": "The new state from step 3."
+   },
+   {
+    "point": "How 'rounding down' applies in the bleed",
+    "assumption": "The amount moved is rounded down: floor(q/4) for BASE and floor(q/2) for SUPERHEATED, so the crucible keeps the remainder."
+   },
+   {
+    "point": "How 'keeps half, rounded down' applies in the tap",
+    "assumption": "The amount kept is floor(q/2). The rest, which is the larger half when q is odd, goes to slag."
+   },
+   {
+    "point": "What 'total' means for the tap",
+    "assumption": "The sum of the six crucibles after step 4 in the same cycle. Slag is not counted. The tap fires only when the total is strictly greater than 38."
+   },
+   {
+    "point": "A crucible over capacity after the bleed",
+    "assumption": "No overflow runs within the cycle. It is handled by the next cycle's step 2. At the end of cycle 5, crucible 2 holds 10 against a capacity of 8 and crucible 4 holds 7 against a capacity of 6, and both stay that way as the write-up says."
+   },
+   {
+    "point": "What counts as a state change",
+    "assumption": "Only the transitions in step 3. No other step changes a state. The tap does not reset any state."
+   },
+   {
+    "point": "Shared scratch folder",
+    "assumption": "Another process overwrote my first script, sim.py, before it ran, so I ignored that output. My figures come only from the uniquely named script listed in the procedure summary. I did not use any other file in the folder."
+   }
+  ],
+  "cycleFigures": "C1: charge [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] (slag 0); states B,S,S,S,S,B; bleed [7,10,9,6,4,3] (slag 1, total 39); tap FIRES [3,5,4,3,2,1] (slag 22, total 18). C2: charge [7,7,4,4,3,8]; overflow [7,7,4,4,3,7] (slag 23); states S,S,B,S,B,S; bleed [7,4,5,2,6,4] (slag 27, total 28); no tap [7,4,5,2,6,4]. C3: charge [11,8,8,2,6,10]; overflow [10,8,9,2,6,7] (slag 30); states S,S,S,B,B,S; bleed [9,8,5,2,8,4] (slag 36, total 36); no tap [9,8,5,2,8,4]. C4: charge [16,14,12,3,11,4]; overflow [10,8,12,6,9,7] (slag 44); states S,S,S,S,S,S; bleed [9,10,9,7,8,4] (slag 49, total 47); tap FIRES [4,5,4,3,4,2] (slag 74, total 22). C5: charge [4,11,10,6,7,2]; overflow [4,8,12,6,8,2] (slag 74); states S,S,S,S,S,B; bleed [6,10,9,7,4,2] (slag 76, total 38); no tap, since the total is exactly 38 [6,10,9,7,4,2].",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "BASE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting melt 20 + charges 94 = 114. End melt 38 + slag 76 = 114. The balance holds.",
+  "usedScript": true,
+  "notes": "The figures come from C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\opus_h2_7f3c91_sim.py. I also checked cycles 1, 2 and 3 by hand, and they match the script. The desk folder is shared with other processes: my first script, sim.py, was overwritten before it ran and printed different figures, so I discarded that output. The cycle 5 bleed leaves a total of exactly 38, so the tap does not fire. At the end, crucible 2 is over its capacity of 8 and crucible 4 is over its capacity of 6; per the write-up, both stay that way after cycle 5."
+ },
+ "grade": {
+  "available": true,
+  "exactAllFields": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  }
+ }
+}

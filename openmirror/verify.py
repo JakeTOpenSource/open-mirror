@@ -175,6 +175,23 @@ if os.path.exists(os.path.join(S3, "phase2-result.json")):
         claim("S3-16", "250-word test: generic-review arm reads exact of 6", 6, ex["G"], ["transformation-2026-10-07/compression-250/result.json"])
         bad = [r for r in c2["reads"] if r["run"] and not g3(r["run"], w2[r["id"]]["translation"]["restingStateWord"], w2[r["id"]]["translation"]["raisedStateWord"])]
         claim("S3-17", "250-word test: every wrong read is S-metallurgy with the known trajectory (4,5,5,4,3,1; resets 1,4,5; loss 92)", True, bool(bad) and all(r["id"] == "S-metallurgy" and r["run"]["finalQuantities"] == [4, 5, 5, 4, 3, 1] and sorted(r["run"]["resetPeriods"]) == [1, 4, 5] and r["run"]["lossTotal"] == 92 for r in bad), ["transformation-2026-10-07/compression-250/result.json"])
+    rr = os.path.join(S3, "compression-250", "rerun", "result.json")
+    if os.path.exists(rr):
+        c3 = jl(rr)
+        w3 = {w["id"]: w for w in c3["writes"]}
+        claim("S3-18", "250-word clean rerun: write-ups passing the cap and figure checks", 12, sum(1 for w in c3["writes"] if not w["problems"] and len(w["translation"]["document"].split()) <= 250), ["transformation-2026-10-07/compression-250/rerun/result.json"])
+        claim("S3-19", "250-word clean rerun: reads attempted", 36, len(c3["reads"]), ["transformation-2026-10-07/compression-250/rerun/result.json"])
+        ex3 = {a: sum(1 for r in c3["reads"] if r["arm"] == a and r["run"] and g3(r["run"], w3[r["id"]]["translation"]["restingStateWord"], w3[r["id"]]["translation"]["raisedStateWord"])) for a in ("S", "G")}
+        claim("S3-20", "250-word clean rerun: skill arm reads exact of 18", 18, ex3["S"], ["transformation-2026-10-07/compression-250/rerun/result.json"])
+        claim("S3-21", "250-word clean rerun: generic-review arm reads exact of 18", 15, ex3["G"], ["transformation-2026-10-07/compression-250/rerun/result.json"])
+        def clean_ct(a):
+            return sum(1 for w in c3["writes"] if w["arm"] == a and not w["problems"] and sum(1 for r in c3["reads"] if r["id"] == w["id"] and r["run"] and g3(r["run"], w["translation"]["restingStateWord"], w["translation"]["raisedStateWord"])) == 3)
+        claim("S3-22", "250-word clean rerun: clean write-ups (all three reads exact), skill arm of 6", 6, clean_ct("S"), ["transformation-2026-10-07/compression-250/rerun/result.json"])
+        claim("S3-23", "250-word clean rerun: clean write-ups, generic-review arm of 6", 5, clean_ct("G"), ["transformation-2026-10-07/compression-250/rerun/result.json"])
+        bad3 = [r for r in c3["reads"] if r["run"] and not g3(r["run"], w3[r["id"]]["translation"]["restingStateWord"], w3[r["id"]]["translation"]["raisedStateWord"])]
+        claim("S3-24", "250-word clean rerun: every wrong read is G-metallurgy-w1 with the known trajectory (4,5,5,4,3,1; resets 1,4,5; loss 92)", True, bool(bad3) and all(r["id"] == "G-metallurgy-w1" and r["run"]["finalQuantities"] == [4, 5, 5, 4, 3, 1] and sorted(r["run"]["resetPeriods"]) == [1, 4, 5] and r["run"]["lossTotal"] == 92 for r in bad3), ["transformation-2026-10-07/compression-250/rerun/result.json"])
+        aud = jl(os.path.join(S3, "compression-250", "rerun", "audit.json"))
+        claim("S3-25", "250-word clean rerun: sessions audited with no git command, no read outside the desk folder, and no answer string from anything but their own script", 48, sum(1 for a in aud if a["clean"]), ["transformation-2026-10-07/compression-250/rerun/audit.json"])
 
 # ------------------------------------------------------------------ what is NOT verified here (stated, not hidden)
 unverified = [

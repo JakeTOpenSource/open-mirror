@@ -1,0 +1,157 @@
+{
+ "id": "G-metamorphosis-w2",
+ "n": 1,
+ "run": {
+  "procedureSummary": "Step 1, feed: add that cycle's feed row to chambers 1 to 6. Chambers may go over their limit at this point.\nStep 2, carry forward: work through chambers 1 to 6 in order. If a chamber is over its holding limit, move the excess (mass minus limit) into the next chamber before checking that chamber. Excess from chamber 6 goes to the loss tally.\nStep 3, state check: use the masses after carry forward. A LARVAL chamber with mass at or above its upper mark becomes PUPAL. A PUPAL chamber with mass at or below its lower mark becomes LARVAL. Otherwise the state stays the same. Each chamber is checked once per cycle and every change is logged.\nStep 4, metabolism: work out every amount from the masses after carry forward, using the states just set, before moving anything. A LARVAL chamber loses floor(m/4) to the loss tally. A PUPAL chamber loses floor(m/2), which goes into chamber i-1 (chamber 1's amount goes to the loss tally). Then all amounts move at once. There is no carry forward afterwards, so overfull chambers stay overfull into the next cycle (and after cycle 5 they stay as they are).\nStep 5, moult: if the line total is strictly greater than 38, every chamber becomes floor(m/2). The removed mass, m - floor(m/2) per chamber, is added to the loss tally, and the cycle is logged.",
+  "openPoints": [
+   {
+    "point": "Halving rounding: 'halve every chamber, rounding down' could mean rounding down the mass kept or the mass removed.",
+    "assumption": "The kept mass is floor(m/2), so the removed mass m - floor(m/2) is the larger half when m is odd. This matters: odd masses occur in cycle 1 (7, 9, 3) and cycle 4 (9, 9, 7)."
+   },
+   {
+    "point": "Moult threshold boundary: is a total of exactly 38 'over 38'?",
+    "assumption": "No. The rule is strictly greater than 38. This applies in cycle 5, where the total after metabolism is exactly 38, so no moult happens in cycle 5."
+   },
+   {
+    "point": "Carry forward cascade: does excess received from the chamber before count towards the next chamber's excess in the same pass?",
+    "assumption": "Yes. The pass is sequential, chambers 1 to 6, so a chamber's own excess includes what it just received (for example, in cycle 1 excess goes chamber 2 to 3 to 4)."
+   },
+   {
+    "point": "Metabolism basis: which masses and states are used, and what if a chamber both gives and receives?",
+    "assumption": "The amounts come from the masses after carry forward and the states after the state check in the same cycle. They are computed simultaneously, so mass a chamber receives from chamber i+1 is not metabolised again in that cycle."
+   },
+   {
+    "point": "Line total checked for the moult.",
+    "assumption": "The total of the six chamber masses after metabolism. The loss tally is not included."
+   },
+   {
+    "point": "State check runs once per cycle.",
+    "assumption": "Each chamber gets one check per cycle against the post-carry mass. There is no second check after metabolism or moult."
+   }
+  ],
+  "cycleFigures": "Cycle 1: feed [3,12,9,7,5,4]; carry [3,8,12,6,7,4] (loss 0); states L,P,P,P,P,L; metabolism [7,10,9,6,4,3] (loss 1); moult FIRED, total 39>38 -> [3,5,4,3,2,1] total 18 (loss 22).\nCycle 2: feed [7,7,4,4,3,8]; carry [7,7,4,4,3,7] (loss 23); states P,P,L,P,L,P; metabolism [7,4,5,2,6,4] (loss 27); no moult, total 28 (loss 27).\nCycle 3: feed [11,8,8,2,6,10]; carry [10,8,9,2,6,7] (loss 30); states P,P,P,L,L,P; metabolism [9,8,5,2,8,4] (loss 36); no moult, total 36 (loss 36).\nCycle 4: feed [16,14,12,3,11,4]; carry [10,8,12,6,9,7] (loss 44); states P,P,P,P,P,P; metabolism [9,10,9,7,8,4] (loss 49); moult FIRED, total 47>38 -> [4,5,4,3,4,2] total 22 (loss 74).\nCycle 5: feed [4,11,10,6,7,2]; carry [4,8,12,6,8,2] (loss 74); states P,P,P,P,P,L; metabolism [6,10,9,7,4,2] (loss 76); no moult, total exactly 38, not over 38 (loss 76).",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "LARVAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting total 20 + all feed 94 = 114. End total 38 + loss tally 76 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "I ran the arithmetic with a short Python script at C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py and checked cycle 1 by hand; the results match. Two figures depend on choices the write-up leaves open. Cycle 5 ends at exactly 38, so reading the rule as 'at or above 38' would add a moult in cycle 5. In cycles 1 and 4, rounding down the removed half instead of the kept half would change the end figures."
+ },
+ "grade": {
+  "available": true,
+  "exactAllFields": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  }
+ }
+}

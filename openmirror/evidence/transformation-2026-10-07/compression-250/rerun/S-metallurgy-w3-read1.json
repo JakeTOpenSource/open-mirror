@@ -1,0 +1,161 @@
+{
+ "id": "S-metallurgy-w3",
+ "n": 1,
+ "run": {
+  "procedureSummary": "Step 1 Charge: add the cycle's table row to each crucible, with no capacity limit. Step 2 Overflow: go through positions 1 to 6 in order. Where a crucible holds more than its capacity, cut it to capacity and add the excess to the next crucible before checking that one, so overflow can carry down the line in a single pass. Excess from crucible 6 goes to slag. Step 3 State check, using the post-overflow quantities and each crucible's state from before this check: BASE with quantity >= upper mark becomes SUPERHEATED; SUPERHEATED with quantity <= lower mark becomes BASE; anything else stays as it is. Each crucible changes state at most once per check. Step 4 Draws: work out every draw from the post-state-check quantities first, then apply them all together. BASE draws floor(q/4) to slag. SUPERHEATED draws floor(q/2) to crucible i-1, except crucible 1, which sends it to slag. A crucible left over capacity stays that way until the next cycle's Step 2, or to the end after cycle 5. Step 5 Global reset: if the line total after draws is strictly greater than 38, each crucible keeps floor(q/2) and the rest goes to slag. Simulated with a short Python script (C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\cascade.py). I checked cycle 1 and the cycle 2 state changes by hand and they match the script.",
+  "openPoints": [
+   {
+    "point": "Overflow order: does excess that runs into the next crucible get checked again in the same pass?",
+    "assumption": "Yes. The pass runs 1 to 6 in order, so an overfilled downstream crucible spills on when its turn comes in that same pass (for example, cycle 1 cascaded 2->3->4->5)."
+   },
+   {
+    "point": "Draw basis: are draws figured on quantities before or after the other draws arrive?",
+    "assumption": "All draws come from the post-state-check quantities and are applied at the same time, as the write-up says ('all figured before moving'). Material that arrives by the return launder is not drawn again in the same step."
+   },
+   {
+    "point": "State used for draws",
+    "assumption": "The state just set in Step 3 of the same cycle."
+   },
+   {
+    "point": "Reset threshold boundary",
+    "assumption": "'Over 38' means strictly greater than 38. Cycle 5 ended at exactly 38, so no reset fired."
+   },
+   {
+    "point": "Reset rounding and where the remainder goes",
+    "assumption": "Each crucible keeps floor(q/2). Everything removed, including odd units, goes to slag."
+   },
+   {
+    "point": "Single transition per state check",
+    "assumption": "A crucible that just went BASE to SUPERHEATED is not tested against the lower mark in the same check, and the reverse also holds."
+   },
+   {
+    "point": "Slag tally vs loss tally",
+    "assumption": "The loss tally is the slag tally: overflow from crucible 6, BASE draws, crucible 1's SUPERHEATED draws, and reset removals."
+   }
+  ],
+  "cycleFigures": "Start: [3,6,6,2,2,1], slag 0. C1: charge [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] (slag 0); state [3,8,12,6,7,4] B,S,S,S,S,B; draws [7,10,9,6,4,3] (slag 1); reset fires (total 39) -> [3,5,4,3,2,1] (slag 22). C2: charge [7,7,4,4,3,8]; overflow [7,7,4,4,3,7] (slag 23); state [7,7,4,4,3,7] S,S,B,S,B,S; draws [7,4,5,2,6,4] (slag 27); no reset (total 28). C3: charge [11,8,8,2,6,10]; overflow [10,8,9,2,6,7] (slag 30); state [10,8,9,2,6,7] S,S,S,B,B,S; draws [9,8,5,2,8,4] (slag 36); no reset (total 36). C4: charge [16,14,12,3,11,4]; overflow [10,8,12,6,9,7] (slag 44); state [10,8,12,6,9,7] all S; draws [9,10,9,7,8,4] (slag 49); reset fires (total 47) -> [4,5,4,3,4,2] (slag 74). C5: charge [4,11,10,6,7,2]; overflow [4,8,12,6,8,2] (slag 74); state [4,8,12,6,8,2] S,S,S,S,S,B; draws [6,10,9,7,4,2] (slag 76); no reset (total 38, not over 38) -> end [6,10,9,7,4,2].",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "BASE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting melt 20 + charges 94 (15+17+17+24+18... per cycle: 20, 15, 17, 24, 18) = 114; end melt 38 (6+10+9+7+4+2) + slag 76 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "Script: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\cascade.py. Charges by cycle: 20, 15, 17, 24, 18 (total 94). The result depends on the boundary case at the end of cycle 5: the line total was exactly 38, so the reset did not fire. If 'over 38' were read as >= 38, the end figures would be halved."
+ },
+ "grade": {
+  "available": true,
+  "exactAllFields": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  }
+ }
+}

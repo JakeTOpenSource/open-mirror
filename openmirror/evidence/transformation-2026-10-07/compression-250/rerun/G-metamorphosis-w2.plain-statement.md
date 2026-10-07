@@ -1,0 +1,1 @@
+The resting state is LARVAL and the raised state is PUPAL. Masses move toward chamber 6. Each of the 5 cycles runs feed, carry forward, state check, metabolism and moult in that order, and every step finishes on all six chambers before the next starts. At the end the new person hands in the end masses, end states, state changes, moult cycles, loss tally and balance check.

@@ -1,0 +1,434 @@
+[
+ {
+  "session": "write-S:metallurgy-w1",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 0,
+  "answer_ts": "17:14:01",
+  "clean": true
+ },
+ {
+  "session": "read-3:S-metallurgy-w3",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:15:59",
+  "clean": true
+ },
+ {
+  "session": "read-3:S-metallurgy-w2",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 2,
+  "answer_ts": "17:16:17",
+  "clean": true
+ },
+ {
+  "session": "read-1:G-metallurgy-w2",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:16:37",
+  "clean": true
+ },
+ {
+  "session": "read-3:G-metamorphosis-w3",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:18:14",
+  "clean": true
+ },
+ {
+  "session": "write-S:metamorphosis-w1",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:14:18",
+  "clean": true
+ },
+ {
+  "session": "read-1:G-metamorphosis-w1",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:17:52",
+  "clean": true
+ },
+ {
+  "session": "read-3:G-metamorphosis-w2",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 3,
+  "answer_ts": "17:18:15",
+  "clean": true
+ },
+ {
+  "session": "write-G:metallurgy-w1",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:13:10",
+  "clean": true
+ },
+ {
+  "session": "read-2:S-metallurgy-w1",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:15:55",
+  "clean": true
+ },
+ {
+  "session": "read-1:G-metallurgy-w1",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:16:19",
+  "clean": true
+ },
+ {
+  "session": "read-2:G-metamorphosis-w3",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:18:09",
+  "clean": true
+ },
+ {
+  "session": "write-S:metamorphosis-w3",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 0,
+  "answer_ts": "17:14:15",
+  "clean": true
+ },
+ {
+  "session": "write-G:metallurgy-w2",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:14:39",
+  "clean": true
+ },
+ {
+  "session": "read-3:S-metamorphosis-w3",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:17:34",
+  "clean": true
+ },
+ {
+  "session": "read-3:G-metallurgy-w2",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:16:39",
+  "clean": true
+ },
+ {
+  "session": "read-3:S-metallurgy-w1",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:15:58",
+  "clean": true
+ },
+ {
+  "session": "read-2:S-metamorphosis-w3",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:17:34",
+  "clean": true
+ },
+ {
+  "session": "read-1:G-metamorphosis-w2",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:17:50",
+  "clean": true
+ },
+ {
+  "session": "read-2:S-metallurgy-w3",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 2,
+  "answer_ts": "17:16:18",
+  "clean": true
+ },
+ {
+  "session": "read-3:S-metamorphosis-w1",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:17:11",
+  "clean": true
+ },
+ {
+  "session": "write-G:metallurgy-w3",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 0,
+  "answer_ts": "17:13:05",
+  "clean": true
+ },
+ {
+  "session": "read-1:S-metamorphosis-w1",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:17:01",
+  "clean": true
+ },
+ {
+  "session": "read-1:G-metamorphosis-w3",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:18:02",
+  "clean": true
+ },
+ {
+  "session": "read-3:G-metamorphosis-w1",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:17:48",
+  "clean": true
+ },
+ {
+  "session": "read-2:S-metallurgy-w2",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:16:04",
+  "clean": true
+ },
+ {
+  "session": "read-2:G-metamorphosis-w2",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:18:00",
+  "clean": true
+ },
+ {
+  "session": "read-2:G-metallurgy-w3",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:16:53",
+  "clean": true
+ },
+ {
+  "session": "read-2:G-metamorphosis-w1",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:17:41",
+  "clean": true
+ },
+ {
+  "session": "read-1:S-metallurgy-w3",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:15:56",
+  "clean": true
+ },
+ {
+  "session": "write-S:metamorphosis-w2",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 0,
+  "answer_ts": "17:12:31",
+  "clean": true
+ },
+ {
+  "session": "read-1:G-metallurgy-w3",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:16:39",
+  "clean": true
+ },
+ {
+  "session": "read-2:G-metallurgy-w2",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 2,
+  "answer_ts": "17:16:58",
+  "clean": true
+ },
+ {
+  "session": "read-2:S-metamorphosis-w1",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:17:05",
+  "clean": true
+ },
+ {
+  "session": "write-G:metamorphosis-w2",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 0,
+  "answer_ts": "17:15:14",
+  "clean": true
+ },
+ {
+  "session": "write-S:metallurgy-w3",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 0,
+  "answer_ts": "17:14:00",
+  "clean": true
+ },
+ {
+  "session": "write-S:metallurgy-w2",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 0,
+  "answer_ts": "17:13:51",
+  "clean": true
+ },
+ {
+  "session": "read-3:S-metamorphosis-w2",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:17:22",
+  "clean": true
+ },
+ {
+  "session": "read-3:G-metallurgy-w3",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:16:55",
+  "clean": true
+ },
+ {
+  "session": "write-G:metamorphosis-w1",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:12:16",
+  "clean": true
+ },
+ {
+  "session": "read-1:S-metallurgy-w1",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:15:52",
+  "clean": true
+ },
+ {
+  "session": "read-1:S-metamorphosis-w3",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:17:19",
+  "clean": true
+ },
+ {
+  "session": "read-3:G-metallurgy-w1",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 0,
+  "answer_ts": "17:16:39",
+  "clean": true
+ },
+ {
+  "session": "read-2:S-metamorphosis-w2",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:17:22",
+  "clean": true
+ },
+ {
+  "session": "read-2:G-metallurgy-w1",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 0,
+  "answer_ts": "17:16:35",
+  "clean": true
+ },
+ {
+  "session": "write-G:metamorphosis-w3",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 0,
+  "answer_ts": "17:15:03",
+  "clean": true
+ },
+ {
+  "session": "read-1:S-metallurgy-w2",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:15:55",
+  "clean": true
+ },
+ {
+  "session": "read-1:S-metamorphosis-w2",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "17:17:19",
+  "clean": true
+ }
+]

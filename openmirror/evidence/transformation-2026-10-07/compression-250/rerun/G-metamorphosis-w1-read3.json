@@ -1,0 +1,161 @@
+{
+ "id": "G-metamorphosis-w1",
+ "n": 3,
+ "run": {
+  "procedureSummary": "1. Feed: add the cycle's feed row to each chamber; limits ignored at this step.\n2. Carry-forward: go through chambers 1 to 6 in order, one at a time. If a chamber is over its limit, cap it at the limit and add the excess to the next chamber, which may push that chamber over too. Chamber 6's excess is discarded and goes into the loss tally.\n3. State: check the masses after carry-forward. A LARVAL chamber at or above its upper mark becomes PUPAL. A PUPAL chamber at or below its lower mark becomes LARVAL. Each chamber is checked once per cycle, and every change is logged.\n4. Metabolism: all chambers work at the same time, using the masses from the end of step 3 and the states just set. A LARVAL chamber burns floor(m/4), which goes into the loss tally. A PUPAL chamber sends floor(m/2) to the chamber before it (i-1, toward the head). Chamber 1's share is discarded into the loss tally. Limits are ignored, so a chamber can stay over its limit until the next carry-forward.\n5. Moult: if the line total after metabolism is strictly above 38, every chamber becomes floor(m/2). The removed amount, m - floor(m/2), goes into the loss tally. The cycle is recorded as a moult cycle.\nLoss tally = chamber-6 carry discards + LARVAL burns + chamber-1 PUPAL discards + moult removals. I used a Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py. I also checked cycle 1 by hand.",
+  "openPoints": [
+   {
+    "point": "Which way 'passes half back one chamber' goes",
+    "assumption": "Back means toward the head (chamber i to chamber i-1), the opposite way to carry-forward. This matches the write-up saying chamber 1's share is discarded."
+   },
+   {
+    "point": "Rounding of a quarter and a half in metabolism",
+    "assumption": "The amount moved is rounded down: a quarter burned is floor(m/4), a half passed is floor(m/2), and the chamber keeps the rest."
+   },
+   {
+    "point": "Rounding when the moult halves a chamber",
+    "assumption": "The chamber becomes floor(m/2), and the removed m - floor(m/2) is discarded. The other reading (remove floor(m/2) and keep ceil(m/2)) gives a different result, but it only matters in cycles 1 and 4."
+   },
+   {
+    "point": "When the moult total is measured and what 'above 38' means",
+    "assumption": "The total is measured after metabolism, and the test is strict (total > 38). In cycle 5 the total is exactly 38, so the moult does not fire."
+   },
+   {
+    "point": "Which masses the state check uses, and how many times",
+    "assumption": "The state check uses the masses after carry-forward. Each chamber is tested once per cycle against the state it held at the start of step 3, so it cannot flip twice in one step. 'Routinely' is read as no extra condition."
+   },
+   {
+    "point": "Which state metabolism uses",
+    "assumption": "Metabolism uses the states as they stand after the step 3 update in the same cycle."
+   },
+   {
+    "point": "Chamber 6's carry-forward excess",
+    "assumption": "It is discarded and counted in the loss tally, since the tally covers everything discarded."
+   }
+  ],
+  "cycleFigures": "Cycle 1: feed [3,12,9,7,5,4]; carry [3,8,12,6,7,4] (no discard); state [L,P,P,P,P,L]; metabolism [7,10,9,6,4,3] total 39 (burns 0 and 1; passes 4,6,3,3); moult fires [3,5,4,3,2,1] total 18 (removed 21); cumulative loss 22.\nCycle 2: feed [7,7,4,4,3,8]; carry [7,7,4,4,3,7] (ch6 discards 1); state [P,P,L,P,L,P]; metabolism [7,4,5,2,6,4] total 28 (ch1 passes 3, discarded; burns 1 and 0); no moult [7,4,5,2,6,4]; cumulative loss 27.\nCycle 3: feed [11,8,8,2,6,10]; carry [10,8,9,2,6,7] (ch6 discards 3); state [P,P,P,L,L,P]; metabolism [9,8,5,2,8,4] total 36 (ch1 passes 5, discarded; burns 0 and 1); no moult [9,8,5,2,8,4]; cumulative loss 36.\nCycle 4: feed [16,14,12,3,11,4]; carry [10,8,12,6,9,7] (ch6 discards 8); state [P,P,P,P,P,P]; metabolism [9,10,9,7,8,4] total 47 (ch1 passes 5, discarded); moult fires [4,5,4,3,4,2] total 22 (removed 25); cumulative loss 74.\nCycle 5: feed [4,11,10,6,7,2]; carry [4,8,12,6,8,2] (no discard); state [P,P,P,P,P,L]; metabolism [6,10,9,7,4,2] total 38 (ch1 passes 2, discarded; ch6 burns 0); no moult, since 38 is not above 38; final [6,10,9,7,4,2]; cumulative loss 76.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "LARVAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Start 20 + all feed 94 = 114. End 38 (6+10+9+7+4+2) + loss tally 76 = 114. The balance holds. Loss tally breakdown: chamber-6 carry discards 12 (1+3+8), LARVAL burns 3 (1+1+1), chamber-1 PUPAL discards 15 (3+5+5+2), moult removals 46 (21+25).",
+  "usedScript": true,
+  "notes": "I used a Python script for the arithmetic: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\sim.py, the only file I created. It stays inside the desk folder, and I ran no git. I checked cycle 1 by hand and it matches the script. The figures depend on the assumptions listed under open points. The one most likely to change them is the moult rounding (keep floor or keep ceil). Under the other reading the cycle 1 and cycle 4 results change, and so does everything after them."
+ },
+ "grade": {
+  "available": true,
+  "exactAllFields": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  }
+ }
+}

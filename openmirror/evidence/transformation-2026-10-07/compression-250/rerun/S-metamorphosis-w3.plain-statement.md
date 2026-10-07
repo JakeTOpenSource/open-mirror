@@ -1,0 +1,17 @@
+Six positions in a row, numbered 1 to 6; position 1 is first (upstream), position 6 is last (downstream). Each position holds an amount that is a whole number and never negative. Each position has a fixed capacity, an upper trigger and a lower trigger, with lower < upper <= capacity. Each position is in one of two states, the resting state or the raised state; all positions start in the resting state. There is one global limit and one running loss tally, which starts at 0.
+
+The process runs for exactly 5 cycles. Each cycle has five steps, always in this order, and each step finishes for all six positions before the next step starts.
+
+Step 1 (add): each position's amount increases by that cycle's table amount for that position. Capacity is not enforced; an amount may exceed capacity after this step.
+
+Step 2 (overflow): handle positions one at a time in order 1, 2, 3, 4, 5, 6. If a position's amount is above its capacity, the excess (amount minus capacity) is added to the next position (n+1) and the position's amount becomes exactly its capacity. Excess from position 6 is added to the loss tally. Because handling is in order, excess from one position arrives at the next before that one is handled, so it can push the next over capacity in the same step, and so on down the line.
+
+Step 3 (state check): using each position's amount after step 2: a resting position whose amount is greater than or equal to its upper trigger becomes raised; a raised position whose amount is less than or equal to its lower trigger becomes resting. In every other case the state does not change; a position between the triggers keeps whatever state it had. Record every change as (cycle, position, old state, new state). A position changes at most once per cycle.
+
+Step 4 (removal): first compute each position's amount from its amount at the start of this step: resting = floor(amount / 4); raised = floor(amount / 2). Compute all six before changing anything, then apply all at once: every position's amount decreases by its own computed amount; a resting position's amount is added to the loss tally; a raised position's amount is added to the position immediately upstream (n-1); if position 1 is raised, its amount is added to the loss tally. Capacity is not enforced in this step; a position may exceed capacity after receiving, and that is corrected only at the next cycle's step 2 (never, if it happens in cycle 5).
+
+Step 5 (global reset): add up all six amounts. If the total is strictly greater than the global limit, every position's amount becomes floor(amount / 2), every removed amount is added to the loss tally, and record that a reset happened in this cycle. If the total is equal to the limit or less, nothing happens.
+
+After cycle 5, the output is: each position's final amount, in order 1 to 6; each position's final state, in order 1 to 6; the complete list of state changes as (cycle, position, old state, new state); the list of cycles in which a global reset happened; the final loss tally; and the balance check: (sum of starting amounts) + (sum of all table amounts) must equal (sum of final amounts) + loss tally.
+
+Data. Capacity, positions 1 to 6: 10, 8, 12, 6, 9, 7. Upper trigger: 7, 6, 9, 5, 7, 5. Lower trigger: 3, 2, 4, 2, 3, 2. Starting amount: 3, 6, 6, 2, 2, 1. Global limit: 38. Table (rows are cycles 1 to 5, columns positions 1 to 6): cycle 1: 0, 6, 3, 5, 3, 3; cycle 2: 4, 2, 0, 1, 1, 7; cycle 3: 4, 4, 3, 0, 0, 6; cycle 4: 7, 6, 7, 1, 3, 0; cycle 5: 0, 6, 6, 3, 3, 0.

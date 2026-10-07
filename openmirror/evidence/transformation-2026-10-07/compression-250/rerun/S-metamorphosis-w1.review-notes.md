@@ -1,0 +1,19 @@
+- Word count: final explanation is 249 words, measured two ways (wc -w, and splitting on spaces and punctuation so each number counts as one word). Both gave 249. Earlier drafts came to 381, 309, 292, 275, 266, 251 and 260, and were cut down to fit.
+- Banned-word scan: a case-insensitive substring search found none of these in the final text: cell, level, mode, normal, elevated, period, intake, spill, release, purge, lost, abstract, metaphor, analog, comparison, represent, correspond, stands for.
+- Numbers: the 6 limits, 6 upper marks, 6 lower marks, 6 starting amounts, the global limit 38 and all 30 feed entries were checked against the engineer's data, row by row. The final text has no end figures, totals or results.
+- Edge cases found by simulation, with no results put in the text: a scratch run (sim.py in the desk folder) showed two edge cases that really happen in this data. First, the line total lands exactly on 38 in one cycle. Second, some chambers end cycle 5 above their limit. I made both explicit: '38 or under: nothing', and 'after cycle 5, none' for the overfill correction.
+- Gap fixed, rounding on moult: an early draft said 'shares round down' for everything. That would make a reader round the discarded half down. The process actually rounds the kept half down (floor(level/2) stays), so the discarded half rounds up on odd amounts. It now says 'each chamber keeps half, rounded down, the rest discarded'.
+- Insect-sense trap fixed, moult and state: in a real insect, a moult is a change of stage, so a reader might reset or change states at a moult. Added 'states unchanged'.
+- Insect-sense trap fixed, pupae feeding: real pupae do not feed. Added 'PUPAL chambers too' to the feed step.
+- Insect-sense trap fixed, going back to larva: real metamorphosis does not reverse. The text says PUPAL 'returns to LARVAL, routinely' at or below the lower mark.
+- Insect-sense trap fixed, where mass goes: real larvae gain mass and real pupae send nothing anywhere. The text states what the line does: LARVAL burns off a quarter, and PUPAL passes half back one chamber, with chamber 1's half discarded.
+- Gap fixed, hysteresis: between the marks the state stays as it is ('Otherwise unchanged').
+- Gap fixed, number of cycles: the run is exactly five cycles ('Five cycles').
+- Gap fixed, step order: each step finishes on all chambers before the next starts.
+- Gap fixed, feed table layout: added 'Lists run 1 to 6' and 'cycle 1 first' so the rows and columns of the feed table can be recovered.
+- Gap fixed, simultaneous shares: the metabolise shares must all be worked out before any mass moves ('figure all shares before moving any'). An earlier wording, 'figure every share first', could be misread.
+- Gap fixed, positions: 'position' is now tied to chamber number in the Report line ('chamber position').
+- Gap fixed, moult threshold: the moult needs strictly more than 38. Both sides are stated: 'over 38' and '38 or under: nothing'.
+- Implicit but recoverable: the loss tally starts at 0 and amounts are never negative. Both are implied ('loss tally (all mass discarded or burned off)' and 'whole units') rather than stated, to stay under the cap. A cascade of overflow in carry forward is covered by 'in turn ... possibly overfilling it'.
+- File clash: while I was working, the shared scratch file expl.txt in the desk folder was overwritten with a different draft. It looks like another process is using the same folder. I treated that content as data, did not use it, and moved my final text to expl-mine-a7.txt in the same folder. The delivered document is my own text, verified there.
+- No git used. No file outside C:\Users\Jaket\AppData\Local\Temp\om\desk-250 was read or written, apart from the SKILL.md inside it.

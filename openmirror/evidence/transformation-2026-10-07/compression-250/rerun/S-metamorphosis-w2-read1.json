@@ -1,0 +1,169 @@
+{
+ "id": "S-metamorphosis-w2",
+ "n": 1,
+ "run": {
+  "procedureSummary": "Feed: add that cycle's row to every chamber regardless of state (PUPAL too), ignoring holding limits. Overflow: process chambers 1 to 6 in order; if a chamber's mass exceeds its holding limit, the excess moves into the next chamber before that chamber is processed; excess from chamber 6 is discarded and added to the loss tally. Check: using post-overflow masses, a LARVAL chamber with mass at or above its upper mark becomes PUPAL; a PUPAL chamber with mass at or below its lower mark becomes LARVAL; otherwise no change; each change is logged with cycle and chamber. Turnover: from the post-check masses and states, compute every amount first (floor): LARVAL loses floor(m/4), which is metabolised and goes to the loss tally; PUPAL loses floor(m/2), which moves to the chamber before it (chamber i to i-1), and chamber 1's amount is discarded to the loss tally; then apply all amounts at once, ignoring limits (any excess waits for the next Overflow). Moult: if the line total after turnover is strictly over 38, every chamber becomes floor(m/2), and the removed amount (m - floor(m/2)) goes to the loss tally; states do not change. Report after cycle 5 with no further clearing of excess. All arithmetic was done with a short Python script (C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\line.py), and I checked cycle 1 by hand.",
+  "openPoints": [
+   {
+    "point": "Which mass Check uses",
+    "assumption": "Mass after Overflow, as the write-up's step order sets out."
+   },
+   {
+    "point": "Which states Turnover uses",
+    "assumption": "States after this cycle's Check, so a chamber that changes state turns over under its new state in the same cycle."
+   },
+   {
+    "point": "Moult threshold boundary",
+    "assumption": "'Over 38' means strictly greater than 38. In cycle 5 the total is exactly 38, so the moult did not fire."
+   },
+   {
+    "point": "Moult halving rounding and amount removed",
+    "assumption": "New mass is floor(m/2), and the removed amount m - floor(m/2) (the larger half for odd masses) is discarded to the loss tally."
+   },
+   {
+    "point": "Turnover rounding",
+    "assumption": "floor(m/4) for LARVAL and floor(m/2) for PUPAL, both computed from masses before any turnover transfer is applied."
+   },
+   {
+    "point": "Overflow cascade",
+    "assumption": "Excess passed into chamber i+1 counts toward that chamber's own excess when its turn comes, so the excess can carry along several chambers in one pass."
+   },
+   {
+    "point": "Excess above holding limits at end of cycle 5",
+    "assumption": "Not cleared, as the write-up says. End masses of chamber 2 (10 > 8) and chamber 4 (7 > 6) are reported as they are."
+   },
+   {
+    "point": "Moult and states",
+    "assumption": "The moult changes masses only. States are next re-evaluated at the following cycle's Check."
+   },
+   {
+    "point": "Loss tally contents",
+    "assumption": "Sum of chamber-6 overflow discards, LARVAL metabolised amounts, chamber-1 PUPAL reabsorption discards, and moult removals."
+   }
+  ],
+  "cycleFigures": "C1: Feed [3,12,9,7,5,4]; Overflow [3,8,12,6,7,4] (loss 0); Check [3,8,12,6,7,4] states L,P,P,P,P,L; Turnover [7,10,9,6,4,3] (loss 1); Moult fired (total 39>38) [3,5,4,3,2,1] (loss 22).\nC2: Feed [7,7,4,4,3,8]; Overflow [7,7,4,4,3,7] (loss 23); Check [7,7,4,4,3,7] states P,P,L,P,L,P; Turnover [7,4,5,2,6,4] (loss 27); Moult not fired (total 28) [7,4,5,2,6,4] (loss 27).\nC3: Feed [11,8,8,2,6,10]; Overflow [10,8,9,2,6,7] (loss 30); Check [10,8,9,2,6,7] states P,P,P,L,L,P; Turnover [9,8,5,2,8,4] (loss 36); Moult not fired (total 36) [9,8,5,2,8,4] (loss 36).\nC4: Feed [16,14,12,3,11,4]; Overflow [10,8,12,6,9,7] (loss 44); Check [10,8,12,6,9,7] states P,P,P,P,P,P; Turnover [9,10,9,7,8,4] (loss 49); Moult fired (total 47>38) [4,5,4,3,4,2] (loss 74).\nC5: Feed [4,11,10,6,7,2]; Overflow [4,8,12,6,8,2] (loss 74); Check [4,8,12,6,8,2] states P,P,P,P,P,L; Turnover [6,10,9,7,4,2] (loss 76); Moult not fired (total exactly 38) [6,10,9,7,4,2] (loss 76).",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "LARVAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Start mass 20 + feed 94 = 114; end mass 38 + loss tally 76 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "Cycle 5 lands exactly on the moult boundary: the total after turnover is 38, so whether the moult fires depends on reading 'over 38' as strictly greater. Under 'at or over 38' the moult would also fire in cycle 5. The end masses would then be [3,5,4,3,2,1] and the loss tally 95. At the end, chamber 2 (10 against a limit of 8) and chamber 4 (7 against a limit of 6) are above their holding limits, which the write-up allows. The script is at C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-250\\line.py."
+ },
+ "grade": {
+  "available": true,
+  "exactAllFields": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  }
+ }
+}

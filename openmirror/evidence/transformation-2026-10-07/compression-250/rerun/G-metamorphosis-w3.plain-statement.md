@@ -1,0 +1,1 @@
+The explanation is exactly 250 words by wc -w, numbers included. It contains every required number and none of the banned words, and its Report paragraph is a template with no results. I did not run the five cycles, so no end results were checked.
