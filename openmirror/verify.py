@@ -123,9 +123,10 @@ claim("V-8", "compiled report embeds all 20 operator documents byte-identically"
       sum(1 for k in ORDER for p in (os.path.join(EV, "documents", f"{k}.md"), os.path.join(EV, "study2-lossy-v2", "write-ups-as-given", f"{k}.md")) if rd(p).rstrip() in full), ["OPEN-MIRROR-FULL-REPORT-2026-10-06.md"])
 
 # ------------------------------------------------------------------ accounting (stated in COHERENCE-STUDY and the compiled summary)
-rows = re.findall(r"\| (?:Red-team|Explanation|Coherence|Study)[^|\n]*\| (\d+) \| ~?([\d.]+)M", full)
-claim("A-1", "accounting table rows sum to the stated session total", int(re.search(r"\| \*\*Total\*\* \| \*\*(\d+)\*\*", full).group(1)), sum(int(a) for a, _ in rows), ["OPEN-MIRROR-FULL-REPORT-2026-10-06.md"])
-claim("A-2", "accounting table rows sum to the stated token total (0.1M tolerance)", True, abs(float(re.search(r"\| \*\*Total\*\* \| \*\*\d+\*\* \| \*\*~([\d.]+)M", full).group(1)) - sum(float(b) for _, b in rows)) < 0.1, ["OPEN-MIRROR-FULL-REPORT-2026-10-06.md"])
+acct = full[full.index("Session and token accounting"):]
+rows = re.findall(r"\| (?:Red-team|Explanation|Coherence|Study)[^|\n]*\| (\d+) \| ~?([\d.]+)M", acct)
+claim("A-1", "accounting table rows sum to the stated session total", int(re.search(r"\| \*\*Total\*\* \| \*\*(\d+)\*\*", acct).group(1)), sum(int(a) for a, _ in rows), ["OPEN-MIRROR-FULL-REPORT-2026-10-06.md"])
+claim("A-2", "accounting table rows sum to the stated token total (0.1M tolerance)", True, abs(float(re.search(r"\| \*\*Total\*\* \| \*\*\d+\*\* \| \*\*~([\d.]+)M", acct).group(1)) - sum(float(b) for _, b in rows)) < 0.1, ["OPEN-MIRROR-FULL-REPORT-2026-10-06.md"])
 
 # ------------------------------------------------------------------ study 3 (transformation)
 S3 = os.path.join(HERE, "evidence", "transformation-2026-10-07")
