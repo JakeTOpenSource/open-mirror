@@ -6,24 +6,24 @@
    "bytes": 6
   },
   "CHANGELOG.md": {
-   "sha256": "1af23019e33117462232b6836b7846df511bb02142cada2f0a47fa1710f4ec11",
-   "bytes": 12824
+   "sha256": "b972baa6620d2c25c9e541560644edd3d17ad583145877201a63ae02e37a3f6c",
+   "bytes": 13476
   },
   "COHERENCE-STUDY.md": {
-   "sha256": "37f323afbdcefc37c955a46f57f5fb98e24b1538f7bbdb6837b6f7d4db402304",
-   "bytes": 13516
+   "sha256": "00580b07b8a266caa5b929f9038e5403b964c1a5ee8109f805b174b29f024964",
+   "bytes": 13580
   },
   "OPEN-MIRROR-FULL-REPORT-2026-10-06.md": {
-   "sha256": "2701aeaa7a54c77898cbd5cf2c467035475548b0febb4836fd138da76ec14a71",
-   "bytes": 580847
+   "sha256": "f0d42353a5dcd5eec1705d9c4f64f0ac7a186496dd370c44d5304aee11c8c9b3",
+   "bytes": 594402
   },
   "OPEN-MIRROR-SKILL-v1.4.3-COPY-ME.md": {
    "sha256": "74c9657f5959569e06add394e7763b71d1c63e3f989135475019696772423966",
    "bytes": 13527
   },
   "README.md": {
-   "sha256": "018ccddf5c896105cbd3aa32381a6192bc18e9a8daaca77958cdd1dda2b87f69",
-   "bytes": 5849
+   "sha256": "370c1de458a8df570c3a2901f6e7bc7cc46e153ea1390421d179132bdd5c7b87",
+   "bytes": 6431
   },
   "RED-TEAM-REPORT-R2.md": {
    "sha256": "74767dd278d5036e6ba5531358741ce402e36b0bdd32c6b0725312336603f558",
@@ -44,6 +44,10 @@
   "TRANSFORMATION-STUDY-PLAN.md": {
    "sha256": "b408c2bf5c913510de9488109d8ebdfa14531c01928afff4f55702a02b970762",
    "bytes": 6798
+  },
+  "TRANSFORMATION-STUDY.md": {
+   "sha256": "2a789f1c02f55ef31b7dfe9605ad6abf75ae65cd7d85cfcf899a3db15f0595c0",
+   "bytes": 5352
   },
   "drafts/SKILL-v1.4-first-draft.md": {
    "sha256": "4ba5099111b096799287a611ef2a767bbbb8e47b5d97126a16af479915894440",
@@ -913,6 +917,330 @@
    "sha256": "15fa46ae51f81435fe52ed0acbbbd5c4897564b4cf87e6e72b177a4a3928cad0",
    "bytes": 19190
   },
+  "evidence/transformation-2026-10-07/README.md": {
+   "sha256": "fce2c032eb8912fb395187ea0de866518edcee224596e28c454874533f22fe32",
+   "bytes": 753
+  },
+  "evidence/transformation-2026-10-07/RESULTS.md": {
+   "sha256": "8f344fa274ad2d4f265a85c2f1bd8679460c99037ac415178917c458f9fbd2b5",
+   "bytes": 2590
+  },
+  "evidence/transformation-2026-10-07/checklist/W0-ballast.json": {
+   "sha256": "4d737ad0928a940cdf1957b2824aa49926d6e26044b8092d04187dd617fee9e0",
+   "bytes": 3483
+  },
+  "evidence/transformation-2026-10-07/checklist/W0-concrete.json": {
+   "sha256": "d13bdb68c1faafd5f312d069865244bb2b323fcc1a0c2480e51031bc3f1dc9f3",
+   "bytes": 3514
+  },
+  "evidence/transformation-2026-10-07/checklist/W0-electrical.json": {
+   "sha256": "1df1a142a35d79b465ca805e6caa71a464fcc0c07fa361a040ba28cf094e2f47",
+   "bytes": 3469
+  },
+  "evidence/transformation-2026-10-07/checklist/W0-goodhart.json": {
+   "sha256": "f8c67e204e1866cb598ae11e1271b967ddeae729928913168db5f42c7f30b3d1",
+   "bytes": 3540
+  },
+  "evidence/transformation-2026-10-07/checklist/W0-lagrangian.json": {
+   "sha256": "93161ef681904f4978493956a11e807c15934982771d0f6e6bbd893b91703027",
+   "bytes": 3429
+  },
+  "evidence/transformation-2026-10-07/checklist/W0-metallurgy.json": {
+   "sha256": "0f534d7bbd648d0fa24dcf6a59ecd0d353e18b12a82e81f456cd584afa8e6c11",
+   "bytes": 3300
+  },
+  "evidence/transformation-2026-10-07/checklist/W0-metamorphosis.json": {
+   "sha256": "7a30e75711c2f5d97b1cf105f8ac3dbf060ce13d54679a8e22e0d0d3f950f361",
+   "bytes": 3515
+  },
+  "evidence/transformation-2026-10-07/checklist/W0-rag.json": {
+   "sha256": "2e69d555f5b1b8f94f83cfb3d2187bf09b1dbc69c97453130ac6c2ae29aa829e",
+   "bytes": 3353
+  },
+  "evidence/transformation-2026-10-07/checklist/W0-treatment.json": {
+   "sha256": "9a5e8460d3f7364c8481b429e29fc8cfc6aa664d8609c5773ebd46a164d8bd0d",
+   "bytes": 3319
+  },
+  "evidence/transformation-2026-10-07/checklist/W0-xylem.json": {
+   "sha256": "ec50102905d3f15e4b7f3badad817b7444f609f17e0ac53707d605ac8f810309",
+   "bytes": 3407
+  },
+  "evidence/transformation-2026-10-07/checklist/W1-ballast.json": {
+   "sha256": "8b3c24d5594702cd83aa84442673b6ec276cfdc6339dbefe7e8d2784971e8b80",
+   "bytes": 3646
+  },
+  "evidence/transformation-2026-10-07/checklist/W1-concrete.json": {
+   "sha256": "341651a3ebfc4a410635fe495c84aa325193a61e455041832e3e12d837e343cd",
+   "bytes": 3366
+  },
+  "evidence/transformation-2026-10-07/checklist/W1-electrical.json": {
+   "sha256": "45476a2755b27fa226498bded5370cd5ac9a39cdf2144820bc6899d9255317b3",
+   "bytes": 3520
+  },
+  "evidence/transformation-2026-10-07/checklist/W1-goodhart.json": {
+   "sha256": "ade9bf6ee489fd56254f40df34a392dc5e857066401ed726d1d5135423436795",
+   "bytes": 3636
+  },
+  "evidence/transformation-2026-10-07/checklist/W1-lagrangian.json": {
+   "sha256": "80c527d2c702b999644969515a5bbfef92fd9bd1d3d6763bc17e0a4afa3494b3",
+   "bytes": 3503
+  },
+  "evidence/transformation-2026-10-07/checklist/W1-metallurgy.json": {
+   "sha256": "0bf0b2d4639cbf46d5347043a9854d8663eb849ae25aebd5cea66d39471f0d22",
+   "bytes": 3498
+  },
+  "evidence/transformation-2026-10-07/checklist/W1-metamorphosis.json": {
+   "sha256": "5543cb436058a8bd0c2d215c128d3c0368bf36a59493c126c61487bb42a64cfd",
+   "bytes": 3462
+  },
+  "evidence/transformation-2026-10-07/checklist/W1-rag.json": {
+   "sha256": "b09c32a8377f3d61f3098631812d166f936f1381611c0da8d583908a4a3944dd",
+   "bytes": 3552
+  },
+  "evidence/transformation-2026-10-07/checklist/W1-treatment.json": {
+   "sha256": "50f841b937bbcc27f3b61f34c1f041bb5e5c1f910657622923a3923afd3eacd7",
+   "bytes": 3386
+  },
+  "evidence/transformation-2026-10-07/checklist/W1-xylem.json": {
+   "sha256": "5fb1514c1e3eb9bf5767bf74150c4829557ee3db2114f57824118b485d8925a8",
+   "bytes": 3537
+  },
+  "evidence/transformation-2026-10-07/grade.py": {
+   "sha256": "433f8ff471e46b36b6cce648d9f2ed6f73fd459d4ba41378e40c1f7d834d8f2f",
+   "bytes": 6943
+  },
+  "evidence/transformation-2026-10-07/phase1-result.json": {
+   "sha256": "fb20a415c4ef4e2ec026359888544173db38796a3b89a19581b909fa9a6cb0ce",
+   "bytes": 85915
+  },
+  "evidence/transformation-2026-10-07/phase2-result.json": {
+   "sha256": "a26196d71a39297557d0a8186f3e5b71192c0af5be13d16382dcdcc537fd11f9",
+   "bytes": 93481
+  },
+  "evidence/transformation-2026-10-07/phase3-result.json": {
+   "sha256": "2effc12c6b7f2886a49e030178e0cee472647203fd436719a5a5261a1cb1f4e6",
+   "bytes": 74378
+  },
+  "evidence/transformation-2026-10-07/reads/ballast-1.json": {
+   "sha256": "7e998c4b6ff13cdbc99baf0a07add564d7aaa6010ca73c0161770e2b8fbe1342",
+   "bytes": 6815
+  },
+  "evidence/transformation-2026-10-07/reads/concrete-1.json": {
+   "sha256": "5a14ff53a6109f35589d740b02153c0c8a8f2ef1dbe72682f675a6c00c392417",
+   "bytes": 6487
+  },
+  "evidence/transformation-2026-10-07/reads/electrical-1.json": {
+   "sha256": "285502bd69cbe95e626c0af83d67531b85b7c4b43282c2fb2bd0788d0f3fb87a",
+   "bytes": 5955
+  },
+  "evidence/transformation-2026-10-07/reads/goodhart-1.json": {
+   "sha256": "2aeaf35c89313f538492889af459e7c18918ee10ac31fb036be252920213224b",
+   "bytes": 7246
+  },
+  "evidence/transformation-2026-10-07/reads/lagrangian-1.json": {
+   "sha256": "ff0d8b467835c2455283e7d85a7224f781e53f0a5af89195b1a13766d99339be",
+   "bytes": 5895
+  },
+  "evidence/transformation-2026-10-07/reads/metallurgy-1.json": {
+   "sha256": "2d4fac851a9bcd5a62348d2ee7cc8fc8325f16d740ccd8163ea580bc2e0d143e",
+   "bytes": 6961
+  },
+  "evidence/transformation-2026-10-07/reads/metallurgy-2.json": {
+   "sha256": "bda7ec0fd379d9c621c08d4bb7220ff035242f2bbbbc2e88cdc05e899069d380",
+   "bytes": 6457
+  },
+  "evidence/transformation-2026-10-07/reads/metallurgy-3.json": {
+   "sha256": "e6208af2bab21ef18e781149b86c5da725bbfb379221274d8143cd9161285f66",
+   "bytes": 6833
+  },
+  "evidence/transformation-2026-10-07/reads/metamorphosis-1.json": {
+   "sha256": "5bafc2c9f0b62caa7d5bda25ae0323367cef0541a6537ab12736ba831032bb18",
+   "bytes": 6704
+  },
+  "evidence/transformation-2026-10-07/reads/metamorphosis-2.json": {
+   "sha256": "5907d1a4c282e75c32ace60979836fbda5d0f53ba2d44da772c4f0b57d8351d5",
+   "bytes": 6530
+  },
+  "evidence/transformation-2026-10-07/reads/metamorphosis-3.json": {
+   "sha256": "49c6ebb8ee64cf17ccf61a1eb524f0d5f6d2f9580b1fac611ab6d71316a8db92",
+   "bytes": 6503
+  },
+  "evidence/transformation-2026-10-07/reads/rag-1.json": {
+   "sha256": "262a1ae230579ffda81f04afdf786deaa67a690cd78974e095828fc3cca9b495",
+   "bytes": 7018
+  },
+  "evidence/transformation-2026-10-07/reads/treatment-1.json": {
+   "sha256": "6dd394f01af9f6f366719edd72f2a3c0e6e984a734f4720eb4f23e5a1536c253",
+   "bytes": 6205
+  },
+  "evidence/transformation-2026-10-07/reads/xylem-1.json": {
+   "sha256": "80578a2f1952b0625cf2bbe8424ab6bdc2f8a787b20a8fad3621b8f64bd77ca6",
+   "bytes": 6305
+  },
+  "evidence/transformation-2026-10-07/rule-checklist.json": {
+   "sha256": "b3834777b4b9fdd85ac026d3d8378cfc90ad47e0ebc178d0f3e9cc2ce2b86e3e",
+   "bytes": 3755
+  },
+  "evidence/transformation-2026-10-07/w1-plain-statements/ballast.md": {
+   "sha256": "2330b6df1b99e4f58632a28f35c218d5723209f5fb178951c7de0f5dfc2243b1",
+   "bytes": 2941
+  },
+  "evidence/transformation-2026-10-07/w1-plain-statements/concrete.md": {
+   "sha256": "1cc57d309ce8dbe11a780b68d2976363d1602b4d39ab41656c6af04f724a5d17",
+   "bytes": 2600
+  },
+  "evidence/transformation-2026-10-07/w1-plain-statements/electrical.md": {
+   "sha256": "67b8f2438ecb5270c8206c455c4428c27a11b007a5dcba087be4cabd227f1e21",
+   "bytes": 3098
+  },
+  "evidence/transformation-2026-10-07/w1-plain-statements/goodhart.md": {
+   "sha256": "150cc78bac4b101f3f312e50112cfcaee1340a02b473e06d05de8e834c4741a2",
+   "bytes": 3027
+  },
+  "evidence/transformation-2026-10-07/w1-plain-statements/lagrangian.md": {
+   "sha256": "44bc4a0a9e2ff0cb5098e885f0c76988a41af6b89cc24fd01b95e8203191dee3",
+   "bytes": 3082
+  },
+  "evidence/transformation-2026-10-07/w1-plain-statements/metallurgy.md": {
+   "sha256": "888e1c368b89a6726ed01eda4e812596794ae513807e5d619a897f7a1806c9fe",
+   "bytes": 3145
+  },
+  "evidence/transformation-2026-10-07/w1-plain-statements/metamorphosis.md": {
+   "sha256": "a03ea67aa105a7d63cf4a7be040a7211605ea70743658666075895ad721d8ae4",
+   "bytes": 3149
+  },
+  "evidence/transformation-2026-10-07/w1-plain-statements/rag.md": {
+   "sha256": "e19f0c65116e4bdec8dbd9a5707f9a433798dc47663f56920754a142f0722ae3",
+   "bytes": 2800
+  },
+  "evidence/transformation-2026-10-07/w1-plain-statements/treatment.md": {
+   "sha256": "93cdd40bc8d5e6b06a2fde6c5150b030d275da513cfadc7f2b473cf7c39843fa",
+   "bytes": 3260
+  },
+  "evidence/transformation-2026-10-07/w1-plain-statements/xylem.md": {
+   "sha256": "84e83da53055482c80dd16bec2d36deb55ff214cb1507b0444a1368cfd767f01",
+   "bytes": 3403
+  },
+  "evidence/transformation-2026-10-07/w1-self-checks/ballast.md": {
+   "sha256": "44a56ac35d68ebbb2b4c94c57750ba93a6c897b18488762ee8152302457556e4",
+   "bytes": 2968
+  },
+  "evidence/transformation-2026-10-07/w1-self-checks/concrete.md": {
+   "sha256": "219608b88241590e145536c9b7ef642b9be2c024aa15cf5e67e9e16e345bcc23",
+   "bytes": 2440
+  },
+  "evidence/transformation-2026-10-07/w1-self-checks/electrical.md": {
+   "sha256": "916857e8064386f3366085203991491e4539a3cb9c65f4ee916c7d4f7f1d47c8",
+   "bytes": 3766
+  },
+  "evidence/transformation-2026-10-07/w1-self-checks/goodhart.md": {
+   "sha256": "804c48d8be8d3dbb181505e1c28718e21dab26f953f217b455c66b250cb084c2",
+   "bytes": 2916
+  },
+  "evidence/transformation-2026-10-07/w1-self-checks/lagrangian.md": {
+   "sha256": "44b7b55224866d3829dc94e9bdaa60be1d22a70c90a210693de31836800ff911",
+   "bytes": 3077
+  },
+  "evidence/transformation-2026-10-07/w1-self-checks/metallurgy.md": {
+   "sha256": "3dfe462d4cd62e2d25f900f4c26d955a7fefe6b9c76c810d5a86a6f008a50fb3",
+   "bytes": 3428
+  },
+  "evidence/transformation-2026-10-07/w1-self-checks/metamorphosis.md": {
+   "sha256": "ae7743e1cff0c6f62cebb865154388056def6cd8cc8dc3bf36c8a955a3d115f5",
+   "bytes": 2667
+  },
+  "evidence/transformation-2026-10-07/w1-self-checks/rag.md": {
+   "sha256": "2ae753d903e899102465b448ca797b4cec4704b42720063513c2f29f621c098d",
+   "bytes": 2656
+  },
+  "evidence/transformation-2026-10-07/w1-self-checks/treatment.md": {
+   "sha256": "c3c66405d2bacbee9828e8b9d0a17e00a24d4d8f4a66b9534e5221dc28ba44e8",
+   "bytes": 2937
+  },
+  "evidence/transformation-2026-10-07/w1-self-checks/xylem.md": {
+   "sha256": "a495c6c152807c286e1078b2e326d4553f339935324ca2da2c359503aa8fcfd8",
+   "bytes": 3237
+  },
+  "evidence/transformation-2026-10-07/w1-write-ups/ballast.md": {
+   "sha256": "40e5d0e1d762b3af5c6ff5407346fbb19d117358ad1ec98bec7d77d85272169e",
+   "bytes": 2190
+  },
+  "evidence/transformation-2026-10-07/w1-write-ups/ballast.meta.json": {
+   "sha256": "045b6e9988dada5927e00c3c139df45866e393f2546b1832c66ad8bbf609dec7",
+   "bytes": 84
+  },
+  "evidence/transformation-2026-10-07/w1-write-ups/concrete.md": {
+   "sha256": "f30ea38ce9d29cf129a3e184f895aa73f7b523b4409e0e7422f833743e815e0c",
+   "bytes": 2026
+  },
+  "evidence/transformation-2026-10-07/w1-write-ups/concrete.meta.json": {
+   "sha256": "d9d48e7ebdbebf52c7cfa55886a08ff249aab75044a8f29be2a5877dd88e0c30",
+   "bytes": 75
+  },
+  "evidence/transformation-2026-10-07/w1-write-ups/electrical.md": {
+   "sha256": "c43ebd7f3f06d71acb0c3fd48a8e3632a6253f36b02e1ddbef9f8bce2a728bf5",
+   "bytes": 2156
+  },
+  "evidence/transformation-2026-10-07/w1-write-ups/electrical.meta.json": {
+   "sha256": "30cd373454e08b33b89278cc56940cf65784f19d93aa1cea8b2de284c01b100c",
+   "bytes": 80
+  },
+  "evidence/transformation-2026-10-07/w1-write-ups/goodhart.md": {
+   "sha256": "036eab9e987fe44dbf70e44b5d58871498de418fdbc75d8446da383323fb080a",
+   "bytes": 2119
+  },
+  "evidence/transformation-2026-10-07/w1-write-ups/goodhart.meta.json": {
+   "sha256": "539ab98c2b217a272c24e5b5b51d1ac8d68bccc749879947995fe3dfc74bfbf1",
+   "bytes": 83
+  },
+  "evidence/transformation-2026-10-07/w1-write-ups/lagrangian.md": {
+   "sha256": "ef3019ebec3e4ec407f097417cfd22e20f286bf871feb6c4f867c61bb23b4789",
+   "bytes": 2145
+  },
+  "evidence/transformation-2026-10-07/w1-write-ups/lagrangian.meta.json": {
+   "sha256": "2224b9fbed1578c1880fae65f394cfc1bfbfd978a2c572cb5256e1c2270401a8",
+   "bytes": 81
+  },
+  "evidence/transformation-2026-10-07/w1-write-ups/metallurgy.md": {
+   "sha256": "847f7d61aa55686053ed737f60572e3202b80a4ee295db1ed78d760b93ccaa99",
+   "bytes": 2056
+  },
+  "evidence/transformation-2026-10-07/w1-write-ups/metallurgy.meta.json": {
+   "sha256": "3fa03d6be85f7725260eb427f985d0b37f7958c0e142c91c7a951db9c0847cb4",
+   "bytes": 82
+  },
+  "evidence/transformation-2026-10-07/w1-write-ups/metamorphosis.md": {
+   "sha256": "c0e5fe3a4aa49002ad4dacbb9d1a6a0e1a7847fd5d54109ef101a96a08c3b2b5",
+   "bytes": 2070
+  },
+  "evidence/transformation-2026-10-07/w1-write-ups/metamorphosis.meta.json": {
+   "sha256": "1831a6887a8bd116927a901a07de54793627046d1755e483cd224e2a665ad5c9",
+   "bytes": 78
+  },
+  "evidence/transformation-2026-10-07/w1-write-ups/rag.md": {
+   "sha256": "d4f958fff42fcf488a845ef9a5cefbeda20508b0dfc39503e309c3d5cfec28b5",
+   "bytes": 2106
+  },
+  "evidence/transformation-2026-10-07/w1-write-ups/rag.meta.json": {
+   "sha256": "781ad2bbba073937b22388cc937ade8b6aa829d75b8420296833837f6bfb4070",
+   "bytes": 74
+  },
+  "evidence/transformation-2026-10-07/w1-write-ups/treatment.md": {
+   "sha256": "cfc2c392b84bc314aee39db59bd7bffb6966756530b4f3e75ef20eb112e3bf3d",
+   "bytes": 2057
+  },
+  "evidence/transformation-2026-10-07/w1-write-ups/treatment.meta.json": {
+   "sha256": "d76769f69b6d9908621c06ecb96c3f09931b3fe67a7379f88cb3f48ca4faa84a",
+   "bytes": 83
+  },
+  "evidence/transformation-2026-10-07/w1-write-ups/xylem.md": {
+   "sha256": "6b6113bcd14cd32183ed782d1ee8bfebe7810dc55288fa19f3648e8d17df10fa",
+   "bytes": 2097
+  },
+  "evidence/transformation-2026-10-07/w1-write-ups/xylem.meta.json": {
+   "sha256": "a8bc833014c13e901db6a4d97897d47b39084e74b2c6ce282a8513537c88a370",
+   "bytes": 83
+  },
   "keys/README.md": {
    "sha256": "b17fcdc3e227d2cbfbe356685beab717235349f2a8ccac1dbd4157bda6f0abee",
    "bytes": 578
@@ -934,8 +1262,8 @@
    "bytes": 927
   },
   "verify.py": {
-   "sha256": "a543cd7153a2f62ddc08184513bdd2ebfe9338a469f3cdedb7fbe07e23f06d43",
-   "bytes": 15533
+   "sha256": "8fa5415c75742f378df132a6409b369b34874cf8093712e77e8ccc1799196e3f",
+   "bytes": 19488
   }
  }
 }

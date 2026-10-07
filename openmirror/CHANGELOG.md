@@ -2,6 +2,10 @@
 
 Newest first. Each entry says what was tested and what was not. Earlier entries are reproduced from the source documents in `evidence/` with their original wording; where that wording is inconsistent, the inconsistency is noted rather than repaired.
 
+## Evidence note — 2026-10-07 — transformation study, no text change
+
+Ten writers used the skill's steps 1, 4 and 5 on their own 400-word analogies of the coherence-study process (`TRANSFORMATION-STUDY.md`). Fourteen blind readers then executed them: 14 of 14 exact by the engine, against 25 of 30 for the undisciplined write-ups the day before, and 6 of 6 against 1 of 6 on the two analogies that had drifted. A fixed 23-rule checklist found 226 of 230 rules recoverable against 219. This is the first measured benefit for the skill: on the writer's side. Not tested: whether a generic self-review instruction would do the same. No version bump.
+
 ## Evidence note — 2026-10-06 — coherence study, no text change
 
 The v1.4.3 pre-read was used by 20 blind model operators executing an exact numerical process from analogical documents, with scripts (`COHERENCE-STUDY.md`). Under those conditions it produced no measurable gain in correctness or in gaps flagged compared with 40 operators who did not run it. The study did not test the skill's stated purpose, inspecting an argument made through metaphor. In the one case where it named the decisive ambiguity in advance, the operator still resolved it wrong. One change is proposed from this, untested: when a flagged gap changes the result, the output should carry both results forward rather than choosing one. No version bump; the text is unchanged.

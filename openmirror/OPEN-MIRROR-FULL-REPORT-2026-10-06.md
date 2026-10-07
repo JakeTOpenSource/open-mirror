@@ -417,7 +417,130 @@ It does not support:
 
 If you are reading an analogy to execute something, the pre-read will not catch what you would miss, because what you would miss is a numeric convention the analogy left ambiguous, and the pre-read names such gaps without resolving them. One change to the skill would have mattered here: when a flagged gap changes the result, deliver both results rather than choosing one. That is a hypothesis, untested.
 
-If you are writing an analogy, the losses are predictable. Across ten write-ups the same rules went missing: that a position changes state at most once per cycle, the ordering of the two marks, which state governs the release, which half a halving keeps, and what the loss tally collects. A writer who restates the process plainly before compressing it would see those; whether they would keep them under a 400-word cap was not tested.
+If you are writing an analogy, the losses are predictable. Across ten write-ups the same rules went missing: that a position changes state at most once per cycle, the ordering of the two marks, which state governs the release, which half a halving keeps, and what the loss tally collects. A writer who restates the process plainly before compressing it would see those; whether they would keep them under a 400-word cap was not tested here. It was tested the next day: see `TRANSFORMATION-STUDY.md`.
+
+## Part 4b. Transformation study (7 October 2026): the plan as committed before the run, then the results
+# Transformation study: plan (study 3)
+
+**Date:** 7 October 2026. **Project manager:** Claude (Fable 5.1). **Auditors:** Jake and Ed, in parallel, outside the run. **Status:** plan only; nothing has run.
+
+## The goal, in plain words
+
+Show, with a deterministic check, that one piece of meaning can be carried into many different analogies and read back out with nothing lost. "Deterministic" means a machine, not a judge, says whether each read-back is right. "Parallel" means the same meaning goes into ten analogies at once. "Mirrored" means each analogy is read back into action and compared with the original.
+
+The meaning is the six-position, five-cycle process from the coherence study. The machine check is `evidence/coherence-2026-10-06/inputs/engine.py`. The ten analogies are the ten domains already used. None of that is new, so none of it costs anything.
+
+## What the record already shows
+
+- When the analogy is written out in full, the meaning survives: 30 of 30 reads correct.
+- When the analogy is compressed to 400 words with no discipline, the meaning mostly survives but drifts in two of ten analogies: 25 of 30 reads correct, every failure from one sentence about rounding that the writer compressed ambiguously.
+- Giving the *reader* the Open Mirror pre-read did not stop that drift.
+
+So the untested lever is the *writer*. The drift entered when the writer compressed. The question this study answers:
+
+**Does a writer who uses Open Mirror's discipline (plain statement first, then the analogy, then check your own analogy for break points and lost rules) produce 400-word analogies that read back with zero drift, where undisciplined writers did not?**
+
+If yes: that is the deterministic demonstration you asked for, and the skill's contribution to it is isolated. If no: the skill does not help the writing side either, and that gets published.
+
+## What will not be run, and why
+
+- No pre-read arm for readers. Already tested; no benefit. Rerunning it is waste.
+- No "told it is an analogy" arm. It behaved the same as telling the reader nothing.
+- No rerun of the undisciplined write-ups. They exist, with 30 graded reads. They are the baseline.
+- No Bank A (judging arguments made through metaphor). It answers a different question. It stays on file in TEST-PROTOCOL.md for later.
+- No model reviewers writing free-form loss lists. Replaced by a fixed checklist (below) applied identically to both arms.
+
+## Design
+
+**Arm W0, baseline (exists).** Ten 400-word analogies written without the skill, by Opus. Reads: 25 of 30 correct. Files: `evidence/coherence-2026-10-06/study2-lossy-v2/write-ups-as-given/`.
+
+**Arm W1, disciplined (new).** Ten 400-word analogies, same ten domains, same mapping hints, same word cap, same ban on abstract words, same rule that the process is what the line does. One change: the writer gets `SKILL.md` and must (1) write the plain statement first, every rule and every number, nothing added; (2) write the analogy; (3) reread the analogy as a stranger and, for every rule in the plain statement, check it is recoverable from the analogy alone, and for every place the domain's real behaviour would mislead, check the analogy says what the line does; (4) fix what that finds; (5) deliver only the analogy. The plain statement and the self-check findings are returned separately as evidence and never shown to readers. No final figures anywhere; the Report paragraph is a template. Every write-up is grepped for answer figures before use, the hazard that voided the first attempt last time.
+
+**Readers.** Same handover prompt that drew zero refusals in the corrected run, Arm A wording (reader told nothing), same structured deliverable, graded by the engine. Adaptive sampling to save sessions: one read per write-up to start; a second read where the first is wrong; three reads regardless for metallurgy and metamorphosis, the two domains where the baseline drifted. Expected 14 to 16 reads.
+
+**Rule-recovery checklist (new, cheap).** A fixed list of the process's atomic rules, written once by me from `plain-spec.md`. A Sonnet session reads one write-up alone and answers, per rule, recoverable or not, with the quote. Applied identically to all twenty write-ups, W0 and W1. This replaces the free-form reviewer loss lists with a comparable count. It is not fully deterministic; it is structured, quoted, and the same instrument on both arms.
+
+**Models.** Writers: Opus 5.5, because the baseline writers were Opus and the writer is the variable under test; changing the model would confound it. Readers: Opus 5.5 for the same reason. Checklist extractor: Sonnet 5.5, since it is a lookup task. If quota requires all-Sonnet, say so; the price is that W1 is then not directly comparable to W0 and a 9-session Sonnet calibration on the baseline would be needed first.
+
+## Pass and fail, decided before the run
+
+- **Primary, deterministic:** W1 reads correct. Target 100 percent. Baseline 25 of 30 (83 percent). Any W1 read that is wrong is reported with its cause from the reader's own procedure summary.
+- **Secondary:** rules recoverable per write-up, W1 against W0, same checklist.
+- **Discipline check:** every W1 write-up at or under 400 words, free of answer figures, with a plain statement and a non-empty self-check on file. A write-up that fails this is rerun once with the defect named; a second failure is reported as a writer-prompt defect and not patched silently.
+
+**Stop rules.** If three or more W1 write-ups fail the discipline check, stop after the writers and report. If W1 drifts in the same two domains for the same reason, stop after the reads and report; the skill does not fix the writing side. No session is ever retried with identical text after a refusal.
+
+## Cost
+
+| Phase | Sessions | Model | Tokens, estimate |
+|---|---|---|---|
+| 1. Writers | 10, plus up to 3 reruns | Opus | 0.2M to 0.3M |
+| 2. Readers | 14 to 16, adaptive, cap 20 | Opus | 1.0M to 1.4M |
+| 3. Checklist | 20 | Sonnet | 0.3M |
+| **Total** | **44 to 53** | | **1.5M to 2.0M** |
+
+Compared with the last run, which was 40 sessions and 2.66M, this is cheaper per answer and asks a sharper question. Nothing launches without a "go". I will report at the end of each phase without asking again unless a stop rule fires.
+
+## What success and failure each mean for the skill
+
+- **Success** (W1 at or near 100 percent, more rules recoverable): the first evidence that Open Mirror does what the pitch says, on the writing side, with a machine as judge. The README changes from "no measured benefit" to "measured benefit for writers; none for readers".
+- **Failure** (W1 no better than W0): the skill's discipline does not survive a word cap any better than good intent does. The README says so, and the next step is changing the skill, not more testing.
+# Transformation study (study 3): results
+
+**Date:** 7 October 2026. **Plan:** `TRANSFORMATION-STUDY-PLAN.md`, written and committed before the run. **Evidence:** `evidence/transformation-2026-10-07/`, every write-up, plain statement, self-check, read, and checklist extraction on file, graded by `grade.py` and re-graded independently by `verify.py` (claims S3-1 to S3-9). **Cost:** 44 sessions, 2.87M subagent tokens, against a plan estimate of 1.5M to 2.0M; the overrun and its cause are in the last section.
+
+## The result, in plain words
+
+Ten writers were given the skill and told to use it on themselves: write the plain statement first, then the 400-word analogy, then reread the analogy as a stranger and fix what it lost. Fourteen blind readers then executed those analogies with no hint that they were analogies. **All fourteen reads reproduced the original process exactly: every quantity, every state, all thirteen state changes, both reset cycles, and the loss tally, as checked by the engine.** That includes all six reads on the two analogies, metallurgy and metamorphosis, that had failed five times out of six when written without the discipline.
+
+The same meaning went into ten different analogies and came back out of each one without drift. That is the demonstration you asked for, with a machine as the judge, and the difference between drift and no drift was the writer's discipline.
+
+## The numbers
+
+| | Undisciplined writers (W0, 6 October) | Disciplined writers (W1, this study) |
+|---|---|---|
+| Reads exactly right | 25 of 30 | **14 of 14** |
+| Reads on metallurgy and metamorphosis | 1 of 6 | **6 of 6** |
+| Write-ups within 400 words | 10 of 10 | 10 of 10 |
+| Rules recoverable from the write-up alone, fixed 23-rule checklist | 219 of 230 | **226 of 230** |
+| Rule most often lost | "quantities are whole and never negative", 8 of 10 | same rule, 4 of 10 |
+
+Same process, same ten domain mappings, same word cap, same reader prompt, same reader model, same grader.
+
+## Where the difference came from
+
+Every baseline failure traced to one compressed sentence about the global halving. The undisciplined metallurgy write-up said "halve every crucible, removed melt to slag" and relied on a general "any split rounds down" elsewhere; readers applied the rounding to the removed melt and kept the larger half. The disciplined metallurgy write-up says "halve every crucible, rounding down, removed melt to slag", which attaches the rounding to what the crucible keeps. Metamorphosis went the same way: "every chamber halves and the shed mass is discarded" became "every chamber is halved, rounded down, the removed mass onto the loss tally". The writers' self-check lists show both of them examining the halving and rounding rules before delivering. Readers of both new write-ups kept the smaller half, as the process requires.
+
+The checklist agrees at the level of the whole text: the disciplined write-ups carried seven more rules across the ten, and no disciplined write-up lost a rule the baseline had kept.
+
+## What this does and does not show
+
+It shows:
+
+1. Meaning carried into ten parallel analogies can be read back with zero drift, deterministically checked, when the writer works the way the skill prescribes.
+2. The drift seen on 6 October was a writing defect, and the writer-side discipline removed it on the two analogies where it had occurred.
+3. The reader-side pre-read, tested the day before, is not where the skill's value is; the writer side is.
+
+It does not show:
+
+4. That the skill's *text* is what mattered, as opposed to any careful "reread your own draft for lost rules" instruction. The disciplined prompt pointed the writer at the skill's steps 1, 4 and 5; a control with a generic self-review instruction was not run. That is the next cheapest test and the most important remaining confound.
+5. Zero drift in general. Fourteen reads is a sample; the two analogies with a history of drift got three reads each and the rest got one, by design, to save sessions.
+6. Anything about human readers or writers. Every session was Opus 5.5 or Sonnet 5.5.
+
+## Cost, honestly
+
+| Phase | Sessions | Model | Estimated | Actual |
+|---|---|---|---|---|
+| 1 Writers | 10 | Opus | 0.2M to 0.3M | 0.77M |
+| 2 Readers | 14 | Opus | 1.0M to 1.4M | 0.88M |
+| 3 Checklist | 20 | Sonnet | 0.3M | 1.22M |
+| **Total** | **44** | | **1.5M to 2.0M** | **2.87M** |
+
+The readers came in under estimate. The writers ran over because they used a shell to count words and iterate under the cap, which was not anticipated. The checklist ran four times over: twenty Sonnet sessions each read two files and wrote 23 quoted answers, and Sonnet's per-session token use was close to Opus's, so "lesser model" saved money but not tokens. Both overruns were foreseeable and are my error in the estimate, not in the design. No session was refused, none was retried, and none produced a placeholder.
+
+## What should change in the skill
+
+Nothing in the seven steps. The study used them as written. What should change is the pitch: the README has said "no measured benefit" since yesterday, and that sentence now needs a second half. The skill's measured value is on the writing side, for a writer who runs it on their own analogy before handing it over. The README and the changelog carry that update; the compiled report carries this file.
 
 ## Part 5. The skill as it stands
 
@@ -593,7 +716,9 @@ Versions 1.2 and 1.3 were evaluated in eight fresh model sessions across six fix
 
 Version 1.4 (this repository) is a plain-language rebuild for sharing. Its v1.4.1 text was run blind on five fixed cases on two Claude models, one round each ([RED-TEAM-REPORT.md](RED-TEAM-REPORT.md) on the v1.3 text, [RED-TEAM-REPORT-R2.md](RED-TEAM-REPORT-R2.md) on v1.4.1). Every step-level criterion passed in round 2; one shared gap was found and closed in v1.4.2. Explanation mode was then rewritten and rerun once on its test case. The remaining v1.4.2 and v1.4.3 wording is untested.
 
-A separate coherence study ([COHERENCE-STUDY.md](COHERENCE-STUDY.md)) put one exact process into ten analogies and had 60 blind operators execute it. Complete documents were read correctly 30 of 30 times; compressed write-ups 25 of 30, with all five failures caused by one ambiguous rounding sentence. **Model operators executing a fixed numerical procedure from analogical documents, with scripts, got no measurable benefit from the pre-read: no more accurate, no more gaps flagged.** That is a null result inside that scope. The study did not test a person using Open Mirror to inspect an argument made through metaphor, which is the skill's stated purpose. All Claude and GPT runs so far are one provider each; no cross-provider replication has been done on the same text.
+A separate coherence study ([COHERENCE-STUDY.md](COHERENCE-STUDY.md)) put one exact process into ten analogies and had 60 blind operators execute it. Complete documents were read correctly 30 of 30 times; compressed write-ups 25 of 30, with all five failures caused by one ambiguous rounding sentence. **Model operators executing a fixed numerical procedure from analogical documents, with scripts, got no measurable benefit from the pre-read: no more accurate, no more gaps flagged.** That is a null result inside that scope. The study did not test a person using Open Mirror to inspect an argument made through metaphor, which is the skill's stated purpose.
+
+The next day's study ([TRANSFORMATION-STUDY.md](TRANSFORMATION-STUDY.md)) moved the skill to the writer's side. Writers who ran it on their own 400-word analogies before handing them over produced ten analogies that fourteen blind readers executed with zero drift, 14 of 14 exact by the engine, including 6 of 6 on the two analogies that had failed 5 of 6 times without the discipline. **The skill's measured value, so far, is for a writer checking their own analogy, not for a reader.** Whether the skill's text or any careful self-review would have done the same was not tested. All Claude and GPT runs so far are one provider each; no cross-provider replication has been done on the same text.
 
 ## Installing as a skill
 
@@ -609,6 +734,10 @@ Concept and research direction: Jake Tiller. Drafting and evaluation assisted by
 # Changelog
 
 Newest first. Each entry says what was tested and what was not. Earlier entries are reproduced from the source documents in `evidence/` with their original wording; where that wording is inconsistent, the inconsistency is noted rather than repaired.
+
+## Evidence note — 2026-10-07 — transformation study, no text change
+
+Ten writers used the skill's steps 1, 4 and 5 on their own 400-word analogies of the coherence-study process (`TRANSFORMATION-STUDY.md`). Fourteen blind readers then executed them: 14 of 14 exact by the engine, against 25 of 30 for the undisciplined write-ups the day before, and 6 of 6 against 1 of 6 on the two analogies that had drifted. A fixed 23-rule checklist found 226 of 230 rules recoverable against 219. This is the first measured benefit for the skill: on the writer's side. Not tested: whether a generic self-review instruction would do the same. No version bump.
 
 ## Evidence note — 2026-10-06 — coherence study, no text change
 

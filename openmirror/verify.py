@@ -127,8 +127,39 @@ rows = re.findall(r"\| (?:Red-team|Explanation|Coherence|Study)[^|\n]*\| (\d+) \
 claim("A-1", "accounting table rows sum to the stated session total", int(re.search(r"\| \*\*Total\*\* \| \*\*(\d+)\*\*", full).group(1)), sum(int(a) for a, _ in rows), ["OPEN-MIRROR-FULL-REPORT-2026-10-06.md"])
 claim("A-2", "accounting table rows sum to the stated token total (0.1M tolerance)", True, abs(float(re.search(r"\| \*\*Total\*\* \| \*\*\d+\*\* \| \*\*~([\d.]+)M", full).group(1)) - sum(float(b) for _, b in rows)) < 0.1, ["OPEN-MIRROR-FULL-REPORT-2026-10-06.md"])
 
+# ------------------------------------------------------------------ study 3 (transformation)
+S3 = os.path.join(HERE, "evidence", "transformation-2026-10-07")
+if os.path.exists(os.path.join(S3, "phase2-result.json")):
+    p1 = jl(os.path.join(S3, "phase1-result.json")); p2 = jl(os.path.join(S3, "phase2-result.json")); p3 = jl(os.path.join(S3, "phase3-result.json"))
+    claim("S3-1", "Study 3: disciplined write-ups passing the discipline check (cap, no figures, plain statement, self-check)", 10, sum(1 for r in p1["results"] if not r["problems"]), ["transformation-2026-10-07/phase1-result.json"])
+    claim("S3-2", "Study 3: every disciplined write-up at or under 400 words", True, all(len(rd(os.path.join(S3, "w1-write-ups", f"{k}.md")).split()) <= 400 for k in ORDER), ["transformation-2026-10-07/w1-write-ups/*.md"])
+    claim("S3-3", "Study 3: disciplined write-ups containing any answer figure", [], [k for k in ORDER if any(x in rd(os.path.join(S3, "w1-write-ups", f"{k}.md")) for x in ["6, 10, 9, 7, 4, 2", "6,10,9,7,4,2", "6 10 9 7 4 2", "(1,2,", "(1, 2,", " 76", "114"])], ["transformation-2026-10-07/w1-write-ups/*.md"])
+    # regrade every read from the raw run records with the same mapping used for study 2
+    def g3(run, resting, raised):
+        n, e = norm(resting), norm(raised)
+        def ms(x):
+            x = norm(x)
+            if x == n: return "NORMAL"
+            if x == e: return "ELEVATED"
+            for w, lab in sorted([(n, "NORMAL"), (e, "ELEVATED")], key=lambda t: -len(t[0])):
+                if w and w in x: return lab
+            return "UNMAPPED"
+        chg = sorted("|".join(map(str, [c["period"], c["position"], ms(c["from"]), ms(c["to"])])) for c in run.get("stateChanges", []))
+        tchg = sorted("|".join(map(str, c)) for c in truth["changes"])
+        return run.get("finalQuantities") == truth["final"] and [ms(x) for x in run.get("finalStates", [])] == truth["modes"] and chg == tchg and sorted(run.get("resetPeriods", [])) == sorted(truth["purges"]) and run.get("lossTotal") == truth["lost"]
+    metas = {k: jl(os.path.join(S3, "w1-write-ups", f"{k}.meta.json")) for k in ORDER}
+    exact3 = sum(1 for r in p2["reads"] if r["run"] and g3(r["run"], metas[r["key"]]["restingStateWord"], metas[r["key"]]["raisedStateWord"]))
+    claim("S3-4", "Study 3: reads of disciplined write-ups exactly right (all five fields, regraded here)", 14, exact3, ["transformation-2026-10-07/phase2-result.json", "transformation-2026-10-07/w1-write-ups/*.meta.json"])
+    claim("S3-5", "Study 3: reads attempted (no refusals, no second reads needed)", 14, len(p2["reads"]), ["transformation-2026-10-07/phase2-result.json"])
+    claim("S3-6", "Study 3: reads on the two domains that drifted in the baseline (metallurgy, metamorphosis), all exact", 6, sum(1 for r in p2["reads"] if r["key"] in ("metallurgy", "metamorphosis") and r["run"] and g3(r["run"], metas[r["key"]]["restingStateWord"], metas[r["key"]]["raisedStateWord"])), ["transformation-2026-10-07/phase2-result.json"])
+    tot = {a: sum(e["recoverable"] for e in p3["extractions"] if e["arm"] == a) for a in ("W0", "W1")}
+    claim("S3-7", "Study 3: checklist rules recoverable, baseline W0 of 230", 219, tot["W0"], ["transformation-2026-10-07/phase3-result.json"])
+    claim("S3-8", "Study 3: checklist rules recoverable, disciplined W1 of 230", 226, tot["W1"], ["transformation-2026-10-07/phase3-result.json"])
+    claim("S3-9", "Study 3: every checklist extraction returned exactly 23 answers", 20, sum(1 for e in p3["extractions"] if e["results"] and len(e["results"]) == 23), ["transformation-2026-10-07/phase3-result.json"])
+
 # ------------------------------------------------------------------ what is NOT verified here (stated, not hidden)
 unverified = [
+    "Study 3 compares disciplined writers with the earlier undisciplined writers; both were Opus with the same domain mappings and word cap, but the disciplined prompt also said explicitly that no figures may appear. Whether the gain comes from Open Mirror's text or from any careful self-review instruction was not tested.",
     "Red-team scorecards (rounds 1 and 2) are one reviewer's judgments against a rubric; this script checks only that the transcripts and packets exist and hash as stated.",
     "Reviewer verdicts in both coherence studies are model judgments; this script recomputes counts from them but cannot check their correctness.",
     "Token figures are the harness's subagent_tokens totals as reported at run time; the raw usage records are not in this folder.",
