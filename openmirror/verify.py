@@ -124,7 +124,7 @@ claim("V-8", "compiled report embeds all 20 operator documents byte-identically"
 
 # ------------------------------------------------------------------ accounting (stated in COHERENCE-STUDY and the compiled summary)
 acct = full[full.index("Session and token accounting"):]
-rows = re.findall(r"\| (?:Red-team|Explanation|Coherence|Study)[^|\n]*\| (\d+) \| ~?([\d.]+)M", acct)
+rows = re.findall(r"\| (?:Red-team|Explanation|Coherence|Study|Function-match)[^|\n]*\| (\d+) \| ~?([\d.]+)M", acct)
 claim("A-1", "accounting table rows sum to the stated session total", int(re.search(r"\| \*\*Total\*\* \| \*\*(\d+)\*\*", acct).group(1)), sum(int(a) for a, _ in rows), ["OPEN-MIRROR-FULL-REPORT-2026-10-06.md"])
 claim("A-2", "accounting table rows sum to the stated token total (0.1M tolerance)", True, abs(float(re.search(r"\| \*\*Total\*\* \| \*\*\d+\*\* \| \*\*~([\d.]+)M", acct).group(1)) - sum(float(b) for _, b in rows)) < 0.1, ["OPEN-MIRROR-FULL-REPORT-2026-10-06.md"])
 
