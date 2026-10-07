@@ -21,9 +21,13 @@
    "sha256": "74c9657f5959569e06add394e7763b71d1c63e3f989135475019696772423966",
    "bytes": 13527
   },
+  "OPEN-MIRROR-v1.4.3.pdf": {
+   "sha256": "6a0d30f86a36891e7b2b6a40bcaebb2c7e73cc64d1a853e7c6d14069077a0e5b",
+   "bytes": 12048
+  },
   "README.md": {
-   "sha256": "ee6d210f1bcf2481df7b202b15c23efa565743ded8f266aa60586cf1e56b8751",
-   "bytes": 7101
+   "sha256": "02e3ce404a4bd5196871088349edad0f36e447f27a52b90a9b4d396bfb3d2a1b",
+   "bytes": 7323
   },
   "RED-TEAM-REPORT-R2.md": {
    "sha256": "74767dd278d5036e6ba5531358741ce402e36b0bdd32c6b0725312336603f558",
