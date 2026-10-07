@@ -2,6 +2,10 @@
 
 **Testing analogies against reality.**
 
+![Open Mirror: a tangled input panel on the left, four numbered layers in the centre (plain statement, picture, review, verdict) with function match beneath them, and a clean output panel on the right](assets/open-mirror-infographic.jpg)
+
+*The picture shows the shape of the method. What each layer has actually been shown to do is in [What is proven and what is not](#what-is-proven-and-what-is-not); the output panel's promise of useful output is the claim still under test.*
+
 Open Mirror is a written method for using comparisons without being fooled by them. When someone explains or argues something through an analogy, it restates the facts in plain words, looks at them through the borrowed picture, marks exactly where the picture stops fitting, and hands back only what survives. When someone needs a hard thing made plain, it does the same in the other direction: plain statement first, then one picture with its break point shown.
 
 Most pictures do not survive. Finding nothing is a valid result, and the method says so out loud.
@@ -59,6 +63,7 @@ One run on 7 October was contaminated by the test harness and is reported as suc
 - [verify.py](verify.py), [CLAIMS.md](CLAIMS.md), [MANIFEST.json](MANIFEST.json): the claims register, the file hashes, and the script that regenerates both.
 - [OPEN-MIRROR-FULL-REPORT-2026-10-06.md](OPEN-MIRROR-FULL-REPORT-2026-10-06.md): everything above compiled into one file for reading offline.
 - [OPEN-MIRROR-v1.4.3.pdf](OPEN-MIRROR-v1.4.3.pdf): the skill text as a PDF. `SKILL.md` is the source of truth.
+- `assets/`: the infographic used at the top of this page.
 - `drafts/`: the longer first v1.4 draft, kept for comparison. Superseded.
 
 ## Rules

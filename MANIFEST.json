@@ -34,16 +34,16 @@
    "bytes": 10861
   },
   "OPEN-MIRROR-FULL-REPORT-2026-10-06.md": {
-   "sha256": "564f78881a39f98ae9eac0b201174ed6a57835459928789d550e6241824d8909",
-   "bytes": 616594
+   "sha256": "c51a7c6e379f29b9c5ef4a431aa8afe940e1976156dd3e15ca6ddcd4d3c2b212",
+   "bytes": 617132
   },
   "OPEN-MIRROR-v1.4.3.pdf": {
    "sha256": "2d47351149f0dcddd352258697d4388e0a7fe75075148a473de5b894c8f27666",
    "bytes": 12052
   },
   "README.md": {
-   "sha256": "0d969a3dcdf758e61d9ed5e7df78f5e07497773333979a6683a14ae964007b78",
-   "bytes": 7770
+   "sha256": "da1bf7e68bd2ac7f1f4f3e209b5c0b1121a2165f0e8734d6e1292c36e15c395b",
+   "bytes": 8308
   },
   "RED-TEAM-REPORT-R2.md": {
    "sha256": "74767dd278d5036e6ba5531358741ce402e36b0bdd32c6b0725312336603f558",
@@ -68,6 +68,10 @@
   "TRANSFORMATION-STUDY.md": {
    "sha256": "a6c9bc3e0e21bd122841111f9d9bae28867acee330544a9e1e893eb3ec2c68fe",
    "bytes": 11488
+  },
+  "assets/open-mirror-infographic.jpg": {
+   "sha256": "f3f9525935f2354ed253bd1e2994cee9877dc82fc04d2351a9368ff7ddd42d93",
+   "bytes": 482377
   },
   "drafts/SKILL-v1.4-first-draft.md": {
    "sha256": "4ba5099111b096799287a611ef2a767bbbb8e47b5d97126a16af479915894440",
