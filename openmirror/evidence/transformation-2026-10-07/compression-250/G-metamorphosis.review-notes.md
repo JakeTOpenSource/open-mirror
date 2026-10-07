@@ -1,0 +1,12 @@
+- Word cap: the first full draft came to 347 words with wc -w (numbers counted). I trimmed it over several passes to 249, and the 30-figure feed table and every limit and mark are still in.
+- Carry-forward cascade: an early wording didn't say that excess arriving from upstream counts toward the next chamber's own check in the same pass. It now says the excess moves into the next chamber 'before its turn'.
+- Chamber 6 excess: I made explicit that it goes to the loss tally rather than just vanishing.
+- State check: I added the 'otherwise unchanged' clause so a chamber sitting between its marks clearly keeps its state, and stated the state check runs after carry-forward by listing the steps in order.
+- Metabolism timing: I made explicit that every amount is taken from contents before anything moves (pre-step contents) and that all amounts round down. Chamber 1's PUPAL half goes to the tally.
+- Overfill after reabsorption: I added that holding limits aren't enforced at feed or metabolism. Overfill is only corrected at the next cycle's carry-forward and is never corrected after cycle 5.
+- Moult threshold: changed it to 'over 38' (strictly greater), so a total of exactly 38 does not trigger a moult.
+- Feed table: in my first trim the cycle-row labels were ambiguous. I gave the table the header 'Feed per cycle' with rows numbered 1 to 5 and the columns in chamber order 1 to 6.
+- Start conditions: added that all chambers start LARVAL and the loss tally starts at 0.
+- Report: checked that it lists end mass in order 1 to 6, the six end states, the state changes as (cycle, position, before, after), the moult cycles, the loss tally and the balance check, with no figures or results.
+- Banned words: scanned the text with grep for the forbidden terms and any variants (cell, level, mode, NORMAL, ELEVATED, period, intake, spill, release, purge, LOST, abstract, metaphor, analog, comparison, represent, correspond, stands for) and found none.
+- Not committed: the working directory C:\Users\Jaket\Downloads\open-mirror is not a git repository, so this subagent made no commit. The explanation is returned here only; a scratch copy is in the session scratchpad as doc.txt.

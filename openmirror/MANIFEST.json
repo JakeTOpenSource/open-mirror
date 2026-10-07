@@ -6,24 +6,24 @@
    "bytes": 6
   },
   "CHANGELOG.md": {
-   "sha256": "1a444e0ddf36d5bb2f8b74bdeb60d48c77440e65e0b1344fd033ea061ca7fc56",
-   "bytes": 13843
+   "sha256": "df638cd71e906283e90cfcc582c053aa37343402f95ff7a59cda7389b8a38daf",
+   "bytes": 14212
   },
   "COHERENCE-STUDY.md": {
    "sha256": "00580b07b8a266caa5b929f9038e5403b964c1a5ee8109f805b174b29f024964",
    "bytes": 13580
   },
   "OPEN-MIRROR-FULL-REPORT-2026-10-06.md": {
-   "sha256": "c64d705ede74e0beda1d7b69e7a3949901e254dcdda1d61e08d2ce4589c00ed3",
-   "bytes": 598551
+   "sha256": "27105107f5a700cab075a19bd1fa1d2b1a262bc86194fa5f4f351a22aa754318",
+   "bytes": 600771
   },
   "OPEN-MIRROR-SKILL-v1.4.3-COPY-ME.md": {
    "sha256": "74c9657f5959569e06add394e7763b71d1c63e3f989135475019696772423966",
    "bytes": 13527
   },
   "README.md": {
-   "sha256": "caa27df297153c68fc47b33e3175e7fe93bcd131c6cefd54159c3a789fdd6ce1",
-   "bytes": 6641
+   "sha256": "a040f3124fee5ebd145d8606ae20281ad68eaa00612894acc6d57879db2a4170",
+   "bytes": 6832
   },
   "RED-TEAM-REPORT-R2.md": {
    "sha256": "74767dd278d5036e6ba5531358741ce402e36b0bdd32c6b0725312336603f558",
@@ -46,8 +46,8 @@
    "bytes": 6798
   },
   "TRANSFORMATION-STUDY.md": {
-   "sha256": "9b5c84baf56b7d7b8bce96daf477750a3bbd783c807b9e1d48a7fed54bcda90d",
-   "bytes": 7737
+   "sha256": "cbf16d06df1334277cea693074f40ed19c4924dfa972b908b61717973f492bac",
+   "bytes": 8965
   },
   "drafts/SKILL-v1.4-first-draft.md": {
    "sha256": "4ba5099111b096799287a611ef2a767bbbb8e47b5d97126a16af479915894440",
@@ -829,6 +829,14 @@
    "sha256": "49b61615d3a7b06998d66cd6f6f8c676920991ca36bcff6153cba543d1f33688",
    "bytes": 1861
   },
+  "evidence/crucible-cascade-2026-10-07/crucible.py": {
+   "sha256": "a502dd5598f5b4c330282cf86882c5509299d6459cf3c4139ea7818cacc1ea6b",
+   "bytes": 1198
+  },
+  "evidence/crucible-cascade-2026-10-07/run-output.txt": {
+   "sha256": "dae878074092fb3187ef6e48a0f28d732bc126166910a68ea23bcb52bc155acd",
+   "bytes": 1960
+  },
   "evidence/protocol-cases/bank-A-ed.md": {
    "sha256": "37ce0f85323c2bfc37d4f9ded5147cfafcf17b1b8ef04abf1a13cdf548e87463",
    "bytes": 2707
@@ -852,6 +860,14 @@
   "evidence/protocol-cases/bank-G-and-I.md": {
    "sha256": "212ebe66794f4db502cd4f97bad5b5ead156132913a172f5c7ac5adb023d445e",
    "bytes": 1468
+  },
+  "evidence/rearing-line-2026-10-07/rearing.py": {
+   "sha256": "f02ed8daab8d1cfa07c631503b53bcb4b49edd6a493401bd95a7ec5ac3a4b436",
+   "bytes": 1208
+  },
+  "evidence/rearing-line-2026-10-07/run-output.txt": {
+   "sha256": "9daf8f59dfca6e14eb4447989fcc2b7194294796c142ae9f0ac45b4f707214f6",
+   "bytes": 1511
   },
   "evidence/red-team-2026-10-06-r2/00-method-packet-given-to-replicators.md": {
    "sha256": "fbc70b9db5bd26a60a7f8fc196f91724fe0444c080a8097c7e6475f827e882e8",
@@ -1004,6 +1020,106 @@
   "evidence/transformation-2026-10-07/checklist/W1-xylem.json": {
    "sha256": "5fb1514c1e3eb9bf5767bf74150c4829557ee3db2114f57824118b485d8925a8",
    "bytes": 3537
+  },
+  "evidence/transformation-2026-10-07/compression-250/G-metallurgy-read1.json": {
+   "sha256": "0a4e9c5a3708f4263bd824faa93e34ec97a85e923d4e900493f86d17f320c88b",
+   "bytes": 6645
+  },
+  "evidence/transformation-2026-10-07/compression-250/G-metallurgy-read2.json": {
+   "sha256": "6ec8b7ff736df50501aa5be04e0bed1595c9e1a865514da3c6bc041e07cbfbf1",
+   "bytes": 6877
+  },
+  "evidence/transformation-2026-10-07/compression-250/G-metallurgy-read3.json": {
+   "sha256": "f5f950e97df8dbe57d4f46db50a45d8d630f3ec778e12a596f500bdedba52c09",
+   "bytes": 5734
+  },
+  "evidence/transformation-2026-10-07/compression-250/G-metallurgy.md": {
+   "sha256": "6fe2a882f5e26ba5a8dac06ffed463f0ac9a1ebc0c054bdb3df45dd98afdb143",
+   "bytes": 1244
+  },
+  "evidence/transformation-2026-10-07/compression-250/G-metallurgy.review-notes.md": {
+   "sha256": "0753f969beacee0021e06e59f9ccdd2f7bccd3aadb0a4751a3bb31f703d3a4c2",
+   "bytes": 2370
+  },
+  "evidence/transformation-2026-10-07/compression-250/G-metamorphosis-read1.json": {
+   "sha256": "e5a820f7a0aa53e5ea1c3166bd48a5229edb97cfdb8ec390f959dea2e4c70624",
+   "bytes": 6248
+  },
+  "evidence/transformation-2026-10-07/compression-250/G-metamorphosis-read2.json": {
+   "sha256": "d243203a7a320818a509f9dd1e400e83a1c7af2b2db4bd6bd2f805472c3432f2",
+   "bytes": 6940
+  },
+  "evidence/transformation-2026-10-07/compression-250/G-metamorphosis-read3.json": {
+   "sha256": "2db4a9ede3bee01cc55c62ded09e1ff450d7d48df717bc1d419e73bef56684ae",
+   "bytes": 5602
+  },
+  "evidence/transformation-2026-10-07/compression-250/G-metamorphosis.md": {
+   "sha256": "a488ef47b07198d62aef3a91db574be897f81adf1fe448333123299a43b3eaf2",
+   "bytes": 1289
+  },
+  "evidence/transformation-2026-10-07/compression-250/G-metamorphosis.review-notes.md": {
+   "sha256": "9d5a7578dbc821b6391897fc53ef28c9dab4e344df94e9a98f8d6a354ec8b444",
+   "bytes": 2186
+  },
+  "evidence/transformation-2026-10-07/compression-250/PLAN.md": {
+   "sha256": "b1369d47f9aca4d9d072be1aa88312d596e357c8358631848d6eef16b5e565a6",
+   "bytes": 2307
+  },
+  "evidence/transformation-2026-10-07/compression-250/RESULTS.md": {
+   "sha256": "54cc8b34f54ed0a0f37646e9bb1060102eba8c14422930f904c04f8e89916c16",
+   "bytes": 2833
+  },
+  "evidence/transformation-2026-10-07/compression-250/S-metallurgy-read1.json": {
+   "sha256": "5c6ca4118319785e2933c4f512457b3e0b8736fee1c6b3723d885e0fedbb6271",
+   "bytes": 6312
+  },
+  "evidence/transformation-2026-10-07/compression-250/S-metallurgy-read2.json": {
+   "sha256": "a5a07e7a606efec132ea0697113100341998d452207b8768206ad61aaf2cdd99",
+   "bytes": 6605
+  },
+  "evidence/transformation-2026-10-07/compression-250/S-metallurgy-read3.json": {
+   "sha256": "3dc2f3e4c198d00da2255742206f04ca2a0061126bc3542763aa8f5e72f123a1",
+   "bytes": 7225
+  },
+  "evidence/transformation-2026-10-07/compression-250/S-metallurgy.md": {
+   "sha256": "6080a43e0c5fd9396a106b87391f3476ddd388a3b63aae614e0ed09c35fe8fa2",
+   "bytes": 1227
+  },
+  "evidence/transformation-2026-10-07/compression-250/S-metallurgy.plain-statement.md": {
+   "sha256": "50963935e6a5bc56afaa1730c862b5dc685de38d1c71db9387bc3078c968134e",
+   "bytes": 3510
+  },
+  "evidence/transformation-2026-10-07/compression-250/S-metallurgy.review-notes.md": {
+   "sha256": "f604a569b6bc78baa13296033de8089350f817933a3b1acbd755f00143c275ee",
+   "bytes": 3958
+  },
+  "evidence/transformation-2026-10-07/compression-250/S-metamorphosis-read1.json": {
+   "sha256": "ef603d45b1e4fd5d611bd32decbe77d34e39dff454edb94c8649c69a92126f6e",
+   "bytes": 6194
+  },
+  "evidence/transformation-2026-10-07/compression-250/S-metamorphosis-read2.json": {
+   "sha256": "2c2aae9fd15cbe90af1bb40df4a908574c3d85d6d47146009fe24b4b8238262a",
+   "bytes": 6164
+  },
+  "evidence/transformation-2026-10-07/compression-250/S-metamorphosis-read3.json": {
+   "sha256": "ae95bd0c5efca523c458514405b1eebd7526c381d8261cb93e5100107d1d4bdf",
+   "bytes": 6024
+  },
+  "evidence/transformation-2026-10-07/compression-250/S-metamorphosis.md": {
+   "sha256": "718357f41c6e1d3f8f5eb37f09bc6d97d91c424a0e23e98fda24450c5a7da90a",
+   "bytes": 1303
+  },
+  "evidence/transformation-2026-10-07/compression-250/S-metamorphosis.plain-statement.md": {
+   "sha256": "9f43230093bd678f2c41147498316a24e088e1c44c1f51b2f48584d31a2ab0dc",
+   "bytes": 3506
+  },
+  "evidence/transformation-2026-10-07/compression-250/S-metamorphosis.review-notes.md": {
+   "sha256": "db57e619fe525d79ab6513448d3a711e5815d2098ab02fb66023fcc742ff2927",
+   "bytes": 4123
+  },
+  "evidence/transformation-2026-10-07/compression-250/result.json": {
+   "sha256": "0882e6bcf6001cc670e99c59b9fc63f4c2d765fbb0d15b2b467dd3cbdf80b88a",
+   "bytes": 105026
   },
   "evidence/transformation-2026-10-07/control/metallurgy-1-read1.json": {
    "sha256": "638dada7b1f8538ef75c13409c3b262cf9f654f6226b863f95423fbffd3ba952",
@@ -1350,8 +1466,8 @@
    "bytes": 927
   },
   "verify.py": {
-   "sha256": "96446f9c2f028a657328ec39df53c4e1aa466625a83a4e2210076600d37ad267",
-   "bytes": 20837
+   "sha256": "6c2e469b097eaa153315b11cfcf26771587e3394323a5dc025e42570679b278a",
+   "bytes": 22308
   }
  }
 }

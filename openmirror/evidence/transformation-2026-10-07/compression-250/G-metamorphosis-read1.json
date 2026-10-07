@@ -1,0 +1,175 @@
+{
+ "id": "G-metamorphosis",
+ "n": 1,
+ "run": {
+  "procedureSummary": "Five cycles. Each step runs across all six chambers before the next step starts. (1) Feed: add the cycle's row to each chamber and ignore limits. (2) Carry forward: go through chambers 1 to 6 in order. Any amount above a chamber's holding limit goes into the next chamber before that chamber is checked. Chamber 6's excess goes to the loss tally. (3) State check on the contents after carry: a LARVAL chamber at or above its upper mark becomes PUPAL; a PUPAL chamber at or below its lower mark becomes LARVAL; log each change. (4) Metabolism: every amount comes from a snapshot taken before the step, using the states just set. A LARVAL chamber loses floor(q/4) to the tally. A PUPAL chamber sends floor(q/2) to the chamber before it (chamber 1 sends its half to the tally). All movements are applied at once, and any overfill stays until the next carry. (5) Moult: if the line total is strictly over 38, every chamber becomes floor(q/2) and the amount removed (q - floor(q/2)) goes to the tally.",
+  "openPoints": [
+   {
+    "point": "Which states metabolism uses",
+    "assumption": "The states set by this cycle's state check, since the state check comes first."
+   },
+   {
+    "point": "Metabolism when a chamber gives and receives in the same step",
+    "assumption": "Each chamber's own loss or transfer is worked out from its pre-step contents, so mass received from the next chamber has no effect on the giving chamber's own amount. All changes are applied together."
+   },
+   {
+    "point": "Where carried excess goes and when",
+    "assumption": "It is added to the next chamber before that chamber's own limit check, so excess can pass along several chambers in one sweep. Chamber 6's excess goes to the tally."
+   },
+   {
+    "point": "Rounding in the moult",
+    "assumption": "The amount kept is floor(q/2) and the amount removed is q - floor(q/2), which takes the odd unit. The removed amount goes to the tally."
+   },
+   {
+    "point": "Moult threshold",
+    "assumption": "Strictly over 38, read from the line total after metabolism. A total of exactly 38 in cycle 5 did not fire."
+   },
+   {
+    "point": "State check thresholds",
+    "assumption": "Both marks are inclusive ('at or above' the upper mark, 'at or below' the lower mark), checked on contents after carry. A chamber changes state at most once per cycle."
+   },
+   {
+    "point": "Overfill at the end",
+    "assumption": "Contents above the holding limit after metabolism or moult are not carried until the next cycle. After cycle 5 they stay as they are (chamber 2 ends at 10 against a limit of 8)."
+   }
+  ],
+  "cycleFigures": "C1: feed [3,12,9,7,5,4]; carry [3,8,12,6,7,4] (tally 0); states L,P,P,P,P,L; metabolism [7,10,9,6,4,3] (tally 1); moult FIRES at 39>38 -> [3,5,4,3,2,1] (tally 22).\nC2: feed [7,7,4,4,3,8]; carry [7,7,4,4,3,7] (tally 23); states P,P,L,P,L,P; metabolism [7,4,5,2,6,4] (tally 27); moult no (28) -> [7,4,5,2,6,4].\nC3: feed [11,8,8,2,6,10]; carry [10,8,9,2,6,7] (tally 30); states P,P,P,L,L,P; metabolism [9,8,5,2,8,4] (tally 36); moult no (36) -> [9,8,5,2,8,4].\nC4: feed [16,14,12,3,11,4]; carry [10,8,12,6,9,7] (tally 44); states P,P,P,P,P,P; metabolism [9,10,9,7,8,4] (tally 49); moult FIRES at 47>38 -> [4,5,4,3,4,2] (tally 74).\nC5: feed [4,11,10,6,7,2]; carry [4,8,12,6,8,2] (tally 74); states P,P,P,P,P,L; metabolism [6,10,9,7,4,2] (tally 76); moult no (38, not over 38) -> [6,10,9,7,4,2].",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "LARVAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting mass 20 + all feed 94 = 114; end mass 38 + loss tally 76 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "I did the arithmetic with a short Python script at C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\line.py and checked cycle 1's metabolism by hand. Tally sources: carry overflow 9 (cycle 2: 1, cycle 3: 3, cycle 4: 5), metabolism 21, moults 46 (cycle 1: 21, cycle 4: 25). This session is one blind reader in the pre-registered compression-250 run (openmirror/evidence/transformation-2026-10-07/compression-250/PLAN.md), so I did not open the other reads or grade.py. I made no git commit. The plan has results committed once, after grading, so committing a single read here would come before the orchestrator's commit and break that order."
+ },
+ "grade": {
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missing": [],
+  "openPoints": 7
+ }
+}

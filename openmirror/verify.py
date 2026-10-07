@@ -165,6 +165,16 @@ if os.path.exists(os.path.join(S3, "phase2-result.json")):
         claim("S3-11", "Control: reads attempted", 12, len(c["reads"]), ["transformation-2026-10-07/control/result.json"])
         claim("S3-12", "Control: reads exactly right (all five fields, regraded here)", 12, sum(1 for r in c["reads"] if r["run"] and g3(r["run"], cw[r["id"]]["translation"]["restingStateWord"], cw[r["id"]]["translation"]["raisedStateWord"])), ["transformation-2026-10-07/control/result.json"])
         claim("S3-13", "Control: the control writer prompt contains none of the skill's moves (plain statement, stranger, recoverable, picture)", True, not any(k in open(os.path.join(S3, "control", "writer-instruction.txt"), encoding="utf-8").read().lower() for k in ["plain statement", "stranger", "recoverable", "picture", "open mirror"]) if os.path.exists(os.path.join(S3, "control", "writer-instruction.txt")) else None, ["transformation-2026-10-07/control/writer-instruction.txt"])
+    c250 = os.path.join(S3, "compression-250", "result.json")
+    if os.path.exists(c250):
+        c2 = jl(c250)
+        w2 = {w["id"]: w for w in c2["writes"]}
+        claim("S3-14", "250-word test: write-ups passing the cap and figure checks", 4, sum(1 for w in c2["writes"] if not w["problems"] and len(w["translation"]["document"].split()) <= 250), ["transformation-2026-10-07/compression-250/result.json"])
+        ex = {a: sum(1 for r in c2["reads"] if r["arm"] == a and r["run"] and g3(r["run"], w2[r["id"]]["translation"]["restingStateWord"], w2[r["id"]]["translation"]["raisedStateWord"])) for a in ("S", "G")}
+        claim("S3-15", "250-word test: skill arm reads exact of 6", 3, ex["S"], ["transformation-2026-10-07/compression-250/result.json"])
+        claim("S3-16", "250-word test: generic-review arm reads exact of 6", 6, ex["G"], ["transformation-2026-10-07/compression-250/result.json"])
+        bad = [r for r in c2["reads"] if r["run"] and not g3(r["run"], w2[r["id"]]["translation"]["restingStateWord"], w2[r["id"]]["translation"]["raisedStateWord"])]
+        claim("S3-17", "250-word test: every wrong read is S-metallurgy with the known trajectory (4,5,5,4,3,1; resets 1,4,5; loss 92)", True, bool(bad) and all(r["id"] == "S-metallurgy" and r["run"]["finalQuantities"] == [4, 5, 5, 4, 3, 1] and sorted(r["run"]["resetPeriods"]) == [1, 4, 5] and r["run"]["lossTotal"] == 92 for r in bad), ["transformation-2026-10-07/compression-250/result.json"])
 
 # ------------------------------------------------------------------ what is NOT verified here (stated, not hidden)
 unverified = [

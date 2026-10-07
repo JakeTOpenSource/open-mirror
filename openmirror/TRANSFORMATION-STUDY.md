@@ -34,6 +34,10 @@ The confound named below as "most important" was tested before this report shipp
 
 So the comparison stands as: no review, 1 of 6 on these two domains; any review against the source, 6 of 6; the skill's review, 6 of 6. **The skill's seven steps did not add anything a one-sentence review instruction did not.** Record: `evidence/transformation-2026-10-07/control/`. Cost: 16 sessions, 1.04M tokens. One protocol difference: control readers received the write-up inline rather than by file, because the workflow could not write files; the reader wording was otherwise identical.
 
+## The 250-word test, run by the book
+
+Plan committed before the run (`evidence/transformation-2026-10-07/compression-250/PLAN.md`), with a four-row outcome table. Same two domains, one writer per arm per domain, three readers each, cap cut from 400 to 250 words. **Skill arm 3 of 6; generic-review arm 6 of 6.** The pre-registered reading for that row: the skill's text hurts at this compression. Under the cap, the skill-arm metallurgy writer wrote "halve all, removed melt to slag" with a general "splits round down", and all three readers kept the larger half; its own review notes say that rule was "covered once". The generic writer wrote "each keeps half, rounded down" and all three readers were exact. One writer per arm per domain, so one writer's choice; but it is the fourth time the same sentence has decided the outcome, and the skill's rule-by-rule check passed it. Full account: `compression-250/RESULTS.md`.
+
 ## What this does and does not show
 
 It shows:
@@ -61,8 +65,10 @@ The readers came in under estimate. The writers ran over because they used a she
 
 ## What should change in the skill
 
-The outcome rule set before the control said: if generic review also goes six of six, the skill should be cut down to whatever did the work. What did the work, on this evidence, is one instruction: before you hand over an analogy, review it against the thing it describes and fix what it lost. That instruction is inside Open Mirror as steps 4 and 5 applied to your own text, and it is also a sentence anyone could write. The honest pitch, as of today: Open Mirror has not been shown to beat a plain review instruction on any task yet tested. The README and changelog say so. The seven steps stay as they are until a task is found where they beat the sentence; the 250-word compression above is the first candidate, and it is cheap.
+The outcome rule set before the control said: if generic review also goes six of six, the skill should be cut down to whatever did the work. What did the work, on this evidence, is one instruction: before you hand over an analogy, review it against the thing it describes and fix what it lost. That instruction is inside Open Mirror as steps 4 and 5 applied to your own text, and it is also a sentence anyone could write. At 400 words the two tied. At 250 words the one-sentence review did better, on one writer each. The honest pitch, as of today: Open Mirror has not been shown to beat a plain review instruction on any task tested, and on the hardest one it did worse. The README and changelog say so.
 
-## Cost of the control
+One concrete thing the record does support changing: the specific failure, four times out of four, is a halving rule whose rounding is stated away from the quantity that keeps it. A writer's checklist that says "for every rounding, name which quantity is rounded" would have caught every failure in this study. That is a sentence, not a skill.
 
-16 sessions, 1.04M tokens, against an estimate of 1.0M to 1.1M. Study 3 total: 60 sessions, 3.91M.
+## Cost
+
+Control: 16 sessions, 1.04M. 250-word test: 16 sessions, 1.14M. Study 3 total: 76 sessions, 5.05M.

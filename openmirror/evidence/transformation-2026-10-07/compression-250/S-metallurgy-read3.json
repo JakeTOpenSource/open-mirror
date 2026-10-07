@@ -1,0 +1,167 @@
+{
+ "id": "S-metallurgy",
+ "n": 3,
+ "run": {
+  "procedureSummary": "Each cycle runs these steps in order, and each step is applied to all six crucibles before the next step starts. (1) Charge: add that cycle's charge to each crucible. A crucible may go over its working volume. (2) Overflow: go through crucibles 1 to 6 in order. If a crucible holds more than its working volume (10 8 12 6 9 7), cut it back to the volume and pass the excess down the launder to the next crucible. That crucible is checked when its turn comes, so the excess can cascade. Excess from crucible 6 goes to slag. (3) State check, on the quantities after overflow: a BASE crucible at or above its upper mark (7 6 9 5 7 5) becomes SUPERHEATED. A SUPERHEATED crucible at or below its lower mark (3 2 4 2 3 2) becomes BASE. Otherwise the state stays the same. Every change is logged. (4) Tap: work out all draws from the quantities after the state check, then move them all at once. BASE crucibles draw floor(q/4) to slag. SUPERHEATED crucibles draw floor(q/2) up the return launder to crucible i-1, and crucible 1's draw goes to slag. A crucible left overfull stays overfull until the next cycle's overflow step, and after cycle 5 it simply stays. (5) Emergency tap: if the six crucibles total strictly more than 38 after the tap, remove floor(q/2) from each crucible to slag, keeping q - floor(q/2), and log the cycle. States do not change during an emergency tap. Slag tally = overflow from crucible 6 + BASE tap draws + crucible 1's SUPERHEATED draws + emergency removals.",
+  "openPoints": [
+   {
+    "point": "Halving rounding in the emergency tap: the write-up says only 'halve all' and that splits round down. It does not say whether the removed half or the kept half is rounded down.",
+    "assumption": "Removed = floor(q/2) goes to slag and the crucible keeps q - floor(q/2). This matches the tap rule, where the drawn amount is the figure rounded down."
+   },
+   {
+    "point": "When the emergency check happens and which total it uses.",
+    "assumption": "It runs once per cycle as the last step, after the tap, using the total of the six crucibles. Slag is not counted in the total."
+   },
+   {
+    "point": "Whether 'over 38' includes exactly 38.",
+    "assumption": "It means strictly greater than 38. In cycle 3 the total after the tap was exactly 38, so the emergency tap did not fire."
+   },
+   {
+    "point": "Which quantities the tap draws are figured from.",
+    "assumption": "The quantities after the overflow step, with the states just set by that cycle's state check. All draws are worked out before anything moves, so material arriving from crucible i+1 is not drawn again in the same tap."
+   },
+   {
+    "point": "Whether the overflow cascade runs once or loops.",
+    "assumption": "It runs once, from crucible 1 to 6. Excess only moves downstream, so a single pass settles it."
+   },
+   {
+    "point": "Where overflow from crucible 6, BASE tap draws, crucible 1's return draw and the emergency removals go.",
+    "assumption": "All of them go to the same single slag tally, which is the lossTotal."
+   },
+   {
+    "point": "Rounding of the tap draws.",
+    "assumption": "BASE draws floor(q/4) and SUPERHEATED draws floor(q/2), per 'splits round down'."
+   },
+   {
+    "point": "Committing to the repo. The user asked to 'run it then commit it to the repo' by the book. The repo's pre-registered plan (openmirror/evidence/transformation-2026-10-07/compression-250/PLAN.md) says results go in RESULTS.md in that folder and are added to verify.py.",
+    "assumption": "This session is one blind read inside that run, so I made no commit. A commit from a single reader in the middle of the run would get ahead of the plan's results step. The session running the study should commit RESULTS.md and verify.py when the run is complete. The working tree on main was left clean and untouched."
+   }
+  ],
+  "cycleFigures": "Figures are crucibles 1-6, with the running slag total after each step. Start: 3 6 6 2 2 1 | slag 0.\nC1: charge 3 12 9 7 5 4 | overflow 3 8 12 6 7 4 (slag 0) | state B S S S S B | tap 7 10 9 6 4 3 (slag 1, total 39) | emergency, since 39 > 38: 4 5 5 3 2 2 (slag 19).\nC2: charge 8 7 5 4 3 9 | overflow 8 7 5 4 3 7 (slag 21) | state S S S S B S | tap 7 6 5 2 6 4 (slag 25, total 30) | no emergency.\nC3: charge 11 10 8 2 6 10 | overflow 10 8 11 2 6 7 (slag 28) | state S S S B B S | tap 9 9 6 2 8 4 (slag 34, total 38) | no emergency, since 38 is not over 38.\nC4: charge 16 15 13 3 11 4 | overflow 10 8 12 6 9 7 (slag 44) | state S S S S S S | tap 9 10 9 7 8 4 (slag 49, total 47) | emergency: 5 5 5 4 4 2 (slag 71).\nC5: charge 5 11 11 7 7 2 | overflow 5 8 12 6 9 3 (slag 71) | state S S S S S S | tap 7 10 9 7 6 2 (slag 73, total 41) | emergency: 4 5 5 4 3 1 (slag 92).",
+  "finalQuantities": [
+   4,
+   5,
+   5,
+   4,
+   3,
+   1
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4,
+   5
+  ],
+  "lossTotal": 92,
+  "balanceCheck": "Starting melt 20 + charges 94 (cycles 1 to 5: 20, 15, 17, 24, 18) = 114. End melt 22 (4+5+5+4+3+1) + slag 92 = 114. The balance holds.",
+  "usedScript": true,
+  "notes": "I ran the arithmetic with a short Python script, crucible.py, saved in the session scratchpad and not in the repo. I made no git commit. The repo at C:\\Users\\Jaket\\Downloads\\open-mirror (branch main, working tree clean) has a pre-registered plan at openmirror/evidence/transformation-2026-10-07/compression-250/PLAN.md. It says results go into RESULTS.md in that folder and into verify.py once the run is complete. This report is one blind read within that run, so recording and committing it is a step for the session running the study."
+ },
+ "grade": {
+  "exact": false,
+  "finalOk": false,
+  "modesOk": false,
+  "changesOk": false,
+  "purgesOk": false,
+  "lostOk": false,
+  "got": {
+   "final": [
+    4,
+    5,
+    5,
+    4,
+    3,
+    1
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED"
+   ],
+   "resetPeriods": [
+    1,
+    4,
+    5
+   ],
+   "loss": 92
+  },
+  "missing": [
+   "2|3|ELEVATED|NORMAL",
+   "3|3|NORMAL|ELEVATED",
+   "5|6|ELEVATED|NORMAL"
+  ],
+  "openPoints": 8
+ }
+}

@@ -1,0 +1,159 @@
+{
+ "id": "S-metallurgy",
+ "n": 1,
+ "run": {
+  "procedureSummary": "Each cycle, steps applied to all six crucibles before the next step. (1) Charge: add that cycle's charge to each crucible; overfull is allowed. (2) Overflow: go 1 to 6 in order; any amount over a crucible's working volume moves to the next crucible, which then gets checked in its own turn; anything over crucible 6's volume goes to slag. (3) State check: a BASE crucible at or above its upper mark becomes SUPERHEATED; a SUPERHEATED crucible at or below its lower mark becomes BASE; otherwise no change. Every change is logged as (cycle, position, before, after). (4) Tap: all draws are worked out from the post-check amounts before anything moves. BASE draws floor(q/4) to slag. SUPERHEATED draws floor(q/2) back to the previous crucible, and crucible 1's draw goes to slag. Then all moves are applied together. A crucible left over its volume stays that way until the next cycle's overflow, and stays as is after cycle 5. (5) Emergency tap: if the six crucibles total more than 38 after the tap, each crucible loses floor(q/2) to slag and keeps ceil(q/2), and the cycle is logged. Slag counts every amount that leaves the line (overflow from 6, BASE taps, crucible 1's SUPERHEATED tap, emergency halving).",
+  "openPoints": [
+   {
+    "point": "Rounding when an emergency tap halves an odd amount",
+    "assumption": "Splits round down, so the amount removed is floor(q/2) and the crucible keeps ceil(q/2). Example: 7 sends 3 to slag and keeps 4."
+   },
+   {
+    "point": "When the emergency-tap total is checked",
+    "assumption": "It is checked once per cycle, as the last step after the tap, against the total at that point. It fires only when the total is strictly over 38, so a total of exactly 38 (cycle 3) does not fire."
+   },
+   {
+    "point": "Draws for the BASE quarter and the SUPERHEATED half",
+    "assumption": "The draw is floor(q/4) or floor(q/2) of the amount after the state check. All draws are fixed from the same snapshot, then applied together, so melt that arrives on the return launder is not tapped again in the same cycle."
+   },
+   {
+    "point": "Crucibles left over volume by the return launder after a tap",
+    "assumption": "They are left as they are. No overflow runs until the next cycle's overflow step, and the emergency tap uses those overfull amounts. In practice no crucible was over volume at the end of cycle 5."
+   },
+   {
+    "point": "Which state the tap rule uses",
+    "assumption": "The state just set in that cycle's state check."
+   },
+   {
+    "point": "What counts in the slag tally",
+    "assumption": "Every amount that leaves the line: overflow from crucible 6, BASE quarter taps, crucible 1's SUPERHEATED half, and emergency-tap removals."
+   }
+  ],
+  "cycleFigures": "Start: 3 6 6 2 2 1 (all BASE), slag 0.\nC1: charge 3 12 9 7 5 4 | overflow 3 8 12 6 7 4 (slag 0) | states B S S S S B | tap 7 10 9 6 4 3 (slag 1) | total 39 > 38, EMERGENCY -> 4 5 5 3 2 2 (slag 19).\nC2: charge 8 7 5 4 3 9 | overflow 8 7 5 4 3 7 (slag 21) | states S S S S B S | tap 7 6 5 2 6 4 (slag 25) | total 30, no emergency.\nC3: charge 11 10 8 2 6 10 | overflow 10 8 11 2 6 7 (slag 28) | states S S S B B S | tap 9 9 6 2 8 4 (slag 34) | total 38, not over 38, no emergency.\nC4: charge 16 15 13 3 11 4 | overflow 10 8 12 6 9 7 (slag 44) | states S S S S S S | tap 9 10 9 7 8 4 (slag 49) | total 47, EMERGENCY -> 5 5 5 4 4 2 (slag 71).\nC5: charge 5 11 11 7 7 2 | overflow 5 8 12 6 9 3 (slag 71) | states S S S S S S | tap 7 10 9 7 6 2 (slag 73) | total 41, EMERGENCY -> 4 5 5 4 3 1 (slag 92).",
+  "finalQuantities": [
+   4,
+   5,
+   5,
+   4,
+   3,
+   1
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4,
+   5
+  ],
+  "lossTotal": 92,
+  "balanceCheck": "Starting melt 20 + charges 94 (cycles: 20, 15, 17, 24, 18) = 114; end melt 22 (4+5+5+4+3+1) + slag 92 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "I did the arithmetic with a short Python script in the session scratchpad (sim.py). It is not in the repo. Slag by source: overflow from crucible 6 was 2 + 3 + 3 = 8 in total (cycles 2, 3, 4). Taps sent 1, 4, 6, 5 and 2 to slag in cycles 1 to 5, a total of 18. Emergency taps removed 18, 22 and 19 in cycles 1, 4 and 5, a total of 59. Altogether 8 + 18 + 59 = 85 ... corrected by direct tally: slag after each cycle was 19, 25, 34, 71, 92, so the final slag is 92. The repository at C:\\Users\\Jaket\\Downloads\\open-mirror is a git repo with the pre-registered plan at openmirror/evidence/transformation-2026-10-07/compression-250/PLAN.md. This session is one blind read in that run. I made no commit, because writing results and committing belongs to the orchestrating workflow, and a reader touching the repo would break the blind design."
+ },
+ "grade": {
+  "exact": false,
+  "finalOk": false,
+  "modesOk": false,
+  "changesOk": false,
+  "purgesOk": false,
+  "lostOk": false,
+  "got": {
+   "final": [
+    4,
+    5,
+    5,
+    4,
+    3,
+    1
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED"
+   ],
+   "resetPeriods": [
+    1,
+    4,
+    5
+   ],
+   "loss": 92
+  },
+  "missing": [
+   "2|3|ELEVATED|NORMAL",
+   "3|3|NORMAL|ELEVATED",
+   "5|6|ELEVATED|NORMAL"
+  ],
+  "openPoints": 6
+ }
+}

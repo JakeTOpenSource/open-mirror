@@ -1,0 +1,171 @@
+{
+ "id": "G-metamorphosis",
+ "n": 3,
+ "run": {
+  "procedureSummary": "Feed: add the cycle's feed row to every chamber, ignoring holding limits. Carry forward: go through chambers 1 to 6 in order. Any amount over a chamber's holding limit is cut back to the limit and added to the next chamber before that chamber's turn, so a chamber can pass on excess it received from the one before. Chamber 6's excess goes to the loss tally. State check: a LARVAL chamber at or above its upper mark turns PUPAL. A PUPAL chamber at or below its lower mark turns LARVAL. Every change is logged. Metabolism: amounts are worked out from the contents before the step and applied to all chambers at once. LARVAL loses floor(q/4) to the tally. PUPAL gives floor(q/2) to the previous chamber; for chamber 1 it goes to the tally. Contents left over the limit stay put until the next carry forward. Moult: if the line total after metabolism is strictly over 38, each chamber becomes floor(q/2) and the amount removed (q - floor(q/2)) goes to the tally.",
+  "openPoints": [
+   {
+    "point": "Moult rounding: does 'halves, rounded down' set the remaining mass or the removed mass?",
+    "assumption": "The remaining mass is floor(q/2) and the removed amount q - floor(q/2) goes to the tally. For an odd q this removes the larger half."
+   },
+   {
+    "point": "When the moult test happens and which total it uses",
+    "assumption": "It uses the line total after metabolism, with a strict test (total > 38). In cycle 5 the total was exactly 38, so the moult did not fire."
+   },
+   {
+    "point": "Whether carry forward cascades",
+    "assumption": "Yes. Chambers are processed in order, so excess received from the previous chamber counts toward the next chamber's own overflow."
+   },
+   {
+    "point": "Metabolism order",
+    "assumption": "Amounts are taken from a snapshot of the contents before the step, so reabsorbed mass a chamber receives does not change its own loss. All moves are applied together."
+   },
+   {
+    "point": "Which state the metabolism step uses",
+    "assumption": "It uses the state after this cycle's state check."
+   },
+   {
+    "point": "State-check boundaries",
+    "assumption": "Both are inclusive (at or above the upper mark; at or below the lower mark). Each chamber is checked once per cycle, so it changes state at most once per cycle."
+   }
+  ],
+  "cycleFigures": "C1: feed [3,12,9,7,5,4]; carry [3,8,12,6,7,4] tally 0; state [3,8,12,6,7,4] L,P,P,P,P,L; metab [7,10,9,6,4,3] tally 1; moult (total 39>38) [3,5,4,3,2,1] tally 22.\nC2: feed [7,7,4,4,3,8]; carry [7,7,4,4,3,7] tally 23; state same, P,P,L,P,L,P; metab [7,4,5,2,6,4] tally 27; no moult (28).\nC3: feed [11,8,8,2,6,10]; carry [10,8,9,2,6,7] tally 30; state P,P,P,L,L,P; metab [9,8,5,2,8,4] tally 36; no moult (36).\nC4: feed [16,14,12,3,11,4]; carry [10,8,12,6,9,7] tally 44; state all P; metab [9,10,9,7,8,4] tally 49; moult (47>38) [4,5,4,3,4,2] tally 74.\nC5: feed [4,11,10,6,7,2]; carry [4,8,12,6,8,2] tally 74; state P,P,P,P,P,L; metab [6,10,9,7,4,2] tally 76; no moult (38, not over 38).",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "LARVAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting mass 20 + all feed 94 = 114; end mass 38 (6+10+9+7+4+2) + loss tally 76 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "I ran a Python script and committed it to the repo with its output, following the format of the earlier crucible-cascade handover commit. The commit is ce3b2fc on branch crucible-cascade-handover. It adds C:\\Users\\Jaket\\Downloads\\open-mirror\\openmirror\\evidence\\rearing-line-2026-10-07\\rearing.py and run-output.txt. I did not push. This run's inputs are the same as the crucible-cascade run in commit 4fe4b47, with different names, and the results match it exactly. Moult was close to firing in cycle 5: the total was exactly 38, so it did not fire under the strict 'over 38' rule."
+ },
+ "grade": {
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missing": [],
+  "openPoints": 6
+ }
+}

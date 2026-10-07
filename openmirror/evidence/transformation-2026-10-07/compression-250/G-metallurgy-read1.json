@@ -1,0 +1,175 @@
+{
+ "id": "G-metallurgy",
+ "n": 1,
+ "run": {
+  "procedureSummary": "1. Charge: add each cycle's six charges to the contents. Overfill is allowed at this point.\n2. Overflow: work through positions 1 to 6 in order. Any amount above a crucible's working volume is cut back to the volume and added to the next crucible before that crucible's turn, so it can cascade. Position 6's excess goes to slag.\n3. State: test the post-overflow contents. BASE at or above its upper mark becomes SUPERHEATED. SUPERHEATED at or below its lower mark becomes BASE. Anything else stays as it is, and every change is logged.\n4. Bleed: work out all six amounts first, from the post-overflow contents and the newly updated states, rounding down. BASE sends floor(c/4) to slag. SUPERHEATED sends floor(c/2) to position i-1, except position 1, whose amount goes to slag. All transfers then happen at once. Any overfill this creates stays until the next cycle's overflow step, and after cycle 5 it stays for good.\n5. Emergency tap: if the total of the six is strictly above 38, each crucible keeps floor(c/2) and the rest goes to slag.",
+  "openPoints": [
+   {
+    "point": "Which contents the state test uses",
+    "assumption": "The contents after the overflow step, since the steps run in order."
+   },
+   {
+    "point": "Which state and contents the bleed uses",
+    "assumption": "The state just set in step 3 and the post-overflow contents. All amounts are worked out before anything moves (simultaneous move)."
+   },
+   {
+    "point": "Crucibles that start at or above their upper mark (position 2 starts at 6, which equals its mark of 6)",
+    "assumption": "The state is only tested at step 3, so every crucible starts BASE whatever its contents."
+   },
+   {
+    "point": "Return-launder inflow that pushes a crucible over its working volume during bleed (for example position 2 holding 10 against a volume of 8 after bleed in cycles 1, 4 and 5)",
+    "assumption": "The overfill stays where it is until the next cycle's overflow step, and after cycle 5 it stays at the end."
+   },
+   {
+    "point": "Tap boundary: 'over 38'",
+    "assumption": "Strictly greater than 38. In cycle 5 the post-bleed total is exactly 38, so the tap did not fire."
+   },
+   {
+    "point": "When the tap test happens and what it tests",
+    "assumption": "Once per cycle, after the bleed, on the total of all six crucibles. The tap does not change any states."
+   },
+   {
+    "point": "Rounding",
+    "assumption": "Always round down (floor) for bleed amounts and for the half each crucible keeps on a tap. The remainder goes to slag on a tap."
+   }
+  ],
+  "cycleFigures": "Start: 3,6,6,2,2,1 (all BASE, slag 0)\nC1: charge 3,12,9,7,5,4 | overflow 3,8,12,6,7,4 (slag 0) | state 3,8,12,6,7,4 [B,S,S,S,S,B] | bleed 7,10,9,6,4,3 (amounts 0,4,6,3,3,1; slag 1) | tap FIRED (total 39) 3,5,4,3,2,1 (slag 22)\nC2: charge 7,7,4,4,3,8 | overflow 7,7,4,4,3,7 (slag 23) | state 7,7,4,4,3,7 [S,S,B,S,B,S] | bleed 7,4,5,2,6,4 (amounts 3,3,1,2,0,3; slag 27) | tap no (total 28) 7,4,5,2,6,4\nC3: charge 11,8,8,2,6,10 | overflow 10,8,9,2,6,7 (slag 30) | state 10,8,9,2,6,7 [S,S,S,B,B,S] | bleed 9,8,5,2,8,4 (amounts 5,4,4,0,1,3; slag 36) | tap no (total 36) 9,8,5,2,8,4\nC4: charge 16,14,12,3,11,4 | overflow 10,8,12,6,9,7 (slag 44) | state 10,8,12,6,9,7 [S,S,S,S,S,S] | bleed 9,10,9,7,8,4 (amounts 5,4,6,3,4,3; slag 49) | tap FIRED (total 47) 4,5,4,3,4,2 (slag 74)\nC5: charge 4,11,10,6,7,2 | overflow 4,8,12,6,8,2 (slag 74) | state 4,8,12,6,8,2 [S,S,S,S,S,B] | bleed 6,10,9,7,4,2 (amounts 2,4,6,3,4,0; slag 76) | tap no (total exactly 38) 6,10,9,7,4,2",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "BASE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting melt 20 + all charges 94 = 114. End melt 38 (6+10+9+7+4+2) + slag tally 76 = 114. The two sides match.",
+  "usedScript": true,
+  "notes": "I used a short Python script for the arithmetic. It is committed with its output as C:\\Users\\Jaket\\Downloads\\open-mirror\\openmirror\\evidence\\crucible-cascade-2026-10-07\\crucible.py and run-output.txt.\n\nCommit: the repo was on main, so I followed the usual practice and made a new branch, crucible-cascade-handover. The commit is 4fe4b47 and contains only those two new files. It has not been pushed and has not been merged into main.\n\nOne thing was skipped: the latest commit on main is a pre-registered plan (compression-250/PLAN.md) that may say where and how run results should be recorded. When I tried to read it, the auto-mode permission classifier blocked the read, flagging it as personal data handling. So I could not check the commit location against the plan. I picked a neutral new folder under openmirror/evidence/ instead.\n\nIf the plan names a different location or format, the user should read it and move or amend the commit. Reading it would also need permission for that read."
+ },
+ "grade": {
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missing": [],
+  "openPoints": 7
+ }
+}

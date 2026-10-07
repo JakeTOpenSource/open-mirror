@@ -1,0 +1,171 @@
+{
+ "id": "G-metallurgy",
+ "n": 3,
+ "run": {
+  "procedureSummary": "1. Charge: add each cycle's charge to crucibles 1 to 6. Overfill is allowed at this step. 2. Overflow: go from 1 to 6 in order. If a crucible holds more than its working volume, the excess moves into the next crucible before that crucible's turn. Excess from 6 goes to slag. 3. State: a BASE crucible at or above its upper mark becomes SUPERHEATED. A SUPERHEATED crucible at or below its lower mark becomes BASE. Otherwise the state stays the same. Every change is logged. 4. Bleed: all six amounts are worked out from the contents after overflow, rounded down, before anything moves. BASE loses floor(q/4) to slag. SUPERHEATED sends floor(q/2) to the crucible before it (from 1 it goes to slag). Any overfill this causes is left in place until the next cycle's overflow step. After cycle 5 it stays. 5. Emergency tap: if the total across all six is strictly greater than 38, each crucible keeps floor(q/2) and the rest goes to slag.",
+  "openPoints": [
+   {
+    "point": "Whether the state check at step 3 uses the contents after overflow",
+    "assumption": "Yes. Steps run in order, so step 3 sees the contents after step 2."
+   },
+   {
+    "point": "Whether a crucible's own bleed amount is based on contents that include what it receives from the crucible after it",
+    "assumption": "No. All six amounts are worked out from the contents before any move ('figure all six ... then move'). A crucible's bleed comes only from its own pre-bleed contents."
+   },
+   {
+    "point": "Rounding of the bleed and of the tap halving",
+    "assumption": "Bleed amounts are rounded down. In the tap, each crucible keeps floor(q/2) and the remainder, ceil(q/2), goes to slag."
+   },
+   {
+    "point": "Tap threshold boundary",
+    "assumption": "'Over 38' means strictly greater than 38. A total of exactly 38, as at the end of cycle 5, does not fire the tap."
+   },
+   {
+    "point": "When the tap test is applied",
+    "assumption": "After the bleed, using the total of all six crucibles."
+   },
+   {
+    "point": "Overflow from a crucible that has already had its turn",
+    "assumption": "Overflow is a single pass from 1 to 6. Excess sent forward is checked when the next crucible's turn comes. Nothing flows backward during overflow."
+   }
+  ],
+  "cycleFigures": "C1: charge [3,12,9,7,5,4]; overflow [3,8,12,6,7,4] slag 0; state [3,8,12,6,7,4] (2,3,4,5 -> SUPERHEATED); bleed [7,10,9,6,4,3] slag 1; tap fired (39>38) [3,5,4,3,2,1] slag 22. C2: charge [7,7,4,4,3,8]; overflow [7,7,4,4,3,7] slag 23; state same quantities; bleed [7,4,5,2,6,4] slag 27; tap no (28) [7,4,5,2,6,4]. C3: charge [11,8,8,2,6,10]; overflow [10,8,9,2,6,7] slag 30; state same; bleed [9,8,5,2,8,4] slag 36; tap no (36) [9,8,5,2,8,4]. C4: charge [16,14,12,3,11,4]; overflow [10,8,12,6,9,7] slag 44; state same; bleed [9,10,9,7,8,4] slag 49; tap fired (47>38) [4,5,4,3,4,2] slag 74. C5: charge [4,11,10,6,7,2]; overflow [4,8,12,6,8,2] slag 74; state same; bleed [6,10,9,7,4,2] slag 76; tap no (38, not over 38) [6,10,9,7,4,2].",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "SUPERHEATED",
+   "BASE"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "BASE",
+    "to": "SUPERHEATED"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "SUPERHEATED",
+    "to": "BASE"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting melt 20 + all charges 94 = 114. End melt 38 + slag tally 76 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "I ran a short Python script for the arithmetic. It is in the session scratchpad as crucible.py, not in the repo. I did not commit anything. The repo's pre-registered plan (openmirror/evidence/transformation-2026-10-07/compression-250/PLAN.md) shows this run is one blind read in the 250-word compression test. Under that plan, reads are collected by the workflow and the results go into RESULTS.md and verify.py. A reader committing its own result would step outside that procedure, so the commit is left to the orchestrating workflow. The tap fired in cycles 1 and 4. At the end of cycle 5 the total was exactly 38, which is not over 38, so the tap did not fire."
+ },
+ "grade": {
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missing": [],
+  "openPoints": 6
+ }
+}

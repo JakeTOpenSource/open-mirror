@@ -1,0 +1,179 @@
+{
+ "id": "G-metamorphosis",
+ "n": 2,
+ "run": {
+  "procedureSummary": "Cycles 1 to 5, each step finished across all six chambers before the next step starts. (1) Feed: add the cycle's row to chambers 1 to 6, ignoring holding limits. (2) Carry forward: go through chambers 1 to 6 in order. If a chamber is over its holding limit (10, 8, 12, 6, 9, 7), cut it back to the limit and add the excess to the next chamber before that chamber's turn, so excess can cascade. Chamber 6's excess goes to the loss tally. (3) State check on the post-carry contents: a LARVAL chamber at or above its upper mark (7, 6, 9, 5, 7, 5) turns PUPAL; a PUPAL chamber at or below its lower mark (3, 2, 4, 2, 3, 2) turns LARVAL; otherwise the state stays. Each change is logged as (cycle, position, before, after). (4) Metabolism: every amount is worked out from the contents before this step, using each chamber's new state. A LARVAL chamber loses floor(q/4) to the tally. A PUPAL chamber gives floor(q/2) to chamber i-1, and chamber 1's PUPAL share goes to the tally. All moves happen at once. Anything this pushes over a holding limit stays there until the next cycle's carry forward, or stays for good after cycle 5. (5) Moult: if the line total is strictly over 38, each chamber keeps floor(q/2) and the rest (q minus floor(q/2)) goes to the tally.",
+  "openPoints": [
+   {
+    "point": "Metabolism and state",
+    "assumption": "Metabolism uses the state the chamber has just after this cycle's state check, so a chamber that changed this cycle is treated by its new state."
+   },
+   {
+    "point": "Metabolism amounts when chambers interact",
+    "assumption": "Every chamber's loss or reabsorption is worked out from its own contents before the step. Reabsorbed mass reaching chamber i-1 does not change that chamber's own quarter or half in the same step. All moves are applied at once."
+   },
+   {
+    "point": "Moult threshold at the boundary",
+    "assumption": "'Over 38' means strictly greater than 38. A line total of exactly 38 does not moult. This decides cycle 5, which ends at exactly 38, so there is no moult in cycle 5."
+   },
+   {
+    "point": "Moult rounding (which part is rounded down)",
+    "assumption": "Each chamber keeps floor(q/2) and the removed part, q minus floor(q/2), goes to the tally. For odd contents the extra unit is removed. It mattered in cycles 1 and 4."
+   },
+   {
+    "point": "Moult test timing",
+    "assumption": "Moult is tested once per cycle, on the line total after metabolism."
+   },
+   {
+    "point": "Carry-forward cascade",
+    "assumption": "Carry forward is one pass from 1 to 6. Excess added to chamber i+1 is counted when that chamber's own turn comes, so it can cascade further. Chamber 1 receives nothing during carry forward."
+   },
+   {
+    "point": "Rounding of metabolism",
+    "assumption": "Floor of q/4 for LARVAL and floor of q/2 for PUPAL, each applied to that chamber's own pre-step contents."
+   },
+   {
+    "point": "Commit request",
+    "assumption": "This session is one blind reader inside the pre-registered 250-word compression run, so I did not commit anything. A partial commit from one reader before all reads are graded would break the plan's procedure. The commit belongs to the orchestrator once RESULTS.md and verify.py are updated. My arithmetic script is in my scratchpad and is not part of the repo."
+   }
+  ],
+  "cycleFigures": "Each row lists chambers 1 to 6 [tally].\nStart: 3,6,6,2,2,1 [0], total 20, all LARVAL.\nC1 feed: 3,12,9,7,5,4 [0] | carry: 3,8,12,6,7,4 [0] | state: 3,8,12,6,7,4 [0], states L,P,P,P,P,L | metabolism: 7,10,9,6,4,3 [1] | moult (total 39 > 38): 3,5,4,3,2,1 [22], total 18.\nC2 feed: 7,7,4,4,3,8 [22] | carry: 7,7,4,4,3,7 [23] | state: 7,7,4,4,3,7 [23], states P,P,L,P,L,P | metabolism: 7,4,5,2,6,4 [27] | moult: none (28): 7,4,5,2,6,4 [27].\nC3 feed: 11,8,8,2,6,10 [27] | carry: 10,8,9,2,6,7 [30] | state: 10,8,9,2,6,7 [30], states P,P,P,L,L,P | metabolism: 9,8,5,2,8,4 [36] | moult: none (36): 9,8,5,2,8,4 [36].\nC4 feed: 16,14,12,3,11,4 [36] | carry: 10,8,12,6,9,7 [44] | state: 10,8,12,6,9,7 [44], states P,P,P,P,P,P | metabolism: 9,10,9,7,8,4 [49] | moult (total 47 > 38): 4,5,4,3,4,2 [74], total 22.\nC5 feed: 4,11,10,6,7,2 [74] | carry: 4,8,12,6,8,2 [74] | state: 4,8,12,6,8,2 [74], states P,P,P,P,P,L | metabolism: 6,10,9,7,4,2 [76] | moult: none (total exactly 38, not over 38): 6,10,9,7,4,2 [76].",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "LARVAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Starting mass 20 (3+6+6+2+2+1) plus all feed 94 (cycles: 20 + 15 + 17 + 24 + 18) = 114. End mass 38 (6+10+9+7+4+2) plus loss tally 76 = 114. The two sides match.",
+  "usedScript": true,
+  "notes": "I did the arithmetic with a short Python script in the session scratchpad (line.py) and checked it against the balance line. Chambers 2 and 3 end at their holding limits (10 > 8 is overfill in chamber 2, and 9 is under 12 in chamber 3). Chamber 2's overfill comes from cycle-5 reabsorption and stays because the run ends after cycle 5. Chamber 4 ends at 7, over its limit of 6, for the same reason. I made no git commit: this session is one blind reader in the pre-registered run, and committing belongs to the orchestrator after grading."
+ },
+ "grade": {
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missing": [],
+  "openPoints": 8
+ }
+}

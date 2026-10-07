@@ -1,0 +1,13 @@
+- Draft 1 ran to 344 words. I cut it to 247 (by wc -w) and kept all 55 required numbers: 6 working volumes, 6 upper marks, 6 lower marks, 6 starting amounts, the limit 38 and the 30 charge entries.
+- Overflow cascade: the earlier wording left out that excess reaches the next crucible before that crucible's own turn. It now says 'before its turn', so one overflow can push the next crucible over within the same step.
+- Overflow from crucible 6: changed 'slag pit' to 'goes to slag' so it is clearly part of the slag tally.
+- Bleed rounding: it now says all six amounts are worked out from current contents and rounded down before any melt moves. This covers both the simultaneous move and the floor on quarter and half.
+- Bleed from crucible 1 when SUPERHEATED: added '(1's to slag)'. There is no crucible upstream of it, so its half goes to slag.
+- Bleed overfill: stated that a crucible can sit above working volume after taking melt back, that only the next cycle's overflow corrects it, and that after cycle 5 nothing does.
+- Emergency tap rounding: changed to 'each keeps half, rounded down'. This matches the engineer's process (contents become floor of half), where 'removes half' would round the wrong way on odd amounts. 'Total over 38' keeps the trigger strictly above 38.
+- State check: added 'otherwise unchanged' so a crucible between its marks, or BASE below its lower mark, keeps its state. One check per cycle means at most one change per cycle.
+- Step order: added that every step finishes on all six crucibles before the next step starts.
+- Charge step: added 'overfill allowed', because working volume is not enforced at charging.
+- Report paragraph: checked that it holds no figures or results. It names only the items to hand in: end melt and state for 1 to 6, each change as (cycle, position, before, after), the cycles the tap fired, the slag tally, and the balance check equation.
+- Banned words: scanned with grep for cell, level, mode, NORMAL, ELEVATED, period, intake, spill, release, purge, LOST, abstract, metaphor, analogy, comparison, represent, correspond and stands for. None found.
+- Commit: I did not commit. The working directory is a git repo on main, but this subagent's job is to return the explanation through the structured output. The commit the user asked for is for the workflow orchestrator to make with the run's results.

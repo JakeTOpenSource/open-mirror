@@ -1,0 +1,179 @@
+{
+ "id": "S-metamorphosis",
+ "n": 3,
+ "run": {
+  "procedureSummary": "Start: q=[3,6,6,2,2,1], all LARVAL, loss=0. Each cycle 1-5, in order: (1) Feed: add the cycle's table row to every chamber regardless of state or capacity. (2) Carry: for i=1..6 in sequence, if q[i]>cap[i], move q[i]-cap[i] into chamber i+1 (which may then itself exceed capacity and pass on in its own turn); chamber 6's excess goes to loss. (3) Check, on post-carry quantities: LARVAL with q>=upper becomes PUPAL; PUPAL with q<=lower becomes LARVAL; otherwise unchanged; each change logged (cycle, position, before, after). (4) Metabolise, using post-check states and quantities, all shares computed first then applied together: LARVAL loses floor(q/4) to loss; PUPAL loses floor(q/2), which goes to chamber i-1 (chamber 1's share goes to loss). Any resulting overfill is left in place for the next cycle's carry. (5) Moult: if the six-chamber total after metabolise is strictly greater than 38, each chamber keeps floor(q/2) and the remainder goes to loss; cycle logged. States are not re-checked after metabolise or moult.",
+  "openPoints": [
+   {
+    "point": "Carry order and cascading",
+    "assumption": "Sequential left to right in one pass; a chamber's received overflow counts in its own turn, so overflow can cascade down the line to chamber 6 and out."
+   },
+   {
+    "point": "Boundary on the marks",
+    "assumption": "Upper is inclusive (q >= upper turns LARVAL to PUPAL); lower is inclusive (q <= lower turns PUPAL back to LARVAL). A chamber changes at most once per check."
+   },
+   {
+    "point": "Which state metabolise uses",
+    "assumption": "The state just set by that cycle's check."
+   },
+   {
+    "point": "Rounding",
+    "assumption": "All shares (quarter burn, half pass, half kept on moult) rounded down per chamber; on moult the chamber keeps floor(q/2) and the discarded part is q - floor(q/2)."
+   },
+   {
+    "point": "Where the amounts go",
+    "assumption": "LARVAL burn, chamber 6 carry excess, chamber 1 PUPAL half, and moult discards all go to the loss tally; PUPAL half from chamber i>1 goes into chamber i-1 even if it exceeds capacity."
+   },
+   {
+    "point": "Moult threshold and timing",
+    "assumption": "Total measured after metabolise; fires only when strictly over 38. Cycle 5 ends at exactly 38, so no moult in cycle 5."
+   },
+   {
+    "point": "Overfill at the end",
+    "assumption": "No carry after cycle 5, so chamber 2 ends at 10 against capacity 8 and it is reported as is."
+   },
+   {
+    "point": "States after metabolise/moult",
+    "assumption": "Not re-checked; end states are the cycle 5 check states."
+   }
+  ],
+  "cycleFigures": "C1: feed [3,12,9,7,5,4]; carry [3,8,12,6,7,4] (loss 0); check L,P,P,P,P,L; metabolise [7,10,9,6,4,3] (loss 1, total 39); moult fires -> [3,5,4,3,2,1] (loss 22). C2: feed [7,7,4,4,3,8]; carry [7,7,4,4,3,7] (loss 23); check P,P,L,P,L,P; metabolise [7,4,5,2,6,4] (loss 27, total 28); no moult. C3: feed [11,8,8,2,6,10]; carry [10,8,9,2,6,7] (loss 30); check P,P,P,L,L,P; metabolise [9,8,5,2,8,4] (loss 36, total 36); no moult. C4: feed [16,14,12,3,11,4]; carry [10,8,12,6,9,7] (loss 44); check P,P,P,P,P,P; metabolise [9,10,9,7,8,4] (loss 49, total 47); moult fires -> [4,5,4,3,4,2] (loss 74). C5: feed [4,11,10,6,7,2]; carry [4,8,12,6,8,2] (loss 74); check P,P,P,P,P,L; metabolise [6,10,9,7,4,2] (loss 76, total 38); no moult (38 is not over 38).",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "LARVAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Start mass 20 + all feed 94 = 114; end mass 38 (6+10+9+7+4+2) + loss tally 76 = 114. Balanced.",
+  "usedScript": true,
+  "notes": "I did the arithmetic with a short Python script (sim.py in the session scratchpad) and checked cycle 1 by hand. Chamber 2 ends at 10, over its capacity of 8, because no carry runs after cycle 5. Cycle 5's total after metabolise is exactly 38, so the moult did not fire. I treated this as a blind read and did not open the repo's study files. I did not make a git commit from this subagent: this read is one of several parallel handover copies, and the parent workflow collects this structured output. Committing the run's results (repo: C:\\Users\\Jaket\\Downloads\\open-mirror, branch main) is the parent's step after all reads finish, per the user's 'run it then commit it'."
+ },
+ "grade": {
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missing": [],
+  "openPoints": 8
+ }
+}

@@ -1,0 +1,171 @@
+{
+ "id": "S-metamorphosis",
+ "n": 2,
+ "run": {
+  "procedureSummary": "Cycles 1 to 5, each step finished for all six chambers before the next one starts. (1) Feed: add the cycle's table amount to every chamber, whatever its state, with no capacity cap. (2) Carry: go through chambers 1 to 6 in turn. If a chamber holds more than its capacity, it drops to capacity and the excess goes into the next chamber, which can then overflow in its own turn. Chamber 6's excess is discarded and added to the loss tally. (3) Check, on the quantities after carry: a LARVAL chamber at or above its upper mark becomes PUPAL. A PUPAL chamber at or below its lower mark goes back to LARVAL. Otherwise the state stays the same. Each change is logged as (cycle, position, before, after). (4) Metabolise, using the states just set: all shares are worked out from the post-carry quantities before anything moves. A LARVAL chamber burns floor(q/4), which goes to loss. A PUPAL chamber passes floor(q/2) to the chamber before it; chamber 1's PUPAL share goes to loss. Overfill created here waits for the next cycle's carry. (5) Moult: if the six-chamber total is strictly over 38, every chamber keeps floor(q/2), the rest goes to loss, and the cycle is logged. A Python script did the arithmetic and the balance check.",
+  "openPoints": [
+   {
+    "point": "Whether Check uses the states before or after this cycle's carry, and which states Metabolise uses",
+    "assumption": "Check runs on the post-carry quantities. Metabolise uses the states Check has just set in the same cycle."
+   },
+   {
+    "point": "Moult threshold boundary (exactly 38)",
+    "assumption": "\"Over 38\" means strictly greater than 38. In cycle 5 the total was exactly 38, so no moult fired."
+   },
+   {
+    "point": "Rounding of the moult half and the metabolise shares",
+    "assumption": "All shares are rounded down (floor). In a moult each chamber keeps floor(q/2) and q - floor(q/2) goes to loss, so an odd quantity loses the larger half."
+   },
+   {
+    "point": "Where burned LARVAL mass and chamber 1's PUPAL pass-back go",
+    "assumption": "Both go to the loss tally, as burned or discarded mass."
+   },
+   {
+    "point": "Overfill after Metabolise in cycle 5",
+    "assumption": "No carry follows cycle 5, so chambers 2, 4 and 5 end above capacity (10/8, 7/6, 9/9 is fine) and nothing is trimmed. The report keeps chamber 2 at 10 against capacity 8, and chamber 4 at 7 against capacity 6."
+   },
+   {
+    "point": "Carry cascading",
+    "assumption": "Carry runs in order from 1 to 6, and what a chamber receives counts toward its own excess when its turn comes. Excess is never passed backward."
+   }
+  ],
+  "cycleFigures": "Positions 1-6. Loss tally shown cumulatively.\nC1: Feed [3,12,9,7,5,4]; Carry [3,8,12,6,7,4] (loss 0); Check states L,P,P,P,P,L; Metab [7,10,9,6,4,3] (loss 1); Moult fired, total 39>38 -> [3,5,4,3,2,1] (loss 22), total 18.\nC2: Feed [7,7,4,4,3,8]; Carry [7,7,4,4,3,7] (loss 23); Check P,P,L,P,L,P; Metab [7,4,5,2,6,4] (loss 27); total 28, no moult.\nC3: Feed [11,8,8,2,6,10]; Carry [10,8,9,2,6,7] (loss 30); Check P,P,P,L,L,P; Metab [9,8,5,2,8,4] (loss 36); total 36, no moult.\nC4: Feed [16,14,12,3,11,4]; Carry [10,8,12,6,9,7] (loss 44); Check P,P,P,P,P,P; Metab [9,10,9,7,8,4] (loss 49); Moult fired, total 47>38 -> [4,5,4,3,4,2] (loss 74), total 22.\nC5: Feed [4,11,10,6,7,2]; Carry [4,8,12,6,8,2] (loss 74); Check P,P,P,P,P,L; Metab [6,10,9,7,4,2] (loss 76); total 38, not over 38, no moult.",
+  "finalQuantities": [
+   6,
+   10,
+   9,
+   7,
+   4,
+   2
+  ],
+  "finalStates": [
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "PUPAL",
+   "LARVAL"
+  ],
+  "stateChanges": [
+   {
+    "period": 1,
+    "position": 2,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 1,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 1,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 2,
+    "position": 3,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 5,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 2,
+    "position": 6,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 3,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 3,
+    "position": 4,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   },
+   {
+    "period": 4,
+    "position": 4,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 4,
+    "position": 5,
+    "from": "LARVAL",
+    "to": "PUPAL"
+   },
+   {
+    "period": 5,
+    "position": 6,
+    "from": "PUPAL",
+    "to": "LARVAL"
+   }
+  ],
+  "resetPeriods": [
+   1,
+   4
+  ],
+  "lossTotal": 76,
+  "balanceCheck": "Start mass 20 + all feed 94 = 114, and end mass 38 + loss tally 76 = 114. The two sides match.",
+  "usedScript": true,
+  "notes": "I ran the simulation, but I could not commit it. You asked me to commit, and C:\\Users\\Jaket\\Downloads\\open-mirror is not a git repository. I did not run git init or create a repo without your say-so, so nothing was committed. To commit this, point me to the right repository or tell me to initialize one here. The arithmetic script is at C:\\Users\\Jaket\\AppData\\Local\\Temp\\claude\\C--Users-Jaket-AppData-Roaming-Claude-scratch-workspaces-a73e8788-401f-4759-b147-cab21be8fdd4-d0a4d93d-ea39-443b-bcbc-2a6c4806f0bb-scratch-2026-10-06-39add6\\a592740d-2cb4-4ce4-b618-d8e0a8b4c716\\scratchpad\\sim.py. Cycle 5 ended at a total of exactly 38, so the moult did not fire. If 'over 38' is read as 38 or more, the end figures would change."
+ },
+ "grade": {
+  "exact": true,
+  "finalOk": true,
+  "modesOk": true,
+  "changesOk": true,
+  "purgesOk": true,
+  "lostOk": true,
+  "got": {
+   "final": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "modes": [
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "ELEVATED",
+    "NORMAL"
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "loss": 76
+  },
+  "missing": [],
+  "openPoints": 6
+ }
+}
