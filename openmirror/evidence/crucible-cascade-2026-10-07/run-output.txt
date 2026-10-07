@@ -1,0 +1,26 @@
+1 charge [3, 12, 9, 7, 5, 4]
+1 overflow [3, 8, 12, 6, 7, 4] slag 0
+1 state [3, 8, 12, 6, 7, 4] ['BASE', 'SUPERHEATED', 'SUPERHEATED', 'SUPERHEATED', 'SUPERHEATED', 'BASE']
+1 bleed [7, 10, 9, 6, 4, 3] moves [0, 4, 6, 3, 3, 1] slag 1
+1 tap [3, 5, 4, 3, 2, 1] total 18 slag 22
+2 charge [7, 7, 4, 4, 3, 8]
+2 overflow [7, 7, 4, 4, 3, 7] slag 23
+2 state [7, 7, 4, 4, 3, 7] ['SUPERHEATED', 'SUPERHEATED', 'BASE', 'SUPERHEATED', 'BASE', 'SUPERHEATED']
+2 bleed [7, 4, 5, 2, 6, 4] moves [3, 3, 1, 2, 0, 3] slag 27
+2 tap [7, 4, 5, 2, 6, 4] total 28 slag 27
+3 charge [11, 8, 8, 2, 6, 10]
+3 overflow [10, 8, 9, 2, 6, 7] slag 30
+3 state [10, 8, 9, 2, 6, 7] ['SUPERHEATED', 'SUPERHEATED', 'SUPERHEATED', 'BASE', 'BASE', 'SUPERHEATED']
+3 bleed [9, 8, 5, 2, 8, 4] moves [5, 4, 4, 0, 1, 3] slag 36
+3 tap [9, 8, 5, 2, 8, 4] total 36 slag 36
+4 charge [16, 14, 12, 3, 11, 4]
+4 overflow [10, 8, 12, 6, 9, 7] slag 44
+4 state [10, 8, 12, 6, 9, 7] ['SUPERHEATED', 'SUPERHEATED', 'SUPERHEATED', 'SUPERHEATED', 'SUPERHEATED', 'SUPERHEATED']
+4 bleed [9, 10, 9, 7, 8, 4] moves [5, 4, 6, 3, 4, 3] slag 49
+4 tap [4, 5, 4, 3, 4, 2] total 22 slag 74
+5 charge [4, 11, 10, 6, 7, 2]
+5 overflow [4, 8, 12, 6, 8, 2] slag 74
+5 state [4, 8, 12, 6, 8, 2] ['SUPERHEATED', 'SUPERHEATED', 'SUPERHEATED', 'SUPERHEATED', 'SUPERHEATED', 'BASE']
+5 bleed [6, 10, 9, 7, 4, 2] moves [2, 4, 6, 3, 4, 0] slag 76
+5 tap [6, 10, 9, 7, 4, 2] total 38 slag 76
+[6, 10, 9, 7, 4, 2] ['SUPERHEATED', 'SUPERHEATED', 'SUPERHEATED', 'SUPERHEATED', 'SUPERHEATED', 'BASE'] [(1, 2, 'BASE', 'SUPERHEATED'), (1, 3, 'BASE', 'SUPERHEATED'), (1, 4, 'BASE', 'SUPERHEATED'), (1, 5, 'BASE', 'SUPERHEATED'), (2, 1, 'BASE', 'SUPERHEATED'), (2, 3, 'SUPERHEATED', 'BASE'), (2, 5, 'SUPERHEATED', 'BASE'), (2, 6, 'BASE', 'SUPERHEATED'), (3, 3, 'BASE', 'SUPERHEATED'), (3, 4, 'SUPERHEATED', 'BASE'), (4, 4, 'BASE', 'SUPERHEATED'), (4, 5, 'BASE', 'SUPERHEATED'), (5, 6, 'SUPERHEATED', 'BASE')] [1, 4] 76 20 94 114 114
