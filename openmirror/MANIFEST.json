@@ -6,8 +6,8 @@
    "bytes": 6
   },
   "ARCHITECTURE.md": {
-   "sha256": "bb4a2b40428bc34d41b882f28500c5e5eeb90c906cd2c17d5f3309bacc8ab629",
-   "bytes": 7630
+   "sha256": "09e6b20d4d615f2990166144690a4253f82bdfcec0c1f29806d4b89f6284a2c7",
+   "bytes": 10249
   },
   "CHANGELOG.md": {
    "sha256": "6937e9df2686f76e2fb3a374ec938fd9f71e1888c2b8c1981527b5cc437bfe36",
@@ -18,12 +18,12 @@
    "bytes": 13580
   },
   "NEXT.md": {
-   "sha256": "52a4b25294cfcef6266fa0837dc86bebaca127000e20310dc91e05baaf27bf8f",
-   "bytes": 2083
+   "sha256": "b44955167a9dc362e37157090045ad6821062a14f637b5d195f23c48b01c83b9",
+   "bytes": 3118
   },
   "OPEN-MIRROR-ARCHITECTURE-2026-10-07.pdf": {
-   "sha256": "5c0827518ae608958af86552aeeae724f41ac53649f9e9e3bbcf794e17c8bdb6",
-   "bytes": 8577
+   "sha256": "ed5bfdf3dc0726a8e991d7f5e4de6219a7bc4619ee3149f6242e353fa734fb58",
+   "bytes": 10861
   },
   "OPEN-MIRROR-FULL-REPORT-2026-10-06.md": {
    "sha256": "a4568247b10903d0c5fb32d27617fdd420b5b562e65f525a329b285ab7831d00",
