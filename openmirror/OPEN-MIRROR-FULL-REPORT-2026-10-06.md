@@ -1,6 +1,6 @@
 # Open Mirror: full record of the 6 October 2026 review
 
-Compiled 6 October 2026 for Jake Tiller, Ed, and the Muse assistant. One file. Every section below is copied from the working files or rendered directly from the saved evidence; nothing is summarised from memory. Where a number appears, the record it comes from is in this file.
+Compiled 6 October 2026, updated 7 October, for Jake Tiller, Ed, and the Muse assistant. One file. Every section below is copied from the working files or rendered directly from the saved evidence; nothing is summarised from memory. Where a number appears, the record it comes from is in this file.
 
 ## How to read this
 
@@ -17,7 +17,9 @@ Part 1 is the summary. Parts 2 to 4 are the three reports as written. Part 5 is 
 
 **Where coherence actually broke.** All five failures in the compressed condition were one failure: a writer compressed "each position becomes floor(level/2)" into "halve, rounds down" with the removed amount made salient, and the reader floored the removed half. The analogy's physics (concrete that un-sets, pupae that revert, melt running uphill, Goodhart targets) never overrode a stated rule in 60 reports.
 
-**What it cost and what went wrong.** About 11M subagent tokens across 177 sessions. Roughly 1.5M was wasted: an operator prompt of mine tripped an API safety classifier 31 times, I reran it twice unchanged before rewording, and the first compressed-condition run leaked the true answer into the write-ups and had to be discarded. Jake has since set token waste as a hard constraint; the corrected run was the only one launched with a stated cost and a go-ahead, and it had zero refusals.
+**The 7 October result.** With the skill moved to the writer's side, ten writers ran it on their own 400-word analogies before handing them over. Fourteen blind readers then executed those analogies: 14 of 14 exact by the engine, including 6 of 6 on the two analogies that had failed 5 of 6 times the day before. The same meaning went into ten analogies and came back from every one without drift. Not yet tested: whether a generic "reread your draft" instruction would do the same.
+
+**What it cost and what went wrong.** About 13.8M subagent tokens across 221 sessions over the two days. Roughly 1.5M was wasted: an operator prompt of mine tripped an API safety classifier 31 times, I reran it twice unchanged before rewording, and the first compressed-condition run leaked the true answer into the write-ups and had to be discarded. Jake has since set token waste as a hard constraint; the corrected run was the only one launched with a stated cost and a go-ahead, and it had zero refusals.
 
 **Open decisions for Jake and Ed.** License (CC BY 4.0 suggested). The Jake/Jacob credit line. Repository name (OpenMirror collides with screen-mirroring projects). Whether "Missing a fact" should yield to "Worth exploring" in filter mode, where Keep exploring was empty in every run. Whether to add the one rule the study suggests: when a flagged gap changes the result, carry both results forward. And whether the skill should state, on its face, the scope and result of the one controlled test so far: no measured benefit for model operators executing a numerical procedure from an analogy, and no test yet of its stated purpose.
 
@@ -6061,5 +6063,8 @@ Open Mirror ends here.
 | Study 1 Sonnet fallbacks | 5 | 0.4M | |
 | Study 2 first attempt, compressed write-ups | 50 | 2.3M | 17 refused; answers leaked; void |
 | Study 2 corrected run | 40 | 2.66M | zero refusals; counted |
-| **Total** | **177** | **~10.9M** | about 1.5M bought nothing |
+| Study 3 phase 1, disciplined writers (7 Oct) | 10 | 0.77M | zero refusals |
+| Study 3 phase 2, readers (7 Oct) | 14 | 0.88M | zero refusals; 14 of 14 exact |
+| Study 3 phase 3, rule checklist (7 Oct) | 20 | 1.22M | Sonnet; four times the estimate |
+| **Total** | **221** | **~13.8M** | about 1.5M bought nothing, all on 6 October |
 
