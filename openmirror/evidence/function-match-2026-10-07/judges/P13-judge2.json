@@ -1,0 +1,359 @@
+{
+ "pair": "P13",
+ "judge": 2,
+ "truth": "DIFFERENT",
+ "visible": true,
+ "result": {
+  "table": [
+   {
+    "step": "Step 1 (feed/load input)",
+    "ruleA": "Add the cycle's feed charge to every chamber; holding limit not enforced.",
+    "ruleB": "Add row k of the input table to every x_i; box bound not enforced.",
+    "same": true
+   },
+   {
+    "step": "Step 2 (carry-forward / Gauss-Seidel sweep)",
+    "ruleA": "Sequential in order 1..6 on already-updated masses; if mass > holding limit (strictly above), excess goes to chamber n+1 and the mass is set to the limit; excess from chamber 6 goes to the waste tally.",
+    "ruleB": "Sequential in order 1..6 on already-updated values; if x_i > c_i (strictly above), violation goes to component i+1 and x_i is set to c_i; violation from component 6 goes to s.",
+    "same": true
+   },
+   {
+    "step": "Step 3 (stage check / active-set update)",
+    "ruleA": "Read after step 2. LARVAL and mass >= pupation mark becomes PUPAL; PUPAL and mass <= return mark becomes LARVAL; otherwise no change; at most one change per cycle; record changes.",
+    "ruleB": "Read after Step 2. INACTIVE and x_i >= u_i becomes ACTIVE; ACTIVE and x_i <= d_i becomes INACTIVE; otherwise no change; at most one change per iteration; record changes.",
+    "same": true
+   },
+   {
+    "step": "Step 4 (metabolism-reabsorption / Jacobi transfer)",
+    "ruleA": "Amounts computed simultaneously from start-of-step mass with post-step-3 stage: LARVAL floor(m/4), PUPAL floor(m/2). Each chamber loses its amount; LARVAL amount goes to the waste tally; PUPAL amount goes to the PREVIOUS chamber n-1; a PUPAL chamber 1 amount goes to waste.",
+    "ruleB": "Amounts computed simultaneously from start-of-step values with post-Step-3 flags: INACTIVE floor(x/4), ACTIVE floor(x/2). Each component loses its amount; INACTIVE amount goes to s; ACTIVE amount goes to the NEXT component i+1; an ACTIVE component 6 amount goes to s.",
+    "same": false,
+    "difference": "Where the high-state transfer goes. A sends a PUPAL chamber's half to chamber n-1 (upstream), with chamber 1's half going to waste. B sends an ACTIVE component's half to component i+1 (downstream), with component 6's half going to s. Rounding, simultaneity and which state reading is used are the same."
+   },
+   {
+    "step": "Step 5 (moult / penalty step)",
+    "ruleA": "Sum all six masses after step 4; if the total is strictly more than 38 (38 does not trigger), every chamber's mass is halved with floor, the removed part goes to waste, and the cycle is recorded.",
+    "ruleB": "1-norm after Step 4; if it is strictly more than 38, every x_i becomes floor(x_i/2), the removed part goes to s, and the iteration is recorded.",
+    "same": true
+   },
+   {
+    "step": "Report",
+    "ruleA": "End masses 1-6, end stages, stage-change list (cycle, chamber, before, after), moult cycles, waste tally, balance check.",
+    "ruleB": "End values 1-6, end flags, flag-change list (iteration, component, before, after), penalty iterations, s, balance check.",
+    "same": true
+   }
+  ],
+  "tableVerdict": "DIFFERENT",
+  "probeStart": [
+   0,
+   8,
+   0,
+   0,
+   0,
+   0
+  ],
+  "probeInput": [
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  ],
+  "probeWhy": "Only position 2 holds anything, and its 8 is at or above its high mark of 6, so in cycle 1 it becomes the only high-state position, with nothing nearby to blur the result. Its half (4) goes upstream to position 1 under A and downstream to position 3 under B. There is no feed, so no carry or halving interferes. The end quantities show directly where the transfer went ([3,2,0,0,0,0] vs [0,2,3,0,0,0]). The stage changes, halving list and loss tally come out identical, which shows the transfer direction is the only rule at work.",
+  "aOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "PUPAL",
+    "PUPAL",
+    "PUPAL",
+    "PUPAL",
+    "PUPAL",
+    "LARVAL"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "PUPAL",
+     "to": "LARVAL"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "PUPAL",
+     "to": "LARVAL"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "PUPAL",
+     "to": "LARVAL"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "PUPAL",
+     "to": "LARVAL"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "bOnPrinted": {
+   "finalQuantities": [
+    1,
+    2,
+    5,
+    4,
+    4,
+    3
+   ],
+   "finalStates": [
+    "INACTIVE",
+    "ACTIVE",
+    "ACTIVE",
+    "ACTIVE",
+    "ACTIVE",
+    "ACTIVE"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 3,
+     "position": 1,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 5,
+     "position": 1,
+     "from": "ACTIVE",
+     "to": "INACTIVE"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4,
+    5
+   ],
+   "lossTotal": 95
+  },
+  "aOnProbe": {
+   "finalQuantities": [
+    3,
+    2,
+    0,
+    0,
+    0,
+    0
+   ],
+   "finalStates": [
+    "LARVAL",
+    "LARVAL",
+    "LARVAL",
+    "LARVAL",
+    "LARVAL",
+    "LARVAL"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 3,
+     "position": 2,
+     "from": "PUPAL",
+     "to": "LARVAL"
+    }
+   ],
+   "resetPeriods": [],
+   "lossTotal": 3
+  },
+  "bOnProbe": {
+   "finalQuantities": [
+    0,
+    2,
+    3,
+    0,
+    0,
+    0
+   ],
+   "finalStates": [
+    "INACTIVE",
+    "INACTIVE",
+    "INACTIVE",
+    "INACTIVE",
+    "INACTIVE",
+    "INACTIVE"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 3,
+     "position": 2,
+     "from": "ACTIVE",
+     "to": "INACTIVE"
+    }
+   ],
+   "resetPeriods": [],
+   "lossTotal": 3
+  },
+  "probeVerdict": "DIFFERENT",
+  "usedScript": true,
+  "verdict": "DIFFERENT",
+  "differingRule": "In step 4, A sends a high-state (PUPAL) position's half to the previous position n-1, and position 1's half is lost, while B sends a high-state (ACTIVE) position's half to the next position i+1, and position 6's half is lost.",
+  "foundBy": "both",
+  "routesAgree": true,
+  "trust": "Both routes agree, so no tie-break was needed. The table pins the difference to the step 4 transfer direction. The probe isolates that rule and gives different end quantities, while everything else matches. The printed tables also diverge sharply (different end quantities, stage changes, halving cycles [1,4] vs [1,4,5], and loss 76 vs 95). I checked the probe runs by hand, and the script asserts the balance check on every run. Script: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P13\\sim.py"
+ },
+ "verdict_correct": true,
+ "table_correct": true,
+ "probe_correct": true,
+ "routes_agree": true,
+ "printed_A_engine_ok": true,
+ "printed_B_engine_ok": true,
+ "probe_A_engine_ok": true,
+ "probe_B_engine_ok": true,
+ "probe_separates_truth": true,
+ "probe_separates_as_reported": true,
+ "differing_rule_reported": "In step 4, A sends a high-state (PUPAL) position's half to the previous position n-1, and position 1's half is lost, while B sends a high-state (ACTIVE) position's half to the next position i+1, and position 6's half is lost.",
+ "differing_rule_truth": "DIFF: step 4 elevated transfer goes to cell n+1, cell 6's to LOST",
+ "found_by": "both",
+ "probe_genuine": true
+}

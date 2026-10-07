@@ -1,0 +1,399 @@
+{
+ "pair": "P11",
+ "judge": 2,
+ "truth": "DIFFERENT",
+ "visible": true,
+ "result": {
+  "table": [
+   {
+    "step": "Definitions/setup",
+    "ruleA": "6 compartments, volume/inception/desinence/start = (10,7,3,3),(8,6,2,6),(12,9,4,6),(6,5,2,2),(9,7,3,2),(7,5,2,1); limit 38; all LAMINAR; overboard 0; quarter/half rounded down",
+    "ruleB": "6 stages, rated/upper/lower/start identical numbers; limit 38; all CLEAR; ground 0; quarter/half rounded down",
+    "same": true
+   },
+   {
+    "step": "Step 1 Fill / Charge input",
+    "ruleA": "Add the cycle's fill amount to each compartment; volume not enforced",
+    "ruleB": "Add the cycle's input to each stage; rated charge not enforced",
+    "same": true
+   },
+   {
+    "step": "Step 2 Scupper overflow / Breakdown shunt",
+    "ruleA": "Sequential 1..6; if contents > volume, excess goes to n+1 (already present when n+1 is checked), contents set to volume; excess from 6 overboard; equal does nothing",
+    "ruleB": "Sequential 1..6; if charge > rated, excess to n+1 (cascades), set to rated; excess from 6 to ground; equal does nothing",
+    "same": true
+   },
+   {
+    "step": "Step 3 Pump state / Comparator check",
+    "ruleA": "Read contents after Step 2. LAMINAR -> CAVITATING only if contents ABOVE (strictly >) inception mark; CAVITATING -> LAMINAR if contents at most desinence; contents equal to inception keeps state",
+    "ruleB": "Read charge after Step 2. CLEAR -> ASSERTED if charge AT LEAST (>=) upper mark; ASSERTED -> CLEAR if charge at most lower mark; only charge strictly between lower and upper keeps state",
+    "same": false,
+    "difference": "Rising threshold differs: A requires contents > inception mark, B requires charge >= upper mark. At exactly the mark A stays LAMINAR while B goes ASSERTED. (A's definition line 'Cavitation begins at the inception mark' is loose wording; the operative Step 3 rule and its 'at or below inception keeps state' sentence fix it as strict.) Falling threshold (<= lower) is the same."
+   },
+   {
+    "step": "Step 4 Pumping / Discharge",
+    "ruleA": "Simultaneous: amounts computed from contents at start of step using post-Step-3 state; LAMINAR quarter rounded down to overboard; CAVITATING half rounded down to n-1, compartment 1's to overboard; volume not enforced",
+    "ruleB": "Simultaneous: CLEAR quarter rounded down to ground; ASSERTED half rounded down to n-1, stage 1's to ground; rated not enforced",
+    "same": true
+   },
+   {
+    "step": "Step 5 Emergency blow / Breaker trip",
+    "ruleA": "If total of all six > 38 (strict), every compartment halved rounded down (keep floor half), removed units overboard; log cycle; equal 38 does nothing",
+    "ruleB": "If total > 38 strictly, every stage halved rounded down, removed to ground; log cycle; 38 does nothing",
+    "same": true
+   },
+   {
+    "step": "Report",
+    "ruleA": "(a) end contents (b) end states (c) state changes (cycle, compartment, before, after) (d) blow cycles or none (e) Total Overboard (f) balance check",
+    "ruleB": "(a) end charges (b) end states (c) state changes in order (d) trip cycles or never (e) ground total (f) balance check with four figures",
+    "same": true
+   }
+  ],
+  "tableVerdict": "DIFFERENT",
+  "probeStart": [
+   7,
+   6,
+   9,
+   5,
+   7,
+   5
+  ],
+  "probeInput": [
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  ],
+  "probeWhy": "Every position starts exactly on its rising mark (inception/upper), with zero input, so at the cycle-1 state check A's strict 'above' leaves all six LAMINAR while B's 'at least' asserts all six; nothing else (overflow, blow) interferes, isolating the suspected threshold difference.",
+  "aOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "CAVITATING",
+    "CAVITATING",
+    "CAVITATING",
+    "CAVITATING",
+    "CAVITATING",
+    "LAMINAR"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "CAVITATING",
+     "to": "LAMINAR"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "CAVITATING",
+     "to": "LAMINAR"
+    }
+   ],
+   "resetPeriods": [
+    2,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "bOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "ASSERTED",
+    "ASSERTED",
+    "ASSERTED",
+    "ASSERTED",
+    "ASSERTED",
+    "CLEAR"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "aOnProbe": {
+   "finalQuantities": [
+    3,
+    3,
+    3,
+    3,
+    3,
+    3
+   ],
+   "finalStates": [
+    "LAMINAR",
+    "LAMINAR",
+    "LAMINAR",
+    "LAMINAR",
+    "LAMINAR",
+    "LAMINAR"
+   ],
+   "stateChanges": [],
+   "resetPeriods": [],
+   "lossTotal": 21
+  },
+  "bOnProbe": {
+   "finalQuantities": [
+    7,
+    7,
+    4,
+    2,
+    2,
+    2
+   ],
+   "finalStates": [
+    "ASSERTED",
+    "ASSERTED",
+    "ASSERTED",
+    "ASSERTED",
+    "CLEAR",
+    "CLEAR"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 1,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 2,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 6,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 3,
+     "position": 6,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    }
+   ],
+   "resetPeriods": [],
+   "lossTotal": 15
+  },
+  "probeVerdict": "DIFFERENT",
+  "usedScript": true,
+  "verdict": "DIFFERENT",
+  "differingRule": "In Step 3, A switches a LAMINAR pump to CAVITATING only when contents are strictly above the inception mark, while B switches a CLEAR comparator to ASSERTED when charge is at or above the upper mark, so a position sitting exactly on its rising mark behaves differently.",
+  "foundBy": "both",
+  "routesAgree": true,
+  "trust": "The two routes agree. Both translate LAMINAR as CLEAR and CAVITATING as ASSERTED. The printed tables already expose the difference: the end quantities (6,10,9,7,4,2) and the loss of 76 match by coincidence, but the state-change logs differ (9 changes in A against 13 in B), and so do the halving cycles ([2,4] in A against [1,4] in B). On the probe, every report field differs. Both runs on the printed tables balance at 114 = 114, and both probe runs balance at 39 = 39. The arithmetic was done by the script C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P11\\sim.py, in which the only difference between A and B is the strict or non-strict rising comparison. One caution: A's definitions line says cavitation 'begins at the inception mark', which reads like B's rule. A's operative Step 3 says 'above', and it explicitly says 'at or below inception keeps state', so I took Step 3 as binding."
+ },
+ "verdict_correct": true,
+ "table_correct": true,
+ "probe_correct": true,
+ "routes_agree": true,
+ "printed_A_engine_ok": true,
+ "printed_B_engine_ok": true,
+ "probe_A_engine_ok": true,
+ "probe_B_engine_ok": true,
+ "probe_separates_truth": true,
+ "probe_separates_as_reported": true,
+ "differing_rule_reported": "In Step 3, A switches a LAMINAR pump to CAVITATING only when contents are strictly above the inception mark, while B switches a CLEAR comparator to ASSERTED when charge is at or above the upper mark, so a position sitting exactly on its rising mark behaves differently.",
+ "differing_rule_truth": "DIFF: step 3 upper trigger strictly above",
+ "found_by": "both",
+ "probe_genuine": true
+}

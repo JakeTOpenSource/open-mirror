@@ -1,0 +1,485 @@
+{
+ "pair": "P04",
+ "judge": 2,
+ "truth": "SAME",
+ "visible": null,
+ "result": {
+  "table": [
+   {
+    "step": "Step 1 (Inflow / Uptake)",
+    "ruleA": "Add each tank's inflow for the cycle from the schedule. Volume not enforced; contents may exceed volume.",
+    "ruleB": "Add each segment's uptake for the cycle from the table. Holding volume not enforced; sap may exceed it.",
+    "same": true
+   },
+   {
+    "step": "Step 2 (Weir overflow / Xylem push)",
+    "ruleA": "Tanks handled one at a time, 1 to 6. If contents > volume (strictly), the excess goes to tank n+1 and the tank is set to its volume. Overflow reaches the next tank before that tank is handled, so overflows cascade. Tank 6 excess goes to the outfall total. Equal or less: nothing.",
+    "ruleB": "Segments handled one at a time, 1 to 6. If sap > holding volume (strictly), the excess goes to segment n+1 and the segment is set to its holding volume. The push reaches the next segment before it is handled, so pushes cascade. Segment 6 excess is transpired and goes to the loss tally. Equal or less: nothing.",
+    "same": true
+   },
+   {
+    "step": "Step 3 (State check)",
+    "ruleA": "Read contents after Step 2. STEADY and contents >= upper mark: becomes OVERLOADED. OVERLOADED and contents <= lower mark: becomes STEADY. Otherwise no change. At most one change per tank per cycle. Each change is logged as (cycle, tank, before, after).",
+    "ruleB": "Read sap after step 2. QUIET and sap >= upper mark: becomes SINK-ACTIVE. SINK-ACTIVE and sap <= lower mark: becomes QUIET. Otherwise no change. At most one change per segment per cycle. Each change is logged as (cycle, segment, before, after).",
+    "same": true
+   },
+   {
+    "step": "Step 4 (Discharge and return / Phloem return and respiration)",
+    "ruleA": "All six amounts are figured from contents at the start of the step, before anything changes. STEADY: floor(contents/4). OVERLOADED: floor(contents/2). All applied together: each tank loses its amount. A STEADY amount goes to outfall. An OVERLOADED amount goes to tank n-1, except tank 1, whose amount goes to outfall. Volume not enforced; any excess waits for the next Step 2 and is never corrected after cycle 5. States are the ones set in Step 3 of this cycle.",
+    "ruleB": "All six amounts are figured from sap at the start of the step, before anything changes. QUIET: floor(sap/4). SINK-ACTIVE: floor(sap/2). All applied together: each segment loses its amount. A QUIET amount is respired to the loss tally. A SINK-ACTIVE amount goes to segment n-1, except segment 1, whose amount goes to the loss tally. Holding volume not enforced; any excess waits for the next step 2 and is never corrected after cycle 5. States are the ones set in step 3 of this cycle.",
+    "same": true
+   },
+   {
+    "step": "Step 5 (Storm bypass / Leaf-drop)",
+    "ruleA": "Sum all six tanks after Step 4. Only if the sum is strictly greater than 38: every tank becomes floor(contents/2), the removed liquor (contents minus kept half) goes to outfall, and the cycle is logged. At 38 or less, nothing happens. Applies to all six tanks.",
+    "ruleB": "Sum all six segments after step 4. Only if the sum is strictly greater than 38: every segment becomes floor(sap/2), the removed sap goes to the loss tally, and the cycle is logged. At 38 or less, nothing happens. Applies to all six segments.",
+    "same": true
+   },
+   {
+    "step": "Fixed data (volumes, marks, start, inflow table, limit)",
+    "ruleA": "Volume 10,8,12,6,9,7. Upper 7,6,9,5,7,5. Lower 3,2,4,2,3,2. Start 3,6,6,2,2,1. Limit 38. Inflow rows are the same five rows as B.",
+    "ruleB": "The same holding volumes, upper marks, lower marks, starting sap, limit 38, and an identical uptake table.",
+    "same": true
+   },
+   {
+    "step": "Rounding",
+    "ruleA": "A quarter or a half of a tank's contents is rounded down. This covers Step 4 amounts and the Step 5 halving.",
+    "ruleB": "Every division is rounded down. The only divisions are the step 4 quarter and half and the step 5 halving.",
+    "same": true
+   },
+   {
+    "step": "Report",
+    "ruleA": "(a) End contents for tanks 1-6. (b) End states. (c) All state changes as (cycle, tank, before, after). (d) Storm bypass cycles. (e) Outfall total. (f) Balance check: start + inflows = end + outfall.",
+    "ruleB": "(a) End sap for segments 1-6. (b) End states. (c) All state changes in order. (d) Leaf-drop cycles, or none. (e) Sap-loss tally. (f) Balance check: start + uptake = end + loss.",
+    "same": true
+   }
+  ],
+  "tableVerdict": "SAME",
+  "probeStart": [
+   1,
+   0,
+   4,
+   4,
+   6,
+   3
+  ],
+  "probeInput": [
+   [
+    3,
+    2,
+    1,
+    8,
+    1,
+    2
+   ],
+   [
+    4,
+    6,
+    6,
+    8,
+    5,
+    8
+   ],
+   [
+    3,
+    4,
+    2,
+    3,
+    3,
+    9
+   ],
+   [
+    9,
+    4,
+    6,
+    1,
+    0,
+    6
+   ],
+   [
+    4,
+    2,
+    8,
+    0,
+    4,
+    6
+   ]
+  ],
+  "probeWhy": "I picked this probe from 200,000 random candidates because it trips more of the suspect boundaries than the others, several of them at once. The line total after step 4 is exactly 39 in cycle 3, so the halving fires, and exactly 38 in cycle 4, so it does not; this tests strict versus inclusive at the limit. Cycle 2 (46) and cycle 5 (47) are well over. In cycle 5 all six positions overflow in one Step 2 cascade, which tests whether one position's overflow reaches the next before that position is handled. Position 6 overflows to loss in every cycle. Position 1 is OVERLOADED/SINK-ACTIVE in cycles 2 to 5, so its step 4 amount goes to loss. Contents equal the upper mark exactly (cycle 2, position 1, which flips) and the lower mark exactly (cycle 4, position 5, which flips back); this tests at-or-above and at-or-below. Some positions end step 4 above their volume, which tests that volume is not enforced in step 4. Odd totals at halving test floor rounding and that the removed half goes to loss. The printed tables already hit 38 exactly in cycle 5 and 39 in cycle 1, plus several equal-mark cases. Beyond the single probe, I ran a separate differential test of my A and B implementations on all 200,000 random starts and input tables: 0 mismatches.",
+  "aOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "OVERLOADED",
+    "OVERLOADED",
+    "OVERLOADED",
+    "OVERLOADED",
+    "OVERLOADED",
+    "STEADY"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "bOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "SINK-ACTIVE",
+    "SINK-ACTIVE",
+    "SINK-ACTIVE",
+    "SINK-ACTIVE",
+    "SINK-ACTIVE",
+    "QUIET"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "SINK-ACTIVE",
+     "to": "QUIET"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "SINK-ACTIVE",
+     "to": "QUIET"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "SINK-ACTIVE",
+     "to": "QUIET"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "SINK-ACTIVE",
+     "to": "QUIET"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "aOnProbe": {
+   "finalQuantities": [
+    4,
+    5,
+    4,
+    3,
+    4,
+    2
+   ],
+   "finalStates": [
+    "OVERLOADED",
+    "OVERLOADED",
+    "OVERLOADED",
+    "OVERLOADED",
+    "OVERLOADED",
+    "OVERLOADED"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 4,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 1,
+     "position": 6,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 2,
+     "position": 2,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    },
+    {
+     "period": 5,
+     "position": 5,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    }
+   ],
+   "resetPeriods": [
+    2,
+    3,
+    5
+   ],
+   "lossTotal": 124
+  },
+  "bOnProbe": {
+   "finalQuantities": [
+    4,
+    5,
+    4,
+    3,
+    4,
+    2
+   ],
+   "finalStates": [
+    "SINK-ACTIVE",
+    "SINK-ACTIVE",
+    "SINK-ACTIVE",
+    "SINK-ACTIVE",
+    "SINK-ACTIVE",
+    "SINK-ACTIVE"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 4,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 6,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 2,
+     "position": 2,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "SINK-ACTIVE",
+     "to": "QUIET"
+    },
+    {
+     "period": 5,
+     "position": 5,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    }
+   ],
+   "resetPeriods": [
+    2,
+    3,
+    5
+   ],
+   "lossTotal": 124
+  },
+  "probeVerdict": "SAME",
+  "usedScript": true,
+  "verdict": "SAME",
+  "foundBy": "none",
+  "routesAgree": true,
+  "differingRule": "None. Every rule matches once the names are translated: tank to segment, liquor to sap, STEADY to QUIET, OVERLOADED to SINK-ACTIVE, weir overflow to xylem push, return line to phloem, storm bypass to leaf-drop, outfall total to sap-loss tally.",
+  "trust": "Both routes say SAME, so there is no conflict to settle. The limit of the probe route is that it only compares my two implementations, each written from my own reading of its document. So it backs up the table but is not independent of how I read the text.\n\nThe arithmetic script is C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P04\\rc2_sim.py. It has a separate function for each document, simA and simB, and B's balance check comes out at 114 = 114 on the printed tables and 146 = 146 on the probe.\n\nThe P04 folder was being written to by another run at the same time. Its sim.py and probe.py replaced mine, and my first attempt failed to load as a result. I only trust results from rc2_sim.py, and I did not use or change the other run's files."
+ },
+ "verdict_correct": true,
+ "table_correct": true,
+ "probe_correct": true,
+ "routes_agree": true,
+ "printed_A_engine_ok": true,
+ "printed_B_engine_ok": true,
+ "probe_A_engine_ok": true,
+ "probe_B_engine_ok": true,
+ "probe_separates_truth": false,
+ "probe_separates_as_reported": true,
+ "differing_rule_reported": "None. Every rule matches once the names are translated: tank to segment, liquor to sap, STEADY to QUIET, OVERLOADED to SINK-ACTIVE, weir overflow to xylem push, return line to phloem, storm bypass to leaf-drop, outfall total to sap-loss tally.",
+ "differing_rule_truth": null,
+ "found_by": "none",
+ "probe_genuine": true
+}

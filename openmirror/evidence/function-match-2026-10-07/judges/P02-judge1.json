@@ -1,0 +1,491 @@
+{
+ "pair": "P02",
+ "judge": 1,
+ "truth": "SAME",
+ "visible": null,
+ "result": {
+  "table": [
+   {
+    "step": "Setup / definitions (tables, marks, start states, rounding)",
+    "ruleA": "Six stages 1..6; rated 10,8,12,6,9,7; upper 7,6,9,5,7,5; lower 3,2,4,2,3,2; start 3,6,6,2,2,1; all CLEAR; ground total 0; chain limit 38; quarter/half rounded down (floor).",
+    "ruleB": "Six teams 1..6; WIP 10,8,12,6,9,7; upper 7,6,9,5,7,5; lower 3,2,4,2,3,2; start 3,6,6,2,2,1; all ROUTINE; closed tally 0; target 38; divisions floor (7/4=1, 9/2=4).",
+    "same": true
+   },
+   {
+    "step": "Step 1 input",
+    "ruleA": "Add the cycle's input row to each stage; rated charge not enforced.",
+    "ruleB": "Add the sprint's New Tickets row to each team; WIP limit not enforced.",
+    "same": true
+   },
+   {
+    "step": "Step 2 shunt / overflow",
+    "ruleA": "Sequential in order 1..6; if charge > rated (strict), excess = charge - rated goes to stage n+1 and stage set to rated; equal or less: nothing. Stage 1's excess is already in stage 2 when stage 2 is handled (cascade). Stage 6 excess to ground.",
+    "ruleB": "Sequential in order 1..6; if open > WIP (strict), excess to team n+1 and team set to WIP; equal or less: nothing. Excess reaches next team before it is handled (cascade). Team 6 excess closed and tallied.",
+    "same": true
+   },
+   {
+    "step": "Step 3 state check",
+    "ruleA": "Read charge after Step 2. CLEAR and charge >= upper -> ASSERTED; ASSERTED and charge <= lower -> CLEAR; otherwise unchanged; at most one change per cycle; log (cycle, stage, before, after).",
+    "ruleB": "Read count after step 2. ROUTINE and count >= upper -> ESCALATED; ESCALATED and count <= lower -> ROUTINE; otherwise unchanged; at most one change per sprint; log (sprint, team, before, after).",
+    "same": true
+   },
+   {
+    "step": "Step 4 discharge / work-off",
+    "ruleA": "Amounts computed from each stage's charge at start of step using post-Step-3 state: CLEAR floor(q/4), ASSERTED floor(q/2). All six computed before any change, applied simultaneously. Each stage reduced by own amount; CLEAR amount to ground; ASSERTED amount added to stage n-1; stage 1 ASSERTED amount to ground. No rated enforcement; overflow waits for next cycle's Step 2 (never handled after cycle 5).",
+    "ruleB": "Amounts from count at start of step using status: ROUTINE floor(t/4), ESCALATED floor(t/2). All computed before any change, applied at once; bounced tickets do not change already-computed amounts. ROUTINE amount closed; ESCALATED amount bounced to team n-1; team 1 ESCALATED amount closed. No WIP enforcement; excess handled next sprint's step 2, never after sprint 5.",
+    "same": true
+   },
+   {
+    "step": "Step 5 line-wide halving",
+    "ruleA": "Sum all six. If total > 38 (strict; 38 does not trip), every stage (all six) becomes floor(q/2); removed charge (q - floor(q/2)) to ground; log cycle. Else nothing.",
+    "ruleB": "Sum all six. If total > 38 (strict; 38 does nothing), every team (all six) becomes floor(t/2); removed tickets closed and tallied; log sprint. Else nothing.",
+    "same": true
+   },
+   {
+    "step": "Report",
+    "ruleA": "After Step 5 of cycle 5: end charges 1..6, end states, all state changes in order, trip cycles (or none), ground total, balance check (start + inputs = end + ground).",
+    "ruleB": "After step 5 of sprint 5: end counts 1..6, end statuses, all status changes in order, halving sprints (or none), closed tally, balance check (start + inputs = end + closed).",
+    "same": true
+   }
+  ],
+  "tableVerdict": "SAME",
+  "probeStart": [
+   4,
+   3,
+   9,
+   0,
+   0,
+   8
+  ],
+  "probeInput": [
+   [
+    4,
+    7,
+    4,
+    5,
+    3,
+    7
+   ],
+   [
+    8,
+    3,
+    8,
+    3,
+    0,
+    6
+   ],
+   [
+    4,
+    0,
+    0,
+    3,
+    7,
+    6
+   ],
+   [
+    1,
+    4,
+    3,
+    6,
+    5,
+    3
+   ],
+   [
+    7,
+    0,
+    5,
+    6,
+    5,
+    6
+   ]
+  ],
+  "probeWhy": "I chose it by searching for an input that hits every boundary where a reworded rule could split the two documents: a multi-stage cascade inside Step 2 (stage n's excess pushes n+1 over), stage 6 overflow to ground/closed, a charge exactly equal to an upper mark while CLEAR (tests >= vs >), exactly equal to a lower mark while ASSERTED (tests <= vs <), stage 1 ASSERTED with a nonzero amount (tests where its feedback goes), a cycle whose post-Step-4 total is exactly 38 (tests strict > on the halving), halving on odd quantities (tests floor and what goes to ground), and an end stage left above its rating by feedback in cycle 5 (tests non-enforcement after the last cycle). Note: the printed tables also happen to hit all of these, so they are a stronger test than they look. I also ran a random check of 300,000 starting/input tables (0-9) through two separately written implementations, with 0 mismatches.",
+  "aOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "ASSERTED",
+    "ASSERTED",
+    "ASSERTED",
+    "ASSERTED",
+    "ASSERTED",
+    "CLEAR"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "bOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "ESCALATED",
+    "ESCALATED",
+    "ESCALATED",
+    "ESCALATED",
+    "ESCALATED",
+    "ROUTINE"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "ESCALATED",
+     "to": "ROUTINE"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "ESCALATED",
+     "to": "ROUTINE"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "ESCALATED",
+     "to": "ROUTINE"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "ESCALATED",
+     "to": "ROUTINE"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "aOnProbe": {
+   "finalQuantities": [
+    5,
+    6,
+    8,
+    7,
+    8,
+    4
+   ],
+   "finalStates": [
+    "ASSERTED",
+    "CLEAR",
+    "ASSERTED",
+    "ASSERTED",
+    "ASSERTED",
+    "ASSERTED"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 1,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 2,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 6,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    },
+    {
+     "period": 3,
+     "position": 5,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 5,
+     "position": 2,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    },
+    {
+     "period": 5,
+     "position": 3,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    2,
+    4
+   ],
+   "lossTotal": 115
+  },
+  "bOnProbe": {
+   "finalQuantities": [
+    5,
+    6,
+    8,
+    7,
+    8,
+    4
+   ],
+   "finalStates": [
+    "ESCALATED",
+    "ROUTINE",
+    "ESCALATED",
+    "ESCALATED",
+    "ESCALATED",
+    "ESCALATED"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 1,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 1,
+     "position": 2,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 1,
+     "position": 6,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "ESCALATED",
+     "to": "ROUTINE"
+    },
+    {
+     "period": 3,
+     "position": 5,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 5,
+     "position": 2,
+     "from": "ESCALATED",
+     "to": "ROUTINE"
+    },
+    {
+     "period": 5,
+     "position": 3,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    2,
+    4
+   ],
+   "lossTotal": 115
+  },
+  "probeVerdict": "SAME",
+  "usedScript": true,
+  "verdict": "SAME",
+  "foundBy": "none",
+  "routesAgree": true,
+  "differingRule": "None. Once the names are mapped (stage=team, charge=open tickets, rated charge=WIP limit, CLEAR=ROUTINE, ASSERTED=ESCALATED, ground=closed tally, breaker trip=backlog halving), every rule matches, including order, thresholds, rounding, where amounts go and timing.",
+  "trust": "Both routes find SAME, so I have no conflict to settle. The two routes back each other up. The table compares the documents clause by clause. The probe and a random check of 300,000 tables run through two separately written implementations, with 0 mismatches. Both end reports balance: printed tables 114 = 114 (end 38 + loss 76), probe 153 = 153 (end 38 + loss 115). The script is C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P02\\p02_claude_route2.py. One caveat: while I worked, something else was writing to the same P02 folder. A file rc2_sim.py appeared that I did not create, and my first sim.py was briefly overwritten. sim.py and probe.py in that folder are my own earlier drafts. I did not use or change rc2_sim.py, and all reported numbers come only from p02_claude_route2.py, which does not depend on any other file."
+ },
+ "verdict_correct": true,
+ "table_correct": true,
+ "probe_correct": true,
+ "routes_agree": true,
+ "printed_A_engine_ok": true,
+ "printed_B_engine_ok": true,
+ "probe_A_engine_ok": true,
+ "probe_B_engine_ok": true,
+ "probe_separates_truth": false,
+ "probe_separates_as_reported": true,
+ "differing_rule_reported": "None. Once the names are mapped (stage=team, charge=open tickets, rated charge=WIP limit, CLEAR=ROUTINE, ASSERTED=ESCALATED, ground=closed tally, breaker trip=backlog halving), every rule matches, including order, thresholds, rounding, where amounts go and timing.",
+ "differing_rule_truth": null,
+ "found_by": "none",
+ "probe_genuine": true
+}

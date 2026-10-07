@@ -1,0 +1,492 @@
+{
+ "pair": "P01",
+ "judge": 1,
+ "truth": "SAME",
+ "visible": null,
+ "result": {
+  "table": [
+   {
+    "step": "Step 1 (Fill / Charge)",
+    "ruleA": "Add each compartment's Fill Table amount for this cycle; volume not enforced (may exceed volume).",
+    "ruleB": "Add each form's charge table amount for this cycle; volume not enforced (may exceed volume).",
+    "same": true
+   },
+   {
+    "step": "Step 2 (Scupper overflow / Overtop)",
+    "ruleA": "Sequential in order 1..6. If contents > volume (strictly), excess goes to n+1 and contents set to volume; equal or less does nothing. Overflow reaches n+1 before n+1 is checked (cascade). Excess from 6 goes to Total Overboard.",
+    "ruleB": "Sequential in order 1..6. If holds > volume (strictly), overtop goes to n+1 and form left at volume; volume or less does nothing. Overtop lands in n+1 before it is handled (cascade). Overtop from 6 goes to waste tally.",
+    "same": true
+   },
+   {
+    "step": "Step 3 (Pump state / Status check)",
+    "ruleA": "Read contents after Step 2. LAMINAR with contents >= inception mark becomes CAVITATING; CAVITATING with contents <= desinence mark becomes LAMINAR; otherwise unchanged (hysteresis band keeps state). At most one change per cycle; log (cycle, compartment, before, after).",
+    "ruleB": "Read contents after Step 2. GREEN holding >= upper mark becomes HOT; HOT holding <= lower mark becomes GREEN; otherwise unchanged. At most one change per cycle; record (cycle, form, before, after).",
+    "same": true
+   },
+   {
+    "step": "Step 4 (Pumping / Settle)",
+    "ruleA": "Amounts from contents at start of step, using state just set in Step 3: LAMINAR floor(contents/4), CAVITATING floor(contents/2). All six computed first, then applied simultaneously. Each loses own amount; LAMINAR amount to Overboard; CAVITATING amount added to n-1; compartment 1 CAVITATING amount to Overboard. Volume not enforced.",
+    "ruleB": "Amounts from contents at start of step: GREEN floor(/4), HOT floor(/2). All six computed first, applied together. Each loses own amount; GREEN amount to waste tally; HOT amount added to n-1; form 1 HOT bleed to waste tally. Volume not enforced.",
+    "same": true
+   },
+   {
+    "step": "Step 5 (Emergency blow / Washout)",
+    "ruleA": "Sum all six contents after Step 4. If total > 38 (strict; 38 does not fire), every compartment (all six) becomes floor(contents/2); the removed units (contents - floor half) go to Total Overboard; log the cycle.",
+    "ruleB": "Sum all six after Step 4. If total > 38 (strict; 38 or less nothing), every form (all six) becomes floor(contents/2); removed units go to waste tally; record the cycle.",
+    "same": true
+   },
+   {
+    "step": "Report",
+    "ruleA": "(a) end contents 1-6, (b) end pump states, (c) all state changes as (cycle, compartment, before, after), (d) blow cycles or 'none', (e) Total Overboard, (f) balance check.",
+    "ruleB": "(a) end mix 1-6, (b) end status, (c) all status changes as (cycle, form, before, after), (d) washout cycles, (e) final waste tally, (f) balance check.",
+    "same": true,
+    "difference": "Only cosmetic: A explicitly allows 'none' in (d); B does not say so. No functional difference."
+   },
+   {
+    "step": "Fixed data (volumes, marks, limit, start, input table)",
+    "ruleA": "Volume 10,8,12,6,9,7; inception 7,6,9,5,7,5; desinence 3,2,4,2,3,2; limit 38; start 3,6,6,2,2,1; Fill Table as printed.",
+    "ruleB": "Identical values for volume, upper mark, lower mark, line limit, starting mix and charge table.",
+    "same": true
+   }
+  ],
+  "tableVerdict": "SAME",
+  "probeStart": [
+   4,
+   3,
+   9,
+   0,
+   0,
+   8
+  ],
+  "probeInput": [
+   [
+    4,
+    7,
+    4,
+    5,
+    3,
+    7
+   ],
+   [
+    8,
+    3,
+    8,
+    3,
+    0,
+    6
+   ],
+   [
+    4,
+    0,
+    0,
+    3,
+    7,
+    6
+   ],
+   [
+    1,
+    4,
+    3,
+    6,
+    5,
+    3
+   ],
+   [
+    7,
+    0,
+    5,
+    6,
+    5,
+    6
+   ]
+  ],
+  "probeWhy": "Selected by a script search (seeded random over 0-9 values) for a table that, in one run, hits every boundary where the documents could plausibly differ: contents exactly equal to volume in Step 2 (tests > vs >=), a cascade where one position's overflow pushes the next over its volume (tests sequential order), overflow out of position 6 (loss routing), contents exactly at the upper/inception mark while in the low state and exactly at the lower/desinence mark while in the high state (tests >= / <= thresholds), position 1 in the high state with a nonzero half-amount (tests where its backflow goes), and line-wide halving firing in several cycles (tests what is halved and where removed units go). The printed tables also hit a step-5 total of exactly 38 without firing, which tests that equality does not trigger the halving. As a further check, 200,000 random start/input tables were run through both implementations, with 0 mismatches.",
+  "aOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "CAVITATING",
+    "CAVITATING",
+    "CAVITATING",
+    "CAVITATING",
+    "CAVITATING",
+    "LAMINAR"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "CAVITATING",
+     "to": "LAMINAR"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "CAVITATING",
+     "to": "LAMINAR"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "CAVITATING",
+     "to": "LAMINAR"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "CAVITATING",
+     "to": "LAMINAR"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "bOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "HOT",
+    "HOT",
+    "HOT",
+    "HOT",
+    "HOT",
+    "GREEN"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "HOT",
+     "to": "GREEN"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "HOT",
+     "to": "GREEN"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "HOT",
+     "to": "GREEN"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "HOT",
+     "to": "GREEN"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "aOnProbe": {
+   "finalQuantities": [
+    5,
+    6,
+    8,
+    7,
+    8,
+    4
+   ],
+   "finalStates": [
+    "CAVITATING",
+    "LAMINAR",
+    "CAVITATING",
+    "CAVITATING",
+    "CAVITATING",
+    "CAVITATING"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 1,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 1,
+     "position": 2,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 1,
+     "position": 6,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "CAVITATING",
+     "to": "LAMINAR"
+    },
+    {
+     "period": 3,
+     "position": 5,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 5,
+     "position": 2,
+     "from": "CAVITATING",
+     "to": "LAMINAR"
+    },
+    {
+     "period": 5,
+     "position": 3,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    2,
+    4
+   ],
+   "lossTotal": 115
+  },
+  "bOnProbe": {
+   "finalQuantities": [
+    5,
+    6,
+    8,
+    7,
+    8,
+    4
+   ],
+   "finalStates": [
+    "HOT",
+    "GREEN",
+    "HOT",
+    "HOT",
+    "HOT",
+    "HOT"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 1,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 2,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 6,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "HOT",
+     "to": "GREEN"
+    },
+    {
+     "period": 3,
+     "position": 5,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 5,
+     "position": 2,
+     "from": "HOT",
+     "to": "GREEN"
+    },
+    {
+     "period": 5,
+     "position": 3,
+     "from": "GREEN",
+     "to": "HOT"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    2,
+    4
+   ],
+   "lossTotal": 115
+  },
+  "probeVerdict": "SAME",
+  "usedScript": true,
+  "verdict": "SAME",
+  "foundBy": "none",
+  "routesAgree": true,
+  "differingRule": "None. Every rule matches once the names are mapped: LAMINAR=GREEN, CAVITATING=HOT, inception=upper mark, desinence=lower mark, overboard=waste tally, emergency blow=washout. The only wording difference is that A's Report (d) explicitly allows 'none'; B's does not say so. This changes nothing in the output.",
+  "trust": "Both routes agree. The two procedures were implemented as two separate functions, each written from its own document's wording, in C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P01\\p01_claude_check.py (Python). Balance checks hold: printed 114 = 114, probe 153 = 153. 200,000 random start/input tables gave 0 mismatches. Caveat: another process in the same folder overwrote my first scratch file (sim.py) partway through. All reported results come from my own self-contained p01_claude_check.py. The probe also exercised equality at volume; the printed tables did not."
+ },
+ "verdict_correct": true,
+ "table_correct": true,
+ "probe_correct": true,
+ "routes_agree": true,
+ "printed_A_engine_ok": true,
+ "printed_B_engine_ok": true,
+ "probe_A_engine_ok": true,
+ "probe_B_engine_ok": true,
+ "probe_separates_truth": false,
+ "probe_separates_as_reported": true,
+ "differing_rule_reported": "None. Every rule matches once the names are mapped: LAMINAR=GREEN, CAVITATING=HOT, inception=upper mark, desinence=lower mark, overboard=waste tally, emergency blow=washout. The only wording difference is that A's Report (d) explicitly allows 'none'; B's does not say so. This changes nothing in the output.",
+ "differing_rule_truth": null,
+ "found_by": "none",
+ "probe_genuine": true
+}

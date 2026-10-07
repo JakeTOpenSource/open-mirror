@@ -1,0 +1,506 @@
+{
+ "pair": "P08",
+ "judge": 2,
+ "truth": "SAME",
+ "visible": null,
+ "result": {
+  "table": [
+   {
+    "step": "Data / setup",
+    "ruleA": "Bounds c=(10,8,12,6,9,7), u=(7,6,9,5,7,5), d=(3,2,4,2,3,2), start x=(3,6,6,2,2,1), B=38, s=0, all flags INACTIVE; input rows identical to B's",
+    "ruleB": "WIP limits, upper marks, lower marks, start counts, target 38 and tally 0 are the same numbers; all teams start ROUTINE; New Tickets table is the same",
+    "same": true
+   },
+   {
+    "step": "Step 1 load",
+    "ruleA": "Add row k, column i of the input to x_i; no bound enforced",
+    "ruleB": "Add the team's new tickets for the sprint; WIP limit not enforced",
+    "same": true
+   },
+   {
+    "step": "Step 2 overflow",
+    "ruleA": "Sequential (Gauss-Seidel) order 1..6, each using the value already updated; if x_i > c_i (strictly) then v = x_i - c_i, x_i = c_i, v goes to i+1, and for component 6 to s",
+    "ruleB": "Sequential order 1..6, excess from team n reaches team n+1 before it is handled; if count > WIP limit (strictly) the excess goes downstream and the count is set to the limit; team 6's excess goes to the closed tally",
+    "same": true
+   },
+   {
+    "step": "Step 3 state update",
+    "ruleA": "Read after Step 2. INACTIVE and x_i >= u_i becomes ACTIVE; ACTIVE and x_i <= d_i becomes INACTIVE; otherwise no change; at most one change; record (iter, comp, before, after)",
+    "ruleB": "Read after step 2. ROUTINE and count >= upper becomes ESCALATED; ESCALATED and count <= lower becomes ROUTINE; otherwise no change; at most one change; recorded the same way",
+    "same": true
+   },
+   {
+    "step": "Step 4 transfer",
+    "ruleA": "Simultaneous (Jacobi): amounts come from the start-of-step values and the Step-3 flags. INACTIVE gives floor(x/4) to s; ACTIVE gives floor(x/2) to i-1, and component 1 gives it to s; every x_i falls by its own t_i; no bound",
+    "ruleB": "All amounts are worked out first from the start-of-step counts. ROUTINE closes floor(n/4) to the tally; ESCALATED bounces floor(n/2) to the previous team, and team 1 sends it to the tally; bounced-in tickets do not change amounts already worked out; no limit",
+    "same": true
+   },
+   {
+    "step": "Step 5 halving",
+    "ruleA": "If the 1-norm is strictly > 38, every one of the six components becomes floor(x_i/2) and the removed x_i - floor(x_i/2) (the ceiling half) goes to s; the iteration is recorded; 38 or less does nothing",
+    "ruleB": "If the total is strictly > 38, every team closes ceil(n/2) to the tally and keeps the rest (= floor(n/2)); the sprint is recorded; 38 or less does nothing",
+    "same": true
+   },
+   {
+    "step": "Report",
+    "ruleA": "After Step 5 of iteration 5: (a) end values 1-6, (b) flags, (c) flag changes, (d) penalty iterations, (e) s, (f) balance check",
+    "ruleB": "After step 5 of sprint 5: (a) end counts 1-6, (b) statuses, (c) status changes in order, (d) halving sprints or 'never', (e) closed tally, (f) balance check with both sides written out",
+    "same": true,
+    "difference": "Presentation only: B asks for both sides of the balance check to be written out and for 'never fired' to be stated. The reported values are the same."
+   }
+  ],
+  "tableVerdict": "SAME",
+  "probeStart": [
+   9,
+   8,
+   9,
+   5,
+   7,
+   5
+  ],
+  "probeInput": [
+   [
+    9,
+    9,
+    9,
+    9,
+    9,
+    9
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    5,
+    3,
+    7,
+    2,
+    6,
+    3
+   ],
+   [
+    9,
+    0,
+    9,
+    0,
+    9,
+    0
+   ],
+   [
+    1,
+    8,
+    3,
+    6,
+    5,
+    7
+   ]
+  ],
+  "probeWhy": "The probe starts high and sends all 9s in cycle 1, which forces a full overflow cascade from position 1 to 6 with spill into the loss tally. That tests sequential against simultaneous overflow and the strict '>' bound. Every position then trips the upper threshold at once, so position 1 sends its transfer to the tally. The zero row in cycle 2 lets values fall to the lower thresholds, which tests '<=' de-escalation. Alternating 9/0 rows and odd totals make the line-wide halving fire repeatedly on odd counts, which tests floor-kept against ceiling-removed. The arithmetic was done with a script (sim.py in the P08 folder) that codes each document separately as written. The script also ran 200,000 random starting and input tables (0 to 9) with 0 mismatches, which covers the equality-at-38 and threshold-equality cases the hand-built probe may not hit.",
+  "aOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "ACTIVE",
+    "ACTIVE",
+    "ACTIVE",
+    "ACTIVE",
+    "ACTIVE",
+    "INACTIVE"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "ACTIVE",
+     "to": "INACTIVE"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "ACTIVE",
+     "to": "INACTIVE"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "ACTIVE",
+     "to": "INACTIVE"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "ACTIVE",
+     "to": "INACTIVE"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "bOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "ESCALATED",
+    "ESCALATED",
+    "ESCALATED",
+    "ESCALATED",
+    "ESCALATED",
+    "ROUTINE"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "ESCALATED",
+     "to": "ROUTINE"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "ESCALATED",
+     "to": "ROUTINE"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "ESCALATED",
+     "to": "ROUTINE"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "ESCALATED",
+     "to": "ROUTINE"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "aOnProbe": {
+   "finalQuantities": [
+    3,
+    5,
+    4,
+    3,
+    4,
+    2
+   ],
+   "finalStates": [
+    "ACTIVE",
+    "ACTIVE",
+    "ACTIVE",
+    "ACTIVE",
+    "ACTIVE",
+    "ACTIVE"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 1,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 2,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 6,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "ACTIVE",
+     "to": "INACTIVE"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "ACTIVE",
+     "to": "INACTIVE"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 3,
+     "position": 6,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    3,
+    4,
+    5
+   ],
+   "lossTotal": 159
+  },
+  "bOnProbe": {
+   "finalQuantities": [
+    3,
+    5,
+    4,
+    3,
+    4,
+    2
+   ],
+   "finalStates": [
+    "ESCALATED",
+    "ESCALATED",
+    "ESCALATED",
+    "ESCALATED",
+    "ESCALATED",
+    "ESCALATED"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 1,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 1,
+     "position": 2,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 1,
+     "position": 6,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "ESCALATED",
+     "to": "ROUTINE"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "ESCALATED",
+     "to": "ROUTINE"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 3,
+     "position": 6,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    3,
+    4,
+    5
+   ],
+   "lossTotal": 159
+  },
+  "probeVerdict": "SAME",
+  "usedScript": true,
+  "verdict": "SAME",
+  "foundBy": "none",
+  "routesAgree": true,
+  "differingRule": "None. With INACTIVE=ROUTINE, ACTIVE=ESCALATED, component=team and slack=closed tally, every rule matches. That includes A's 'x becomes floor(x/2), the removed amount goes to s' against B's 'close the larger half, rounded up, and keep the rest'.",
+  "trust": "Both routes agree. Rule by rule, the table finds the same functions. The script codes each document separately as written, and A and B match on the printed tables, on the probe, and on 200,000 random tables. Both balance checks hold: 114 = 114 on the printed tables and 180 = 180 on the probe. Script: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P08\\sim.py"
+ },
+ "verdict_correct": true,
+ "table_correct": true,
+ "probe_correct": true,
+ "routes_agree": true,
+ "printed_A_engine_ok": true,
+ "printed_B_engine_ok": true,
+ "probe_A_engine_ok": true,
+ "probe_B_engine_ok": true,
+ "probe_separates_truth": false,
+ "probe_separates_as_reported": true,
+ "differing_rule_reported": "None. With INACTIVE=ROUTINE, ACTIVE=ESCALATED, component=team and slack=closed tally, every rule matches. That includes A's 'x becomes floor(x/2), the removed amount goes to s' against B's 'close the larger half, rounded up, and keep the rest'.",
+ "differing_rule_truth": null,
+ "found_by": "none",
+ "probe_genuine": true
+}

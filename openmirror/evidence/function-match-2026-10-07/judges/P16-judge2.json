@@ -1,0 +1,518 @@
+{
+ "pair": "P16",
+ "judge": 2,
+ "truth": "DIFFERENT",
+ "visible": false,
+ "result": {
+  "table": [
+   {
+    "step": "Setup (parameters, start, input table, rounding)",
+    "ruleA": "6 tiers; budget/heat/cool = (10,7,3),(8,6,2),(12,9,4),(6,5,2),(9,7,3),(7,5,2); start 3,6,6,2,2,1; all COLD; limit 38; drop count 0; every division rounded down; identical 5x6 ingest schedule",
+    "ruleB": "6 compartments; volume/inception/desinence identical; start 3,6,6,2,2,1; all LAMINAR; blow limit 38; Total Overboard 0; quarters and halves rounded down; identical Fill Table",
+    "same": true
+   },
+   {
+    "step": "Step 1 Ingest / Fill",
+    "ruleA": "Add the scheduled chunks to each tier; budget not enforced",
+    "ruleB": "Add the fill amount to each compartment; volume not enforced",
+    "same": true
+   },
+   {
+    "step": "Step 2 Eviction / Scupper overflow",
+    "ruleA": "Sequential 1 to 6; if count > budget, excess goes to tier n+1 (already there when n+1 is handled), count set to budget; at or below budget does nothing; excess from tier 6 is added to drop count",
+    "ruleB": "Sequential 1 to 6; if contents > volume, excess goes aft to n+1 before n+1 is checked, contents set to volume; equal or less does nothing; excess from 6 goes overboard",
+    "same": true
+   },
+   {
+    "step": "Step 3 Temperature / Pump state check",
+    "ruleA": "Read counts after step 2; COLD with count >= heat becomes HOT; HOT with count <= cool becomes COLD; otherwise unchanged; at most one change per cycle; log (cycle, tier, before, after)",
+    "ruleB": "Read contents after Step 2; LAMINAR with contents >= inception becomes CAVITATING; CAVITATING with contents <= desinence becomes LAMINAR; otherwise unchanged; at most one change per cycle; log the same 4-tuple",
+    "same": true
+   },
+   {
+    "step": "Step 4 Compaction and promotion / Pumping",
+    "ruleA": "Compute all amounts from counts at the start of the step using post-step-3 state: COLD floor(count/4), HOT floor(count/2); then apply simultaneously; COLD amount dropped; HOT amount to tier n-1; HOT tier 1 amount dropped; budget not enforced",
+    "ruleB": "Compute all amounts from contents at the start of the step: LAMINAR floor(contents/4), CAVITATING floor(contents/2); apply together; LAMINAR amount overboard; CAVITATING amount to n-1; compartment 1 backflow overboard; volume not enforced",
+    "same": true
+   },
+   {
+    "step": "Step 5 trigger",
+    "ruleA": "Sum of six counts > 38 fires the reset (exactly 38 does not); log the cycle",
+    "ruleB": "Sum of six contents > 38 fires the blow (exactly 38 does not); log the cycle",
+    "same": true
+   },
+   {
+    "step": "Step 5 scope of the halving",
+    "ruleA": "Only HOT tiers are halved (floor(count/2)); COLD tiers are left as they are; removed chunks go to drop count",
+    "ruleB": "Every compartment is halved (floor(contents/2)) regardless of pump state; removed units go overboard",
+    "same": false,
+    "difference": "A halves only HOT positions and keeps COLD positions whole; B halves all six positions including LAMINAR (COLD) ones. Any COLD/LAMINAR position holding 1 or more at a firing changes the outcome."
+   },
+   {
+    "step": "Report",
+    "ruleA": "(a) end counts 1-6, (b) end states, (c) all state changes in order, (d) reset cycles, (e) final drop count, (f) balance check",
+    "ruleB": "(a) end contents 1-6, (b) end pump states, (c) all pump state changes, (d) blow cycles or none, (e) Total Overboard, (f) balance check",
+    "same": true
+   }
+  ],
+  "tableVerdict": "DIFFERENT",
+  "probeStart": [
+   5,
+   2,
+   6,
+   0,
+   1,
+   8
+  ],
+  "probeInput": [
+   [
+    1,
+    5,
+    9,
+    0,
+    8,
+    3
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  ],
+  "probeWhy": "The suspected difference is which positions the line-wide halving covers, so the probe has to fire the halving while at least one COLD/LAMINAR position holds 1 or more, and must not let later cycles erase the gap. Cycle 1 by hand: after ingest [6,7,15,0,9,11]; eviction gives [6,7,12,3,9,7] and drops 4; positions 2,3,5,6 go HOT while 1 and 4 stay COLD; compaction/promotion gives [8,10,6,7,8,4] (drop count 5), total 43 > 38, so the halving fires. A halves only the HOT positions: [8,5,3,7,4,2], drop count 19. B halves everything: [4,5,3,3,4,2], drop count 27. Inputs in cycles 2-5 are all zero, so nothing refills the line and the gap reaches the end report. Why the printed tables hide it: the printed run does diverge after the cycle 1 halving (COLD positions 1 and 6 hold 7 and 3; A keeps them, B halves them to 3 and 1), and the mid-run counts differ through cycle 3. But by the cycle 4 firing every position is HOT and budget clipping has absorbed the gap, so the two runs reconverge exactly ([4,5,4,3,4,2], tally 74 for both after cycle 4). Their printed end reports are therefore identical, a coincidence of those tables. A random search over 20,000 start/input pairs (digits 0-9) found 4,604 where the end reports differ.",
+  "aOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "HOT",
+    "HOT",
+    "HOT",
+    "HOT",
+    "HOT",
+    "COLD"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "HOT",
+     "to": "COLD"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "HOT",
+     "to": "COLD"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "HOT",
+     "to": "COLD"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "HOT",
+     "to": "COLD"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "bOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "CAVITATING",
+    "CAVITATING",
+    "CAVITATING",
+    "CAVITATING",
+    "CAVITATING",
+    "LAMINAR"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "CAVITATING",
+     "to": "LAMINAR"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "CAVITATING",
+     "to": "LAMINAR"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "CAVITATING",
+     "to": "LAMINAR"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "CAVITATING",
+     "to": "LAMINAR"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "aOnProbe": {
+   "finalQuantities": [
+    2,
+    2,
+    6,
+    2,
+    3,
+    2
+   ],
+   "finalStates": [
+    "COLD",
+    "COLD",
+    "COLD",
+    "COLD",
+    "COLD",
+    "COLD"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 6,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "HOT",
+     "to": "COLD"
+    },
+    {
+     "period": 2,
+     "position": 4,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "HOT",
+     "to": "COLD"
+    },
+    {
+     "period": 3,
+     "position": 5,
+     "from": "HOT",
+     "to": "COLD"
+    },
+    {
+     "period": 4,
+     "position": 2,
+     "from": "HOT",
+     "to": "COLD"
+    },
+    {
+     "period": 5,
+     "position": 1,
+     "from": "HOT",
+     "to": "COLD"
+    },
+    {
+     "period": 5,
+     "position": 4,
+     "from": "HOT",
+     "to": "COLD"
+    }
+   ],
+   "resetPeriods": [
+    1
+   ],
+   "lossTotal": 31
+  },
+  "bOnProbe": {
+   "finalQuantities": [
+    3,
+    2,
+    4,
+    2,
+    2,
+    2
+   ],
+   "finalStates": [
+    "LAMINAR",
+    "LAMINAR",
+    "LAMINAR",
+    "LAMINAR",
+    "LAMINAR",
+    "LAMINAR"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 1,
+     "position": 6,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "CAVITATING",
+     "to": "LAMINAR"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "CAVITATING",
+     "to": "LAMINAR"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 3,
+     "position": 5,
+     "from": "CAVITATING",
+     "to": "LAMINAR"
+    },
+    {
+     "period": 4,
+     "position": 2,
+     "from": "CAVITATING",
+     "to": "LAMINAR"
+    },
+    {
+     "period": 5,
+     "position": 4,
+     "from": "CAVITATING",
+     "to": "LAMINAR"
+    }
+   ],
+   "resetPeriods": [
+    1
+   ],
+   "lossTotal": 33
+  },
+  "probeVerdict": "DIFFERENT",
+  "usedScript": true,
+  "verdict": "DIFFERENT",
+  "differingRule": "At step 5, when the total is above 38, A halves only the HOT tiers and leaves the COLD tiers whole, while B halves all six compartments whatever their pump state.",
+  "foundBy": "both",
+  "routesAgree": true,
+  "trust": "Both routes agree on DIFFERENT. Route 1 finds the step 5 halving-scope rule as the only differing clause; every other step matches clause by clause, including the order, the rounding targets, the inclusive and strict thresholds, where amounts go, and the strict > 38 trigger. Route 2 shows it in practice: the probe fires one halving while positions 1 and 4 are COLD/LAMINAR and holding 8 and 7, and the end reports differ in quantities (A 2,2,6,2,3,2 vs B 3,2,4,2,2,2), state changes, and loss tally (31 vs 33). The printed tables produce identical end reports (both 6,10,9,7,4,2, halving in cycles 1 and 4, tally 76, balance 114 = 114), but only because the runs reconverge. They diverge after cycle 1, where COLD positions 1 and 6 hold 7 and 3 at the firing, and become identical again by the cycle 4 firing, when all six positions are HOT and clipping has absorbed the gap. A check on the printed tables alone would wrongly say SAME. I used a Python script for the arithmetic (C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P16\\sim.py, with search.py, search2.py and search3.py for probe search) and checked probe cycle 1 by hand. Balance holds in every run: probe 54 = 54 for A (23 end + 31 tally) and for B (21 end + 33 tally)."
+ },
+ "verdict_correct": true,
+ "table_correct": true,
+ "probe_correct": true,
+ "routes_agree": true,
+ "printed_A_engine_ok": true,
+ "printed_B_engine_ok": true,
+ "probe_A_engine_ok": true,
+ "probe_B_engine_ok": true,
+ "probe_separates_truth": true,
+ "probe_separates_as_reported": true,
+ "differing_rule_reported": "At step 5, when the total is above 38, A halves only the HOT tiers and leaves the COLD tiers whole, while B halves all six compartments whatever their pump state.",
+ "differing_rule_truth": "DIFF (hidden on frozen data): step 5 halves only ELEVATED cells",
+ "found_by": "both",
+ "probe_genuine": true
+}

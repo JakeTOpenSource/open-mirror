@@ -1,0 +1,443 @@
+{
+ "pair": "P09",
+ "judge": 1,
+ "truth": "DIFFERENT",
+ "visible": true,
+ "result": {
+  "table": [
+   {
+    "step": "Setup / fixed values",
+    "ruleA": "6 segments; holding volume 10,8,12,6,9,7; upper mark 7,6,9,5,7,5; lower mark 3,2,4,2,3,2; start 3,6,6,2,2,1; all QUIET; limit 38; tally 0",
+    "ruleB": "6 crucibles; working volume 10,8,12,6,9,7; upper mark 7,6,9,5,7,5; lower mark 3,2,4,2,3,2; start 3,6,6,2,2,1; all BASE; limit 38; slag 0",
+    "same": true
+   },
+   {
+    "step": "Step 1 (Uptake / Charge)",
+    "ruleA": "Add each cycle's row of the uptake table to each segment; holding volume not enforced",
+    "ruleB": "Add each cycle's row of the charge table to each crucible; working volume not enforced",
+    "same": true
+   },
+   {
+    "step": "Step 2 (Xylem push / Overflow)",
+    "ruleA": "Sequential, segments 1 to 6; if sap > holding volume, the excess goes to n+1 (already there when n+1 is handled) and the segment is set to its holding volume; excess from 6 goes to the loss tally; equal means nothing happens",
+    "ruleB": "Sequential, crucibles 1 to 6; if melt > working volume, the excess goes to n+1 (already there when n+1 is handled) and the crucible is set to its working volume; excess from 6 goes to slag; equal means nothing happens",
+    "same": true
+   },
+   {
+    "step": "Step 3 (State check)",
+    "ruleA": "Read after step 2; QUIET and sap >= upper mark becomes SINK-ACTIVE; SINK-ACTIVE and sap <= lower mark becomes QUIET; otherwise no change; at most one change per cycle; log (cycle, segment, before, after)",
+    "ruleB": "Read after step 2; BASE and melt >= upper mark becomes SUPERHEATED; SUPERHEATED and melt <= lower mark becomes BASE; otherwise no change; at most one change per cycle; log (cycle, crucible, before, after)",
+    "same": true
+   },
+   {
+    "step": "Step 4 (Phloem return and respiration / Draw-off)",
+    "ruleA": "Simultaneous; amount from sap at the start of the step and the post-step-3 state: QUIET floor(sap/4), SINK-ACTIVE floor(sap/2); every segment drops by its amount; QUIET amount goes to the loss tally; SINK-ACTIVE amount goes to n-1; segment 1's SINK-ACTIVE amount goes to the loss tally; no capacity check",
+    "ruleB": "Simultaneous; amount from melt at the start of the step and the post-step-3 state: BASE floor(melt/4), SUPERHEATED floor(melt/2); every crucible drops by its amount; BASE amount goes to slag; SUPERHEATED amount goes to n-1; crucible 1's SUPERHEATED amount goes to slag; no capacity check",
+    "same": true
+   },
+   {
+    "step": "Step 5 (Leaf-drop / Emergency tap)",
+    "ruleA": "If the total is strictly greater than 38, all six segments become floor(sap/2), rounded DOWN; the removed sap (ceil(sap/2)) goes to the loss tally; log the cycle; a total of 38 or less does nothing",
+    "ruleB": "If the total is strictly greater than 38, all six crucibles become ceil(melt/2), rounded UP; the removed melt (floor(melt/2)) goes to slag; log the cycle; a total of 38 or less does nothing",
+    "same": false,
+    "difference": "The rounding of the kept amount when halving fires. A keeps half rounded down, so an odd amount loses its extra unit. B keeps half rounded up, so the odd unit stays in the crucible. The trigger (strictly greater than 38), the scope (all six) and the routing of the removed amount (to the tally) are the same."
+   },
+   {
+    "step": "Report",
+    "ruleA": "(a) end sap 1-6, (b) end states, (c) state changes in order, (d) leaf-drop cycles or 'none', (e) loss tally, (f) balance check",
+    "ruleB": "(a) end melt 1-6, (b) end states, (c) state changes, (d) emergency tap cycles, (e) slag total, (f) balance check",
+    "same": true
+   }
+  ],
+  "tableVerdict": "DIFFERENT",
+  "probeStart": [
+   9,
+   9,
+   9,
+   9,
+   9,
+   9
+  ],
+  "probeInput": [
+   [
+    9,
+    9,
+    9,
+    9,
+    9,
+    9
+   ],
+   [
+    9,
+    9,
+    9,
+    9,
+    9,
+    9
+   ],
+   [
+    9,
+    9,
+    9,
+    9,
+    9,
+    9
+   ],
+   [
+    9,
+    9,
+    9,
+    9,
+    9,
+    9
+   ],
+   [
+    9,
+    9,
+    9,
+    9,
+    9,
+    9
+   ]
+  ],
+  "probeWhy": "The 9s overload the line every cycle, so the line-wide halving fires in all five cycles and keeps landing on odd amounts. That exposes the round-down versus round-up difference in step 5 again and again. It also tests the sequential overflow cascade, every segment's upper-mark entry in cycle 1, and segment 1's phloem amount leaving the line.",
+  "aOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "SINK-ACTIVE",
+    "SINK-ACTIVE",
+    "SINK-ACTIVE",
+    "SINK-ACTIVE",
+    "SINK-ACTIVE",
+    "QUIET"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "SINK-ACTIVE",
+     "to": "QUIET"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "SINK-ACTIVE",
+     "to": "QUIET"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "SINK-ACTIVE",
+     "to": "QUIET"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "SINK-ACTIVE",
+     "to": "QUIET"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "bOnPrinted": {
+   "finalQuantities": [
+    4,
+    5,
+    5,
+    4,
+    3,
+    1
+   ],
+   "finalStates": [
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "SUPERHEATED"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "SUPERHEATED",
+     "to": "BASE"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "SUPERHEATED",
+     "to": "BASE"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4,
+    5
+   ],
+   "lossTotal": 92
+  },
+  "aOnProbe": {
+   "finalQuantities": [
+    4,
+    5,
+    4,
+    3,
+    4,
+    2
+   ],
+   "finalStates": [
+    "SINK-ACTIVE",
+    "SINK-ACTIVE",
+    "SINK-ACTIVE",
+    "SINK-ACTIVE",
+    "SINK-ACTIVE",
+    "SINK-ACTIVE"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 1,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 2,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 6,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "lossTotal": 302
+  },
+  "bOnProbe": {
+   "finalQuantities": [
+    5,
+    5,
+    5,
+    4,
+    4,
+    2
+   ],
+   "finalStates": [
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "SUPERHEATED"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 1,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 2,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 6,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "lossTotal": 299
+  },
+  "probeVerdict": "DIFFERENT",
+  "usedScript": true,
+  "verdict": "DIFFERENT",
+  "differingRule": "In step 5, when the line-wide halving fires, A keeps each position's amount halved and rounded down, while B keeps it halved and rounded up. So with an odd amount, A sends the extra unit to the loss tally and B keeps it in the crucible.",
+  "foundBy": "both",
+  "routesAgree": true,
+  "trust": "The two routes agree. The table isolates the rounding direction in step 5 as the only difference; all other rules match one to one. Running both documents confirms it. On the probe, and on the printed tables too, A and B end with different quantities and loss tallies, and on the printed tables they also differ in state changes, end states and halving cycles (A: 1,4; B: 1,4,5). The balance check holds for all four runs (printed 114 = 114; probe 324 = 324). The script is C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P09\\sim.py."
+ },
+ "verdict_correct": true,
+ "table_correct": true,
+ "probe_correct": true,
+ "routes_agree": true,
+ "printed_A_engine_ok": true,
+ "printed_B_engine_ok": true,
+ "probe_A_engine_ok": true,
+ "probe_B_engine_ok": true,
+ "probe_separates_truth": true,
+ "probe_separates_as_reported": true,
+ "differing_rule_reported": "In step 5, when the line-wide halving fires, A keeps each position's amount halved and rounded down, while B keeps it halved and rounded up. So with an odd amount, A sends the extra unit to the loss tally and B keeps it in the crucible.",
+ "differing_rule_truth": "DIFF: step 5 keeps half rounded up",
+ "found_by": "both",
+ "probe_genuine": true
+}

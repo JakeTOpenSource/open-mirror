@@ -1,0 +1,470 @@
+{
+ "pair": "P10",
+ "judge": 2,
+ "truth": "DIFFERENT",
+ "visible": true,
+ "result": {
+  "table": [
+   {
+    "step": "Step 1 Charge / Ingest",
+    "ruleA": "Add charge-table units to each form; volume not enforced.",
+    "ruleB": "Add ingest-schedule chunks to each tier; budget not enforced.",
+    "same": true
+   },
+   {
+    "step": "Step 2 Overtop / Eviction",
+    "ruleA": "Forms handled in order 1 to 6, one at a time. If contents are above volume (strictly), the excess goes to form n+1 and the form is set to its volume; form 6's excess goes to waste. Overflow reaches the next form before that form is handled.",
+    "ruleB": "Tiers handled in order 1 to 6, one at a time. If count is above budget (strictly), the excess goes to tier n+1 and the tier is set to its budget; tier 6's excess is dropped. Eviction reaches the next tier before that tier is handled.",
+    "same": true
+   },
+   {
+    "step": "Step 3 Status / Temperature check",
+    "ruleA": "Read contents after Step 2. GREEN at or above the upper mark becomes HOT; HOT at or below the lower mark becomes GREEN; otherwise no change; at most one change per cycle; log (cycle, form, before, after).",
+    "ruleB": "Read count after eviction. COLD at or above the heat mark becomes HOT; HOT at or below the cool mark becomes COLD; otherwise no change; at most one change per cycle; log (cycle, tier, before, after).",
+    "same": true
+   },
+   {
+    "step": "Step 4 Settle / Compaction and promotion",
+    "ruleA": "Amounts come from contents at the start of the step, using the status after Step 3: GREEN gives floor(contents/4), HOT gives floor(contents/2). All six are worked out first, then applied together. Each form loses its amount. GREEN amounts go to waste. HOT amounts go to form n-1, and form 1's HOT amount goes to waste. Volume is not enforced.",
+    "ruleB": "Amounts come from the count at the start of the step, using the state after step 3: COLD gives floor(count/4), HOT gives floor(count/2). All six are worked out first, then applied together. Each tier loses its amount. COLD amounts are dropped. HOT amounts go to tier n-1, and tier 1's HOT amount is dropped. Budget is not enforced.",
+    "same": true
+   },
+   {
+    "step": "Step 5 Washout / Context reset",
+    "ruleA": "Sum all six. If the total is MORE THAN 38 (strictly), every form becomes floor(contents/2), the removed units go to waste, and the cycle is logged. At exactly 38, nothing happens.",
+    "ruleB": "Sum all six. If the total is 38 OR MORE, every tier becomes floor(count/2), the removed chunks are dropped, and the cycle is logged. At exactly 38, it fires.",
+    "same": false,
+    "difference": "The trigger comparison differs. A uses total > 38 and B uses total >= 38, so a total of exactly 38 fires a reset in B but not in A. What is halved, what is kept, which positions are affected and where the removed units go are all the same."
+   },
+   {
+    "step": "Report",
+    "ruleA": "(a) End contents for forms 1-6, (b) end statuses, (c) all status changes, (d) washout cycles, (e) final waste tally, (f) balance check: start plus charges equals end plus waste.",
+    "ruleB": "(a) End counts for tiers 1-6, (b) end states, (c) all state changes in the order they occurred, (d) reset cycles, (e) final drop count, (f) balance check showing both sides.",
+    "same": true,
+    "difference": "Only the presentation differs: B asks for changes in occurrence order and for both sides of the balance to be shown. The content is the same."
+   }
+  ],
+  "tableVerdict": "DIFFERENT",
+  "probeStart": [
+   4,
+   0,
+   2,
+   6,
+   3,
+   1
+  ],
+  "probeInput": [
+   [
+    8,
+    7,
+    1,
+    9,
+    6,
+    9
+   ],
+   [
+    3,
+    4,
+    5,
+    1,
+    3,
+    9
+   ],
+   [
+    8,
+    8,
+    0,
+    1,
+    6,
+    0
+   ],
+   [
+    0,
+    6,
+    5,
+    2,
+    0,
+    5
+   ],
+   [
+    5,
+    7,
+    2,
+    0,
+    3,
+    2
+   ]
+  ],
+  "probeWhy": "The table showed that the only suspected difference was the Step 5 trigger at a total of exactly 38. I searched seeded random starting and input tables (0-9) and chose the first one whose line total after cycle 1's Step 4 is exactly 38. On this probe A does not halve in cycle 1 and B does, so the two runs split from the first cycle. The printed tables also trip the boundary: the cycle 5 total is exactly 38 under both documents. B fires there and A does not.",
+  "aOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "HOT",
+    "HOT",
+    "HOT",
+    "HOT",
+    "HOT",
+    "GREEN"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "HOT",
+     "to": "GREEN"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "HOT",
+     "to": "GREEN"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "HOT",
+     "to": "GREEN"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "HOT",
+     "to": "GREEN"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "bOnPrinted": {
+   "finalQuantities": [
+    3,
+    5,
+    4,
+    3,
+    2,
+    1
+   ],
+   "finalStates": [
+    "HOT",
+    "HOT",
+    "HOT",
+    "HOT",
+    "HOT",
+    "COLD"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "HOT",
+     "to": "COLD"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "HOT",
+     "to": "COLD"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "HOT",
+     "to": "COLD"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "HOT",
+     "to": "COLD"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4,
+    5
+   ],
+   "lossTotal": 96
+  },
+  "aOnProbe": {
+   "finalQuantities": [
+    4,
+    5,
+    4,
+    3,
+    4,
+    2
+   ],
+   "finalStates": [
+    "HOT",
+    "HOT",
+    "HOT",
+    "HOT",
+    "HOT",
+    "HOT"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 1,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 2,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 6,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "HOT",
+     "to": "GREEN"
+    },
+    {
+     "period": 5,
+     "position": 5,
+     "from": "GREEN",
+     "to": "HOT"
+    }
+   ],
+   "resetPeriods": [
+    2,
+    3,
+    5
+   ],
+   "lossTotal": 119
+  },
+  "bOnProbe": {
+   "finalQuantities": [
+    8,
+    9,
+    5,
+    4,
+    5,
+    2
+   ],
+   "finalStates": [
+    "HOT",
+    "HOT",
+    "HOT",
+    "COLD",
+    "HOT",
+    "HOT"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 1,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 2,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 6,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 5,
+     "position": 4,
+     "from": "HOT",
+     "to": "COLD"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    3,
+    4
+   ],
+   "lossTotal": 108
+  },
+  "probeVerdict": "DIFFERENT",
+  "usedScript": true,
+  "verdict": "DIFFERENT",
+  "differingRule": "The Step 5 line-wide halving fires only when the total is strictly greater than 38 in A (washout), but when the total is 38 or more in B (context reset), so a total of exactly 38 halves the line in B and not in A.",
+  "foundBy": "both",
+  "routesAgree": true,
+  "trust": "Both routes agree. The table points to the 38 boundary in Step 5 and nothing else. The probe hits a total of exactly 38 in cycle 1, and the printed tables hit it in cycle 5, and in both cases the runs differ. The printed-table runs match through cycle 4 (same changes, same totals 39/28/36/47/38) and differ only from B's cycle 5 reset onward. The script is C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P10\\sim.py. The two documents share one simulator that differs only in the threshold comparison, and every run passed its balance-check assertion."
+ },
+ "verdict_correct": true,
+ "table_correct": true,
+ "probe_correct": true,
+ "routes_agree": true,
+ "printed_A_engine_ok": true,
+ "printed_B_engine_ok": true,
+ "probe_A_engine_ok": true,
+ "probe_B_engine_ok": true,
+ "probe_separates_truth": true,
+ "probe_separates_as_reported": true,
+ "differing_rule_reported": "The Step 5 line-wide halving fires only when the total is strictly greater than 38 in A (washout), but when the total is 38 or more in B (context reset), so a total of exactly 38 halves the line in B and not in A.",
+ "differing_rule_truth": "DIFF: step 5 fires at 38 or more",
+ "found_by": "both",
+ "probe_genuine": true
+}

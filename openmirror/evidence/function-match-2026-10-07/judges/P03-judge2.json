@@ -1,0 +1,465 @@
+{
+ "pair": "P03",
+ "judge": 2,
+ "truth": "SAME",
+ "visible": null,
+ "result": {
+  "table": [
+   {
+    "step": "Data (parameters, start, inputs)",
+    "ruleA": "c=(10,8,12,6,9,7), u=(7,6,9,5,7,5), d=(3,2,4,2,3,2), start x=(3,6,6,2,2,1), B=38, s=0, all INACTIVE; same 5x6 input table",
+    "ruleB": "budget=(10,8,12,6,9,7), heat=(7,6,9,5,7,5), cool=(3,2,4,2,3,2), start=(3,6,6,2,2,1), limit 38, drop 0, all COLD; identical 5x6 ingest schedule",
+    "same": true
+   },
+   {
+    "step": "Step 1 load/ingest",
+    "ruleA": "Add row k, column i to x_i for all six; box bound not enforced",
+    "ruleB": "Add cycle's scheduled chunks to each tier; budget not enforced",
+    "same": true
+   },
+   {
+    "step": "Step 2 projection/eviction",
+    "ruleA": "Sequential 1..6 using already-updated values; if x_i > c_i (strict), excess goes to i+1 (component 6: to s), x_i set to c_i; cascades in same sweep",
+    "ruleB": "Sequential 1..6; if count > budget (strict), excess to tier n+1 (tier 6: dropped to drop count), count set to budget; cascades outward in same step",
+    "same": true
+   },
+   {
+    "step": "Step 3 active-set/temperature",
+    "ruleA": "Read after Step 2. INACTIVE and x_i >= u_i -> ACTIVE; ACTIVE and x_i <= d_i -> INACTIVE; otherwise unchanged; at most one change per iteration; logged (k,i,before,after)",
+    "ruleB": "Read after eviction. COLD and count >= heat -> HOT; HOT and count <= cool -> COLD; otherwise unchanged; at most once per cycle; logged (cycle,tier,before,after)",
+    "same": true
+   },
+   {
+    "step": "Step 4 Jacobi transfer/compaction",
+    "ruleA": "Simultaneous, from values at start of step with Step-3 flags: INACTIVE t=floor(x/4) to s; ACTIVE t=floor(x/2) to component i-1 (component 1: to s); each x_i decreases by own t_i; bound not enforced",
+    "ruleB": "Simultaneous, from counts at start of step with post-step-3 states: COLD amount=floor(count/4) dropped; HOT amount=floor(count/2) to tier n-1 (tier 1: dropped); each tier decreases by own amount; budget not enforced",
+    "same": true
+   },
+   {
+    "step": "Step 5 penalty/context reset",
+    "ruleA": "If sum of all six strictly > 38: every x_i -> floor(x_i/2), removed amounts to s, record iteration; equality (38) does nothing",
+    "ruleB": "If total > 38: every tier -> floor(count/2), removed chunks to drop count, log cycle; 38 or less does nothing",
+    "same": true
+   },
+   {
+    "step": "Report",
+    "ruleA": "End values 1..6, end flags, all flag changes (k,i,before,after), penalty iterations, final s, balance check",
+    "ruleB": "End counts 1..6, end states, all state changes (cycle,tier,before,after) in order, reset cycles, final drop count, balance check",
+    "same": true
+   }
+  ],
+  "tableVerdict": "SAME",
+  "probeStart": [
+   3,
+   7,
+   1,
+   9,
+   9,
+   2
+  ],
+  "probeInput": [
+   [
+    4,
+    2,
+    3,
+    9,
+    4,
+    5
+   ],
+   [
+    9,
+    7,
+    8,
+    5,
+    4,
+    9
+   ],
+   [
+    4,
+    7,
+    1,
+    2,
+    2,
+    4
+   ],
+   [
+    9,
+    3,
+    0,
+    1,
+    2,
+    8
+   ],
+   [
+    6,
+    3,
+    0,
+    3,
+    9,
+    2
+   ]
+  ],
+  "probeWhy": "I picked this probe by scripted search over random starts and inputs, keeping cases that trip every boundary the printed tables might miss. In three cycles the total after step 4 is exactly 38, which tests whether equality fires the halving; it fires in two other cycles. A count lands exactly on its heat mark while COLD and exactly on its cool mark while HOT, which tests at-or-above versus above and at-or-below versus below. There are 13 adjacent cascades in step 2, which tests sequential versus simultaneous eviction. Position 1 is ACTIVE/HOT in all five cycles, so the edge sink for its transfer is used. Some positions sit over budget after step 4, which tests that the bound is enforced only in step 2.",
+  "aOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "ACTIVE",
+    "ACTIVE",
+    "ACTIVE",
+    "ACTIVE",
+    "ACTIVE",
+    "INACTIVE"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "ACTIVE",
+     "to": "INACTIVE"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "ACTIVE",
+     "to": "INACTIVE"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "ACTIVE",
+     "to": "INACTIVE"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "ACTIVE",
+     "to": "INACTIVE"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "bOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "HOT",
+    "HOT",
+    "HOT",
+    "HOT",
+    "HOT",
+    "COLD"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "HOT",
+     "to": "COLD"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "HOT",
+     "to": "COLD"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "HOT",
+     "to": "COLD"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "HOT",
+     "to": "COLD"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "aOnProbe": {
+   "finalQuantities": [
+    9,
+    4,
+    6,
+    7,
+    8,
+    4
+   ],
+   "finalStates": [
+    "ACTIVE",
+    "ACTIVE",
+    "INACTIVE",
+    "ACTIVE",
+    "ACTIVE",
+    "ACTIVE"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 1,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 2,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 6,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "INACTIVE",
+     "to": "ACTIVE"
+    },
+    {
+     "period": 5,
+     "position": 3,
+     "from": "ACTIVE",
+     "to": "INACTIVE"
+    }
+   ],
+   "resetPeriods": [
+    2,
+    4
+   ],
+   "lossTotal": 128
+  },
+  "bOnProbe": {
+   "finalQuantities": [
+    9,
+    4,
+    6,
+    7,
+    8,
+    4
+   ],
+   "finalStates": [
+    "HOT",
+    "HOT",
+    "COLD",
+    "HOT",
+    "HOT",
+    "HOT"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 1,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 2,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 6,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "COLD",
+     "to": "HOT"
+    },
+    {
+     "period": 5,
+     "position": 3,
+     "from": "HOT",
+     "to": "COLD"
+    }
+   ],
+   "resetPeriods": [
+    2,
+    4
+   ],
+   "lossTotal": 128
+  },
+  "probeVerdict": "SAME",
+  "usedScript": true,
+  "verdict": "SAME",
+  "foundBy": "none",
+  "routesAgree": true,
+  "differingRule": "None. Every rule matches once the names are translated: x_i to chunk count, INACTIVE/ACTIVE to COLD/HOT, s to drop count, penalty step to context reset.",
+  "trust": "The two routes agree, so neither has to be preferred. On the printed tables both give end quantities (6,10,9,7,4,2), the same 13 state changes, halving in cycles 1 and 4, and a loss of 76. On the probe both give (9,4,6,7,8,4), the same 7 changes, halving in cycles 2 and 4, and a loss of 128. The balance check holds in both cases: 114 = 114 printed and 166 = 166 probe. I also ran the two implementations, written separately, on 200,000 random starts and input tables with values 0 to 9, and found no mismatch. Scripts are C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P03\\sim.py and C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P03\\probe.py. One limit applies: the random check only covers the documents' fixed thresholds and limit of 38. Other values are outside the task as stated, but the rules read the same symbolically, so they would agree there too."
+ },
+ "verdict_correct": true,
+ "table_correct": true,
+ "probe_correct": true,
+ "routes_agree": true,
+ "printed_A_engine_ok": true,
+ "printed_B_engine_ok": true,
+ "probe_A_engine_ok": true,
+ "probe_B_engine_ok": true,
+ "probe_separates_truth": false,
+ "probe_separates_as_reported": true,
+ "differing_rule_reported": "None. Every rule matches once the names are translated: x_i to chunk count, INACTIVE/ACTIVE to COLD/HOT, s to drop count, penalty step to context reset.",
+ "differing_rule_truth": null,
+ "found_by": "none",
+ "probe_genuine": true
+}

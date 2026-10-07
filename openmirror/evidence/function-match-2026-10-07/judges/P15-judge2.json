@@ -1,0 +1,495 @@
+{
+ "pair": "P15",
+ "judge": 2,
+ "truth": "DIFFERENT",
+ "visible": false,
+ "result": {
+  "table": [
+   {
+    "step": "Step 1 input",
+    "ruleA": "Add the cycle's input to each stage's charge; rated charge not enforced",
+    "ruleB": "Add the cycle's inflow to each tank; volume not enforced",
+    "same": true
+   },
+   {
+    "step": "Step 2 overflow",
+    "ruleA": "Stages 1 to 6 in strict order; excess over rated charge is added to stage n+1 before n+1 is handled (cascades); stage set to rated; stage 6 excess to ground; equal-to-rated does nothing",
+    "ruleB": "Tanks 1 to 6 in order; excess over volume added to tank n+1 before n+1 is handled (cascades); tank set to volume; tank 6 excess to outfall; equal-to-volume does nothing",
+    "same": true
+   },
+   {
+    "step": "Step 3 state check",
+    "ruleA": "Read charge after Step 2. CLEAR and charge >= upper mark -> ASSERTED; ASSERTED and charge <= lower mark -> CLEAR; otherwise unchanged; log (cycle, stage, before, after); at most one change per cycle",
+    "ruleB": "Read contents after Step 2. STEADY and contents >= upper mark -> OVERLOADED; OVERLOADED and contents <= lower mark -> STEADY; otherwise unchanged; log (cycle, tank, before, after); at most one change per cycle",
+    "same": true
+   },
+   {
+    "step": "Step 4 discharge",
+    "ruleA": "All six amounts computed from charge at start of step using post-Step-3 state (CLEAR floor(q/4), ASSERTED floor(q/2)), then applied simultaneously; CLEAR amount to ground; ASSERTED amount to stage n-1 (stage 1 ASSERTED to ground); rated not enforced",
+    "ruleB": "All six amounts computed from contents at start of step using post-Step-3 state (STEADY floor(q/4), OVERLOADED floor(q/2)), then applied simultaneously; STEADY amount to outfall; OVERLOADED amount to tank n-1 (tank 1 to outfall); volume not enforced",
+    "same": true
+   },
+   {
+    "step": "Step 5 line-wide halving",
+    "ruleA": "If total of all six > 38 (strict; 38 does not trip), EVERY stage's charge becomes floor(q/2); removed charge to ground; log cycle",
+    "ruleB": "If total of all six > 38 (strict; 38 does not trip), only OVERLOADED tanks become floor(q/2); STEADY tanks are left unchanged; removed liquor to outfall; log cycle",
+    "same": false,
+    "difference": "Scope of the halving: A halves all six stages regardless of state; B halves only tanks in the OVERLOADED state (the analogue of ASSERTED), leaving STEADY/CLEAR tanks untouched. Trigger (strictly above 38) and destination (ground/outfall) are identical."
+   },
+   {
+    "step": "Report",
+    "ruleA": "(a) end charges 1-6, (b) end states, (c) all state changes in order occurred, (d) breaker-trip cycles, (e) ground total, (f) balance check start+inputs = end+ground",
+    "ruleB": "(a) end contents 1-6, (b) end states, (c) all state changes (order not explicitly stated, but logged as they occur), (d) storm-bypass cycles, (e) outfall total, (f) balance check start+inflows = end+outfall",
+    "same": true,
+    "difference": "Only cosmetic: B does not explicitly say 'in the order they occurred' for (c); content of the report is the same."
+   }
+  ],
+  "tableVerdict": "DIFFERENT",
+  "probeStart": [
+   9,
+   9,
+   9,
+   9,
+   9,
+   1
+  ],
+  "probeInput": [
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  ],
+  "probeWhy": "Starting total 46 forces the line-wide halving in cycle 1, while stages 1-5 go to ASSERTED/OVERLOADED and stage 6 (charge 1, below its upper mark) stays CLEAR/STEADY with a nonzero charge that receives nothing from Step 4 (no stage 7 feeding back). A halves stage 6's charge, B leaves it alone, so the suspected scope difference must show. On the printed tables the halving fires in cycles 1 and 4 but every CLEAR/STEADY stage then holds 0 or 1 units, so halving it changes nothing and the difference is hidden; that is why the printed tables give identical reports.",
+  "aOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "ASSERTED",
+    "ASSERTED",
+    "ASSERTED",
+    "ASSERTED",
+    "ASSERTED",
+    "CLEAR"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "bOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "OVERLOADED",
+    "OVERLOADED",
+    "OVERLOADED",
+    "OVERLOADED",
+    "OVERLOADED",
+    "STEADY"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "aOnProbe": {
+   "finalQuantities": [
+    2,
+    2,
+    3,
+    2,
+    2,
+    1
+   ],
+   "finalStates": [
+    "CLEAR",
+    "CLEAR",
+    "CLEAR",
+    "CLEAR",
+    "CLEAR",
+    "CLEAR"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 1,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 2,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    },
+    {
+     "period": 3,
+     "position": 2,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    },
+    {
+     "period": 4,
+     "position": 1,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    }
+   ],
+   "resetPeriods": [
+    1
+   ],
+   "lossTotal": 34
+  },
+  "bOnProbe": {
+   "finalQuantities": [
+    2,
+    2,
+    3,
+    2,
+    2,
+    3
+   ],
+   "finalStates": [
+    "STEADY",
+    "STEADY",
+    "STEADY",
+    "STEADY",
+    "STEADY",
+    "STEADY"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 1,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 1,
+     "position": 2,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    },
+    {
+     "period": 3,
+     "position": 2,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    },
+    {
+     "period": 4,
+     "position": 1,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    }
+   ],
+   "resetPeriods": [
+    1
+   ],
+   "lossTotal": 32
+  },
+  "probeVerdict": "DIFFERENT",
+  "usedScript": true,
+  "verdict": "DIFFERENT",
+  "differingRule": "In Step 5, A halves every stage's charge when the total is over 38, but B halves only the OVERLOADED tanks and leaves STEADY tanks as they are.",
+  "foundBy": "both",
+  "routesAgree": true,
+  "trust": "Both routes found the same difference. The table found it by reading Step 5. The probe showed it in the numbers: position 6 ends at 1 under A and 3 under B, and the loss tally is 34 under A and 32 under B. The printed tables cannot reveal it. At both halvings (cycles 1 and 4), every CLEAR/STEADY stage holds 0 or 1, and half of that rounded down leaves it unchanged, so A and B give identical reports on the printed data. All four runs pass the balance check. The script is C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P15\\sim.py."
+ },
+ "verdict_correct": true,
+ "table_correct": true,
+ "probe_correct": true,
+ "routes_agree": true,
+ "printed_A_engine_ok": true,
+ "printed_B_engine_ok": true,
+ "probe_A_engine_ok": true,
+ "probe_B_engine_ok": true,
+ "probe_separates_truth": true,
+ "probe_separates_as_reported": true,
+ "differing_rule_reported": "In Step 5, A halves every stage's charge when the total is over 38, but B halves only the OVERLOADED tanks and leaves STEADY tanks as they are.",
+ "differing_rule_truth": "DIFF (hidden on frozen data): step 5 halves only ELEVATED cells",
+ "found_by": "both",
+ "probe_genuine": true
+}

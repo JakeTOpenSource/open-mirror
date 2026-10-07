@@ -1,0 +1,400 @@
+{
+ "pair": "P14",
+ "judge": 2,
+ "truth": "DIFFERENT",
+ "visible": true,
+ "result": {
+  "table": [
+   {
+    "step": "Setup/fixed values",
+    "ruleA": "Six segments, holding volume 10,8,12,6,9,7; upper 7,6,9,5,7,5; lower 3,2,4,2,3,2; start 3,6,6,2,2,1; all QUIET; tally 0; limit 38",
+    "ruleB": "Six crucibles, identical working volumes, marks, starting melts; all BASE; slag 0; limit 38",
+    "same": true
+   },
+   {
+    "step": "Step 1 uptake/charge",
+    "ruleA": "Add the cycle's uptake row to each segment; volume not enforced",
+    "ruleB": "Add the cycle's charge row to each crucible; volume not enforced",
+    "same": true
+   },
+   {
+    "step": "Step 2 push/overflow",
+    "ruleA": "Sequential 1..6; excess over holding volume goes to n+1 (already there when n+1 is handled); segment set to volume; excess from 6 to loss tally",
+    "ruleB": "Sequential 1..6; excess over working volume goes to next crucible (n+1), cascading in the same step; crucible set to volume; excess from 6 to slag",
+    "same": true
+   },
+   {
+    "step": "Step 3 state check",
+    "ruleA": "Reads sap as it stood after step 1, BEFORE the step-2 push. QUIET->SINK-ACTIVE if >= upper; SINK-ACTIVE->QUIET if <= lower; at most once per cycle",
+    "ruleB": "Reads melt as it stands AFTER step 2 overflow. BASE->SUPERHEATED if >= upper; SUPERHEATED->BASE if <= lower; at most once per cycle",
+    "same": false,
+    "difference": "Read time differs: A uses post-uptake (pre-push) values, B uses post-overflow values. Thresholds (>= upper, <= lower) are identical. Diverges whenever a position receives overflow from below (or was capped) so that its pre- and post-push values sit on different sides of a mark."
+   },
+   {
+    "step": "Step 4 phloem return/draw-off",
+    "ruleA": "Amounts from sap at start of step, state after step 3: QUIET floor(sap/4) to loss; SINK-ACTIVE floor(sap/2) to n-1; segment 1 SINK-ACTIVE amount to loss; simultaneous",
+    "ruleB": "Same: BASE floor(melt/4) to slag; SUPERHEATED floor(melt/2) to previous crucible n-1; crucible 1 SUPERHEATED to slag; simultaneous",
+    "same": true
+   },
+   {
+    "step": "Step 5 leaf-drop/emergency tap",
+    "ruleA": "If total strictly > 38, every segment halved (floor) \u2013 the sap kept is floor(sap/2), removed part to loss; log cycle; equality does not fire",
+    "ruleB": "If total strictly > 38, every crucible halved (floor), removed to slag; log cycle; equality does not fire",
+    "same": true
+   },
+   {
+    "step": "Report",
+    "ruleA": "(a) end sap 1-6 (b) end states (c) state changes (cycle,segment,before,after) (d) leaf-drop cycles (e) loss tally (f) balance check",
+    "ruleB": "(a) end melt 1-6 (b) end states (c) state changes (d) emergency tap cycles (e) slag total (f) balance check",
+    "same": true
+   }
+  ],
+  "tableVerdict": "DIFFERENT",
+  "probeStart": [
+   9,
+   1,
+   0,
+   0,
+   0,
+   0
+  ],
+  "probeInput": [
+   [
+    9,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  ],
+  "probeWhy": "Position 1 goes to 18 after uptake, above its volume of 10, so it pushes 8 into position 2, taking position 2 from 1 to 9 (upper mark 6). A reads position 2 at 1 (pre-push) and leaves it QUIET. B reads it at 9 (post-push) and makes it SUPERHEATED in cycle 1. Isolating the step-3 read time this way changes the state-change log.",
+  "aOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "SINK-ACTIVE",
+    "SINK-ACTIVE",
+    "SINK-ACTIVE",
+    "SINK-ACTIVE",
+    "SINK-ACTIVE",
+    "QUIET"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 3,
+     "position": 5,
+     "from": "SINK-ACTIVE",
+     "to": "QUIET"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "SINK-ACTIVE",
+     "to": "QUIET"
+    }
+   ],
+   "resetPeriods": [
+    2,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "bOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "BASE"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "SUPERHEATED",
+     "to": "BASE"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "SUPERHEATED",
+     "to": "BASE"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "SUPERHEATED",
+     "to": "BASE"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "SUPERHEATED",
+     "to": "BASE"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "aOnProbe": {
+   "finalQuantities": [
+    2,
+    2,
+    1,
+    0,
+    0,
+    0
+   ],
+   "finalStates": [
+    "QUIET",
+    "QUIET",
+    "QUIET",
+    "QUIET",
+    "QUIET",
+    "QUIET"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 1,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 2,
+     "position": 2,
+     "from": "QUIET",
+     "to": "SINK-ACTIVE"
+    },
+    {
+     "period": 4,
+     "position": 2,
+     "from": "SINK-ACTIVE",
+     "to": "QUIET"
+    },
+    {
+     "period": 5,
+     "position": 1,
+     "from": "SINK-ACTIVE",
+     "to": "QUIET"
+    }
+   ],
+   "resetPeriods": [],
+   "lossTotal": 14
+  },
+  "bOnProbe": {
+   "finalQuantities": [
+    2,
+    2,
+    1,
+    0,
+    0,
+    0
+   ],
+   "finalStates": [
+    "BASE",
+    "BASE",
+    "BASE",
+    "BASE",
+    "BASE",
+    "BASE"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 1,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 2,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 3,
+     "position": 2,
+     "from": "SUPERHEATED",
+     "to": "BASE"
+    },
+    {
+     "period": 5,
+     "position": 1,
+     "from": "SUPERHEATED",
+     "to": "BASE"
+    }
+   ],
+   "resetPeriods": [],
+   "lossTotal": 14
+  },
+  "probeVerdict": "DIFFERENT",
+  "usedScript": true,
+  "verdict": "DIFFERENT",
+  "differingRule": "In Step 3, A reads each position's amount as it stood after Step 1 (before the push), while B reads it after the Step 2 overflow.",
+  "foundBy": "both",
+  "routesAgree": true,
+  "trust": "The two routes agree. The table pinned the difference to when Step 3 reads the amounts. The probe isolates that one rule and changes the state-change log. The printed tables also expose it: the state-change logs differ (9 entries in A, 13 in B) and so do the halving cycles (A: [2,4], B: [1,4]). End quantities (6,10,9,7,4,2) and the loss tally (76) happen to match on the printed tables, so comparing only end amounts would wrongly say SAME. I used a Python script, C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P14\\sim_p14.py. It asserts the balance check in every run: start total plus input total equals end total plus loss. I did not read or run the sim.py that was already in the folder."
+ },
+ "verdict_correct": true,
+ "table_correct": true,
+ "probe_correct": true,
+ "routes_agree": true,
+ "printed_A_engine_ok": true,
+ "printed_B_engine_ok": true,
+ "probe_A_engine_ok": true,
+ "probe_B_engine_ok": true,
+ "probe_separates_truth": true,
+ "probe_separates_as_reported": true,
+ "differing_rule_reported": "In Step 3, A reads each position's amount as it stood after Step 1 (before the push), while B reads it after the Step 2 overflow.",
+ "differing_rule_truth": "DIFF: step 3 uses levels after intake, before spill-over",
+ "found_by": "both",
+ "probe_genuine": true
+}

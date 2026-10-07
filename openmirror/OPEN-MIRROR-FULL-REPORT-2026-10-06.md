@@ -19,7 +19,9 @@ Part 1 is the summary. Parts 2 to 4 are the three reports as written. Part 5 is 
 
 **The 7 October result.** With the skill moved to the writer's side, ten writers ran it on their own 400-word analogies before handing them over. Fourteen blind readers then executed those analogies: 14 of 14 exact by the engine, including 6 of 6 on the two analogies that had failed 5 of 6 times the day before. The same meaning went into ten analogies and came back from every one without drift. A control the same afternoon replaced the skill with one sentence, "review your explanation against the engineer's process and fix what you find": 12 of 12 exact on the two analogies that had drifted. By the rule set before the run, the active ingredient is a review pass against the source, not the seven steps. A pre-registered 250-word test then put the two head to head on the same two analogies, one writer per arm per domain: skill 3 of 6, one-sentence review 6 of 6. The skill-arm metallurgy writer detached the rounding from the halving rule and its own rule-by-rule check passed it. That run was contaminated: the harness relayed Jake's "commit it to the repo" into every session, fourteen of sixteen browsed the repository, the skill-arm metamorphosis writer read the README sentence naming the rounding failure, and one generic-arm reader saw the answer in another reader's commit message after computing it. The contamination favoured the skill arm; its one clean arm-domain scored 0 of 3. A clean rerun followed, three writers per arm per domain, every session confined to a scratch folder and audited: skill arm 6 of 6 write-ups clean (18 of 18 reads), one-sentence review 5 of 6 (15 of 18). By the rule fixed before the run, a difference of one write-up is no separation. The one failure was the same sentence as every failure before it: a halving rule with the rounding stated away from the kept quantity, this time from a generic-arm writer. Open Mirror has not been shown to beat that sentence on any tested task, and has not been shown to do worse.
 
-**What it cost and what went wrong.** About 19.2M subagent tokens across 301 sessions over the two days. Roughly 1.5M was wasted: an operator prompt of mine tripped an API safety classifier 31 times, I reran it twice unchanged before rewording, and the first compressed-condition run leaked the true answer into the write-ups and had to be discarded. Jake has since set token waste as a hard constraint; the corrected run was the only one launched with a stated cost and a go-ahead, and it had zero refusals.
+**The function-match result (7 October, evening).** Jake restated the goal as recognising when two theories are the same circuit, the same switches and breakers, under different lexicons. A pre-registered test built sixteen document pairs across unrelated fields, eight the same function (four with a rule reworded in a provably identical way) and eight differing by one switch or breaker, two of those invisible on the printed data. Two independent judges per pair, plain instruction, each required to prove its verdict two ways: a rule-by-rule correspondence table and a self-chosen probe executed on both documents, which the engine then re-executed. 32 of 32 verdicts correct, 32 of 32 probes genuine, both hidden differences caught in all four sessions by both routes, zero disagreement between judges, all 32 sessions audited clean. On executable procedures, mirroring the function rather than the words, and tracing it back by two routes to the same answer, is doable. Record: Part 4c.
+
+**What it cost and what went wrong.** About 21.5M subagent tokens across 333 sessions over the two days. Roughly 1.5M was wasted: an operator prompt of mine tripped an API safety classifier 31 times, I reran it twice unchanged before rewording, and the first compressed-condition run leaked the true answer into the write-ups and had to be discarded. Jake has since set token waste as a hard constraint; the corrected run was the only one launched with a stated cost and a go-ahead, and it had zero refusals.
 
 **Open decisions for Jake and Ed.** License (CC BY 4.0 suggested). The Jake/Jacob credit line. Repository name (OpenMirror collides with screen-mirroring projects). Whether "Missing a fact" should yield to "Worth exploring" in filter mode, where Keep exploring was empty in every run. Whether to add the one rule the study suggests: when a flagged gap changes the result, carry both results forward. And whether the skill should state, on its face, the scope and result of the one controlled test so far: no measured benefit for model operators executing a numerical procedure from an analogy, and no test yet of its stated purpose.
 
@@ -570,6 +572,104 @@ One concrete thing the record does support changing: the specific failure, five 
 
 Control: 16 sessions, 1.04M. 250-word test: 16 sessions, 1.14M. Clean rerun: 48 sessions, 3.28M. Study 3 total: 124 sessions, 8.33M.
 
+## Part 4c. Function-match test (7 October 2026): the plan as committed before the run, then the results
+# Function-match test: plan, committed before the run
+
+**Date:** 7 October 2026. **Asked for by:** Jake: "map out when a theory becomes an exact match with another theory, even with different wording. Mirroring the function instead of the semantics, and being able to trace it back in different ways but get the same result"; "identifying and reverse engineering when two circuits have the same designed breakers and switches, regardless of the model, semantics, lexicon or user."
+
+## Question
+
+Given two operating documents written in different fields, can a model decide whether they compute the same function, with the same switches (hysteresis triggers), breakers (the global reset), rounding and routing, and show it by two independent routes that reach the same verdict? Not "do they say the same thing" but "would they give the same end report for every possible input".
+
+## Materials, built deterministically (`build_pairs.py`, `fm_engine.py`, `key.json`)
+
+The ten complete analogical documents from the 6 October coherence study, each about 1,150 words, each of which blind operators executed correctly 30 of 30 times. Sixteen pairs, each pair two documents from different fields:
+
+| Class | Pairs | What differs | Truth |
+|---|---|---|---|
+| Untouched | P01 to P04 | Lexicon only | SAME |
+| Reworded rule, identical function | P05 to P07: step 4 restated as one-cell-at-a-time in order 1 to 6 (provably identical, because transfers go to cells already handled). P08: the halving restated as "close the larger half, rounded up, keep the rest" | SAME |
+| One switch or breaker changed, visible on the given data | P09 halving keeps the larger half; P10 breaker fires at 38 or more; P11 upper trigger strictly above; P12 lower trigger strictly below; P13 transfers go downstream; P14 triggers read before the spill-over | DIFFERENT |
+| One breaker changed, invisible on the given data | P15, P16: the halving skips cells in the resting state. Same end report on the given tables; different function | DIFFERENT |
+
+Every edited document differs from its source by the listed sentences only, in that field's own vocabulary; the build script refuses to run if an edit does not match exactly once. The engine computes each document's true function. Judges never see the repository, the engine, the key, the class labels, or the word "variant".
+
+## Judges
+
+Opus 5.5, one session per pair per judge, confined to a scratch folder holding only that pair's two documents. Prompt, in full, in `judge-prompt.txt`. It asks for:
+
+1. **Route 1, correspondence table.** For each of the five steps and the report: the rule as document A states it, the rule as document B states it, SAME or DIFFERENT, and if different, exactly what differs.
+2. **Route 2, probe.** The judge chooses its own starting amounts and five-row input table (whole numbers 0 to 9) designed to expose any difference it suspects, executes both documents on that probe and on their own given tables (a script is fine), and reports all four end reports.
+3. **Verdict.** SAME or DIFFERENT, the one differing rule named if DIFFERENT, and whether the two routes agree. If they disagree, which it trusts and why.
+
+No hint of how many pairs are SAME. Two judges per pair, independent sessions, so that agreement between judges is itself measured.
+
+## Scoring, fixed now
+
+Per judge session, from the engine:
+
+- **Verdict correct** against `key.json`.
+- **Rule named correctly** for DIFFERENT pairs: the judge's named difference is the edited rule (hand-checked against the key, recorded verbatim).
+- **Probe genuine:** the judge's reported end reports for its probe match the engine run of each document's true function on that probe. A judge whose reported outputs do not match the engine did not execute what it claims.
+- **Probe separating:** for DIFFERENT pairs, the probe produces different end reports under the two functions.
+- **Routes agree:** the table verdict and the probe verdict are the same.
+- **Hidden pairs:** for P15 and P16, which route caught the difference, since execution on the given tables cannot.
+
+## Outcome rules
+
+| Result | Reading |
+|---|---|
+| Verdicts correct in at least 30 of 32 sessions, both hidden pairs caught by both judges, probes engine-verified in at least 28 of 32 | Function matching across lexicons is doable by this method |
+| Verdicts correct in at least 30 of 32 but a hidden pair missed | Doable for differences that show on the data; the mapping route is not yet reliable for breakers that the given data never trips |
+| Fewer than 30 of 32 correct | Not doable at this reliability by this method; failures listed by class |
+| Judges disagree on 4 or more pairs | The method is not deterministic across judges, whatever the accuracy |
+
+The judge prompt is a plain instruction and does not use Open Mirror. If the method works, a second arm with the skill is a separate, later decision. If a judge session is refused by the API, it is rerun once with reworded framing, never with identical text; a refused slot after that is reported as missing.
+
+## Cost, stated before the run
+
+32 sessions. Each judge reads two 1,150-word documents, writes and runs a script, and reports four end reports: estimated 80k to 100k tokens each, so 2.6M to 3.2M in total. A one-judge version is 16 sessions, 1.3M to 1.6M, and loses the agreement measure.
+
+## Containment
+
+Each session starts in its own scratch folder containing only `A.md` and `B.md`. The prompt forbids reading, listing, changing or committing anything outside it and forbids git. All transcripts are audited after the run with the same script used for the clean 250-word rerun (`audit_wf.py`): no git, no reads outside the folder, no answer strings from anything but the session's own script.
+# Function-match test: results
+
+**Run:** 7 October 2026, 32 Opus 5.5 judge sessions (16 pairs, 2 independent judges each), zero refusals, zero reruns, 2.28M tokens against a stated 2.6M to 3.2M. **Plan:** `PLAN.md`, committed before the run. **Containment:** each session confined to a folder holding only its pair's two documents; all 32 transcripts audited (`judges/audit.json`): no git command, no read outside the folder, no answer string from anything but the session's own script. **Grading:** `grade_fm.py` against `key.json`, with every judge's probe re-executed by the engine; regraded independently by `verify.py` claims FM-1 to FM-8.
+
+## Outcome
+
+| Measure | Result |
+|---|---|
+| Verdict correct (SAME or DIFFERENT) | **32 of 32** |
+| Correspondence-table route correct on its own | 32 of 32 |
+| Probe route correct on its own | 32 of 32 |
+| Two routes agree within a session | 32 of 32 |
+| Two judges agree on a pair | 16 of 16 pairs |
+| Probe genuine (judge's reported outputs for its own probe match the engine, both documents) | 32 of 32 |
+| Printed-table executions match the engine, both documents | 32 of 32 |
+| Probe separates the two functions, on DIFFERENT pairs | 16 of 16 |
+| Hidden pairs P15 and P16 (no difference on the printed data) caught | 4 of 4 sessions, each by both routes |
+| Differing rule named correctly on DIFFERENT pairs | 16 of 16 (quoted in `judges/*.json`) |
+
+Pre-registered reading: **function matching across lexicons is doable by this method.** Every threshold in the plan's first row was met.
+
+## What the judges did
+
+Each judge built a translation table first (for example "LAMINAR = GREEN, CAVITATING = HOT, inception mark = upper mark, overboard = waste tally") and compared the six rule groups under it. The four reworded-but-identical pairs were all called SAME, and every judge said why: "A computes everything first and applies it all at once; B handles one position at a time in order 1 to 6, but since each transfer goes to a position already handled, the results are identical", and for the restated halving, "closing the larger half rounded up leaves exactly half rounded down." Those are the right proofs, not just the right answers.
+
+For the probes, judges chose inputs that trip the boundaries: totals of exactly 38, positions exactly at a trigger mark, cascades through several positions, position 1 in the raised state. One judge searched 200,000 random tables with both implementations and reported zero mismatches on a SAME pair. On the two hidden pairs, where the printed data gives the same end report under both documents, every judge found the difference in the table ("B halves only the raised positions") and then built a probe on which the two documents diverge, which the engine confirms.
+
+## What this does and does not show
+
+It shows that a model can decide whether two descriptions in unrelated vocabularies compute the same function, with the same switches and breakers, and can prove it two ways that agree with each other and with an independent judge, 32 times out of 32, including the cases where running the printed example would have said "same" for a different function. That is the "mirror the function, not the semantics, and trace it back by different routes" claim, demonstrated on this process.
+
+It does not show this for processes a judge cannot execute. Every document here describes a finite arithmetic procedure, so the probe route has a machine behind it. For theories that are not executable, only the correspondence route exists, and this test says nothing about how reliable it is alone, though here it was correct 32 of 32 on its own. It does not show anything about the Open Mirror skill: the judge prompt was a plain instruction, and the materials were chosen to be hard but fair, with one rule changed per pair. Two or more simultaneous changes, or changes buried in prose rather than in a rule sentence, were not tested. The ten base documents were themselves written by one model from one specification, which is why their vocabularies differ but their structure is parallel; documents written independently by different people would be a harder test.
+
+## Cost
+
+32 sessions, 2.28M tokens. All runs since 6 October: 333 sessions, about 21.5M.
+
 ## Part 5. The skill as it stands
 
 ### 5.1 SKILL.md, v1.4.3
@@ -737,6 +837,7 @@ Paste the copy-paste version from [SKILL.md](SKILL.md#copy-paste-version) into a
 | [RED-TEAM-REPORT.md](RED-TEAM-REPORT.md) | October 2026 coherence and functionality review of v1.3, with five live test runs. |
 | [RED-TEAM-REPORT-R2.md](RED-TEAM-REPORT-R2.md) | Round 2: the same five cases on v1.4.1, second model. Scorecard and what the repairs did. |
 | [COHERENCE-STUDY.md](COHERENCE-STUDY.md) | One exact process written in ten analogies, worked by blind operators. Where coherence held, where it broke, and what the pre-read changed. Includes what went wrong and what it cost. |
+| [evidence/function-match-2026-10-07/RESULTS.md](evidence/function-match-2026-10-07/RESULTS.md) | Can a model tell whether two documents in unrelated vocabularies compute the same function, with the same switches and breakers, and prove it two ways? 16 pairs, 2 judges each, engine-checked. |
 | `evidence/` | The v1.0 through v1.3 documents and the full evaluation record (eight model sessions, adversarial review, lexicon review, retained failures). |
 
 ## Evidence, honestly
@@ -748,6 +849,8 @@ Version 1.4 (this repository) is a plain-language rebuild for sharing. Its v1.4.
 A separate coherence study ([COHERENCE-STUDY.md](COHERENCE-STUDY.md)) put one exact process into ten analogies and had 60 blind operators execute it. Complete documents were read correctly 30 of 30 times; compressed write-ups 25 of 30, with all five failures caused by one ambiguous rounding sentence. **Model operators executing a fixed numerical procedure from analogical documents, with scripts, got no measurable benefit from the pre-read: no more accurate, no more gaps flagged.** That is a null result inside that scope. The study did not test a person using Open Mirror to inspect an argument made through metaphor, which is the skill's stated purpose.
 
 The next day's study ([TRANSFORMATION-STUDY.md](TRANSFORMATION-STUDY.md)) moved the skill to the writer's side. Writers who ran it on their own 400-word analogies before handing them over produced ten analogies that fourteen blind readers executed with zero drift, 14 of 14 exact by the engine, including 6 of 6 on the two analogies that had failed 5 of 6 times without the discipline. A control run the same afternoon then replaced the skill with one sentence, "review your explanation against the engineer's process and fix what you find", on the two analogies that had drifted: 12 of 12 exact. A pre-registered test at 250 words then put the two head to head on the same two analogies: skill 3 of 6, one-sentence review 6 of 6, one writer per arm. That run was contaminated by the test harness and is reported as such. A clean rerun with three writers per arm per domain, every session confined and audited, came out skill 6 of 6 write-ups, one-sentence review 5 of 6, which the pre-registered rule reads as no separation. **So far, Open Mirror has not been shown to beat a plain review instruction on any task tested, and has not been shown to do worse.** The zero-drift result is real and repeatable; the skill's seven steps are not what produced it. All Claude and GPT runs so far are one provider each; no cross-provider replication has been done on the same text.
+
+A separate function-match test the same evening (`evidence/function-match-2026-10-07/`) asked the question behind the project directly: can a model tell when two documents written in unrelated vocabularies compute the same function, with the same switches and breakers, and prove it by two routes that agree? Sixteen pairs built deterministically from the coherence-study documents, eight the same function (four with a rule reworded in a provably identical way), eight differing by one switch or breaker, two of those invisible on the printed data. Two independent judges per pair, plain instruction, no skill: **32 of 32 verdicts correct, every probe reproduced by the engine, both hidden differences caught by both routes in all four sessions, zero disagreement between judges.** That is a result about the method, on executable procedures, not about the Open Mirror text.
 
 ## Installing as a skill
 
@@ -766,7 +869,9 @@ Newest first. Each entry says what was tested and what was not. Earlier entries 
 
 ## Evidence note — 2026-10-07 — transformation study, no text change
 
-Ten writers used the skill's steps 1, 4 and 5 on their own 400-word analogies of the coherence-study process (`TRANSFORMATION-STUDY.md`). Fourteen blind readers then executed them: 14 of 14 exact by the engine, against 25 of 30 for the undisciplined write-ups the day before, and 6 of 6 against 1 of 6 on the two analogies that had drifted. A fixed 23-rule checklist found 226 of 230 rules recoverable against 219. A control the same afternoon replaced the skill with a one-sentence "review against the source and fix" instruction on the two drifting domains: 12 of 12 exact, with the writers catching the halving ambiguity unprompted. Conclusion by the pre-set rule: the active ingredient is a review pass against the source, which the skill contains but does not own. Open Mirror has not yet been shown to beat that sentence on any tested task. No version bump. A pre-registered 250-word test followed (`evidence/transformation-2026-10-07/compression-250/`): skill 3 of 6, one-sentence review 6 of 6, one writer per arm per domain; the skill-arm metallurgy writer detached the rounding from the halving rule and its self-check passed it. Pre-registered reading: the skill's text hurts at that compression. The run was contaminated by the harness relaying the triggering message into every session, which sent writers and readers browsing the repository; one skill-arm writer read the README sentence naming the rounding failure, one generic-arm reader saw the answer in another reader's commit message after computing it, and two readers committed scripts. Audit in `compression-250/AUDIT.md`. The contamination favoured the skill arm. Clean rerun the same evening (`compression-250/PLAN-RERUN.md`, `RESULTS-RERUN.md`): three writers per arm per domain, 48 sessions confined to a scratch folder and audited clean; skill 6 of 6 write-ups clean, one-sentence review 5 of 6; by the pre-registered rule, no separation. The one failure was again a halving rule with the rounding detached from the kept quantity, this time from a generic-arm writer. Candidate text change, untested: a checklist line, "for every rounding, name which quantity is rounded".
+Ten writers used the skill's steps 1, 4 and 5 on their own 400-word analogies of the coherence-study process (`TRANSFORMATION-STUDY.md`). Fourteen blind readers then executed them: 14 of 14 exact by the engine, against 25 of 30 for the undisciplined write-ups the day before, and 6 of 6 against 1 of 6 on the two analogies that had drifted. A fixed 23-rule checklist found 226 of 230 rules recoverable against 219. A control the same afternoon replaced the skill with a one-sentence "review against the source and fix" instruction on the two drifting domains: 12 of 12 exact, with the writers catching the halving ambiguity unprompted. Conclusion by the pre-set rule: the active ingredient is a review pass against the source, which the skill contains but does not own. Open Mirror has not yet been shown to beat that sentence on any tested task. No version bump. A pre-registered 250-word test followed (`evidence/transformation-2026-10-07/compression-250/`): skill 3 of 6, one-sentence review 6 of 6, one writer per arm per domain; the skill-arm metallurgy writer detached the rounding from the halving rule and its self-check passed it. Pre-registered reading: the skill's text hurts at that compression. The run was contaminated by the harness relaying the triggering message into every session, which sent writers and readers browsing the repository; one skill-arm writer read the README sentence naming the rounding failure, one generic-arm reader saw the answer in another reader's commit message after computing it, and two readers committed scripts. Audit in `compression-250/AUDIT.md`. The contamination favoured the skill arm. Clean rerun the same evening (`compression-250/PLAN-RERUN.md`, `RESULTS-RERUN.md`): three writers per arm per domain, 48 sessions confined to a scratch folder and audited clean; skill 6 of 6 write-ups clean, one-sentence review 5 of 6; by the pre-registered rule, no separation. The one failure was again a halving rule with the rounding detached from the kept quantity, this time from a generic-arm writer.
+
+**Evidence note, 7 October 2026, function-match test.** Pre-registered (`evidence/function-match-2026-10-07/PLAN.md`), 16 document pairs across unrelated fields built deterministically with single-rule variants from the engine, 2 judges per pair, plain instruction, confined and audited. 32 of 32 verdicts correct, probes engine-verified 32 of 32, hidden breaker differences caught 4 of 4, judge disagreement 0 of 16. Reading by the plan: function matching across lexicons is doable by this method on executable procedures. No skill text involved; no version bump. Candidate text change, untested: a checklist line, "for every rounding, name which quantity is rounded".
 
 ## Evidence note — 2026-10-06 — coherence study, no text change
 
@@ -6096,5 +6201,6 @@ Open Mirror ends here.
 | Study 3 control, generic review (7 Oct) | 16 | 1.04M | zero refusals; 12 of 12 exact |
 | Study 3 pre-registered 250-word test (7 Oct) | 16 | 1.14M | zero refusals; skill 3 of 6, one-sentence review 6 of 6; contaminated by harness relay, see AUDIT.md |
 | Study 3 clean 250-word rerun, 3 writers per arm-domain (7 Oct) | 48 | 3.28M | zero refusals; all 48 sessions audited clean; skill 6 of 6 write-ups clean, one-sentence review 5 of 6 |
-| **Total** | **301** | **~19.2M** | about 1.5M bought nothing, all on 6 October |
+| Function-match test, 16 pairs x 2 judges (7 Oct) | 32 | 2.28M | zero refusals; audited clean; 32 of 32 verdicts correct, probes engine-verified |
+| **Total** | **333** | **~21.5M** | about 1.5M bought nothing, all on 6 October |
 

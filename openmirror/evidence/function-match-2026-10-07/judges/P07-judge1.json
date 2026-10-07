@@ -1,0 +1,506 @@
+{
+ "pair": "P07",
+ "judge": 1,
+ "truth": "SAME",
+ "visible": null,
+ "result": {
+  "table": [
+   {
+    "step": "Setup",
+    "ruleA": "6 stages; rated 10,8,12,6,9,7; upper 7,6,9,5,7,5; lower 3,2,4,2,3,2; all start CLEAR; ground 0; limit 38",
+    "ruleB": "6 compartments; volume 10,8,12,6,9,7; inception 7,6,9,5,7,5; desinence 3,2,4,2,3,2; all start LAMINAR; overboard 0; limit 38",
+    "same": true
+   },
+   {
+    "step": "Step 1 input",
+    "ruleA": "Add the cycle's input to every stage; rated charge not enforced",
+    "ruleB": "Add the cycle's fill to every compartment; volume not enforced",
+    "same": true
+   },
+   {
+    "step": "Step 2 overflow",
+    "ruleA": "Sequential 1..6; if charge > rated, excess to n+1 (already there when n+1 is checked, so it cascades), stage set to rated; stage 6 excess to ground; equal does nothing",
+    "ruleB": "Sequential 1..6; if contents > volume, excess aft to n+1 (cascades), set to volume; compartment 6 excess overboard; equal does nothing",
+    "same": true
+   },
+   {
+    "step": "Step 3 state check",
+    "ruleA": "Read after Step 2; CLEAR and charge >= upper -> ASSERTED; ASSERTED and charge <= lower -> CLEAR; otherwise hold; log (cycle, stage, before, after)",
+    "ruleB": "Read after Step 2; LAMINAR and contents >= inception -> CAVITATING; CAVITATING and contents <= desinence -> LAMINAR; otherwise hold; same log",
+    "same": true
+   },
+   {
+    "step": "Step 4 discharge/pumping",
+    "ruleA": "All amounts computed from start-of-step charge using post-Step-3 state (CLEAR floor(q/4), ASSERTED floor(q/2)), then applied all at once; CLEAR amount to ground; ASSERTED amount to n-1, stage 1 ASSERTED to ground",
+    "ruleB": "Sequential 1..6, each amount computed from contents when reached and applied immediately; same quarter/half rule, same destinations (LAMINAR overboard, CAVITATING to n-1, compartment 1 overboard)",
+    "same": true,
+    "difference": "The wording differs (simultaneous vs sequential) but the function does not. Transfers only go forward to n-1, and n-1 has already been handled by the time n is reached. So when a compartment is reached, nothing has changed its contents yet, and every amount equals the start-of-step amount. The order is a decoy."
+   },
+   {
+    "step": "Step 5 halving",
+    "ruleA": "If total of all six > 38 (strict; 38 does not trip), every stage set to floor(q/2), removed part to ground, cycle logged",
+    "ruleB": "If total > 38 (strict; 38 or less nothing), every compartment set to floor(q/2), removed units overboard, cycle logged",
+    "same": true
+   },
+   {
+    "step": "Report",
+    "ruleA": "End charges 1-6, end states, ordered state-change log, trip cycles or none, ground total, balance check",
+    "ruleB": "End contents 1-6, end pump states, state-change log, blow cycles or none, Total Overboard, balance check",
+    "same": true
+   }
+  ],
+  "tableVerdict": "SAME",
+  "probeStart": [
+   9,
+   9,
+   9,
+   9,
+   9,
+   9
+  ],
+  "probeInput": [
+   [
+    9,
+    9,
+    9,
+    9,
+    9,
+    9
+   ],
+   [
+    0,
+    9,
+    0,
+    9,
+    0,
+    9
+   ],
+   [
+    9,
+    0,
+    9,
+    0,
+    9,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    9,
+    9,
+    9,
+    9,
+    9,
+    9
+   ]
+  ],
+  "probeWhy": "The one suspicious difference is in Step 4: A applies all amounts at once and B works through positions in order. That difference can only matter when adjacent positions are both in the high state, so feedback travels while other positions are still being handled. The probe uses maximum starting values and heavy, alternating inputs. This drives all six positions high in cycle 1, cascades overflow through Step 2, makes the halving fire repeatedly, and forces some positions to drop back and rise again. As a further check, the script ran 200,000 random starting and input tables (values 0-9) through both rules and found 0 differences.",
+  "aOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "ASSERTED",
+    "ASSERTED",
+    "ASSERTED",
+    "ASSERTED",
+    "ASSERTED",
+    "CLEAR"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "bOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "CAVITATING",
+    "CAVITATING",
+    "CAVITATING",
+    "CAVITATING",
+    "CAVITATING",
+    "LAMINAR"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "CAVITATING",
+     "to": "LAMINAR"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "CAVITATING",
+     "to": "LAMINAR"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "CAVITATING",
+     "to": "LAMINAR"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "CAVITATING",
+     "to": "LAMINAR"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "aOnProbe": {
+   "finalQuantities": [
+    4,
+    5,
+    4,
+    3,
+    4,
+    2
+   ],
+   "finalStates": [
+    "ASSERTED",
+    "ASSERTED",
+    "ASSERTED",
+    "ASSERTED",
+    "ASSERTED",
+    "ASSERTED"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 1,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 2,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 1,
+     "position": 6,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 4,
+     "position": 3,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    },
+    {
+     "period": 4,
+     "position": 6,
+     "from": "ASSERTED",
+     "to": "CLEAR"
+    },
+    {
+     "period": 5,
+     "position": 3,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "CLEAR",
+     "to": "ASSERTED"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    2,
+    3,
+    5
+   ],
+   "lossTotal": 194
+  },
+  "bOnProbe": {
+   "finalQuantities": [
+    4,
+    5,
+    4,
+    3,
+    4,
+    2
+   ],
+   "finalStates": [
+    "CAVITATING",
+    "CAVITATING",
+    "CAVITATING",
+    "CAVITATING",
+    "CAVITATING",
+    "CAVITATING"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 1,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 1,
+     "position": 2,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 1,
+     "position": 6,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 4,
+     "position": 3,
+     "from": "CAVITATING",
+     "to": "LAMINAR"
+    },
+    {
+     "period": 4,
+     "position": 6,
+     "from": "CAVITATING",
+     "to": "LAMINAR"
+    },
+    {
+     "period": 5,
+     "position": 3,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "LAMINAR",
+     "to": "CAVITATING"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    2,
+    3,
+    5
+   ],
+   "lossTotal": 194
+  },
+  "probeVerdict": "SAME",
+  "usedScript": true,
+  "verdict": "SAME",
+  "foundBy": "none",
+  "routesAgree": true,
+  "differingRule": "None. The only rule worded differently is Step 4 (A applies all amounts at once, B works through positions 1 to 6 in order), and it gives the same result. Feedback only goes to n-1, which has already been handled, so no position's contents change before it is reached.",
+  "trust": "Both routes agree, so neither has to be preferred. The table route explains why: in B the sequential order never lets one position's result reach a later position before that position is handled. The script confirms it: both rules matched on the printed tables, on the probe, and on 200,000 random tables. Every run also passed the balance check (start plus inputs equals end plus loss). The script is C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P07\\sim.py. Limitation: the random tables never fed an exact total of 38 into the halving check on purpose, but both documents state the strict \"more than 38\" rule in matching words."
+ },
+ "verdict_correct": true,
+ "table_correct": true,
+ "probe_correct": true,
+ "routes_agree": true,
+ "printed_A_engine_ok": true,
+ "printed_B_engine_ok": true,
+ "probe_A_engine_ok": true,
+ "probe_B_engine_ok": true,
+ "probe_separates_truth": false,
+ "probe_separates_as_reported": true,
+ "differing_rule_reported": "None. The only rule worded differently is Step 4 (A applies all amounts at once, B works through positions 1 to 6 in order), and it gives the same result. Feedback only goes to n-1, which has already been handled, so no position's contents change before it is reached.",
+ "differing_rule_truth": null,
+ "found_by": "none",
+ "probe_genuine": true
+}

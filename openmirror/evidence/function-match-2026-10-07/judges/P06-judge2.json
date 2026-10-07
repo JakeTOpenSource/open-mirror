@@ -1,0 +1,511 @@
+{
+ "pair": "P06",
+ "judge": 2,
+ "truth": "SAME",
+ "visible": null,
+ "result": {
+  "table": [
+   {
+    "step": "Step 1 (Charge / Inflow)",
+    "ruleA": "Add the charge-table amount for this cycle to each form; volume not enforced.",
+    "ruleB": "Add the inflow-schedule amount for this cycle to each tank; volume not enforced.",
+    "same": true
+   },
+   {
+    "step": "Step 2 (Overtop / Weir overflow)",
+    "ruleA": "Forms 1 to 6 in order, one at a time; if contents > volume, excess goes to form n+1 before it is handled (cascades); form 6 excess goes to waste tally; contents = volume does nothing.",
+    "ruleB": "Tanks 1 to 6 in order, one at a time; if contents > volume, excess goes to tank n+1 before it is handled (cascades); tank 6 excess goes to outfall total; equal to volume does nothing.",
+    "same": true
+   },
+   {
+    "step": "Step 3 (Status / State check)",
+    "ruleA": "Read contents after Step 2. GREEN and >= upper mark becomes HOT; HOT and <= lower mark becomes GREEN; otherwise unchanged; at most one change per cycle; logged as (cycle, form, before, after).",
+    "ruleB": "Read contents after Step 2. STEADY and >= upper mark becomes OVERLOADED; OVERLOADED and <= lower mark becomes STEADY; otherwise unchanged; at most one change per cycle; logged as (cycle, tank, before, after).",
+    "same": true
+   },
+   {
+    "step": "Step 4 (Settle / Discharge and return)",
+    "ruleA": "Compute all six amounts first from contents at start of step (GREEN: floor of quarter; HOT: floor of half), then apply together: each loses its amount; GREEN amount to waste; HOT amount to form n-1; HOT form 1 to waste. Volume not enforced.",
+    "ruleB": "Tanks 1 to 6 sequentially, amount from contents when reached (STEADY: floor of quarter; OVERLOADED: floor of half), applied immediately: loses amount; STEADY amount to outfall; OVERLOADED amount to tank n-1; OVERLOADED tank 1 to outfall. Volume not enforced.",
+    "same": true,
+    "difference": "The wording differs (simultaneous vs sequential), but the function does not. Transfers only go upstream (n to n-1). In B's 1-to-6 order, tank n-1 has already been handled by the time it receives tank n's return, and nothing reaches tank n before it is handled (only tank n+1 sends to it, and n+1 comes later). So every tank's amount is computed from its start-of-step contents, exactly as in A. Rounding applies to each position's own contents in both."
+   },
+   {
+    "step": "Step 5 (Washout / Storm bypass)",
+    "ruleA": "Sum all six forms; if total > 38 (strictly), every form becomes floor(half); all removed units go to waste; record the cycle. Total of 38 or less: nothing.",
+    "ruleB": "Sum all six tanks; if total > 38 (strictly), every tank becomes floor(half); all removed liquor goes to outfall; log the cycle. Total of 38 or less: nothing.",
+    "same": true
+   },
+   {
+    "step": "Report",
+    "ruleA": "After cycle 5 Step 5: (a) end mix by form, (b) end status, (c) all status changes, (d) washout cycles, (e) waste tally, (f) balance check.",
+    "ruleB": "After cycle 5 Step 5: (a) end contents by tank, (b) end state, (c) all state changes, (d) bypass cycles, (e) outfall total, (f) balance check, showing both sides.",
+    "same": true,
+    "difference": "B asks for both sides of the balance check to be shown. That is presentation only."
+   }
+  ],
+  "tableVerdict": "SAME",
+  "probeStart": [
+   9,
+   8,
+   9,
+   6,
+   9,
+   7
+  ],
+  "probeInput": [
+   [
+    0,
+    9,
+    9,
+    9,
+    9,
+    9
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    9,
+    9,
+    9,
+    9,
+    9,
+    9
+   ],
+   [
+    0,
+    9,
+    0,
+    9,
+    0,
+    9
+   ],
+   [
+    5,
+    0,
+    5,
+    0,
+    5,
+    0
+   ]
+  ],
+  "probeWhy": "The only suspected difference was Step 4: simultaneous in A, sequential in B. The probe starts every position at or near its volume and adds heavy inflow, so in cycle 1 all six positions go HOT/OVERLOADED, including position 1, which sends its return to the loss tally. That puts adjacent HOT pairs in Step 4 in five cycles, so returned amounts land on neighbours in both directions of handling order. A zero row, an all-9 row and alternating rows push the total above 38 in several cycles (washouts in cycles 1, 3 and 4) and also produce HOT-to-GREEN reversals. The printed tables separately trip the equality edge: the Step 5 total is exactly 38 in one cycle and no halving fires in either document. I also compared the two over 200,000 random start/input sets with a script and found 0 differences.",
+  "aOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "HOT",
+    "HOT",
+    "HOT",
+    "HOT",
+    "HOT",
+    "GREEN"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "HOT",
+     "to": "GREEN"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "HOT",
+     "to": "GREEN"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "HOT",
+     "to": "GREEN"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "HOT",
+     "to": "GREEN"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "bOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "OVERLOADED",
+    "OVERLOADED",
+    "OVERLOADED",
+    "OVERLOADED",
+    "OVERLOADED",
+    "STEADY"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "aOnProbe": {
+   "finalQuantities": [
+    6,
+    6,
+    6,
+    6,
+    5,
+    2
+   ],
+   "finalStates": [
+    "HOT",
+    "HOT",
+    "HOT",
+    "HOT",
+    "HOT",
+    "GREEN"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 1,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 2,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 1,
+     "position": 6,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "HOT",
+     "to": "GREEN"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "HOT",
+     "to": "GREEN"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 3,
+     "position": 6,
+     "from": "GREEN",
+     "to": "HOT"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "HOT",
+     "to": "GREEN"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    3,
+    4
+   ],
+   "lossTotal": 158
+  },
+  "bOnProbe": {
+   "finalQuantities": [
+    6,
+    6,
+    6,
+    6,
+    5,
+    2
+   ],
+   "finalStates": [
+    "OVERLOADED",
+    "OVERLOADED",
+    "OVERLOADED",
+    "OVERLOADED",
+    "OVERLOADED",
+    "STEADY"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 1,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 1,
+     "position": 2,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 1,
+     "position": 6,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 3,
+     "position": 6,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    3,
+    4
+   ],
+   "lossTotal": 158
+  },
+  "probeVerdict": "SAME",
+  "usedScript": true,
+  "verdict": "SAME",
+  "foundBy": "none",
+  "routesAgree": true,
+  "differingRule": "None. The only wording difference is in Step 4: A computes every amount first and applies them together, while B handles the tanks one at a time from 1 to 6. This gives the same result because each return goes only to the previous tank, which B has already handled.",
+  "trust": "Both routes agree. The table argument is a proof for all inputs, not just a sample. In B's 1-to-6 order, tank n's contents cannot change before it is handled: only tank n+1 sends to it, and n+1 comes later. A return lands on tank n-1 after n-1 has been handled. So each tank's amount comes from its start-of-step contents, which is A's rule. The script backs this up: it implements A as simultaneous and B as literally sequential, and finds no differences on the printed tables, the probe, or 200,000 random cases. Balance checks close: 114 = 114 printed, 189 = 189 probe. Script: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P06\\sim.py"
+ },
+ "verdict_correct": true,
+ "table_correct": true,
+ "probe_correct": true,
+ "routes_agree": true,
+ "printed_A_engine_ok": true,
+ "printed_B_engine_ok": true,
+ "probe_A_engine_ok": true,
+ "probe_B_engine_ok": true,
+ "probe_separates_truth": false,
+ "probe_separates_as_reported": true,
+ "differing_rule_reported": "None. The only wording difference is in Step 4: A computes every amount first and applies them together, while B handles the tanks one at a time from 1 to 6. This gives the same result because each return goes only to the previous tank, which B has already handled.",
+ "differing_rule_truth": null,
+ "found_by": "none",
+ "probe_genuine": true
+}

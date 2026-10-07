@@ -1,0 +1,290 @@
+[
+ {
+  "session": "judge-2:P15",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "18:07:26",
+  "clean": true
+ },
+ {
+  "session": "judge-2:P07",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "18:05:13",
+  "clean": true
+ },
+ {
+  "session": "judge-1:P11",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "18:06:19",
+  "clean": true
+ },
+ {
+  "session": "judge-1:P04",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "18:03:45",
+  "clean": true
+ },
+ {
+  "session": "judge-2:P03",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "18:04:19",
+  "clean": true
+ },
+ {
+  "session": "judge-2:P09",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "18:06:05",
+  "clean": true
+ },
+ {
+  "session": "judge-2:P16",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 2,
+  "answer_ts": "18:08:34",
+  "clean": true
+ },
+ {
+  "session": "judge-2:P01",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "18:03:47",
+  "clean": true
+ },
+ {
+  "session": "judge-2:P08",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "18:05:50",
+  "clean": true
+ },
+ {
+  "session": "judge-2:P06",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "18:05:14",
+  "clean": true
+ },
+ {
+  "session": "judge-2:P11",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "18:06:30",
+  "clean": true
+ },
+ {
+  "session": "judge-1:P05",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "18:03:28",
+  "clean": true
+ },
+ {
+  "session": "judge-1:P01",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 3,
+  "answer_ts": "18:05:42",
+  "clean": true
+ },
+ {
+  "session": "judge-1:P14",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "18:07:10",
+  "clean": true
+ },
+ {
+  "session": "judge-1:P15",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "18:07:54",
+  "clean": true
+ },
+ {
+  "session": "judge-1:P12",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "18:06:39",
+  "clean": true
+ },
+ {
+  "session": "judge-2:P02",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 3,
+  "answer_ts": "18:04:58",
+  "clean": true
+ },
+ {
+  "session": "judge-1:P10",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 3,
+  "answer_ts": "18:07:33",
+  "clean": true
+ },
+ {
+  "session": "judge-1:P09",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "18:05:54",
+  "clean": true
+ },
+ {
+  "session": "judge-2:P04",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 3,
+  "answer_ts": "18:04:48",
+  "clean": true
+ },
+ {
+  "session": "judge-1:P06",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 2,
+  "answer_ts": "18:06:27",
+  "clean": true
+ },
+ {
+  "session": "judge-1:P13",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "18:06:56",
+  "clean": true
+ },
+ {
+  "session": "judge-1:P03",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "18:03:42",
+  "clean": true
+ },
+ {
+  "session": "judge-2:P10",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "18:06:16",
+  "clean": true
+ },
+ {
+  "session": "judge-1:P08",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "18:05:31",
+  "clean": true
+ },
+ {
+  "session": "judge-2:P12",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "18:06:58",
+  "clean": true
+ },
+ {
+  "session": "judge-2:P13",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "18:07:01",
+  "clean": true
+ },
+ {
+  "session": "judge-2:P05",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "18:03:45",
+  "clean": true
+ },
+ {
+  "session": "judge-1:P07",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "18:05:10",
+  "clean": true
+ },
+ {
+  "session": "judge-1:P02",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 3,
+  "answer_ts": "18:05:23",
+  "clean": true
+ },
+ {
+  "session": "judge-2:P14",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 1,
+  "answer_ts": "18:07:22",
+  "clean": true
+ },
+ {
+  "session": "judge-1:P16",
+  "git": [],
+  "outside": [],
+  "foreign_answer": [],
+  "own_answer": 3,
+  "answer_ts": "18:08:37",
+  "clean": true
+ }
+]

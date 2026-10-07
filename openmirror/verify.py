@@ -192,6 +192,34 @@ if os.path.exists(os.path.join(S3, "phase2-result.json")):
         claim("S3-24", "250-word clean rerun: every wrong read is G-metallurgy-w1 with the known trajectory (4,5,5,4,3,1; resets 1,4,5; loss 92)", True, bool(bad3) and all(r["id"] == "G-metallurgy-w1" and r["run"]["finalQuantities"] == [4, 5, 5, 4, 3, 1] and sorted(r["run"]["resetPeriods"]) == [1, 4, 5] and r["run"]["lossTotal"] == 92 for r in bad3), ["transformation-2026-10-07/compression-250/rerun/result.json"])
         aud = jl(os.path.join(S3, "compression-250", "rerun", "audit.json"))
         claim("S3-25", "250-word clean rerun: sessions audited with no git command, no read outside the desk folder, and no answer string from anything but their own script", 48, sum(1 for a in aud if a["clean"]), ["transformation-2026-10-07/compression-250/rerun/audit.json"])
+    FM = os.path.join(HERE, "evidence", "function-match-2026-10-07")
+    fmr = os.path.join(FM, "judges", "result.json")
+    if os.path.exists(fmr):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("fm_engine", os.path.join(FM, "fm_engine.py")); fme = importlib.util.module_from_spec(spec); spec.loader.exec_module(fme)
+        fkey = {p["id"]: p for p in jl(os.path.join(FM, "key.json"))["pairs"]}
+        rows = [r for r in jl(fmr)["rows"] if r.get("result")]
+        def rep_ok(rep, t):
+            return bool(rep) and rep.get("finalQuantities") == t["final"] and sorted(rep.get("resetPeriods", [])) == sorted(t["purges"]) and rep.get("lossTotal") == t["lost"] and sorted((c["period"], c["position"]) for c in rep.get("stateChanges", [])) == sorted((c[0], c[1]) for c in t["changes"])
+        claim("FM-1", "Function match: judge sessions with a result", 32, len(rows), ["function-match-2026-10-07/judges/result.json"])
+        claim("FM-2", "Function match: verdicts correct against key.json", 32, sum(1 for r in rows if r["result"]["verdict"] == fkey[r["pair"]]["truth"]), ["function-match-2026-10-07/judges/result.json", "function-match-2026-10-07/key.json"])
+        claim("FM-3", "Function match: sessions whose table route and probe route both give the correct verdict and agree", 32, sum(1 for r in rows if r["result"]["tableVerdict"] == fkey[r["pair"]]["truth"] and r["result"]["probeVerdict"] == fkey[r["pair"]]["truth"] and r["result"]["routesAgree"]), ["function-match-2026-10-07/judges/result.json"])
+        gen = 0; sep = 0; ndiff = 0
+        for r in rows:
+            k = fkey[r["pair"]]; q = r["result"]
+            ta = fme.run(k["A"]["variant"], q["probeStart"], q["probeInput"]); tb = fme.run(k["B"]["variant"], q["probeStart"], q["probeInput"])
+            if rep_ok(q["aOnProbe"], ta) and rep_ok(q["bOnProbe"], tb): gen += 1
+            if k["truth"] == "DIFFERENT":
+                ndiff += 1
+                if ta != tb: sep += 1
+        claim("FM-4", "Function match: probes genuine (judge's reported probe outputs reproduced by the engine for both documents)", 32, gen, ["function-match-2026-10-07/judges/result.json", "function-match-2026-10-07/fm_engine.py"])
+        claim("FM-5", "Function match: on DIFFERENT pairs, the judge's probe separates the two functions under the engine", 16, sep, ["function-match-2026-10-07/judges/result.json", "function-match-2026-10-07/fm_engine.py"])
+        claim("FM-6", "Function match: hidden pairs (same output on printed data) called DIFFERENT", 4, sum(1 for r in rows if fkey[r["pair"]]["visible_on_given_data"] is False and r["result"]["verdict"] == "DIFFERENT"), ["function-match-2026-10-07/judges/result.json"])
+        pairs = sorted(set(r["pair"] for r in rows))
+        claim("FM-7", "Function match: pairs on which the two judges disagree", 0, sum(1 for p in pairs if len(set(r["result"]["verdict"] for r in rows if r["pair"] == p)) > 1), ["function-match-2026-10-07/judges/result.json"])
+        faud = jl(os.path.join(FM, "judges", "audit.json"))
+        claim("FM-8", "Function match: sessions audited clean (no git, no read outside the desk folder, no foreign answer string)", 32, sum(1 for a in faud if a["clean"]), ["function-match-2026-10-07/judges/audit.json"])
+        claim("FM-9", "Function match: edited pair documents still differ from their sources only by the planned edits (rebuilt hashes match key.json)", True, all(hashlib.sha256(open(os.path.join(FM, "pairs", f"{p}-{s_}.md"), "rb").read()).hexdigest() == fkey[p][s_]["sha256"] for p in fkey for s_ in "AB"), ["function-match-2026-10-07/build_pairs.py", "function-match-2026-10-07/key.json"])
 
 # ------------------------------------------------------------------ what is NOT verified here (stated, not hidden)
 unverified = [

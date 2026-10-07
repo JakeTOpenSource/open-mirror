@@ -1,0 +1,506 @@
+{
+ "pair": "P05",
+ "judge": 1,
+ "truth": "SAME",
+ "visible": null,
+ "result": {
+  "table": [
+   {
+    "step": "Definitions/data",
+    "ruleA": "6 crucibles, working volume 10,8,12,6,9,7; upper 7,6,9,5,7,5; lower 3,2,4,2,3,2; start 3,6,6,2,2,1; limit 38; all BASE; slag 0; quarter/half rounded down",
+    "ruleB": "6 chambers, holding limit 10,8,12,6,9,7; pupation 7,6,9,5,7,5; return 3,2,4,2,3,2; start 3,6,6,2,2,1; moult limit 38; all LARVAL; waste 0; quarter/half rounded down",
+    "same": true
+   },
+   {
+    "step": "Step 1 charge/feeding",
+    "ruleA": "Add the cycle's charge row to each crucible; working volume not enforced",
+    "ruleB": "Add the cycle's feed row to each chamber; holding limit not enforced",
+    "same": true
+   },
+   {
+    "step": "Step 2 overflow/carry-forward",
+    "ruleA": "Sequential 1..6; if melt > volume (strict), excess goes to next crucible before it is handled, melt set to volume; crucible 6 excess to slag",
+    "ruleB": "Sequential 1..6; if mass > limit (strict), excess added to next chamber before it is handled, mass set to limit; chamber 6 excess to waste",
+    "same": true
+   },
+   {
+    "step": "Step 3 state/stage check",
+    "ruleA": "Read melt after Step 2; BASE and melt >= upper -> SUPERHEATED; SUPERHEATED and melt <= lower -> BASE; else unchanged; log (cycle, crucible, before, after)",
+    "ruleB": "Read mass after step 2; LARVAL and mass >= pupation -> PUPAL; PUPAL and mass <= return -> LARVAL; else unchanged; log (cycle, chamber, before, after)",
+    "same": true
+   },
+   {
+    "step": "Step 4 draw-off/metabolism",
+    "ruleA": "Compute all six amounts first from start-of-step melt (BASE quarter, SUPERHEATED half, rounded down on the melt), then apply simultaneously: BASE amount to slag, SUPERHEATED amount to previous crucible (crucible 1's to slag)",
+    "ruleB": "Sequential 1..6, each amount computed from mass at that moment and applied immediately: LARVAL quarter to waste, PUPAL half to previous chamber (chamber 1's to waste)",
+    "same": true,
+    "difference": "Wording differs (simultaneous vs sequential) but functionally equivalent: transfers only go from n to n-1, and n-1 has already been processed when n is reached, so no chamber's amount is ever computed after it has received anything. Every chamber's 'mass at that moment' equals its start-of-step mass."
+   },
+   {
+    "step": "Step 5 emergency tap/moult",
+    "ruleA": "Sum all six; if > 38 (strict), every crucible halved rounded down, removed melt to slag, log cycle; applies to all six",
+    "ruleB": "Sum all six; if > 38 (strict), every chamber halved rounded down, removed mass to waste, log cycle; applies to all six",
+    "same": true
+   },
+   {
+    "step": "Report",
+    "ruleA": "(a) end melts 1-6, (b) end states, (c) state changes, (d) tap cycles, (e) slag total, (f) balance check",
+    "ruleB": "(a) end masses 1-6, (b) end stages, (c) stage changes, (d) moult cycles, (e) waste tally, (f) balance check",
+    "same": true
+   }
+  ],
+  "tableVerdict": "SAME",
+  "probeStart": [
+   9,
+   9,
+   9,
+   9,
+   9,
+   9
+  ],
+  "probeInput": [
+   [
+    0,
+    9,
+    9,
+    9,
+    9,
+    9
+   ],
+   [
+    9,
+    0,
+    9,
+    9,
+    9,
+    9
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    9,
+    9,
+    9,
+    9,
+    9,
+    9
+   ],
+   [
+    0,
+    9,
+    0,
+    9,
+    0,
+    9
+   ]
+  ],
+  "probeWhy": "Heavy loads push every position SUPERHEATED/PUPAL in cycle 1, so in Step 4 every position both sends half to its predecessor and receives from its successor, the exact case where A's simultaneous and B's sequential wording could diverge; it also drives cascading overflow in Step 2, repeated halvings, a zero-input cycle to trigger reverse state changes. A 200,000-case random test (starts and inputs 0-9) also found zero differences.",
+  "aOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "BASE"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "SUPERHEATED",
+     "to": "BASE"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "SUPERHEATED",
+     "to": "BASE"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "SUPERHEATED",
+     "to": "BASE"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "SUPERHEATED",
+     "to": "BASE"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "bOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "PUPAL",
+    "PUPAL",
+    "PUPAL",
+    "PUPAL",
+    "PUPAL",
+    "LARVAL"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "PUPAL",
+     "to": "LARVAL"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "PUPAL",
+     "to": "LARVAL"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "PUPAL",
+     "to": "LARVAL"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "PUPAL",
+     "to": "LARVAL"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "aOnProbe": {
+   "finalQuantities": [
+    3,
+    4,
+    4,
+    3,
+    4,
+    2
+   ],
+   "finalStates": [
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "SUPERHEATED"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 1,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 2,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 6,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "SUPERHEATED",
+     "to": "BASE"
+    },
+    {
+     "period": 3,
+     "position": 6,
+     "from": "SUPERHEATED",
+     "to": "BASE"
+    },
+    {
+     "period": 4,
+     "position": 3,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 4,
+     "position": 6,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    2,
+    4,
+    5
+   ],
+   "lossTotal": 205
+  },
+  "bOnProbe": {
+   "finalQuantities": [
+    3,
+    4,
+    4,
+    3,
+    4,
+    2
+   ],
+   "finalStates": [
+    "PUPAL",
+    "PUPAL",
+    "PUPAL",
+    "PUPAL",
+    "PUPAL",
+    "PUPAL"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 1,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 1,
+     "position": 2,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 1,
+     "position": 6,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "PUPAL",
+     "to": "LARVAL"
+    },
+    {
+     "period": 3,
+     "position": 6,
+     "from": "PUPAL",
+     "to": "LARVAL"
+    },
+    {
+     "period": 4,
+     "position": 3,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 4,
+     "position": 6,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    2,
+    4,
+    5
+   ],
+   "lossTotal": 205
+  },
+  "probeVerdict": "SAME",
+  "usedScript": true,
+  "verdict": "SAME",
+  "foundBy": "none",
+  "routesAgree": true,
+  "differingRule": "None. The only wording difference is Step 4: A computes everything first and applies it all at once, while B handles each position in turn. These are equivalent because returned melt only moves from position n back to n-1, and n-1 has always been handled before n.",
+  "trust": "Both routes agree. The table argument proves the Step 4 wording difference has no effect for any input. A script (C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P05\\sim.py) ran both documents as written on the printed tables and on the probe. It also ran 200,000 random starting and input tables (values 0-9) and found zero differences."
+ },
+ "verdict_correct": true,
+ "table_correct": true,
+ "probe_correct": true,
+ "routes_agree": true,
+ "printed_A_engine_ok": true,
+ "printed_B_engine_ok": true,
+ "probe_A_engine_ok": true,
+ "probe_B_engine_ok": true,
+ "probe_separates_truth": false,
+ "probe_separates_as_reported": true,
+ "differing_rule_reported": "None. The only wording difference is Step 4: A computes everything first and applies it all at once, while B handles each position in turn. These are equivalent because returned melt only moves from position n back to n-1, and n-1 has always been handled before n.",
+ "differing_rule_truth": null,
+ "found_by": "none",
+ "probe_genuine": true
+}

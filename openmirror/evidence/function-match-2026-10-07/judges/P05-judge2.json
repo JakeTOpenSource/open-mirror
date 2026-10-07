@@ -1,0 +1,512 @@
+{
+ "pair": "P05",
+ "judge": 2,
+ "truth": "SAME",
+ "visible": null,
+ "result": {
+  "table": [
+   {
+    "step": "Definitions / rounding",
+    "ruleA": "Quarter or half: divide and round down (drop fraction). Melt is a whole number and never negative. All start BASE, slag 0, limit 38.",
+    "ruleB": "Quarter or half of a mass: divide and round down. Mass is a whole number and never negative. All start LARVAL, waste 0, moult limit 38.",
+    "same": true
+   },
+   {
+    "step": "Data tables",
+    "ruleA": "Vol 10,8,12,6,9,7; upper 7,6,9,5,7,5; lower 3,2,4,2,3,2; start 3,6,6,2,2,1; same 5x6 charge table",
+    "ruleB": "Holding limit, pupation mark, return mark, starting mass and feed schedule are identical figure for figure",
+    "same": true
+   },
+   {
+    "step": "Step 1 Charge/Feeding",
+    "ruleA": "Add this cycle's row to each crucible. Working volume not enforced.",
+    "ruleB": "Add this cycle's row to each chamber. Holding limit not enforced.",
+    "same": true
+   },
+   {
+    "step": "Step 2 Overflow/Carry-forward",
+    "ruleA": "Sequential 1 to 6. If melt > volume (strictly), the excess goes to the next crucible (already there before that crucible is handled) and the melt is set to the volume. Excess from 6 goes to slag.",
+    "ruleB": "Sequential 1 to 6. If mass > limit (strictly), the excess goes to the next chamber (cascades) and the mass is set to the limit. Excess from 6 goes to waste.",
+    "same": true
+   },
+   {
+    "step": "Step 3 State/Stage check",
+    "ruleA": "Read after Step 2. BASE and melt >= upper mark: becomes SUPERHEATED. SUPERHEATED and melt <= lower mark: becomes BASE. Otherwise unchanged. At most one change per cycle. Log (cycle, crucible, before, after).",
+    "ruleB": "Read after step 2. LARVAL and mass >= pupation mark: becomes PUPAL. PUPAL and mass <= return mark: becomes LARVAL. Otherwise unchanged. At most one change per cycle. Log (cycle, chamber, before, after).",
+    "same": true
+   },
+   {
+    "step": "Step 4 Draw-off/Metabolism",
+    "ruleA": "Simultaneous. Every amount is computed from the melt at the start of the step and the state after Step 3: BASE takes floor(melt/4), SUPERHEATED takes floor(melt/2). Then all are applied at once. A BASE amount goes to slag. A SUPERHEATED amount goes to crucible n-1, or to slag if n=1. No volume cap.",
+    "ruleB": "Sequential 1 to 6. Each amount is computed from the mass held at that moment and the stage after step 3: LARVAL takes floor(mass/4), PUPAL takes floor(mass/2). Each is applied immediately. A LARVAL amount goes to waste. A PUPAL amount goes to chamber n-1, or to waste if n=1. No limit cap.",
+    "same": true,
+    "difference": "The wording differs (simultaneous vs sequential), but the function is the same. The only flow into chamber n in this step comes from chamber n+1, and chamber n+1 is handled after chamber n. So when B reaches chamber n, its mass still equals its start-of-step mass, and every amount matches A. Mass returned to n-1 lands after n-1 has been handled in both documents. This would differ only if B processed in the order 6 to 1."
+   },
+   {
+    "step": "Step 5 Emergency tap/Moult",
+    "ruleA": "Sum all six. If the total > 38 (strictly; 38 does not fire), every crucible becomes floor(melt/2) and all removed melt goes to slag. Log the cycle.",
+    "ruleB": "Sum all six. If the total > 38 (38 or less: nothing), every chamber becomes floor(mass/2) and all removed mass goes to waste. Log the cycle.",
+    "same": true
+   },
+   {
+    "step": "Report",
+    "ruleA": "(a) end melts 1 to 6, (b) end states, (c) all state changes, (d) tap cycles, (e) slag total, (f) balance: start + charges = end + slag",
+    "ruleB": "(a) end masses 1 to 6, (b) end stages, (c) all stage changes, (d) moult cycles, (e) waste tally, (f) the same balance check",
+    "same": true
+   }
+  ],
+  "tableVerdict": "SAME",
+  "probeStart": [
+   9,
+   9,
+   9,
+   6,
+   9,
+   7
+  ],
+  "probeInput": [
+   [
+    9,
+    9,
+    9,
+    9,
+    9,
+    9
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    9,
+    0,
+    9,
+    0,
+    9,
+    0
+   ],
+   [
+    0,
+    9,
+    0,
+    9,
+    0,
+    9
+   ],
+   [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+   ]
+  ],
+  "probeWhy": "The only suspected difference is Step 4: A applies all amounts at once and B applies them one chamber at a time. The probe is built to stress that. Cycle 1 drives all six positions to SUPERHEATED/PUPAL at once, including position 1. That makes a chain of adjacent upstream returns, the case where a sequential pass and a simultaneous pass could split, and it also sends position 1's draw-off to the loss route. Every position starts at or above its working volume, so Step 2 cascades the full length of the line and spills off the end. The zero-input cycle and the alternating rows push melt down into the lower-mark band so states revert (cycles 2 and 3). The tap fires in 4 of the 5 cycles. As a supplement, a script ran 200,000 random start/input tables (values 0 to 9) through both documents and found 0 differences. All of those random runs happened to include at least one tap, so the no-tap path was not separately sampled; the structural argument covers it.",
+  "aOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "BASE"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "SUPERHEATED",
+     "to": "BASE"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "SUPERHEATED",
+     "to": "BASE"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "SUPERHEATED",
+     "to": "BASE"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "SUPERHEATED",
+     "to": "BASE"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "bOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "PUPAL",
+    "PUPAL",
+    "PUPAL",
+    "PUPAL",
+    "PUPAL",
+    "LARVAL"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "PUPAL",
+     "to": "LARVAL"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "PUPAL",
+     "to": "LARVAL"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "PUPAL",
+     "to": "LARVAL"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "PUPAL",
+     "to": "LARVAL"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "aOnProbe": {
+   "finalQuantities": [
+    4,
+    4,
+    4,
+    3,
+    4,
+    2
+   ],
+   "finalStates": [
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "SUPERHEATED",
+    "SUPERHEATED"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 1,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 2,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 1,
+     "position": 6,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "SUPERHEATED",
+     "to": "BASE"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "SUPERHEATED",
+     "to": "BASE"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    },
+    {
+     "period": 4,
+     "position": 6,
+     "from": "BASE",
+     "to": "SUPERHEATED"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    3,
+    4,
+    5
+   ],
+   "lossTotal": 166
+  },
+  "bOnProbe": {
+   "finalQuantities": [
+    4,
+    4,
+    4,
+    3,
+    4,
+    2
+   ],
+   "finalStates": [
+    "PUPAL",
+    "PUPAL",
+    "PUPAL",
+    "PUPAL",
+    "PUPAL",
+    "PUPAL"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 1,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 1,
+     "position": 2,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 1,
+     "position": 6,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "PUPAL",
+     "to": "LARVAL"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "PUPAL",
+     "to": "LARVAL"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    },
+    {
+     "period": 4,
+     "position": 6,
+     "from": "LARVAL",
+     "to": "PUPAL"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    3,
+    4,
+    5
+   ],
+   "lossTotal": 166
+  },
+  "probeVerdict": "SAME",
+  "usedScript": true,
+  "verdict": "SAME",
+  "foundBy": "none",
+  "routesAgree": true,
+  "differingRule": "None. The only difference is in wording. A's Step 4 is simultaneous and B's is sequential from 1 to 6. Because returns flow only upstream (n to n-1) and B processes downstream (1 to 6), no chamber receives a return before its own amount is computed. The two rules therefore give the same result for every input.",
+  "trust": "The two routes agree. If they had disagreed, I would trust the table plus its structural argument over any single probe, because a probe only samples inputs. Here the simulations back the argument: with the names translated, A and B gave identical reports on the printed tables (both balances 114 = 114), on the probe (both balances 187 = 187), and on 200,000 random tables. Script: C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P05\\sim.py"
+ },
+ "verdict_correct": true,
+ "table_correct": true,
+ "probe_correct": true,
+ "routes_agree": true,
+ "printed_A_engine_ok": true,
+ "printed_B_engine_ok": true,
+ "probe_A_engine_ok": true,
+ "probe_B_engine_ok": true,
+ "probe_separates_truth": false,
+ "probe_separates_as_reported": true,
+ "differing_rule_reported": "None. The only difference is in wording. A's Step 4 is simultaneous and B's is sequential from 1 to 6. Because returns flow only upstream (n to n-1) and B processes downstream (1 to 6), no chamber receives a return before its own amount is computed. The two rules therefore give the same result for every input.",
+ "differing_rule_truth": null,
+ "found_by": "none",
+ "probe_genuine": true
+}

@@ -1,0 +1,352 @@
+{
+ "pair": "P12",
+ "judge": 1,
+ "truth": "DIFFERENT",
+ "visible": true,
+ "result": {
+  "table": [
+   {
+    "step": "Step 1 Inflow/New tickets",
+    "ruleA": "Add each tank's cycle inflow; volume not enforced",
+    "ruleB": "Add each team's sprint new tickets; WIP limit not enforced",
+    "same": true
+   },
+   {
+    "step": "Step 2 Weir overflow/Overflow handoff",
+    "ruleA": "Sequential 1..6; if contents > volume, excess to next tank (tank 6 excess to outfall), set to volume; cascade within step",
+    "ruleB": "Sequential 1..6; if open > WIP limit, excess to next team (team 6 excess closed to tally), set to limit; cascade within step",
+    "same": true
+   },
+   {
+    "step": "Step 3 State check",
+    "ruleA": "Read after step 2. STEADY -> OVERLOADED if contents >= upper mark; OVERLOADED -> STEADY if contents <= lower mark (at most)",
+    "ruleB": "Read after step 2. ROUTINE -> ESCALATED if open >= upper mark; ESCALATED -> ROUTINE if open < lower mark (strictly below); at the lower mark the status stays",
+    "same": false,
+    "difference": "Return threshold: A returns to the low state at contents equal to the lower mark (<=), B only strictly below it (<). A position sitting exactly at its lower mark goes back to the low state in A and stays in the high state in B."
+   },
+   {
+    "step": "Step 4 Discharge and return/Work-off",
+    "ruleA": "Simultaneous: amounts from contents at start of step using post-step-3 states; STEADY floor(q/4) to outfall, OVERLOADED floor(q/2) to previous tank (tank 1 to outfall); no volume enforcement",
+    "ruleB": "Simultaneous: amounts from counts at start of step using post-step-3 statuses; ROUTINE floor(q/4) closed to tally, ESCALATED floor(q/2) bounced to previous team (team 1 to tally); no limit enforcement",
+    "same": true
+   },
+   {
+    "step": "Step 5 Storm bypass/Backlog halving",
+    "ruleA": "If line total > 38 (strict; 38 does not fire), every one of six tanks becomes floor(q/2); removed amount to outfall; log cycle",
+    "ruleB": "If total > 38 (strict), every one of six teams becomes floor(q/2); removed amount to closed tally; log sprint",
+    "same": true
+   },
+   {
+    "step": "Report",
+    "ruleA": "End contents 1..6, end states, all state changes (cycle, tank, before, after), bypass cycles, outfall total, balance check",
+    "ruleB": "End counts 1..6, end statuses, all status changes (sprint, team, before, after), halving sprints, closed tally, balance check",
+    "same": true
+   }
+  ],
+  "tableVerdict": "DIFFERENT",
+  "probeStart": [
+   0,
+   0,
+   4,
+   5,
+   0,
+   0
+  ],
+  "probeInput": [
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  ],
+  "probeWhy": "Position 4 (upper 5, lower 2) starts at its upper mark, so it goes high in cycle 1, then sheds half each cycle (5 -> 3 -> 2), landing exactly on its lower mark (2) at the cycle 3 state check. That is the only case where <= and < disagree: A sends it back to STEADY in cycle 3, B keeps it ESCALATED until it drops to 1 in cycle 4. That changes the cycle 3 amount (quarter vs half), so end quantities, state changes and loss all differ. Zero inflow keeps everything else quiet so no other rule can mask it.",
+  "aOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    4,
+    2
+   ],
+   "finalStates": [
+    "OVERLOADED",
+    "OVERLOADED",
+    "OVERLOADED",
+    "OVERLOADED",
+    "OVERLOADED",
+    "STEADY"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 2,
+     "position": 3,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    },
+    {
+     "period": 2,
+     "position": 5,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 3,
+     "position": 3,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 4,
+     "position": 5,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 5,
+     "position": 6,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "bOnPrinted": {
+   "finalQuantities": [
+    6,
+    10,
+    9,
+    7,
+    5,
+    1
+   ],
+   "finalStates": [
+    "ESCALATED",
+    "ESCALATED",
+    "ESCALATED",
+    "ESCALATED",
+    "ESCALATED",
+    "ESCALATED"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 2,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 1,
+     "position": 3,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 1,
+     "position": 4,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 1,
+     "position": 5,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 2,
+     "position": 1,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 2,
+     "position": 6,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    }
+   ],
+   "resetPeriods": [
+    1,
+    4
+   ],
+   "lossTotal": 76
+  },
+  "aOnProbe": {
+   "finalQuantities": [
+    0,
+    0,
+    3,
+    2,
+    0,
+    0
+   ],
+   "finalStates": [
+    "STEADY",
+    "STEADY",
+    "STEADY",
+    "STEADY",
+    "STEADY",
+    "STEADY"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 4,
+     "from": "STEADY",
+     "to": "OVERLOADED"
+    },
+    {
+     "period": 3,
+     "position": 4,
+     "from": "OVERLOADED",
+     "to": "STEADY"
+    }
+   ],
+   "resetPeriods": [],
+   "lossTotal": 4
+  },
+  "bOnProbe": {
+   "finalQuantities": [
+    0,
+    0,
+    3,
+    1,
+    0,
+    0
+   ],
+   "finalStates": [
+    "ROUTINE",
+    "ROUTINE",
+    "ROUTINE",
+    "ROUTINE",
+    "ROUTINE",
+    "ROUTINE"
+   ],
+   "stateChanges": [
+    {
+     "period": 1,
+     "position": 4,
+     "from": "ROUTINE",
+     "to": "ESCALATED"
+    },
+    {
+     "period": 4,
+     "position": 4,
+     "from": "ESCALATED",
+     "to": "ROUTINE"
+    }
+   ],
+   "resetPeriods": [],
+   "lossTotal": 5
+  },
+  "probeVerdict": "DIFFERENT",
+  "usedScript": true,
+  "verdict": "DIFFERENT",
+  "differingRule": "Step 3 return-to-low-state threshold: A returns an OVERLOADED tank to STEADY when contents are at or below the lower mark (<=), while B returns an ESCALATED team to ROUTINE only when its count is strictly below the lower mark (<).",
+  "foundBy": "both",
+  "routesAgree": true,
+  "trust": "Both routes agree. The table pinned the single differing rule, which is Step 3, <= in A versus < in B. The probe sets off only that rule and shows it diverging. The printed tables trip it as well: A logs 13 state changes and B logs 6. End quantities differ at positions 5 and 6 (A 4,2 vs B 5,1) and end states differ, but halving cycles (1, 4) and loss (76) happen to match. Every other step matched clause for clause. The script is C:\\Users\\Jaket\\AppData\\Local\\Temp\\om\\desk-fm\\P12\\sim.py. It asserts the balance check (start plus inflows equals end plus loss) on all four runs, and all four passed."
+ },
+ "verdict_correct": true,
+ "table_correct": true,
+ "probe_correct": true,
+ "routes_agree": true,
+ "printed_A_engine_ok": true,
+ "printed_B_engine_ok": true,
+ "probe_A_engine_ok": true,
+ "probe_B_engine_ok": true,
+ "probe_separates_truth": true,
+ "probe_separates_as_reported": true,
+ "differing_rule_reported": "Step 3 return-to-low-state threshold: A returns an OVERLOADED tank to STEADY when contents are at or below the lower mark (<=), while B returns an ESCALATED team to ROUTINE only when its count is strictly below the lower mark (<).",
+ "differing_rule_truth": "DIFF: step 3 lower trigger strictly below",
+ "found_by": "both",
+ "probe_genuine": true
+}
